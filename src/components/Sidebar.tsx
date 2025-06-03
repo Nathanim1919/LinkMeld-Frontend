@@ -22,7 +22,6 @@ const sidebarItems: NavItem[] = [
   { name: "Settings", icon: <FiSettings />, route: "/settings" },
 ];
 
-
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -37,7 +36,9 @@ const Sidebar: React.FC = () => {
               console.log(`Navigate to ${item.route}`);
             }}
           >
-            <span className="w-7 h-7 rounded-full bg-green-200 grid place-items-center">{item.icon}</span>
+            <span className="w-7 h-7 rounded-full bg-green-200 grid place-items-center">
+              {item.icon}
+            </span>
             <span className="text-[15px]">{item.name}</span>
           </button>
         </li>
@@ -47,7 +48,6 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-
       {/* Sidebar */}
       <section className="">
         <aside
@@ -55,11 +55,8 @@ const Sidebar: React.FC = () => {
             isOpen ? "translate-x-0" : "-translate-x-full"
           } lg:translate-x-0 transition-transform duration-200 z-40 p-4 shadow-md`}
         >
-
           <nav>
-            <div className="">
-              {renderNavItems(sidebarItems)}
-            </div>
+            <div className="">{renderNavItems(sidebarItems)}</div>
           </nav>
         </aside>
 
