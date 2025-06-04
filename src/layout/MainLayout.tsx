@@ -8,7 +8,7 @@ interface MainLayoutProps {
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <section className="grid text-white bg-gray-500 lg:grid-cols-[_.2fr_.4fr_1fr] h-full w-full">
+    <section className="grid text-white bg-gray-500 lg:grid-cols-[_.2fr_.4fr_1fr] h-full w-full overflow-hidden">
       <Sidebar />
       <div className="bg-[#131413] p-4">
         <div className="flex items-center justify-between">
