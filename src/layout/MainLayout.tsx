@@ -1,6 +1,7 @@
 import EmptyNoteView from "../components/EmptyNoteView";
 import NotesList from "../components/NotesList";
 import Sidebar from "../components/Sidebar";
+import { IoSearch } from "react-icons/io5";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -8,14 +9,15 @@ interface MainLayoutProps {
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <section className="grid text-white bg-gray-500 lg:grid-cols-[_.2fr_.4fr_1fr] h-full w-full overflow-hidden">
+    <section className="grid text-white bg-gray-500 lg:grid-cols-[_.2fr_.35fr_1fr] h-full w-full overflow-hidden">
       <Sidebar />
-      <div className="bg-[#131413] p-4">
-        <div className="flex items-center justify-between">
+      <div className="bg-[#131413] overflow-hidden h-screen grid gap-2">
+        <div className="flex relative rounded-full pl-2 mt-2  bg-[#1d1f1d] items-center justify-between w-[90%] mx-auto">
+          <IoSearch />
           <input
             type="text"
             placeholder="Search notes..."
-            className="w-full p-3 rounded-xl border border-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full  p-2  text-sm outline-0"
           />
         </div>
         <NotesList />

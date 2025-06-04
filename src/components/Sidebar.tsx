@@ -7,7 +7,7 @@ import type { JSX } from "react";
 
 const Sidebar = () => {
   return (
-    <div className="h-screen bg-black w-full text-zinc-100 flex flex-col justify-between p-4 shadow-xl">
+    <div className="h-screen bg-black w-full text-zinc-100 flex flex-col justify-between p-4 shadow-xl overflow-hidden">
       {/* Top Section */}
       <div>
         <h1 className="text-xl font-bold mb-6">Quick Access</h1>
