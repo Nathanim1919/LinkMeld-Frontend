@@ -1,75 +1,54 @@
-import React, { useState } from "react";
-import {
-  FiActivity,
-  FiSearch,
-  FiFolder,
-  FiSettings,
-  FiBarChart2,
-  FiMenu,
-} from "react-icons/fi";
+import { FiHome, FiStar, FiSearch } from "react-icons/fi";
+import { BsFolder, BsTag } from "react-icons/bs";
+import { FaRegUserCircle } from "react-icons/fa";
+import { MdOutlineHighlight } from "react-icons/md";
+import { PiBrainBold } from "react-icons/pi";
+import type { JSX } from "react";
 
-interface NavItem {
-  name: string;
-  icon: React.ReactNode;
-  route: string;
-}
-
-const sidebarItems: NavItem[] = [
-  { name: "My Brain", icon: <FiActivity />, route: "/" },
-  { name: "Search", icon: <FiSearch />, route: "/search" },
-  { name: "Collections", icon: <FiFolder />, route: "/collections" },
-  { name: "Insights", icon: <FiBarChart2 />, route: "/insights" },
-  { name: "Settings", icon: <FiSettings />, route: "/settings" },
-];
-
-const Sidebar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const renderNavItems = (items: NavItem[]) => (
-    <ul className="space-y-1">
-      {items.map((item) => (
-        <li key={item.name}>
-          <button
-            className="flex cursor-pointer items-center w-full gap-1 p-2 text-gray-700 hover:bg-emerald-100 hover:text-emerald-600 rounded-md transition-colors"
-            onClick={() => {
-              // Handle navigation if using react-router
-              console.log(`Navigate to ${item.route}`);
-            }}
-          >
-            <span className="w-7 h-7 rounded-full bg-green-200 grid place-items-center">
-              {item.icon}
-            </span>
-            <span className="text-[15px]">{item.name}</span>
-          </button>
-        </li>
-      ))}
-    </ul>
-  );
-
+const Sidebar = () => {
   return (
-    <>
-      {/* Sidebar */}
-      <section className="">
-        <aside
-          className={`fixed lg:static top-0 left-0 h-full bg-white border-r transform ${
-            isOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 transition-transform duration-200 z-40 p-4 shadow-md`}
-        >
-          <nav>
-            <div className="">{renderNavItems(sidebarItems)}</div>
-          </nav>
-        </aside>
+    <div className="h-screen bg-black w-full text-zinc-100 flex flex-col justify-between p-4 shadow-xl">
+      {/* Top Section */}
+      <div>
+        <h1 className="text-xl font-bold mb-6">Quick Access</h1>
 
-        {/* Overlay for Mobile */}
-        {isOpen && (
-          <div
-            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-            onClick={() => setIsOpen(false)}
-          />
-        )}
-      </section>
-    </>
+        <nav className="space-y-2">
+          <SidebarItem icon={<FiHome />} label="Captures" />
+          <SidebarItem icon={<FiStar />} label="Favorites" />
+          <SidebarItem icon={<MdOutlineHighlight />} label="Highlights" />
+          <SidebarItem icon={<FiSearch />} label="Smart Search" />
+        </nav>
+
+        <div className="mt-6">
+          <h2 className="text-sm text-zinc-400 mb-2 uppercase">Organization</h2>
+          <SidebarItem icon={<BsFolder />} label="Smart Folders" />
+          <SidebarItem icon={<BsTag />} label="Tags" />
+          <SidebarItem icon={<PiBrainBold />} label="Smart Clusters" />
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center space-x-3 mt-8 border-t pt-4 border-zinc-700">
+        <FaRegUserCircle size={30} />
+        <div>
+          <p className="text-sm font-semibold">Thomas Williams</p>
+          <p className="text-xs text-zinc-400">Personal</p>
+        </div>
+      </div>
+    </div>
   );
 };
+
+type SidebarItemProps = {
+  icon: JSX.Element;
+  label: string;
+};
+
+const SidebarItem = ({ icon, label }: SidebarItemProps) => (
+  <div className="flex items-center space-x-3 px-3 py-2 hover:bg-zinc-800/70 hover:backdrop-blur rounded-lg cursor-pointer transition-all duration-200">
+    <span className="text-lg">{icon}</span>
+    <span className="text-sm font-medium">{label}</span>
+  </div>
+);
 
 export default Sidebar;

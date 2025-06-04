@@ -1,14 +1,13 @@
-import './App.css'
-import MainLayout from './layout/MainLayout'
-import { Dashboard } from './pages/Dashboard'
+import "./App.css";
+import MainLayout from "./layout/MainLayout";
+import { Dashboard } from "./pages/Dashboard";
 
 function App() {
-
   return (
     <>
-   <MainLayout children={<Dashboard/>}/>
+      <MainLayout children={<Dashboard />} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
