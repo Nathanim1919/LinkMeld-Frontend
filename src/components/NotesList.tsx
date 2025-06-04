@@ -3,20 +3,11 @@ import { FaStar, FaExternalLinkAlt } from "react-icons/fa";
 import { FiMoreVertical } from "react-icons/fi";
 import { getCaptures } from "../api/capture.api";
 import type { Capture } from "../types/Capture";
+import { useCaptureContext } from "../context/CaptureContext";
 
 const NotesList = () => {
-  const [captures, setCaptures] = useState<Capture[]>([]);
-
-  useEffect(() => {
-    getCaptures()
-      .then((captures) => {
-        console.log("Fetched captures:", captures);
-        setCaptures(captures);
-      })
-      .catch((error) => {
-        console.error("Error fetching captures:", error);
-      });
-  }, []);
+  
+  const { captures, setSelectedCapture } = useCaptureContext();
 
   function formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -46,24 +37,26 @@ const NotesList = () => {
   return (
     <div>
       {/* Notes Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-1 h-screen overflow-y-auto">
+      <div className="flex flex-col h-screen overflow-y-auto">
         {captures.map((note) => (
           <div
+            onClick={() => setSelectedCapture(note)}
             key={note._id}
-            className="border-b border-gray-800 cursor-pointer shadow-md p-2 hover:shadow-lg transition-all hover:bg-[#1d1f1d]"
+            className="border-b border-white/10 cursor-pointer p-2 transition-all hover:bg-[#1d1f1d]"
           >
             <div className="flex flex-col justify-between items-start">
               <h3 className="text-sm font-semibold text-white">
                 {note.metadata.title}
               </h3>
               <p className="text-xs text-gray-400 mt-1">
-                {note.metadata.description.length > 100?
-                  `${note.metadata.description.slice(0, 100)}...` :
-                  note.metadata.description}
+                {note.metadata.description.length > 100
+                  ? `${note.metadata.description.slice(0, 100)}...`
+                  : note.metadata.description}
               </p>
             </div>
 
             <div className="flex justify-between items-center mt-4 text-xs text-gray-500">
+              <span>{formatTimeAgo(note.timestamp)}</span>
               <span>{formatDate(note.timestamp)}</span>
             </div>
           </div>

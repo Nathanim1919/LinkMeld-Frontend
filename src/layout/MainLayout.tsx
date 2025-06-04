@@ -1,13 +1,16 @@
 import EmptyNoteView from "../components/EmptyNoteView";
 import NotesList from "../components/NotesList";
+import NoteView from "../components/NoteView";
 import Sidebar from "../components/Sidebar";
 import { IoSearch } from "react-icons/io5";
+import { useCaptureContext } from "../context/CaptureContext";
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+export const MainLayout: React.FC<MainLayoutProps> = () => {
+  const { selectedCapture } = useCaptureContext();
   return (
     <section className="grid text-white bg-gray-500 lg:grid-cols-[_.2fr_.35fr_1fr] h-full w-full overflow-hidden">
       <Sidebar />
@@ -23,7 +26,11 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <NotesList />
       </div>
       <div className="bg-[#1d1f1d]">
-        <EmptyNoteView />
+        {!selectedCapture ? (
+          <EmptyNoteView />
+        ) : (
+          <NoteView capture={selectedCapture} />
+        )}
       </div>
     </section>
   );
