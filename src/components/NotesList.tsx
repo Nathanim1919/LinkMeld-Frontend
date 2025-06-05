@@ -1,8 +1,3 @@
-import { useEffect, useState } from "react";
-import { FaStar, FaExternalLinkAlt } from "react-icons/fa";
-import { FiMoreVertical } from "react-icons/fi";
-import { getCaptures } from "../api/capture.api";
-import type { Capture } from "../types/Capture";
 import { useCaptureContext } from "../context/CaptureContext";
 
 const NotesList = () => {
