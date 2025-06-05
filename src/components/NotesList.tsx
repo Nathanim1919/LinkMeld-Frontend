@@ -6,7 +6,6 @@ import type { Capture } from "../types/Capture";
 import { useCaptureContext } from "../context/CaptureContext";
 
 const NotesList = () => {
-  
   const { captures, setSelectedCapture } = useCaptureContext();
 
   function formatDate(dateString: string): string {
@@ -32,6 +31,14 @@ const NotesList = () => {
     if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
     if (minutes > 0) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
     return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
+  }
+
+  if (!captures || captures.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-gray-500">No notes available</p>
+      </div>
+    );
   }
 
   return (

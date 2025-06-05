@@ -1,13 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import { CaptureProvider } from './context/CaptureContext.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { CaptureProvider } from "./context/CaptureContext.tsx";
+import { UIProvider } from "./context/UIContext.tsx";
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <CaptureProvider>
-    <App />
+      <UIProvider>
+        <App />
+      </UIProvider>
     </CaptureProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);
