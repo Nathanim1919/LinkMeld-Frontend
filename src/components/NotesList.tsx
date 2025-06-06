@@ -1,17 +1,41 @@
 import type React from "react";
 import { useCaptureContext } from "../context/CaptureContext";
-import { useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import type { Capture } from "../types/Capture";
+import { FaFolderClosed } from "react-icons/fa6";
+import { FaHashtag } from "react-icons/fa";
+import { GrCluster } from "react-icons/gr";
+import { TbCaptureFilled } from "react-icons/tb";
+import type { JSX } from "react";
 
 interface NoteListProps {
-  filter?: "all" | "favourites" | "folder" | "tag" | "cluster";
+  filter?: "all" | "bookmarks" | "folder" | "tag" | "cluster";
 }
 
-const NotesList: React.FC<NoteListProps> = ({ filter }) => {
+const filterLabels: Record<NonNullable<NoteListProps["filter"]>, string> = {
+  all: "All Captures",
+  bookmarks: "Bookmarks",
+  folder: "Folder Notes",
+  tag: "Tagged Notes",
+  cluster: "Cluster Notes",
+};
 
+const filterIcons: Record<NonNullable<NoteListProps["filter"]>, JSX.Element> = {
+  all: <TbCaptureFilled className="text-purple-500" />,
+  bookmarks: <TbCaptureFilled className="text-purple-500" />, // You can use a heart/star icon here later
+  folder: <FaFolderClosed className="text-yellow-500" />,
+  tag: <FaHashtag className="text-blue-400" />,
+  cluster: <GrCluster className="text-green-400" />,
+};
+
+const NotesList: React.FC<NoteListProps> = ({ filter = "all" }) => {
   const { captures, setSelectedCapture } = useCaptureContext();
+  const navigate = useNavigate();
 
-
-  console.log("NotesList renders with filter:", filter);
+  const handleNoteClick = (note: Capture) => {
+    setSelectedCapture(note);
+    navigate({ to: `/captures/${note._id}` });
+  };
 
   function formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -47,29 +71,40 @@ const NotesList: React.FC<NoteListProps> = ({ filter }) => {
   }
 
   return (
-    <div>
-      {/* Notes Cards */}
-      <div className="flex flex-col h-screen overflow-y-auto">
+    <div className="px-4 py-4">
+      <h3 className="text-sm w-full border-b border-white/10 py-2 font-bold text-white mb-1 leading-tight flex items-center gap-2">
+        {filterIcons[filter]}
+        {filterLabels[filter]}
+      </h3>
+
+      <div className="flex flex-col max-h-[80vh] overflow-y-auto space-y-2 pr-1">
         {captures.map((note) => (
           <div
-            onClick={() => setSelectedCapture(note)}
+            onClick={() => handleNoteClick(note)}
             key={note._id}
-            className="border-b border-white/10 cursor-pointer p-2 transition-all hover:bg-[#1d1f1d]"
+            className="cursor-pointer p-3 border-b transition-all hover:bg-[#1d1f1d] rounded-md border border-transparent hover:border-violet-500/25 group"
           >
             <div className="flex flex-col justify-between items-start">
-              <h3 className="text-sm font-semibold text-white">
-                {note.metadata.title}
-              </h3>
-              <p className="text-xs text-gray-400 mt-1">
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-white group-hover:underline group-hover:text-violet-500">
+                  {note.metadata.title.length > 50
+                    ? `${note.metadata.title.slice(0, 50)}...`
+                    : note.metadata.title}
+                </h3>
+              </div>
+
+              <p className="text-[12px] text-gray-400 mt-1 group-hover:text-gray-500">
                 {note.metadata.description.length > 100
                   ? `${note.metadata.description.slice(0, 100)}...`
                   : note.metadata.description}
               </p>
             </div>
 
-            <div className="flex justify-between items-center mt-4 text-xs text-gray-500">
-              <span>{formatTimeAgo(note.timestamp)}</span>
-              <span>{formatDate(note.timestamp)}</span>
+            <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
+              <span title={formatDate(note.timestamp)}>
+                {formatTimeAgo(note.timestamp)}
+              </span>
+              <span className="italic">{formatDate(note.timestamp)}</span>
             </div>
           </div>
         ))}
