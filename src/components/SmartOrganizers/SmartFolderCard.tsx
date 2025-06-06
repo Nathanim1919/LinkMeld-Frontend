@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { MoreVertical } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 
 // --- Type ---
 export type SmartFolder = {
@@ -37,6 +38,38 @@ const sampleFolders: SmartFolder[] = [
     captures: 8,
     updatedAt: "2025-05-30T18:05:10Z",
   },
+  {
+    id: "4",
+    name: "Meeting Notes",
+    description: "Notes from team meetings and client calls",
+    color: "#EF4444", // red
+    captures: 20,
+    updatedAt: "2025-06-01T14:15:30Z",
+  },
+  {
+    id: "5",
+    name: "Research Projects",
+    description: "Ongoing research and experiments",
+    color: "#3B82F6", // blue
+    captures: 15,
+    updatedAt: "2025-06-03T10:00:00Z",
+  },
+  {
+    id: "6",
+    name: "Personal Journal",
+    description: "Daily reflections and personal thoughts",
+    color: "#D97706", // orange
+    captures: 30,
+    updatedAt: "2025-06-04T08:45:12Z",
+  },
+  {
+    id: "7",
+    name: "Travel Plans",
+    description: "Itineraries, packing lists, and travel notes",
+    color: "#8B5CF6", // purple
+    captures: 10,
+    updatedAt: "2025-06-05T11:30:45Z",
+  },
 ];
 
 // --- Component ---
@@ -53,50 +86,94 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
   onRename,
   onDelete,
 }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div
-      className="relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-sm p-2 cursor-pointer hover:shadow-md transition-all group"
+      className="relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-sm p-3 cursor-pointer hover:shadow-md transition-all group"
       onClick={() => onOpen(folder.id)}
     >
       {/* Color indicator */}
       <div
         className="w-3 h-3 rounded-full absolute top-4 right-4"
-        style={{ backgroundColor: folder.color || "#ccc" }}
+        style={{ backgroundColor: folder.color ?? "#d1d5db" }}
       />
 
+      {/* Folder Info */}
       <div>
-        <h2 className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">
+        <h2
+          className="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
+          title={folder.name}
+        >
           {folder.name}
         </h2>
 
-        {folder.description && (
-          <p className="text-[13px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-3">
-            {folder.description}
-          </p>
-        )}
+        <p
+          className="text-[13px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-3"
+          title={folder.description}
+        >
+          {folder.description || "No description"}
+        </p>
       </div>
 
-      <div>
-        <div className="text-xs font-bold text-white dark:text-white">
+      {/* Footer Info */}
+      <div className="flex justify-between items-center mt-1">
+        <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
           {folder.captures} {folder.captures === 1 ? "capture" : "captures"}
-        </div>
-
-        <div className="text-xs text-zinc-400 dark:text-zinc-500">
+        </span>
+        <span className="text-xs text-zinc-400 dark:text-zinc-500">
           Updated {new Date(folder.updatedAt).toLocaleDateString()}
-        </div>
+        </span>
       </div>
 
+      {/* Actions */}
       <div
-        className="absolute top-2 right-2 hidden group-hover:flex flex-col items-end space-y-1"
-        onClick={(e) => e.stopPropagation()}
-      ></div>
+        className="absolute top-2 right-2 z-10"
+        onClick={(e) => {
+          e.stopPropagation();
+          setMenuOpen((prev) => !prev);
+        }}
+      >
+        <MoreVertical className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+      </div>
+
+      {/* Dropdown Menu */}
+      {menuOpen && (
+        <div
+          className="absolute top-8 right-2 z-20 bg-white dark:bg-zinc-800 shadow-lg rounded-md border border-zinc-200 dark:border-zinc-700 w-32 text-sm"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className="w-full text-left px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-t-md"
+            onClick={() => {
+              onRename?.(folder.id);
+              setMenuOpen(false);
+            }}
+          >
+            Rename
+          </button>
+          <button
+            className="w-full text-left px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-b-md text-red-500"
+            onClick={() => {
+              onDelete?.(folder.id);
+              setMenuOpen(false);
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
 // --- Preview (for testing) ---
 export const SmartFolderPreviewGrid = () => {
-  const openFolder = (id: string) => alert(`Open folder ${id}`);
+  const navigate = useNavigate();
+
+  const openFolder = (id: string) => {
+    navigate({ to: "/folders/$folderId", params: { folderId: id } });
+  };
   const renameFolder = (id: string) => alert(`Rename folder ${id}`);
   const deleteFolder = (id: string) => alert(`Delete folder ${id}`);
 

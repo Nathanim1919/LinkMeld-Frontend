@@ -1,5 +1,6 @@
 import React from "react";
 import { Sparkles, Pencil, Pin, Layers3 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 
 // --- Type ---
 export type SmartCluster = {
@@ -17,7 +18,8 @@ const sampleClusters: SmartCluster[] = [
     id: "cluster-1",
     title: "AI & Machine Learning",
     emoji: "🤖",
-    description: "Captures about transformers, LLMs, neural networks, and AI trends.",
+    description:
+      "Captures about transformers, LLMs, neural networks, and AI trends.",
     captures: 21,
     pinned: true,
   },
@@ -25,14 +27,16 @@ const sampleClusters: SmartCluster[] = [
     id: "cluster-2",
     title: "Productivity Systems",
     emoji: "🧠",
-    description: "Zettelkasten, time management, second brain, and Notion workflows.",
+    description:
+      "Zettelkasten, time management, second brain, and Notion workflows.",
     captures: 10,
   },
   {
     id: "cluster-3",
     title: "Startup Insights",
     emoji: "🚀",
-    description: "Captures about fundraising, MVPs, Y Combinator, and startup strategies.",
+    description:
+      "Captures about fundraising, MVPs, Y Combinator, and startup strategies.",
     captures: 8,
   },
 ];
@@ -88,7 +92,9 @@ export const SmartClusterCard: React.FC<SmartClusterCardProps> = ({
         </div>
       </div>
 
-      <p className="text-sm text-zinc-500 dark:text-zinc-400">{cluster.description}</p>
+      <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        {cluster.description}
+      </p>
       <span className="text-xs text-zinc-400">
         {cluster.captures} {cluster.captures === 1 ? "capture" : "captures"}
       </span>
@@ -98,7 +104,11 @@ export const SmartClusterCard: React.FC<SmartClusterCardProps> = ({
 
 // --- Preview Component ---
 export const SmartClusterListPreview = () => {
-  const openCluster = (id: string) => alert(`Open Cluster ${id}`);
+  const navigate = useNavigate();
+
+  const openCluster = (id: string) => {
+    navigate({ to: "/clusters/$clusterId", params: { clusterId: id } });
+  };
   const renameCluster = (id: string) => alert(`Rename Cluster ${id}`);
   const togglePin = (id: string) => alert(`Toggle Pin on Cluster ${id}`);
 

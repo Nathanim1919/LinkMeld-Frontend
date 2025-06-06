@@ -1,13 +1,9 @@
 import EmptyNoteView from "../components/EmptyNoteView";
-import NotesList from "../components/NotesList";
 import NoteView from "../components/NoteView";
 import Sidebar from "../components/Sidebar";
 import { IoSearch } from "react-icons/io5";
 import { useCaptureContext } from "../context/CaptureContext";
 import { useUI } from "../context/UIContext";
-import { SmartClusterListPreview } from "../components/SmartOrganizers/SmartClusterCard";
-import { SmartTagListPreview } from "../components/SmartOrganizers/SmartTagCard";
-import { SmartFolderPreviewGrid } from "../components/SmartOrganizers/SmartFolderCard";
 import { MiddlePanel } from "../components/MiddlePanel";
 
 interface MainLayoutProps {

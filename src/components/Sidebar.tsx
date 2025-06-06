@@ -34,12 +34,12 @@ const navItems = [
   },
   {
     icon: <FiSearch />,
-    label: "Smart Search",
-    path: "/smart-search", // placeholder
+    label: "Search",
+    path: "/search", // updated path
   },
   {
     icon: <BsFolder />,
-    label: "Smart Folders",
+    label: "Folders",
     path: "/folders",
   },
   {
