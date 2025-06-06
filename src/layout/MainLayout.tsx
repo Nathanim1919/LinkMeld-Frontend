@@ -8,6 +8,7 @@ import { useUI } from "../context/UIContext";
 import { SmartClusterListPreview } from "../components/SmartOrganizers/SmartClusterCard";
 import { SmartTagListPreview } from "../components/SmartOrganizers/SmartTagCard";
 import { SmartFolderPreviewGrid } from "../components/SmartOrganizers/SmartFolderCard";
+import { MiddlePanel } from "../components/MiddlePanel";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -36,10 +37,7 @@ export const MainLayout: React.FC<MainLayoutProps> = () => {
             className="w-full  p-2  text-sm outline-0"
           />
         </div>
-        {/* <NotesList /> */}
-        {/* <SmartClusterListPreview/> */}
-        {/* <SmartTagListPreview/> */}
-        <SmartFolderPreviewGrid/>
+        <MiddlePanel />
       </div>
       <div className="bg-[#1d1f1d]">
         {!selectedCapture ? (

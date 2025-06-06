@@ -1,6 +1,13 @@
+import type React from "react";
 import { useCaptureContext } from "../context/CaptureContext";
 
-const NotesList = () => {
+interface NoteListProps {
+  filter?: "all" | "favourites" | "folder" | "tag" | "cluster";
+}
+
+const NotesList:React.FC<NoteListProps> = ({
+  filter
+}) => {
   const { captures, setSelectedCapture } = useCaptureContext();
 
   function formatDate(dateString: string): string {

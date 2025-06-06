@@ -1,5 +1,6 @@
 import React from "react";
 import { Tag, Pencil, Trash2 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 
 // --- Type ---
 export type SmartTag = {
@@ -91,7 +92,10 @@ export const SmartTagCard: React.FC<SmartTagCardProps> = ({
 
 // --- Preview Component ---
 export const SmartTagListPreview = () => {
-  const openTag = (id: string) => alert(`View captures with tag ${id}`);
+  const navigate = useNavigate();
+  const openTag = (id: string) => {
+    navigate({ to: `/tags/${id}` }); // Navigate to tag route
+  };
   const editTag = (id: string) => alert(`Edit tag ${id}`);
   const deleteTag = (id: string) => alert(`Delete tag ${id}`);
 

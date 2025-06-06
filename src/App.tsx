@@ -1,13 +1,8 @@
-import "./App.css";
-import MainLayout from "./layout/MainLayout";
-import { Dashboard } from "./pages/Dashboard";
+import { RouterProvider } from "@tanstack/react-router";
+import { router } from "./router";
 
 function App() {
-  return (
-    <>
-      <MainLayout children={<Dashboard />} />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
