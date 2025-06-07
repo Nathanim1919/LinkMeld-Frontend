@@ -1,4 +1,4 @@
-import { Sparkles, AlarmClock, HelpCircle, Layers, Share2 } from "lucide-react";
+import { Sparkles,Wand2, AlarmClock, HelpCircle, Layers, Share2 } from "lucide-react";
 
 type Action = {
   icon: React.ReactNode;
@@ -31,6 +31,11 @@ const actions: Action[] = [
     icon: <Share2 className="w-4 h-4" />,
     label: "Share",
     onClick: () => console.log("Sharing..."),
+  },
+  {
+    icon: <Wand2 className="w-4 h-4" />,
+    label: "Related captures",
+    onClick: () => console.log("Performing smart actions..."),
   },
 ];
 

@@ -58,8 +58,8 @@ import MainLayout from './layout/MainLayout';
     component: () => null,
   });
   
-  const favouritesRoute = createRoute({
-    path: '/favourites',
+  const bookmarksRoute = createRoute({
+    path: '/bookmarks',
     getParentRoute: () => rootRoute,
     component: () => null,
   });
@@ -73,7 +73,7 @@ import MainLayout from './layout/MainLayout';
     tagNotesRoute,
     clustersRoute,
     clusterNotesRoute,
-    favouritesRoute,
+    bookmarksRoute,
   ]);
   
   export const router = createRouter({ routeTree });

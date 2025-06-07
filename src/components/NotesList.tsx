@@ -1,6 +1,6 @@
 import type React from "react";
 import { useCaptureContext } from "../context/CaptureContext";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
 import type { Capture } from "../types/Capture";
 import { FaFolderClosed } from "react-icons/fa6";
 import { FaHashtag } from "react-icons/fa";
@@ -30,12 +30,8 @@ const filterIcons: Record<NonNullable<NoteListProps["filter"]>, JSX.Element> = {
 
 const NotesList: React.FC<NoteListProps> = ({ filter = "all" }) => {
   const { captures, setSelectedCapture } = useCaptureContext();
-  const navigate = useNavigate();
-
-  const handleNoteClick = (note: Capture) => {
-    setSelectedCapture(note);
-    navigate({ to: `/captures/${note._id}` });
-  };
+  const params = useParams({ strict: false });
+  const activeCaptureId = params?.captureId;
 
   function formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -79,14 +75,21 @@ const NotesList: React.FC<NoteListProps> = ({ filter = "all" }) => {
 
       <div className="flex flex-col max-h-[80vh] overflow-y-auto space-y-2 pr-1">
         {captures.map((note) => (
-          <div
-            onClick={() => handleNoteClick(note)}
+          <Link
+            to={`/captures/${note._id}`}
+            onClick={() => setSelectedCapture(note as Capture)}
             key={note._id}
-            className="cursor-pointer p-3 border-b transition-all hover:bg-[#1d1f1d] rounded-md border border-transparent hover:border-violet-500/25 group"
+            className={`cursor-pointer p-2 border-b transition-all rounded-md border border-transparent group
+           ${
+             activeCaptureId === note._id
+               ? "bg-[#1d1f1d] border-violet-500/25 text-violet-500"
+               : "hover:bg-[#1d1f1d] hover:border-violet-500/25"
+           }
+         `}
           >
             <div className="flex flex-col justify-between items-start">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold text-white group-hover:underline group-hover:text-violet-500">
+                <h3 className="text-sm font-semibold  group-hover:underline group-hover:text-violet-500">
                   {note.metadata.title.length > 50
                     ? `${note.metadata.title.slice(0, 50)}...`
                     : note.metadata.title}
@@ -106,7 +109,7 @@ const NotesList: React.FC<NoteListProps> = ({ filter = "all" }) => {
               </span>
               <span className="italic">{formatDate(note.timestamp)}</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

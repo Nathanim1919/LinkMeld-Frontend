@@ -20,7 +20,7 @@ export const MiddlePanel = () => {
     return <NotesList filter="all" />;
   }
 
-  if (router.location.pathname.startsWith("/favourites")) {
+  if (router.location.pathname.startsWith("/bookmarks")) {
     return <NotesList filter="bookmarks" />;
   }
 
