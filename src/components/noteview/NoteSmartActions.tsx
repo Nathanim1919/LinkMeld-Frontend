@@ -40,21 +40,23 @@ const actions: Action[] = [
 ];
 
 export const NoteActionBar = () => {
-    return (
-        <div className="flex flex-wrap items-center justify-end gap-1 mt-4">
-          {actions.map((action, i) => (
-            <div key={i} className="relative group">
-              <button
-                onClick={action.onClick}
-                className="flex items-center cursor-pointer justify-center text-zinc-600 dark:text-zinc-300 hover:text-indigo-500 p-2 rounded-md transition"
-              >
-                {action.icon}
-              </button>
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 bg-zinc-800 text-white text-xs rounded-md px-2 py-1 transition-all duration-150 pointer-events-none whitespace-nowrap z-10">
-                {action.label}
-              </div>
-            </div>
-          ))}
+  return (
+    <div className="flex flex-col fixed right-0 bg-black h-full items-center justify-start top-0 p-2 gap-1">
+      {actions.map((action, i) => (
+        <div key={i} className="relative group flex items-center">
+          <button
+            onClick={action.onClick}
+            className="flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:text-indigo-500 p-2 rounded-md transition"
+          >
+            {action.icon}
+          </button>
+
+          {/* Tooltip */}
+          <div className="absolute right-full mr-2 opacity-0 group-hover:opacity-100 transition transform translate-y-1/2 bg-zinc-800 text-white text-xs rounded-md px-2 py-1 whitespace-nowrap flex items-center gap-1">
+            <span>{action.label}</span>
+          </div>
         </div>
-      );
+      ))}
+    </div>
+  );
 };
