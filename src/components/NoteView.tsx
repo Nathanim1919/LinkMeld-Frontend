@@ -9,14 +9,16 @@ import { NoteActionBar } from "./noteview/NoteSmartActions";
 import { CiBookmark } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Share2 } from "lucide-react";
+import { useUI } from "../context/UIContext";
 
 interface NoteViewProps {
   capture: Capture | null;
 }
 
 export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
+  const {collapsed, middlePanelCollapsed} = useUI();
   return (
-    <div className="p-4 w-[80%] mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen">
+    <div className={`p-4 ${collapsed && middlePanelCollapsed?"w-[60%]":(collapsed || middlePanelCollapsed)?"w-[70%]":"w-[80%]"} mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen`}>
       <NoteActionBar />
       <div className="flex items-center justify-between mb-4">
         <div>
