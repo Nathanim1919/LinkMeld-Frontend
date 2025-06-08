@@ -4,12 +4,14 @@ import NotesList from "./NotesList";
 import { SmartFolderPreviewGrid } from "./SmartOrganizers/SmartFolderCard";
 import { SmartTagListPreview } from "./SmartOrganizers/SmartTagCard";
 import { SmartClusterListPreview } from "./SmartOrganizers/SmartClusterCard";
+import { useUI } from "../context/UIContext";
 
 export const MiddlePanel = () => {
   const router = useRouterState();
+  const {middlePanelCollapsed} = useUI();
 
-  if (router.location.pathname.startsWith("/folders/")) {
-    return <NotesList filter="folder" />;
+  if (middlePanelCollapsed) {
+    return null;
   }
 
   if (router.location.pathname.startsWith("/tags/")) {

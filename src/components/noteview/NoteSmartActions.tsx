@@ -5,12 +5,9 @@ import {
   AlarmClock,
   HelpCircle,
   Layers,
-  Share2,
 } from "lucide-react";
 import clsx from "clsx";
-import {
-  MdKeyboardDoubleArrowRight,
-} from "react-icons/md";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 
 type Action = {
   icon: React.ReactNode;
@@ -48,12 +45,6 @@ export const NoteActionBar = () => {
       onClick: () => {},
     },
     {
-      icon: <Share2 className="w-4 h-4" />,
-      label: "Share",
-      content: "Share this with your team",
-      onClick: () => {},
-    },
-    {
       icon: <Wand2 className="w-4 h-4" />,
       label: "Related captures",
       content: "Discover related notes and ideas",
@@ -86,7 +77,7 @@ export const NoteActionBar = () => {
 
             {/* Tooltip */}
             {activeIndex !== i && (
-              <div className="absolute right-full mr-2 opacity-0 group-hover:opacity-100 transition transform translate-y-1/2 bg-zinc-800 text-white text-xs rounded-md px-2 py-1 whitespace-nowrap">
+              <div className="absolute right-full mr-2 opacity-0 group-hover:opacity-100 transition transform translate-y-1/2 bg-zinc-800 text-white text-xs rounded-sm px-2 py-2 whitespace-nowrap">
                 {action.label}
               </div>
             )}

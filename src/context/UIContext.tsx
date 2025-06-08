@@ -3,18 +3,20 @@ import { createContext, useState, useContext } from "react";
 
 type SidebarContextType = {
   collapsed: boolean;
-  toggleCollapsed: () => void;
+  setCollapsed: (collapsed: boolean) => void;
+  middlePanelCollapsed: boolean;
+  setMiddlePanelCollapsed: (collapsed: boolean) => void;
 };
 
 const UIContext = createContext<SidebarContextType | undefined>(undefined);
 
 export const UIProvider = ({ children }: { children: React.ReactNode }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+  const [middlePanelCollapsed, setMiddlePanelCollapsed] = useState(true);
 
-  const toggleCollapsed = () => setCollapsed((prev) => !prev);
 
   return (
-    <UIContext.Provider value={{ collapsed, toggleCollapsed }}>
+    <UIContext.Provider value={{ collapsed, setCollapsed, middlePanelCollapsed, setMiddlePanelCollapsed }}>
       {children}
     </UIContext.Provider>
   );

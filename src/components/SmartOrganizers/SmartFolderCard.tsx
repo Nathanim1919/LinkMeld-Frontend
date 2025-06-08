@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { MoreVertical } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { IoFolderOpen } from "react-icons/io5";
+import { FaFolderPlus } from "react-icons/fa";
+
 
 // --- Type ---
 export type SmartFolder = {
@@ -179,6 +182,23 @@ export const SmartFolderPreviewGrid = () => {
 
   return (
     <div className="flex flex-col gap-2 p-3 self-start">
+      <div>
+        <div className="flex items-center justify-between mb-2">
+        <h2 className="text-sm flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-100">
+          <IoFolderOpen className="inline-block text-lg" />
+           Folders
+        </h2>
+        <button
+          className=""
+          onClick={() => alert("Create new folder")}
+        >
+          <FaFolderPlus className="inline-block mr-1" />
+        </button>
+        </div>
+        {/* <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          Organize your captures into smart folders
+        </p> */}
+      </div>
       {sampleFolders.map((folder) => (
         <SmartFolderCard
           key={folder.id}

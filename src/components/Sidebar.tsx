@@ -1,8 +1,5 @@
 import { useUI } from "../context/UIContext";
-import {
-  FiHome,
-  FiSearch,
-} from "react-icons/fi";
+import { FiHome, FiSearch } from "react-icons/fi";
 import { BsBookmarkHeart, BsTag } from "react-icons/bs";
 import { TbHighlight } from "react-icons/tb";
 import {
@@ -53,7 +50,7 @@ const navItems = [
     label: "Sources",
     path: "/sources",
   },
-  
+
   {
     icon: <HiOutlineSparkles />,
     label: "Smart Clusters",
@@ -62,25 +59,21 @@ const navItems = [
 ];
 
 const Sidebar = () => {
-  const { collapsed, toggleCollapsed } = useUI();
+  const { collapsed, setCollapsed } = useUI();
   const { location } = useRouterState();
 
   return (
     <div
-      className={`h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 \
-        ${collapsed ? "w-[72px]" : "w-46"} text-zinc-100 flex flex-col \
-        relative justify-between py-6 px-4 shadow-xl transition-all duration-300`}
+      className={`h-screen bg-black \
+        ${collapsed ? "w-[60px]" : "w-46"} text-zinc-100 flex flex-col \
+        relative justify-between items-center py-6 px-4 shadow-xl transition-all duration-300`}
     >
       {/* Collapse Toggle */}
       <div
         className="absolute top-2 right-2 p-1 cursor-pointer rounded-md hover:bg-zinc-800"
-        onClick={toggleCollapsed}
+        onClick={() => setCollapsed(true)}
       >
-        {collapsed ? (
-          <MdKeyboardDoubleArrowRight size={20} />
-        ) : (
-          <MdKeyboardDoubleArrowLeft size={20} />
-        )}
+        {!collapsed ? <MdKeyboardDoubleArrowLeft size={20} /> : null}
       </div>
 
       {/* Top Nav */}
@@ -130,20 +123,37 @@ const SidebarItem = ({
   collapsed,
   active,
 }: SidebarItemProps) => {
+  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
   return (
     <Link
       to={path}
-      className={`flex items-center ${collapsed?'gap-0':'gap-3'} px-2 py-2 rounded-md transition-all duration-200 \
-        text-sm font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/80 \
-        ${active ? "bg-zinc-800 text-white" : ""}`}
+      onClick={() => {
+        setCollapsed(false); // Ensure sidebar is expanded when navigating
+        setMiddlePanelCollapsed(false);
+      }}
+      className={`flex items-center ${
+        collapsed ? "gap-0" : "gap-3"
+      } px-2 py-2 rounded-md transition-all duration-200 \
+        text-sm font-medium text-zinc-400 hover:bg-zinc-950 \
+        ${active ? "bg-zinc-950 text-white" : ""}`}
     >
       <span
-        className={`flex-shrink-0 ${collapsed ? "text-2xl" : "text-lg"}  ${active ? "text-violet-500" : "text-zinc-400"}`}
-      >{icon}</span>
-      {!collapsed && <span
-        className={`flex-1 ${active ? "text-violet-500" : "text-zinc-400"}`}
-        title={label}
-      >{label}</span>}
+        className={`flex-shrink-0 ${collapsed ? "text-2xl" : "text-lg"}  ${
+          active ? "text-violet-500" : "text-zinc-400"
+        }`}
+      >
+        {icon}
+      </span>
+      {!collapsed && (
+        <span
+          className={`flex-1 ${
+            active ? "text-violet-500" : "text-zinc-400"
+          } hover:text-violet-500`}
+          title={label}
+        >
+          {label}
+        </span>
+      )}
     </Link>
   );
 };

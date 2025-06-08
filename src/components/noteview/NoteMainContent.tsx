@@ -9,7 +9,9 @@ export const NoteMainText: React.FC<NoteMainTextProps> = ({ text }) => {
   const formatted = text.split("\n").filter(p => p.trim().length > 0);
 
   return (
-    <div className="prose dark:prose-invert max-w-none text-sm leading-relaxed bg-red-500 h-[20%] overflow-hidden">
+    <div className="prose dark:prose-invert max-w-none relative text-sm leading-relaxed  h-[20%] overflow-hidden
+    before:content-[''] before:absolute before:w-full before:h-full before:bg-gradient-to-b before:from-transparent to-black 
+    ">
       <Linkify
         componentDecorator={(decoratedHref, decoratedText, key) => (
           <a
