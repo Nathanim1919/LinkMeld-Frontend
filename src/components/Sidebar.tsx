@@ -96,7 +96,9 @@ const Sidebar = () => {
 
       {/* Footer */}
       <div className="pt-6 border-t border-zinc-800 mt-auto">
-        <div className="flex items-center space-x-3">
+        <Link 
+        onClick={()=>setCollapsed(false)}
+        to="/profile" className="flex items-center space-x-3">
           <FaRegUserCircle size={30} className="text-zinc-400" />
           {!collapsed && (
             <div>
@@ -104,7 +106,7 @@ const Sidebar = () => {
               <p className="text-xs text-zinc-500">Personal</p>
             </div>
           )}
-        </div>
+        </Link>
       </div>
     </div>
   );

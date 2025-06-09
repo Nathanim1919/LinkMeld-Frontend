@@ -5,6 +5,7 @@ import { SmartFolderPreviewGrid } from "./SmartOrganizers/SmartFolderCard";
 import { SmartTagListPreview } from "./SmartOrganizers/SmartTagCard";
 import { SmartClusterListPreview } from "./SmartOrganizers/SmartClusterCard";
 import { useUI } from "../context/UIContext";
+import { UserProfile } from "../pages/UserProfile";
 
 export const MiddlePanel = () => {
   const router = useRouterState();
@@ -12,6 +13,11 @@ export const MiddlePanel = () => {
 
   if (middlePanelCollapsed) {
     return null;
+  }
+
+  // for profile page
+  if (router.location.pathname.startsWith("/profile")) {
+    return <UserProfile />;
   }
 
   if (router.location.pathname.startsWith("/tags/")) {

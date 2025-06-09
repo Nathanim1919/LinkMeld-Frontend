@@ -62,11 +62,11 @@ export const NoteActionBar = () => {
       {/* Icon Sidebar */}
       <div className="flex flex-col bg-black h-full items-center p-2 gap-2 w-14">
         {actions.map((action, i) => (
-          <div key={i} className="relative group flex items-center">
+          <div key={i} className="relative flex items-center">
             <button
               onClick={() => setActiveIndex(i === activeIndex ? null : i)}
               className={clsx(
-                "flex items-center cursor-pointer justify-center p-2 rounded-md transition",
+                "flex items-center cursor-pointer peer justify-center p-2 rounded-md transition",
                 i === activeIndex
                   ? "text-violet-500 bg-zinc-800"
                   : "text-zinc-400 hover:text-white"
@@ -77,7 +77,7 @@ export const NoteActionBar = () => {
 
             {/* Tooltip */}
             {activeIndex !== i && (
-              <div className="absolute right-full mr-2 opacity-0 group-hover:opacity-100 transition transform translate-y-1/2 bg-zinc-800 text-white text-xs rounded-sm px-2 py-2 whitespace-nowrap">
+              <div className="absolute right-full mr-2 opacity-0 peer-hover:opacity-100 transition transform translate-y-1/2 bg-zinc-800 text-white text-xs rounded-sm px-2 py-2 whitespace-nowrap">
                 {action.label}
               </div>
             )}

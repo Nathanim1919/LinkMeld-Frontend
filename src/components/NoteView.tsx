@@ -10,6 +10,8 @@ import { CiBookmark } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Share2 } from "lucide-react";
 import { useUI } from "../context/UIContext";
+import { FaFolderPlus } from "react-icons/fa6";
+
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -39,9 +41,10 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           </a>
         </div>
         <div className="flex self-end items-center justify-between gap-3 relative z-100">
-          <CiBookmark className="w-4 h-4 cursor-pointer text-gray-500 hover:text-white" />
-          <RiDeleteBin6Line className="w-4 h-4 cursor-pointer text-gray-500 hover:text-white" />
-          <Share2 className="w-4 h-4 cursor-pointer text-gray-500 hover:text-white" />
+          <CiBookmark className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
+          <RiDeleteBin6Line className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
+          <Share2 className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
+          <FaFolderPlus className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
         </div>
       </div>
       <NoteHeader
