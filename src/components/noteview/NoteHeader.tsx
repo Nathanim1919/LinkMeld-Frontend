@@ -11,6 +11,7 @@ const sentimentMap: Record<string, string> = {
 
 type NoteHeaderProps = {
   title: string;
+  description?: string;
   tags?: string[];
   capturedAt?: string;
   sentiment?: "insightful" | "inspiring" | "warning" | "neutral";
@@ -18,6 +19,7 @@ type NoteHeaderProps = {
 
 export const NoteHeader: React.FC<NoteHeaderProps> = ({
   title,
+  description = "",
   tags = [],
   capturedAt,
   sentiment = "neutral",
@@ -26,7 +28,7 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="sticky top-0 z-20 p-2 border-b border-gray-600"
+      className="p-2 border-b border-gray-600"
     >
       <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
         {capturedAt && (
@@ -38,6 +40,11 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
       <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
         {title}
       </h1>
+      {description && (
+        <p className="text-gray-700 dark:text-gray-400 mt-1 text-sm">
+          {description}
+        </p>
+      )}
       {tags.length > 0 && (
         <div className="mt-2 flex gap-2 flex-wrap">
           {tags.map((tag, index) => (

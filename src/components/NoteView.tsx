@@ -30,7 +30,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       } mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen`}
     >
       <NoteActionBar />
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 sticky top-[-1rem]  z-50 backdrop-blur-[15rem] py-2 px-4">
         <div>
           <a
             href={capture?.metadata.url}
@@ -49,6 +49,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       </div>
       <NoteHeader
         title={capture?.metadata.title || "Untitled Note"}
+        description={capture?.metadata.description||""}
         tags={
           capture?.metadata.keywords
             ? // this is not array but a string with comma separated values
