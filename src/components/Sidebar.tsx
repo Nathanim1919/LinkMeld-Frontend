@@ -34,6 +34,7 @@ const navItems = [
     icon: <FiSearch />,
     label: "Search",
     path: "/search",
+    action: "trigger-global-search",
   },
   {
     icon: <LuFolderOpen />,
@@ -87,6 +88,7 @@ const Sidebar = () => {
               path={item.path}
               collapsed={collapsed}
               active={location.pathname.startsWith(item.path)}
+              action={item.action}
             />
           ))}
         </nav>
@@ -114,6 +116,7 @@ interface SidebarItemProps {
   path: string;
   collapsed: boolean;
   active?: boolean;
+  action?: string; // Optional action for global search
 }
 
 const SidebarItem = ({
@@ -122,15 +125,26 @@ const SidebarItem = ({
   path,
   collapsed,
   active,
+  action,
 }: SidebarItemProps) => {
-  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
+  const { setMiddlePanelCollapsed, setCollapsed, setOpenGlobalSearch } =
+    useUI();
+
+  const handleClick = () => {
+    if (action === "trigger-global-search" && setOpenGlobalSearch) {
+      setOpenGlobalSearch(true);
+      setCollapsed(true);
+      setMiddlePanelCollapsed(true);
+    } else {
+      setCollapsed(false);
+      setMiddlePanelCollapsed(false);
+    }
+  };
+
   return (
     <Link
       to={path}
-      onClick={() => {
-        setCollapsed(false); // Ensure sidebar is expanded when navigating
-        setMiddlePanelCollapsed(false);
-      }}
+      onClick={handleClick}
       className={`flex items-center ${
         collapsed ? "gap-0" : "gap-3"
       } px-2 py-2 rounded-md transition-all duration-200 \

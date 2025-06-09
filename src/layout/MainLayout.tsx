@@ -7,6 +7,7 @@ import { useUI } from "../context/UIContext";
 import { MiddlePanel } from "../components/MiddlePanel";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import clsx from "clsx";
+import GlobalSearch from "../components/GlobalSearch";
 
 export const MainLayout: React.FC = () => {
   const { selectedCapture } = useCaptureContext();
@@ -23,7 +24,10 @@ export const MainLayout: React.FC = () => {
   );
 
   return (
+    <>
+    <GlobalSearch/>
     <section className={gridCols}>
+
       <Sidebar />
       {/* Middle Panel */}
       <div
@@ -69,6 +73,7 @@ export const MainLayout: React.FC = () => {
         )}
       </div>
     </section>
+    </>
   );
 };
 
