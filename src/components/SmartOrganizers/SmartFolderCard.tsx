@@ -3,6 +3,8 @@ import { MoreVertical } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { IoFolderOpen } from "react-icons/io5";
 import { FaFolderPlus } from "react-icons/fa";
+import { FaRegFolderOpen } from "react-icons/fa6";
+
 
 
 // --- Type ---
@@ -93,17 +95,16 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
 
   return (
     <div
-      className="relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-sm p-3 cursor-pointer hover:shadow-md transition-all group"
+      className="relative grid gap-1 w-full bg-white dark:bg-zinc-900 dark:border-zinc-700 rounded-2xl p-3 cursor-pointer hover:shadow-md transition-all group"
       onClick={() => onOpen(folder.id)}
     >
-      {/* Color indicator */}
-      <div
-        className="w-3 h-3 rounded-full absolute top-4 right-4"
-        style={{ backgroundColor: folder.color ?? "#d1d5db" }}
-      />
-
-      {/* Folder Info */}
-      <div>
+    
+    <div
+    className={`bg-gray-800 place-self-start  p-1 rounded-md`}
+    >
+     <FaRegFolderOpen/>
+    </div>
+      <div className="flex flex-col gap-1 mt-2">
         <h2
           className="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
           title={folder.name}
@@ -111,8 +112,8 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
           {folder.name}
         </h2>
 
-        <p
-          className="text-[13px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-3"
+       <p
+          className="text-[12px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-3"
           title={folder.description}
         >
           {folder.description || "No description"}
@@ -181,8 +182,8 @@ export const SmartFolderPreviewGrid = () => {
   const deleteFolder = (id: string) => alert(`Delete folder ${id}`);
 
   return (
-    <div className="flex flex-col gap-2 p-3 self-start">
-      <div>
+    <div className="flex flex-col w-full gap-2 p-3 self-start overflow-auto">
+      <div className="">
         <div className="flex items-center justify-between mb-2">
         <h2 className="text-sm flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-100">
           <IoFolderOpen className="inline-block text-lg" />
@@ -195,9 +196,7 @@ export const SmartFolderPreviewGrid = () => {
           <FaFolderPlus className="inline-block mr-1" />
         </button>
         </div>
-        {/* <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Organize your captures into smart folders
-        </p> */}
+       
       </div>
       {sampleFolders.map((folder) => (
         <SmartFolderCard
