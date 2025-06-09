@@ -26,10 +26,9 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-black/30 p-4 rounded-b-xl shadow-md"
+      className="sticky top-0 z-20 p-2 border-b border-gray-600"
     >
       <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-        <span>{sentimentMap[sentiment]}</span>
         {capturedAt && (
           <span>
             Captured {formatDistanceToNow(new Date(capturedAt))} ago

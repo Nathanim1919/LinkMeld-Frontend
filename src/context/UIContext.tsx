@@ -6,6 +6,8 @@ type SidebarContextType = {
   setCollapsed: (collapsed: boolean) => void;
   middlePanelCollapsed: boolean;
   setMiddlePanelCollapsed: (collapsed: boolean) => void;
+  mainContentCollapsed: boolean;
+  setMainContentCollapsed: (collapsed: boolean) => void;
 };
 
 const UIContext = createContext<SidebarContextType | undefined>(undefined);
@@ -13,10 +15,11 @@ const UIContext = createContext<SidebarContextType | undefined>(undefined);
 export const UIProvider = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(true);
   const [middlePanelCollapsed, setMiddlePanelCollapsed] = useState(true);
+  const [mainContentCollapsed, setMainContentCollapsed] = useState(true);
 
 
   return (
-    <UIContext.Provider value={{ collapsed, setCollapsed, middlePanelCollapsed, setMiddlePanelCollapsed }}>
+    <UIContext.Provider value={{ collapsed, setCollapsed, middlePanelCollapsed, setMiddlePanelCollapsed, mainContentCollapsed, setMainContentCollapsed }}>
       {children}
     </UIContext.Provider>
   );

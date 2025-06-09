@@ -16,9 +16,17 @@ interface NoteViewProps {
 }
 
 export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
-  const {collapsed, middlePanelCollapsed} = useUI();
+  const { collapsed, middlePanelCollapsed } = useUI();
   return (
-    <div className={`p-4 ${collapsed && middlePanelCollapsed?"w-[60%]":(collapsed || middlePanelCollapsed)?"w-[70%]":"w-[80%]"} mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen`}>
+    <div
+      className={`p-4 ${
+        collapsed && middlePanelCollapsed
+          ? "w-[60%]"
+          : collapsed || middlePanelCollapsed
+          ? "w-[70%]"
+          : "w-[80%]"
+      } mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen`}
+    >
       <NoteActionBar />
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -56,13 +64,13 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       />
 
       <NoteMainText text={capture?.mainText || ""} />
-      <p className="text-white bg-red-500 p-4">{capture?.metadata.keywords}</p>
       <NoteMetaBox
         domain="dev.to"
         savedAt="2025-06-01T08:15:00Z"
         wordCount={1024}
         tags={["productivity", "web3", "reading"]}
       />
+      
     </div>
   );
 };
