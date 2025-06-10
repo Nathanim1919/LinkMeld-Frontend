@@ -112,7 +112,7 @@ export const SmartFolderPreviewGrid = () => {
   const renameFolder = (id: string) => alert(`Rename folder ${id}`);
   const deleteFolder = (id: string) => alert(`Delete folder ${id}`);
 
-  const { folders } = useFolderContext();
+  const { folders, loading } = useFolderContext();
 
   return (
     <div className="flex relative flex-col w-full gap-2 p-3 self-start overflow-auto">
@@ -134,11 +134,19 @@ export const SmartFolderPreviewGrid = () => {
         open={openNewFolderForm}
         onClose={() => setOpenNewFolderForm(false)}
       />
-      {folders.length === 0 && (
-        <div className="flex items-center justify-center h-64 text-gray-500">
-          <p>No folders available. Create a new folder to get started.</p>
+
+      {loading && (
+        <div className="flex items-center justify-center w-full h-20">
+          <span className="text-sm text-zinc-500">Loading folders...</span>
         </div>
       )}
+
+      {!loading && folders.length === 0 && (
+        <div className="flex items-center justify-center w-full h-20">
+          <span className="text-sm text-zinc-500">No folders available</span>
+        </div>
+      )}
+
       {folders.map((folder) => (
         <SmartFolderCard
           key={folder._id}
