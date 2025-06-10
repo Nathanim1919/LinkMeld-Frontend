@@ -4,8 +4,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { IoFolderOpen } from "react-icons/io5";
 import { FaFolderPlus } from "react-icons/fa";
 import { FaRegFolderOpen } from "react-icons/fa6";
-
-
+import { NewFolderFormCard } from "../cards/newFolderFormCard";
+import axios from "axios";
 
 // --- Type ---
 export type SmartFolder = {
@@ -16,66 +16,6 @@ export type SmartFolder = {
   captures: number;
   updatedAt: string;
 };
-
-// --- Sample Data ---
-const sampleFolders: SmartFolder[] = [
-  {
-    id: "1",
-    name: "Deep Learning Papers",
-    description: "Papers and notes on CNNs, RNNs, and Transformers",
-    color: "#4F46E5", // indigo
-    captures: 12,
-    updatedAt: "2025-06-02T12:34:56Z",
-  },
-  {
-    id: "2",
-    name: "Product Ideas",
-    description: "Random thoughts, notes, and feature lists",
-    color: "#10B981", // emerald
-    captures: 5,
-    updatedAt: "2025-05-28T09:21:43Z",
-  },
-  {
-    id: "3",
-    name: "Design Inspirations",
-    description: "Futuristic UIs and UX patterns from other apps",
-    color: "#F59E0B", // amber
-    captures: 8,
-    updatedAt: "2025-05-30T18:05:10Z",
-  },
-  {
-    id: "4",
-    name: "Meeting Notes",
-    description: "Notes from team meetings and client calls",
-    color: "#EF4444", // red
-    captures: 20,
-    updatedAt: "2025-06-01T14:15:30Z",
-  },
-  {
-    id: "5",
-    name: "Research Projects",
-    description: "Ongoing research and experiments",
-    color: "#3B82F6", // blue
-    captures: 15,
-    updatedAt: "2025-06-03T10:00:00Z",
-  },
-  {
-    id: "6",
-    name: "Personal Journal",
-    description: "Daily reflections and personal thoughts",
-    color: "#D97706", // orange
-    captures: 30,
-    updatedAt: "2025-06-04T08:45:12Z",
-  },
-  {
-    id: "7",
-    name: "Travel Plans",
-    description: "Itineraries, packing lists, and travel notes",
-    color: "#8B5CF6", // purple
-    captures: 10,
-    updatedAt: "2025-06-05T11:30:45Z",
-  },
-];
 
 // --- Component ---
 type SmartFolderCardProps = {
@@ -98,12 +38,9 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
       className="relative grid gap-1 w-full bg-white dark:bg-zinc-900 dark:border-zinc-700 rounded-2xl p-3 cursor-pointer hover:shadow-md transition-all group"
       onClick={() => onOpen(folder.id)}
     >
-    
-    <div
-    className={`bg-gray-800 place-self-start  p-1 rounded-md`}
-    >
-     <FaRegFolderOpen/>
-    </div>
+      <div className={`bg-gray-800 place-self-start  p-1 rounded-md`}>
+        <FaRegFolderOpen />
+      </div>
       <div className="flex flex-col gap-1 mt-2">
         <h2
           className="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
@@ -112,7 +49,7 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
           {folder.name}
         </h2>
 
-       <p
+        <p
           className="text-[12px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-3"
           title={folder.description}
         >
@@ -174,6 +111,7 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
 // --- Preview (for testing) ---
 export const SmartFolderPreviewGrid = () => {
   const navigate = useNavigate();
+  const [openNewFolderForm, setOpenNewFolderForm] = useState(false);
 
   const openFolder = (id: string) => {
     navigate({ to: "/folders/$folderId", params: { folderId: id } });
@@ -181,24 +119,50 @@ export const SmartFolderPreviewGrid = () => {
   const renameFolder = (id: string) => alert(`Rename folder ${id}`);
   const deleteFolder = (id: string) => alert(`Delete folder ${id}`);
 
+  const [folders, setFolders] = useState<SmartFolder[]>([]);
+
+  React.useEffect(() => {
+    const getFolders = async () => {
+      try {
+        const folders = await axios.get<SmartFolder[]>("http://localhost:3000/api/v1/folders");
+        console.log("Fetched folders:", folders.data);
+        setFolders(folders.data);
+      } catch (error) {
+        console.error("Error fetching folders:", error);
+      }
+    };
+    getFolders();
+  }, []);
+
+
   return (
-    <div className="flex flex-col w-full gap-2 p-3 self-start overflow-auto">
-      <div className="">
+    <div className="flex relative flex-col w-full gap-2 p-3 self-start overflow-auto">
+      <div className="sticky top-0">
         <div className="flex items-center justify-between mb-2">
-        <h2 className="text-sm flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-100">
-          <IoFolderOpen className="inline-block text-lg" />
-           Folders
-        </h2>
-        <button
-          className=""
-          onClick={() => alert("Create new folder")}
-        >
-          <FaFolderPlus className="inline-block mr-1" />
-        </button>
+          <h2 className="text-sm flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-100">
+            <IoFolderOpen className="inline-block text-lg" />
+            Folders
+          </h2>
+          <button
+            className="cursor-pointer text-white rounded-md transition-colors duration-200"
+            onClick={() => setOpenNewFolderForm(true)}
+          >
+            <FaFolderPlus className="inline-block mr-1" />
+          </button>
         </div>
-       
       </div>
-      {sampleFolders.map((folder) => (
+      <NewFolderFormCard
+        open={openNewFolderForm}
+        onClose={() => setOpenNewFolderForm(false)}
+      />
+      {
+        folders.length === 0 && (
+          <div className="flex items-center justify-center h-64 text-gray-500">
+            <p>No folders available. Create a new folder to get started.</p>
+          </div>
+        )
+      }
+      {folders.map((folder) => (
         <SmartFolderCard
           key={folder.id}
           folder={folder}
