@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { MoreVertical } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { IoFolderOpen } from "react-icons/io5";
 import { FaFolderPlus } from "react-icons/fa";
@@ -9,7 +8,6 @@ import { useFolderContext } from "../../context/FolderContext";
 import type { IFolder } from "../../types/Folder";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
-
 
 // --- Component ---
 type SmartFolderCardProps = {
@@ -22,11 +20,7 @@ type SmartFolderCardProps = {
 export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
   folder,
   onOpen,
-  onRename,
-  onDelete,
 }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
     <div
       className="relative border grid gap-1 w-full bg-white dark:bg-zinc-900 dark:border-zinc-800 rounded-2xl p-3 cursor-pointer hover:shadow-md transition-all group"
@@ -56,14 +50,19 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
       </div>
 
       {/* Actions */}
-      <div
-        className="absolute top-2 right-2 z-10"
-        onClick={(e) => {
-          e.stopPropagation();
-          setMenuOpen((prev) => !prev);
-        }}
-      >
-        <MoreVertical className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+      <div className=" absolute top-2 right-2 z-10 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <button
+          className="p-1 cursor-pointer rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors"
+          title="Rename Folder"
+        >
+          <BiEdit className="text-zinc-600 dark:text-zinc-300" />
+        </button>
+        <button
+          className="p-1 cursor-pointer rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors"
+          title="Delete Folder"
+        >
+          <MdDeleteOutline className="text-zinc-600 dark:text-zinc-300" />
+        </button>
       </div>
     </div>
   );
