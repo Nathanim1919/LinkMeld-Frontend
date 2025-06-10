@@ -6,20 +6,12 @@ import { FaFolderPlus } from "react-icons/fa";
 import { FaRegFolderOpen } from "react-icons/fa6";
 import { NewFolderFormCard } from "../cards/newFolderFormCard";
 import axios from "axios";
-
-// --- Type ---
-export type SmartFolder = {
-  id: string;
-  name: string;
-  description?: string;
-  color?: string;
-  captures: number;
-  updatedAt: string;
-};
+import { useFolderContext } from "../../context/FolderContext";
+import type { IFolder } from "../../types/Folder";
 
 // --- Component ---
 type SmartFolderCardProps = {
-  folder: SmartFolder;
+  folder: IFolder;
   onOpen: (id: string) => void;
   onRename?: (id: string) => void;
   onDelete?: (id: string) => void;
@@ -36,7 +28,7 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
   return (
     <div
       className="relative grid gap-1 w-full bg-white dark:bg-zinc-900 dark:border-zinc-700 rounded-2xl p-3 cursor-pointer hover:shadow-md transition-all group"
-      onClick={() => onOpen(folder.id)}
+      onClick={() => onOpen(folder._id)}
     >
       <div className={`bg-gray-800 place-self-start  p-1 rounded-md`}>
         <FaRegFolderOpen />
@@ -60,7 +52,8 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
       {/* Footer Info */}
       <div className="flex justify-between items-center mt-1">
         <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-          {folder.captures} {folder.captures === 1 ? "capture" : "captures"}
+          {folder.captures.length}{" "}
+          {folder.captures.length === 1 ? "capture" : "captures"}
         </span>
         <span className="text-xs text-zinc-400 dark:text-zinc-500">
           Updated {new Date(folder.updatedAt).toLocaleDateString()}
@@ -87,7 +80,7 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
           <button
             className="w-full text-left px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-t-md"
             onClick={() => {
-              onRename?.(folder.id);
+              onRename?.(folder._id);
               setMenuOpen(false);
             }}
           >
@@ -96,7 +89,7 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
           <button
             className="w-full text-left px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-b-md text-red-500"
             onClick={() => {
-              onDelete?.(folder.id);
+              onDelete?.(folder._id);
               setMenuOpen(false);
             }}
           >
@@ -119,21 +112,7 @@ export const SmartFolderPreviewGrid = () => {
   const renameFolder = (id: string) => alert(`Rename folder ${id}`);
   const deleteFolder = (id: string) => alert(`Delete folder ${id}`);
 
-  const [folders, setFolders] = useState<SmartFolder[]>([]);
-
-  React.useEffect(() => {
-    const getFolders = async () => {
-      try {
-        const folders = await axios.get<SmartFolder[]>("http://localhost:3000/api/v1/folders");
-        console.log("Fetched folders:", folders.data);
-        setFolders(folders.data);
-      } catch (error) {
-        console.error("Error fetching folders:", error);
-      }
-    };
-    getFolders();
-  }, []);
-
+  const { folders } = useFolderContext();
 
   return (
     <div className="flex relative flex-col w-full gap-2 p-3 self-start overflow-auto">
@@ -155,16 +134,14 @@ export const SmartFolderPreviewGrid = () => {
         open={openNewFolderForm}
         onClose={() => setOpenNewFolderForm(false)}
       />
-      {
-        folders.length === 0 && (
-          <div className="flex items-center justify-center h-64 text-gray-500">
-            <p>No folders available. Create a new folder to get started.</p>
-          </div>
-        )
-      }
+      {folders.length === 0 && (
+        <div className="flex items-center justify-center h-64 text-gray-500">
+          <p>No folders available. Create a new folder to get started.</p>
+        </div>
+      )}
       {folders.map((folder) => (
         <SmartFolderCard
-          key={folder.id}
+          key={folder._id}
           folder={folder}
           onOpen={openFolder}
           onRename={renameFolder}
