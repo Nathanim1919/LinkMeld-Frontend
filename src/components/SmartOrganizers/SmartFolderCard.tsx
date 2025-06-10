@@ -5,9 +5,11 @@ import { IoFolderOpen } from "react-icons/io5";
 import { FaFolderPlus } from "react-icons/fa";
 import { FaRegFolderOpen } from "react-icons/fa6";
 import { NewFolderFormCard } from "../cards/newFolderFormCard";
-import axios from "axios";
 import { useFolderContext } from "../../context/FolderContext";
 import type { IFolder } from "../../types/Folder";
+import { BiEdit } from "react-icons/bi";
+import { MdDeleteOutline } from "react-icons/md";
+
 
 // --- Component ---
 type SmartFolderCardProps = {
@@ -27,7 +29,7 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
 
   return (
     <div
-      className="relative grid gap-1 w-full bg-white dark:bg-zinc-900 dark:border-zinc-700 rounded-2xl p-3 cursor-pointer hover:shadow-md transition-all group"
+      className="relative border grid gap-1 w-full bg-white dark:bg-zinc-900 dark:border-zinc-800 rounded-2xl p-3 cursor-pointer hover:shadow-md transition-all group"
       onClick={() => onOpen(folder._id)}
     >
       <div className={`bg-gray-800 place-self-start  p-1 rounded-md`}>
@@ -40,13 +42,6 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
         >
           {folder.name}
         </h2>
-
-        <p
-          className="text-[12px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mb-3"
-          title={folder.description}
-        >
-          {folder.description || "No description"}
-        </p>
       </div>
 
       {/* Footer Info */}
@@ -70,33 +65,6 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
       >
         <MoreVertical className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
       </div>
-
-      {/* Dropdown Menu */}
-      {menuOpen && (
-        <div
-          className="absolute top-8 right-2 z-20 bg-white dark:bg-zinc-800 shadow-lg rounded-md border border-zinc-200 dark:border-zinc-700 w-32 text-sm"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            className="w-full text-left px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-t-md"
-            onClick={() => {
-              onRename?.(folder._id);
-              setMenuOpen(false);
-            }}
-          >
-            Rename
-          </button>
-          <button
-            className="w-full text-left px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-b-md text-red-500"
-            onClick={() => {
-              onDelete?.(folder._id);
-              setMenuOpen(false);
-            }}
-          >
-            Delete
-          </button>
-        </div>
-      )}
     </div>
   );
 };
@@ -116,7 +84,7 @@ export const SmartFolderPreviewGrid = () => {
 
   return (
     <div className="flex relative flex-col w-full gap-2 p-3 self-start overflow-auto">
-      <div className="sticky top-0">
+      <div className="sticky top-0 z-999 backdrop-blur-3xl px-3">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-sm flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-100">
             <IoFolderOpen className="inline-block text-lg" />

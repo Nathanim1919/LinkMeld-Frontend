@@ -2,13 +2,10 @@ import axios from "axios";
 import type { IFolder } from "../types/Folder";
 
 export const createFolder = async (
-  folder: Omit<IFolder, "_id" | "createdAt" | "updatedAt">
+  folder: string
 ): Promise<IFolder> => {
   try {
-    const res = await axios.post<IFolder>(
-      "http://localhost:3000/api/v1/folders",
-      folder
-    );
+    const res = await axios.post<IFolder>("http://localhost:3000/api/v1/folders",{name:folder});
     return res.data;
   } catch (error) {
     console.error("Error creating folder:", error);

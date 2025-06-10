@@ -1,8 +1,9 @@
-import axios from "axios";
 import { motion } from "framer-motion";
 import { X } from "lucide-react"; // Using Lucide for clean icons
 import { useState } from "react";
 import { VscLoading } from "react-icons/vsc";
+import { createFolder } from "../../api/folder.api";
+import { useFolderContext } from "../../context/FolderContext";
 
 interface NewFolderFormCardProps {
   open: boolean;
@@ -13,23 +14,14 @@ export const NewFolderFormCard = ({
   onClose,
 }: NewFolderFormCardProps) => {
   const [folderName, setFolderName] = useState<string>("");
+  const { setFolders, loading } = useFolderContext();
 
-  const createFolder = async (e: React.FormEvent) => {
-    alert("Creating folder...");
+  const handleFolderCreation = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (folderName) {
-      try {
-        const res = await axios.post("http://localhost:3000/api/v1/folders", {
-          name: folderName,
-        });
-        console.log("New folder created:", res.data);
-      } catch (error) {
-        console.error("Error creating folder:", error);
-        alert("Failed to create folder. Please try again.");
-      }
-      setFolderName("");
-      onClose();
-    }
+    const res = await createFolder(folderName);
+    setFolders((prevFolders) => [...prevFolders, res]);
+    setFolderName(""); // Clear the input field after creation
+    onClose(); // Close the form after creation
   };
 
   if (!open) return null;
@@ -55,7 +47,7 @@ export const NewFolderFormCard = ({
         role="button"
         className="absolute top-2 right-2 cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
       />
-      <form className="flex flex-col gap-4" onSubmit={createFolder}>
+      <form className="flex flex-col gap-4" onSubmit={handleFolderCreation}>
         <div className="flex flex-col gap-2">
           <label
             htmlFor="folderName"
@@ -81,7 +73,7 @@ export const NewFolderFormCard = ({
           type="submit"
           className="w-full justify-self-end cursor-pointer bg-zinc-800 text-white py-1 rounded-md hover:bg-zinc-700 transition-colors duration-200"
         >
-          <VscLoading className="inline mr-2 animate-spin" />
+          {loading && <VscLoading className="inline mr-2 animate-spin" />}
           Create
         </button>
       </form>
