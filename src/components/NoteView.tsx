@@ -11,6 +11,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { Share2 } from "lucide-react";
 import { useUI } from "../context/UIContext";
 import { FaFolderPlus } from "react-icons/fa6";
+import { FolderList } from "./cards/FolderList";
 
 
 interface NoteViewProps {
@@ -30,6 +31,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       } mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen`}
     >
       <NoteActionBar />
+      <FolderList/>
       <div className="flex items-center justify-between mb-4 sticky top-[-1rem]  z-50 backdrop-blur-[15rem] py-2 px-4">
         <div>
           <a
