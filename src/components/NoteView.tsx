@@ -13,13 +13,12 @@ import { useUI } from "../context/UIContext";
 import { FaFolderPlus } from "react-icons/fa6";
 import { FolderList } from "./cards/FolderList";
 
-
 interface NoteViewProps {
   capture: Capture | null;
 }
 
 export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
-  const { collapsed, middlePanelCollapsed } = useUI();
+  const { collapsed, middlePanelCollapsed, setIsFolderListOpen } = useUI();
   return (
     <div
       className={`p-4 ${
@@ -31,7 +30,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       } mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen`}
     >
       <NoteActionBar />
-      <FolderList/>
+      <FolderList />
       <div className="flex items-center justify-between mb-4 sticky top-[-1rem]  z-50 backdrop-blur-[15rem] py-2 px-4">
         <div>
           <a
@@ -46,12 +45,16 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           <CiBookmark className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
           <RiDeleteBin6Line className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
           <Share2 className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
-          <FaFolderPlus className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
+          <FaFolderPlus
+            onClick={() => setIsFolderListOpen(true)}
+            data-testid="add-folder-button"
+            className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white"
+          />
         </div>
       </div>
       <NoteHeader
         title={capture?.metadata.title || "Untitled Note"}
-        description={capture?.metadata.description||""}
+        description={capture?.metadata.description || ""}
         tags={
           capture?.metadata.keywords
             ? // this is not array but a string with comma separated values
@@ -76,7 +79,6 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         wordCount={1024}
         tags={["productivity", "web3", "reading"]}
       />
-      
     </div>
   );
 };

@@ -25,38 +25,38 @@ const navItems = [
     label: "Bookmarks",
     path: "/bookmarks",
   },
-  {
-    icon: <TbHighlight />,
-    label: "Highlights",
-    path: "/highlights",
-  },
-  {
-    icon: <FiSearch />,
-    label: "Search",
-    path: "/search",
-    action: "trigger-global-search",
-  },
+  // {
+  //   icon: <TbHighlight />,
+  //   label: "Highlights",
+  //   path: "/highlights",
+  // },
+  // {
+  //   icon: <FiSearch />,
+  //   label: "Search",
+  //   path: "/search",
+  //   action: "trigger-global-search",
+  // },
   {
     icon: <LuFolderOpen />,
     label: "Folders",
     path: "/folders",
   },
-  {
-    icon: <BsTag />,
-    label: "Tags",
-    path: "/tags",
-  },
+  // {
+  //   icon: <BsTag />,
+  //   label: "Tags",
+  //   path: "/tags",
+  // },
   {
     icon: <MdOutlineLanguage />,
     label: "Sources",
     path: "/sources",
   },
 
-  {
-    icon: <HiOutlineSparkles />,
-    label: "Smart Clusters",
-    path: "/clusters",
-  },
+  // {
+  //   icon: <HiOutlineSparkles />,
+  //   label: "Smart Clusters",
+  //   path: "/clusters",
+  // },
 ];
 
 const Sidebar = () => {
