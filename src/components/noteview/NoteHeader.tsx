@@ -30,6 +30,7 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
       animate={{ opacity: 1, y: 0 }}
       className="p-2 border-b border-gray-600"
     >
+    
       <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
         {capturedAt && (
           <span>

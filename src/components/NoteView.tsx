@@ -52,6 +52,9 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           />
         </div>
       </div>
+      <h3>
+        {capture?.folder?.name}
+      </h3>
       <NoteHeader
         title={capture?.metadata.title || "Untitled Note"}
         description={capture?.metadata.description || ""}
