@@ -40,7 +40,7 @@ export const MiddlePanel = () => {
     return <SmartFolderPreviewGrid />;
   }
 
-  if (router.location.pathname === "/tags") {
+  if (router.location.pathname === "/sources") {
     return <SmartTagListPreview />;
   }
 

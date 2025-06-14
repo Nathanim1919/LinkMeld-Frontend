@@ -30,7 +30,6 @@ const sampleTags: SmartTag[] = [
     color: "#3B82F6", // blue
     captures: 3,
   },
-  
 ];
 
 // --- Component ---

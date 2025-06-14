@@ -1,5 +1,6 @@
 import { useUI } from "../context/UIContext";
 import { FiHome, FiSearch } from "react-icons/fi";
+import { IoMdDocument } from "react-icons/io";
 import { BsBookmarkHeart, BsTag } from "react-icons/bs";
 import { TbHighlight } from "react-icons/tb";
 import {
@@ -10,13 +11,18 @@ import {
 import { LuFolderOpen } from "react-icons/lu";
 import { HiOutlineSparkles } from "react-icons/hi2";
 import { FaRegUserCircle } from "react-icons/fa";
-
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { JSX } from "react";
+import { useCaptureContext } from "../context/CaptureContext";
 
 const navItems = [
   {
-    icon: <FiHome />, // Consider replacing with custom icon if brandable
+    icon: <FiHome />,
+    label: "Home",
+    path: "/",
+  },
+  {
+    icon: <IoMdDocument />,
     label: "Captures",
     path: "/captures",
   },
@@ -96,9 +102,11 @@ const Sidebar = () => {
 
       {/* Footer */}
       <div className="pt-6 border-t border-zinc-800 mt-auto">
-        <Link 
-        onClick={()=>setCollapsed(false)}
-        to="/profile" className="flex items-center space-x-3">
+        <Link
+          onClick={() => setCollapsed(false)}
+          to="/profile"
+          className="flex items-center space-x-3"
+        >
           <FaRegUserCircle size={30} className="text-zinc-400" />
           {!collapsed && (
             <div>
@@ -131,16 +139,20 @@ const SidebarItem = ({
 }: SidebarItemProps) => {
   const { setMiddlePanelCollapsed, setCollapsed, setOpenGlobalSearch } =
     useUI();
+  const { setSelectedCapture } = useCaptureContext(); // Add this from CaptureContext
 
   const handleClick = () => {
-    if (action === "trigger-global-search" && setOpenGlobalSearch) {
-      setOpenGlobalSearch(true);
-      setCollapsed(true);
-      setMiddlePanelCollapsed(true);
-    } else {
-      setCollapsed(false);
-      setMiddlePanelCollapsed(false);
+    // if (action === "trigger-global-search" && setOpenGlobalSearch) {
+    //   setOpenGlobalSearch(true);
+    //   setCollapsed(true);
+    //   setMiddlePanelCollapsed(true);
+    // } else {
+    setCollapsed(false);
+    setMiddlePanelCollapsed(false);
+    if (path === "/") {
+      setSelectedCapture(null); // Clear selectedCapture for Home
     }
+    // }
   };
 
   return (

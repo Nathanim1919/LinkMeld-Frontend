@@ -1,6 +1,5 @@
 import { FaExternalLinkAlt } from "react-icons/fa";
 import type { Capture } from "../types/Capture";
-import { PDFViewer } from "./PdfViewer";
 import { NoteHeader } from "./noteview/NoteHeader";
 import { NoteSummary } from "./noteview/NoteSummary";
 import { NoteMainText } from "./noteview/NoteMainContent";
@@ -46,16 +45,21 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           <RiDeleteBin6Line className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
           <Share2 className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
           <FaFolderPlus
-            onClick={() => setIsFolderListOpen(true)}
+            onClick={() => setIsFolderListOpen?.(true)}
             data-testid="add-folder-button"
             className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white"
           />
         </div>
       </div>
-      <h3>
-        {capture?.folder?.name}
-      </h3>
       <NoteHeader
+        folder={
+          capture?.folder
+            ? {
+                name: capture.folder.name,
+                id: capture.folder._id,
+              }
+            : { name: "Uncategorized", id: "uncategorized" }
+        }
         title={capture?.metadata.title || "Untitled Note"}
         description={capture?.metadata.description || ""}
         tags={
@@ -65,7 +69,6 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             : []
         }
         capturedAt={capture?.timestamp}
-        sentiment={"neutral"}
       />
       <NoteSummary
         summary={capture?.mainText.slice(0, 200) ?? null}

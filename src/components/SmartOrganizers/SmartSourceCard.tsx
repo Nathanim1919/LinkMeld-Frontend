@@ -5,26 +5,25 @@ import { FaFolderPlus } from "react-icons/fa";
 import { FaRegFolderOpen } from "react-icons/fa6";
 import { NewFolderFormCard } from "../cards/newFolderFormCard";
 import { useFolderContext } from "../../context/FolderContext";
-import type { IFolder } from "../../types/Folder";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
 
 // --- Component ---
-type SmartFolderCardProps = {
-  folder: IFolder;
+type SmartSourceCardProps = {
+  source: string;
   onOpen: (id: string) => void;
   onRename?: (id: string) => void;
   onDelete?: (id: string) => void;
 };
 
-export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
-  folder,
+export const SmartSourceCard: React.FC<SmartSourceCardProps> = ({
+  source,
   onOpen,
 }) => {
   return (
     <div
       className="relative border grid gap-1 w-full bg-white dark:bg-zinc-900 dark:border-zinc-800 rounded-2xl p-3 cursor-pointer hover:shadow-md transition-all group"
-      onClick={() => onOpen(folder._id)}
+      onClick={() => onOpen(source)}
     >
       <div className={`bg-gray-800 place-self-start  p-1 rounded-md`}>
         <FaRegFolderOpen />
@@ -32,24 +31,12 @@ export const SmartFolderCard: React.FC<SmartFolderCardProps> = ({
       <div className="flex flex-col gap-1 mt-2">
         <h2
           className="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
-          title={folder.name}
+          title={source}
         >
-          {folder.name}
+          {source}
         </h2>
       </div>
 
-      {/* Footer Info */}
-      <div className="flex justify-between items-center mt-1">
-        <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-          {folder.captures.length}{" "}
-          {folder.captures.length === 1 ? "capture" : "captures"}
-        </span>
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">
-          Updated {new Date(folder.updatedAt).toLocaleDateString()}
-        </span>
-      </div>
-
-      {/* Actions */}
       <div className=" absolute top-2 right-2 z-10 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <button
           className="p-1 cursor-pointer rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors"

@@ -11,6 +11,13 @@ const rootRoute = createRootRoute({
   component: MainLayout,
 });
 
+
+const homeRoute = createRoute({
+  path: "/",
+  getParentRoute: () => rootRoute,
+  component: () => null, // Handled in MiddlePanel
+});
+
 const capturesRoute = createRoute({
   path: "/captures",
   getParentRoute: () => rootRoute,
@@ -73,6 +80,7 @@ const bookmarksRoute = createRoute({
 });
 
 export const routeTree = rootRoute.addChildren([
+  homeRoute,
   capturesRoute,
   captureDetailRoute,
   foldersRoute,
