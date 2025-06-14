@@ -6,32 +6,41 @@ import { FaFolderClosed } from "react-icons/fa6";
 import { FaHashtag } from "react-icons/fa";
 import { GrCluster } from "react-icons/gr";
 import { TbCaptureFilled } from "react-icons/tb";
-import type { JSX } from "react";
+import { useEffect, type JSX } from "react";
+import { useFolderContext } from "../context/FolderContext";
+import { useSourceContext } from "../context/sourceContext";
 
 interface NoteListProps {
-  filter?: "all" | "bookmarks" | "folder" | "tag" | "cluster";
+  filter?: "all" | "bookmarks" | "folder" | "source";
 }
 
 const filterLabels: Record<NonNullable<NoteListProps["filter"]>, string> = {
   all: "All Captures",
   bookmarks: "Bookmarks",
   folder: "Folder Notes",
-  tag: "Tagged Notes",
-  cluster: "Cluster Notes",
+  source: "Source Notes",
 };
 
 const filterIcons: Record<NonNullable<NoteListProps["filter"]>, JSX.Element> = {
   all: <TbCaptureFilled className="text-purple-500" />,
   bookmarks: <TbCaptureFilled className="text-purple-500" />, // You can use a heart/star icon here later
   folder: <FaFolderClosed className="text-yellow-500" />,
-  tag: <FaHashtag className="text-blue-400" />,
-  cluster: <GrCluster className="text-green-400" />,
+  source: <FaHashtag className="text-blue-400" />,
 };
 
 const NotesList: React.FC<NoteListProps> = ({ filter = "all" }) => {
-  const { captures, setSelectedCapture } = useCaptureContext();
+  const { captures, setSelectedCapture, fetchCaptures } = useCaptureContext();
+
+  console.log("Params:", useParams({ strict: false }));
+  // the params can be folderId, source, or null, so how to get them
+
   const params = useParams({ strict: false });
   const activeCaptureId = params?.captureId;
+  const id = params.folderId || params.source;
+
+  useEffect(() => {
+    fetchCaptures(filter, id);
+  }, [fetchCaptures, filter, id]);
 
   function formatDate(dateString: string): string {
     const date = new Date(dateString);

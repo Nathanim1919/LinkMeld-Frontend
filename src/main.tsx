@@ -5,13 +5,16 @@ import App from "./App.tsx";
 import { CaptureProvider } from "./context/CaptureContext.tsx";
 import { UIProvider } from "./context/UIContext.tsx";
 import { FolderProvider } from "./context/FolderContext.tsx";
+import { SourceProvider } from "./context/sourceContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <CaptureProvider>
       <UIProvider>
         <FolderProvider>
-          <App />
+          <SourceProvider>
+            <App />
+          </SourceProvider>
         </FolderProvider>
       </UIProvider>
     </CaptureProvider>

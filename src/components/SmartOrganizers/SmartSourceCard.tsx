@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { IoFolderOpen } from "react-icons/io5";
-import { FaFolderPlus } from "react-icons/fa";
-import { FaRegFolderOpen } from "react-icons/fa6";
 import { NewFolderFormCard } from "../cards/newFolderFormCard";
-import { useFolderContext } from "../../context/FolderContext";
-import { BiEdit } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
+import { useSourceContext } from "../../context/sourceContext";
+import { MdOutlineLanguage } from "react-icons/md";
 
 // --- Component ---
 type SmartSourceCardProps = {
   source: string;
-  onOpen: (id: string) => void;
+  onOpen: (source: string) => void;
   onRename?: (id: string) => void;
   onDelete?: (id: string) => void;
 };
@@ -22,33 +19,27 @@ export const SmartSourceCard: React.FC<SmartSourceCardProps> = ({
 }) => {
   return (
     <div
-      className="relative border grid gap-1 w-full bg-white dark:bg-zinc-900 dark:border-zinc-800 rounded-2xl p-3 cursor-pointer hover:shadow-md transition-all group"
+      className="relative border-b border-white/10 grid gap-1 w-full p-2 cursor-pointer hover:shadow-md transition-all group"
       onClick={() => onOpen(source)}
     >
-      <div className={`bg-gray-800 place-self-start  p-1 rounded-md`}>
-        <FaRegFolderOpen />
-      </div>
-      <div className="flex flex-col gap-1 mt-2">
-        <h2
-          className="text-sm font-semibold text-zinc-800 dark:text-zinc-100"
-          title={source}
-        >
-          {source}
-        </h2>
+      <div className="flex flex-col">
+        <div className="flex items-center gap-1 text-blue-700 hover:underline">
+          <MdOutlineLanguage />
+          <h2 className="text-sm font-semibold " title={source}>
+            {source}
+          </h2>
+        </div>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          123 captures{" "}
+        </p>
       </div>
 
       <div className=" absolute top-2 right-2 z-10 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <button
           className="p-1 cursor-pointer rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors"
-          title="Rename Folder"
-        >
-          <BiEdit className="text-zinc-600 dark:text-zinc-300" />
-        </button>
-        <button
-          className="p-1 cursor-pointer rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors"
           title="Delete Folder"
         >
-          <MdDeleteOutline className="text-zinc-600 dark:text-zinc-300" />
+          <MdDeleteOutline className="text-zinc-600 dark:text-zinc-500" />
         </button>
       </div>
     </div>
@@ -56,55 +47,48 @@ export const SmartSourceCard: React.FC<SmartSourceCardProps> = ({
 };
 
 // --- Preview (for testing) ---
-export const SmartFolderPreviewGrid = () => {
+export const SmartSourcePreviewGrid = () => {
   const navigate = useNavigate();
   const [openNewFolderForm, setOpenNewFolderForm] = useState(false);
 
-  const openFolder = (id: string) => {
-    navigate({ to: "/folders/$folderId", params: { folderId: id } });
+  const openFolder = (sourceName: string) => {
+    navigate({ to: "/sources/$source", params: { source: sourceName } });
   };
   const renameFolder = (id: string) => alert(`Rename folder ${id}`);
   const deleteFolder = (id: string) => alert(`Delete folder ${id}`);
 
-  const { folders, loadingStates } = useFolderContext();
+  const { sources, loading } = useSourceContext();
+  console.log("Sources:", sources);
 
   return (
     <div className="flex relative flex-col w-full gap-2 p-3 self-start overflow-auto">
       <div className="sticky top-0 z-999 backdrop-blur-3xl px-3">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-sm flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-100">
-            <IoFolderOpen className="inline-block text-lg" />
-            Folders
-          </h2>
-          <button
-            className="cursor-pointer text-white rounded-md transition-colors duration-200"
-            onClick={() => setOpenNewFolderForm(true)}
-          >
-            <FaFolderPlus className="inline-block mr-1" />
-          </button>
-        </div>
+        <h2 className="text-sm flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-100">
+          <MdOutlineLanguage className="inline-block text-lg" />
+          Sources
+        </h2>
       </div>
       <NewFolderFormCard
         open={openNewFolderForm}
         onClose={() => setOpenNewFolderForm(false)}
       />
 
-      {loadingStates.fetch && (
+      {loading && (
         <div className="flex items-center justify-center w-full h-20">
-          <span className="text-sm text-zinc-500">Loading folders...</span>
+          <span className="text-sm text-zinc-500">Loading sources...</span>
         </div>
       )}
 
-      {!loadingStates.fetch && folders.length === 0 && (
+      {!loading && sources?.length === 0 && (
         <div className="flex items-center justify-center w-full h-20">
-          <span className="text-sm text-zinc-500">No folders available</span>
+          <span className="text-sm text-zinc-500">No Sources available</span>
         </div>
       )}
 
-      {folders?.map((folder) => (
-        <SmartFolderCard
-          key={folder._id}
-          folder={folder}
+      {sources?.map((source) => (
+        <SmartSourceCard
+          key={source}
+          source={source}
           onOpen={openFolder}
           onRename={renameFolder}
           onDelete={deleteFolder}
@@ -114,4 +98,4 @@ export const SmartFolderPreviewGrid = () => {
   );
 };
 
-export default SmartFolderCard;
+export default SmartSourceCard;

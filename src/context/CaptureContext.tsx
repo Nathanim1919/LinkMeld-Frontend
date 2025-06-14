@@ -1,41 +1,55 @@
-// Create a context for managing capture state
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { getCaptures } from "../api/capture.api";
+// CaptureContext.tsx
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+} from "react";
+import { getCapturesBasedOnFilter } from "../api/capture.api";
 import type { Capture } from "../types/Capture";
+
+type FilterType = "all" | "bookmarks" | "folder" | "source";
 
 interface CaptureContextType {
   captures: Capture[];
-  setCaptures: React.Dispatch<React.SetStateAction<Capture[]>>;
-  setSelectedCapture: React.Dispatch<React.SetStateAction<Capture | null>>;
   selectedCapture: Capture | null;
+  setSelectedCapture: React.Dispatch<React.SetStateAction<Capture | null>>;
+  fetchCaptures: (filter: FilterType, id?: string | null) => Promise<void>;
 }
 
 const CaptureContext = createContext<CaptureContextType | undefined>(undefined);
 
-export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [captures, setCaptures] = useState<Capture[]>([]);
   const [selectedCapture, setSelectedCapture] = useState<Capture | null>(null);
 
-  useEffect(() => {
-    getCaptures()
-      .then((data) => {
-        console.log("Fetched captures:", data);
-        setCaptures(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching captures:", error);
-      });
-  }, []);
+  const fetchCaptures = useCallback(
+    async (filter: FilterType, id: string | null = null) => {
+      try {
+        const response = await getCapturesBasedOnFilter(filter, id);
+        setCaptures(response);
+      } catch (error) {
+        console.error("Failed to fetch captures", error);
+      }
+    },
+    []
+  );
 
   return (
     <CaptureContext.Provider
-      value={{ captures, setCaptures, selectedCapture, setSelectedCapture }}
+      value={{
+        captures,
+        selectedCapture,
+        setSelectedCapture,
+        fetchCaptures,
+      }}
     >
       {children}
     </CaptureContext.Provider>
   );
 };
-
 
 export const useCaptureContext = (): CaptureContextType => {
   const context = useContext(CaptureContext);

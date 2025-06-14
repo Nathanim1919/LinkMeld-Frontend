@@ -4,7 +4,6 @@ import { formatDistanceToNow } from "date-fns";
 import { Link } from "@tanstack/react-router";
 import { IoFolderOpen } from "react-icons/io5";
 
-
 type NoteHeaderProps = {
   title: string;
   folder: {
@@ -29,9 +28,13 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
       animate={{ opacity: 1, y: 0 }}
       className="p-2 border-b border-gray-600"
     >
-        <Link to={`/folders/${folder.id}`} className="text-blue-500 flex items-center gap-1 hover:underline">
-            <IoFolderOpen/>{folder.name || "Uncategorized"}
-        </Link>
+      <Link
+        to={`/folders/${folder.id}`}
+        className="text-blue-500 flex items-center gap-1 hover:underline"
+      >
+        <IoFolderOpen />
+        {folder.name || "Uncategorized"}
+      </Link>
       <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
         {capturedAt && (
           <span>Captured {formatDistanceToNow(new Date(capturedAt))} ago</span>

@@ -23,21 +23,21 @@ export const SourceProvider: React.FC<{ children: React.ReactNode }> = ({
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    const fetchFolders = async () => {
+    const fetchSources = async () => {
       setLoading(true);
       try {
         const response = await getSources();
         console.log("Fetched sources:", response);
         setSources(response);
       } catch (err) {
-        console.error("Error fetching folders:", err);
+        console.error("Error fetching Sources:", err);
         setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFolders();
+    fetchSources();
   }, []);
 
   return (

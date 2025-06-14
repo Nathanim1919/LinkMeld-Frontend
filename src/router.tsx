@@ -55,8 +55,8 @@ const tagsRoute = createRoute({
   component: () => null,
 });
 
-const tagNotesRoute = createRoute({
-  path: "/tags/$tagId",
+const sourceRoute = createRoute({
+  path: "/sources/$sourceId",
   getParentRoute: () => rootRoute,
   component: () => null,
 });
@@ -86,7 +86,7 @@ export const routeTree = rootRoute.addChildren([
   foldersRoute,
   folderNotesRoute,
   tagsRoute,
-  tagNotesRoute,
+  sourceRoute,
   clustersRoute,
   clusterNotesRoute,
   bookmarksRoute,

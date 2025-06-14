@@ -6,6 +6,7 @@ import { SmartTagListPreview } from "./SmartOrganizers/SmartTagCard";
 import { SmartClusterListPreview } from "./SmartOrganizers/SmartClusterCard";
 import { useUI } from "../context/UIContext";
 import { UserProfile } from "../pages/UserProfile";
+import { SmartSourcePreviewGrid } from "./SmartOrganizers/SmartSourceCard";
 
 export const MiddlePanel = () => {
   const router = useRouterState();
@@ -41,7 +42,7 @@ export const MiddlePanel = () => {
   }
 
   if (router.location.pathname === "/sources") {
-    return <SmartTagListPreview />;
+    return <SmartSourcePreviewGrid />;
   }
 
   if (router.location.pathname === "/clusters") {

@@ -1,11 +1,14 @@
+import axios from "axios";
+
 export const getSources = async (): Promise<string[]> => {
   try {
-    const response = await fetch("http://localhost:3000/api/v1/sources");
-    if (!response.ok) {
+    const response = await axios.get("http://localhost:3000/api/v1/sources");
+    console.log("Fetching sources from API", response);
+    if (!response.data || !Array.isArray(response.data.siteNames)) {
       throw new Error("Failed to fetch sources");
     }
-    const data = await response.json();
-    return data.sources as string[];
+    const data = response.data;
+    return data.siteNames as string[];
   } catch (error) {
     console.error("Error fetching sources:", error);
     throw error;
