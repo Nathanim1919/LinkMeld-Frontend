@@ -21,9 +21,9 @@ export const MiddlePanel = () => {
     return <UserProfile />;
   }
 
-  if (router.location.pathname.startsWith("/tags/")) {
-    return <NotesList filter="tag" />;
-  }
+  // if (router.location.pathname.startsWith("/tags/")) {
+  //   return <NotesList filter="tag" />;
+  // }
 
   if (router.location.pathname.startsWith("/captures/")) {
     return <NotesList filter="all" />;
@@ -33,9 +33,9 @@ export const MiddlePanel = () => {
     return <NotesList filter="bookmarks" />;
   }
 
-  if (router.location.pathname.startsWith("/clusters/")) {
-    return <NotesList filter="cluster" />;
-  }
+  // if (router.location.pathname.startsWith("/clusters/")) {
+  //   return <NotesList filter="cluster" />;
+  // }
 
   if (router.location.pathname === "/folders") {
     return <SmartFolderPreviewGrid />;
@@ -49,5 +49,5 @@ export const MiddlePanel = () => {
     return <SmartClusterListPreview />;
   }
 
-  return <NotesList />;
+  return <NotesList filter="all" />;
 };

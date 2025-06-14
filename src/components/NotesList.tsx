@@ -4,11 +4,8 @@ import { Link, useParams } from "@tanstack/react-router";
 import type { Capture } from "../types/Capture";
 import { FaFolderClosed } from "react-icons/fa6";
 import { FaHashtag } from "react-icons/fa";
-import { GrCluster } from "react-icons/gr";
 import { TbCaptureFilled } from "react-icons/tb";
-import { useEffect, type JSX } from "react";
-import { useFolderContext } from "../context/FolderContext";
-import { useSourceContext } from "../context/sourceContext";
+import { useEffect, useMemo, useState, type JSX } from "react";
 
 interface NoteListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -23,53 +20,119 @@ const filterLabels: Record<NonNullable<NoteListProps["filter"]>, string> = {
 
 const filterIcons: Record<NonNullable<NoteListProps["filter"]>, JSX.Element> = {
   all: <TbCaptureFilled className="text-purple-500" />,
-  bookmarks: <TbCaptureFilled className="text-purple-500" />, // You can use a heart/star icon here later
+  bookmarks: <TbCaptureFilled className="text-purple-500" />,
   folder: <FaFolderClosed className="text-yellow-500" />,
   source: <FaHashtag className="text-blue-400" />,
 };
 
-const NotesList: React.FC<NoteListProps> = ({ filter = "all" }) => {
+const NotesList: React.FC<NoteListProps> = () => {
   const { captures, setSelectedCapture, fetchCaptures } = useCaptureContext();
-
-  console.log("Params:", useParams({ strict: false }));
-  // the params can be folderId, source, or null, so how to get them
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const params = useParams({ strict: false });
   const activeCaptureId = params?.captureId;
-  const id = params.folderId || params.source;
+
+  // Safely determine filter
+  const filter = useMemo(() => {
+    if (params.folderId) return "folder";
+    if (params.source) return "source";
+    if (location.pathname.startsWith("/bookmarks")) return "bookmarks";
+    return "all";
+  }, [params]);
+
+  const id = useMemo(() => params.folderId || params.source, [params]);
 
   useEffect(() => {
-    fetchCaptures(filter, id);
+    const loadCaptures = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        await fetchCaptures(filter, id);
+      } catch (err) {
+        console.error("Failed to fetch captures:", err);
+        setError("Failed to load notes. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCaptures();
   }, [fetchCaptures, filter, id]);
 
-  function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
+  const formatDate = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return "";
+    }
+  };
 
-  function formatTimeAgo(dateString: string): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-    if (minutes > 0) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-    return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
-  }
+  const formatTimeAgo = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diff = now.getTime() - date.getTime();
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      if (days > 0) return `${days} day${days > 1 ? "s" : ""} ago`;
+      if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+      if (minutes > 0) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+      return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
+    } catch {
+      return "";
+    }
+  };
 
-  if (!captures || captures.length === 0) {
+  // Safely handle captures data
+  const safeCaptures = useMemo(() => {
+    console.log("Captures data:", captures);
+    if (!captures) return [];
+    if (!Array.isArray(captures)) {
+      console.warn("Captures is not an array:", captures);
+      return [];
+    }
+    return captures.map(note => ({
+      ...note,
+      _id: note._id?.toString() || "",
+      metadata: {
+        ...note.metadata,
+        title: note.metadata?.title || "Untitled",
+        description: note.metadata?.description || "",
+      },
+      formattedDate: formatDate(note.timestamp),
+      timeAgo: formatTimeAgo(note.timestamp),
+    }));
+  }, [captures]);
+
+  if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-full py-8">
+        <p className="text-gray-500">Loading notes...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-full py-8">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
+
+  if (!safeCaptures.length) {
+    return (
+      <div className="flex items-center justify-center h-full py-8">
         <p className="text-gray-500">No notes available</p>
       </div>
     );
@@ -83,22 +146,21 @@ const NotesList: React.FC<NoteListProps> = ({ filter = "all" }) => {
       </h3>
 
       <div className="flex flex-col max-h-[80vh] overflow-y-auto space-y-2 pr-1">
-        {captures.map((note) => (
+        {safeCaptures.map((note) => (
           <Link
             to={`/captures/${note._id}`}
             onClick={() => setSelectedCapture(note as Capture)}
             key={note._id}
             className={`cursor-pointer p-2 border-b transition-all rounded-md border border-transparent group
-           ${
-             activeCaptureId === note._id
-               ? "bg-[#1d1f1d] border-violet-500/25 text-violet-500"
-               : "hover:bg-[#1d1f1d] hover:border-violet-500/25"
-           }
-         `}
+              ${
+                activeCaptureId === note._id
+                  ? "bg-[#1d1f1d] border-violet-500/25 text-violet-500"
+                  : "hover:bg-[#1d1f1d] hover:border-violet-500/25"
+              }`}
           >
             <div className="flex flex-col justify-between items-start">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold  group-hover:underline group-hover:text-violet-500">
+                <h3 className="text-sm font-semibold group-hover:underline group-hover:text-violet-500">
                   {note.metadata.title.length > 50
                     ? `${note.metadata.title.slice(0, 50)}...`
                     : note.metadata.title}
@@ -113,10 +175,10 @@ const NotesList: React.FC<NoteListProps> = ({ filter = "all" }) => {
             </div>
 
             <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
-              <span title={formatDate(note.timestamp)}>
-                {formatTimeAgo(note.timestamp)}
+              <span title={note.formattedDate}>
+                {note.timeAgo}
               </span>
-              <span className="italic">{formatDate(note.timestamp)}</span>
+              <span className="italic">{note.formattedDate}</span>
             </div>
           </Link>
         ))}

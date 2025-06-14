@@ -1,45 +1,55 @@
 import type { Capture } from "../types/Capture";
 import axios from "axios";
 
-export const getCaptures = async (): Promise<Capture[]> => {
-  try {
-    const response = await axios.get<Capture[]>(
-      "http://localhost:3000/api/v1/captures"
-    );
-    console.log("Fetched captures:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching captures:", error);
-    throw error;
-  }
-};
+// Strongly typed filter
+export type CaptureFilter = "all" | "bookmarks" | "folder" | "source";
 
 export const getCapturesBasedOnFilter = async (
-  filter: string,
+  filter: CaptureFilter,
   id: string | null = null
 ): Promise<Capture[]> => {
-  try {
-    let url = "http://localhost:3000/api/v1/captures";
+  const baseUrl = "http://localhost:3000/api/v1";
+  let url = `${baseUrl}/captures`; // Default: all
 
+  try {
     switch (filter) {
       case "bookmarks":
-        url = "http://localhost:3000/api/v1/captures/bookmarks";
+        url = `${baseUrl}/captures/bookmarks`;
         break;
+
       case "folder":
-        url = "http://localhost:3000/api/v1/captures/folder";
+        if (!id)
+          throw new Error(
+            "Folder ID is required for fetching folder captures."
+          );
+        url = `${baseUrl}/folders/${id}/captures`;
         break;
+
       case "source":
-        url = "http://localhost:3000/api/v1/captures/source";
+        if (!id)
+          throw new Error(
+            "Source ID is required for fetching source captures."
+          );
+        url = `${baseUrl}/captures/source/${id}`;
         break;
+
+      case "all":
       default:
-        // If filter is 'all' or any other value, use the default captures endpoint
-        url = "http://localhost:3000/api/v1/captures";
+        url = `${baseUrl}/captures`;
+        break;
     }
+
+    console.log(
+      `📦 Fetching captures - Filter: ${filter}, ID: ${id}, URL: ${url}`
+    );
+
     const response = await axios.get<Capture[]>(url);
-    console.log("Fetched captures based on filter:", response.data);
+
+    console.log("✅ Captures fetched:", response.data);
+
     return response.data;
   } catch (error) {
-    console.error("Error fetching captures based on filter:", error);
+    console.error("❌ Error fetching captures based on filter:", error);
     throw error;
   }
 };

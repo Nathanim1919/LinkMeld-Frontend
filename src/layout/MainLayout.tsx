@@ -1,18 +1,14 @@
-import EmptyNoteView from "../components/EmptyNoteView";
-import NoteView from "../components/NoteView";
+// src/layout/MainLayout.tsx
 import Sidebar from "../components/Sidebar";
 import { IoSearch } from "react-icons/io5";
-import { useCaptureContext } from "../context/CaptureContext";
 import { useUI } from "../context/UIContext";
 import { MiddlePanel } from "../components/MiddlePanel";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import clsx from "clsx";
 import GlobalSearch from "../components/GlobalSearch";
-import { useMatchRoute } from "@tanstack/react-router";
-import { UserProfile } from "../pages/UserProfile";
+import { useMatchRoute, Outlet } from "@tanstack/react-router";
 
 export const MainLayout: React.FC = () => {
-  const { selectedCapture } = useCaptureContext();
   const { collapsed, middlePanelCollapsed, setMiddlePanelCollapsed } = useUI();
   const matchRoute = useMatchRoute();
   const isProfileRoute = matchRoute({ to: "/profile", fuzzy: false });
@@ -37,6 +33,7 @@ export const MainLayout: React.FC = () => {
         )}
       >
         <Sidebar />
+
         {!isProfileRoute && (
           <div
             className={clsx(
@@ -74,14 +71,9 @@ export const MainLayout: React.FC = () => {
           </div>
         )}
 
+        {/* This is where routed page content is rendered */}
         <div className="bg-[#1d1f1d] overflow-y-auto h-screen">
-          {isProfileRoute ? (
-            <UserProfile />
-          ) : !selectedCapture ? (
-            <EmptyNoteView />
-          ) : (
-            <NoteView capture={selectedCapture} />
-          )}
+          <Outlet />
         </div>
       </section>
     </>

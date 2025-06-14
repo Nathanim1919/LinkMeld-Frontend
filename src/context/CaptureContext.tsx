@@ -29,6 +29,9 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     async (filter: FilterType, id: string | null = null) => {
       try {
         const response = await getCapturesBasedOnFilter(filter, id);
+        console.log(
+          `📦 Fetching captures with filter: ${filter}, id: ${id}, response length: ${response.length} and captures list ${response}`
+        );
         setCaptures(response);
       } catch (error) {
         console.error("Failed to fetch captures", error);
