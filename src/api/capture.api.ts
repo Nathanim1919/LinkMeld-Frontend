@@ -14,7 +14,7 @@ export const getCapturesBasedOnFilter = async (
   try {
     switch (filter) {
       case "bookmarks":
-        url = `${baseUrl}/captures/bookmarks`;
+        url = `${baseUrl}/captures/bookmarked`;
         break;
 
       case "folder":
@@ -57,17 +57,6 @@ export const bookMarkOrUnbookMarkCapture = async (
     return response.data;
   } catch (error) {
     console.error(`❌ Error bookmarking or unbookmarking capture:`, error);
-    throw error;
-  }
-};
-
-export const getBookmarkedCaptures = async (): Promise<Capture[]> => {
-  const url = "http://localhost:3000/api/v1/captures/bookmarked";
-  try {
-    const response = await axios.get<Capture[]>(url);
-    return response.data;
-  } catch (error) {
-    console.error("❌ Error fetching bookmarked captures:", error);
     throw error;
   }
 };

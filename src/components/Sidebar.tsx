@@ -1,17 +1,11 @@
 import { useUI } from "../context/UIContext";
-import { FiHome, FiSearch } from "react-icons/fi";
+import { FiHome } from "react-icons/fi";
 import { IoMdDocument } from "react-icons/io";
-import { BsBookmarkHeart, BsTag } from "react-icons/bs";
-import { TbHighlight } from "react-icons/tb";
-import {
-  MdKeyboardDoubleArrowRight,
-  MdKeyboardDoubleArrowLeft,
-  MdOutlineLanguage,
-} from "react-icons/md";
+import { BsBookmarkHeart } from "react-icons/bs";
+import { MdKeyboardDoubleArrowLeft, MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
-import { HiOutlineSparkles } from "react-icons/hi2";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useCaptureContext } from "../context/CaptureContext";
 
@@ -31,43 +25,20 @@ const navItems = [
     label: "Bookmarks",
     path: "/bookmarks",
   },
-  // {
-  //   icon: <TbHighlight />,
-  //   label: "Highlights",
-  //   path: "/highlights",
-  // },
-  // {
-  //   icon: <FiSearch />,
-  //   label: "Search",
-  //   path: "/search",
-  //   action: "trigger-global-search",
-  // },
   {
     icon: <LuFolderOpen />,
     label: "Folders",
     path: "/folders",
   },
-  // {
-  //   icon: <BsTag />,
-  //   label: "Tags",
-  //   path: "/tags",
-  // },
   {
     icon: <MdOutlineLanguage />,
     label: "Sources",
     path: "/sources",
   },
-
-  // {
-  //   icon: <HiOutlineSparkles />,
-  //   label: "Smart Clusters",
-  //   path: "/clusters",
-  // },
 ];
 
 const Sidebar = () => {
   const { collapsed, setCollapsed } = useUI();
-  const { location } = useRouterState();
 
   return (
     <div
@@ -93,8 +64,6 @@ const Sidebar = () => {
               label={item.label}
               path={item.path}
               collapsed={collapsed}
-              active={location.pathname.startsWith(item.path)}
-              action={item.action}
             />
           ))}
         </nav>
@@ -126,59 +95,36 @@ interface SidebarItemProps {
   path: string;
   collapsed: boolean;
   active?: boolean;
-  action?: string; // Optional action for global search
 }
 
-const SidebarItem = ({
-  icon,
-  label,
-  path,
-  collapsed,
-  active,
-  action,
-}: SidebarItemProps) => {
-  const { setMiddlePanelCollapsed, setCollapsed, setOpenGlobalSearch } =
-    useUI();
+const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
+  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
   const { setSelectedCapture } = useCaptureContext(); // Add this from CaptureContext
 
   const handleClick = () => {
-    // if (action === "trigger-global-search" && setOpenGlobalSearch) {
-    //   setOpenGlobalSearch(true);
-    //   setCollapsed(true);
-    //   setMiddlePanelCollapsed(true);
-    // } else {
     setCollapsed(false);
     setMiddlePanelCollapsed(false);
     if (path === "/") {
       setSelectedCapture(null); // Clear selectedCapture for Home
     }
-    // }
   };
 
   return (
     <Link
       to={path}
+      activeOptions={{ exact: true }}
       onClick={handleClick}
       className={`flex items-center ${
         collapsed ? "gap-0" : "gap-3"
       } px-2 py-2 rounded-md transition-all duration-200 \
         text-sm font-medium text-zinc-400 hover:bg-zinc-950 \
-        ${active ? "bg-zinc-950 text-white" : ""}`}
+       [&.active]:text-violet-500 [&.active]:bg-violet-500/10`}
     >
-      <span
-        className={`flex-shrink-0 ${collapsed ? "text-2xl" : "text-lg"}  ${
-          active ? "text-violet-500" : "text-zinc-400"
-        }`}
-      >
+      <span className={`flex-shrink-0 ${collapsed ? "text-2xl" : "text-lg"}`}>
         {icon}
       </span>
       {!collapsed && (
-        <span
-          className={`flex-1 ${
-            active ? "text-violet-500" : "text-zinc-400"
-          } hover:text-violet-500`}
-          title={label}
-        >
+        <span className={`flex-1  hover:text-violet-500`} title={label}>
           {label}
         </span>
       )}
