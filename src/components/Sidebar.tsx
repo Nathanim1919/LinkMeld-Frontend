@@ -16,11 +16,6 @@ const navItems = [
     path: "/",
   },
   {
-    icon: <IoMdDocument />,
-    label: "Captures",
-    path: "/captures",
-  },
-  {
     icon: <BsBookmarkHeart />,
     label: "Bookmarks",
     path: "/bookmarks",
@@ -43,7 +38,7 @@ const Sidebar = () => {
   return (
     <div
       className={`h-screen bg-black \
-        ${collapsed ? "w-[60px]" : "w-46"} text-zinc-100 flex flex-col \
+        ${collapsed ? "w-[60px]" : "w-40"} text-zinc-100 flex flex-col \
         relative justify-between items-center py-6 px-4 shadow-xl transition-all duration-300`}
     >
       {/* Collapse Toggle */}
