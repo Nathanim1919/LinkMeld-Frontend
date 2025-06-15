@@ -60,3 +60,14 @@ export const bookMarkOrUnbookMarkCapture = async (
     throw error;
   }
 };
+
+export const getBookmarkedCaptures = async (): Promise<Capture[]> => {
+  const url = "http://localhost:3000/api/v1/captures/bookmarked";
+  try {
+    const response = await axios.get<Capture[]>(url);
+    return response.data;
+  } catch (error) {
+    console.error("❌ Error fetching bookmarked captures:", error);
+    throw error;
+  }
+};
