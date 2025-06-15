@@ -27,8 +27,7 @@ const filterIcons: Record<NonNullable<NoteListProps["filter"]>, JSX.Element> = {
 };
 
 const NotesList: React.FC<NoteListProps> = () => {
-  const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
-    useCaptureContext();
+  const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } = useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

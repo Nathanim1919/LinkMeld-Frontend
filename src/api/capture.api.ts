@@ -9,7 +9,7 @@ export const getCapturesBasedOnFilter = async (
   id: string | null = null
 ): Promise<Capture[]> => {
   const baseUrl = "http://localhost:3000/api/v1";
-  let url = `${baseUrl}/captures`; // Default: all
+  let url = `${baseUrl}/captures`;
 
   try {
     switch (filter) {
@@ -32,21 +32,13 @@ export const getCapturesBasedOnFilter = async (
           );
         url = `${baseUrl}/sources/${id}/captures`;
         break;
-
       case "all":
       default:
         url = `${baseUrl}/captures`;
         break;
     }
 
-    console.log(
-      `📦 Fetching captures - Filter: ${filter}, ID: ${id}, URL: ${url}`
-    );
-
     const response = await axios.get<Capture[]>(url);
-
-    console.log("✅ Captures fetched:", response.data);
-
     return response.data;
   } catch (error) {
     console.error("❌ Error fetching captures based on filter:", error);
@@ -61,8 +53,6 @@ export const bookMarkOrUnbookMarkCapture = async (
 
   try {
     const response = await axios.post<Capture>(url);
-
-    console.log("✅ Capture bookmark status updated:", response.data);
 
     return response.data;
   } catch (error) {
