@@ -8,6 +8,7 @@ import { MdOutlineLanguage } from "react-icons/md";
 // --- Component ---
 type SmartSourceCardProps = {
   source: string;
+  siteNameCount?: number;
   onOpen: (source: string) => void;
   onRename?: (id: string) => void;
   onDelete?: (id: string) => void;
@@ -15,8 +16,10 @@ type SmartSourceCardProps = {
 
 export const SmartSourceCard: React.FC<SmartSourceCardProps> = ({
   source,
+  siteNameCount,
   onOpen,
 }) => {
+  
   return (
     <div
       className="relative border-b border-white/10 grid gap-1 w-full p-2 cursor-pointer hover:shadow-md transition-all group"
@@ -30,7 +33,7 @@ export const SmartSourceCard: React.FC<SmartSourceCardProps> = ({
           </h2>
         </div>
         <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-          123 captures{" "}
+          {siteNameCount} Captures
         </p>
       </div>
 
@@ -57,8 +60,7 @@ export const SmartSourcePreviewGrid = () => {
   const renameFolder = (id: string) => alert(`Rename folder ${id}`);
   const deleteFolder = (id: string) => alert(`Delete folder ${id}`);
 
-  const { sources, loading } = useSourceContext();
-  console.log("Sources:", sources);
+  const { sources, loading, siteNameCounts } = useSourceContext();
 
   return (
     <div className="flex relative flex-col w-full gap-2 p-3 self-start overflow-auto">
@@ -89,6 +91,7 @@ export const SmartSourcePreviewGrid = () => {
         <SmartSourceCard
           key={source}
           source={source}
+          siteNameCount={siteNameCounts[source] || 0}
           onOpen={openFolder}
           onRename={renameFolder}
           onDelete={deleteFolder}

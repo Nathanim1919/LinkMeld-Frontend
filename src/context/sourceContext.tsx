@@ -3,6 +3,10 @@ import { getSources } from "../api/source.api";
 
 interface SourceContextType {
   sources: string[];
+  siteNameCounts: Record<string, number>;
+  setSiteNameCounts: React.Dispatch<
+    React.SetStateAction<Record<string, number>>
+  >;
   setSources: React.Dispatch<React.SetStateAction<string[]>>;
   selectedSource: string | null;
   setSelectedSource: React.Dispatch<React.SetStateAction<string | null>>;
@@ -19,6 +23,9 @@ export const SourceProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [sources, setSources] = useState<string[]>([]);
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
+  const [siteNameCounts, setSiteNameCounts] = useState<Record<string, number>>(
+    {}
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -27,8 +34,8 @@ export const SourceProvider: React.FC<{ children: React.ReactNode }> = ({
       setLoading(true);
       try {
         const response = await getSources();
-        console.log("Fetched sources:", response);
-        setSources(response);
+        setSources(response.siteNames);
+        setSiteNameCounts(response.siteNameCounts || {});
       } catch (err) {
         console.error("Error fetching Sources:", err);
         setError(err instanceof Error ? err.message : "Unknown error");
@@ -47,6 +54,8 @@ export const SourceProvider: React.FC<{ children: React.ReactNode }> = ({
         setSources,
         selectedSource,
         setSelectedSource,
+        siteNameCounts,
+        setSiteNameCounts,
         loading,
         setLoading,
         error,

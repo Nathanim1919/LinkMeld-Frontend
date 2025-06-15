@@ -72,7 +72,7 @@ const folderNotesRoute = createRoute({
 });
 
 const tagsRoute = createRoute({
-  path: "/tags",
+  path: "/sources",
   getParentRoute: () => rootRoute,
   component: () => <EmptyNoteView />,
 });
