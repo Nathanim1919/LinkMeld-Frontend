@@ -47,6 +47,24 @@ const foldersRoute = createRoute({
   component: () => <EmptyNoteView />,
 });
 
+const folderCaptureDetailRoute = createRoute({
+  path: "/folders/$folderId/captures/$captureId",
+  getParentRoute: () => rootRoute,
+  component: CaptureDetail,
+});
+
+const sourceCaptureDetailRoute = createRoute({
+  path: "/sources/$source/captures/$captureId",
+  getParentRoute: () => rootRoute,
+  component: CaptureDetail,
+});
+
+const bookmarksCaptureDetailRoute = createRoute({
+  path: "/bookmarks/captures/$captureId",
+  getParentRoute: () => rootRoute,
+  component: CaptureDetail,
+});
+
 const folderNotesRoute = createRoute({
   path: "/folders/$folderId",
   getParentRoute: () => rootRoute,
@@ -92,6 +110,9 @@ const profileRoute = createRoute({
 export const routeTree = rootRoute.addChildren([
   homeRoute,
   capturesRoute,
+  folderCaptureDetailRoute,
+  sourceCaptureDetailRoute,
+  bookmarksCaptureDetailRoute,
   captureDetailRoute,
   foldersRoute,
   folderNotesRoute,

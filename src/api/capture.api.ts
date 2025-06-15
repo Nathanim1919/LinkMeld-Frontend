@@ -30,7 +30,7 @@ export const getCapturesBasedOnFilter = async (
           throw new Error(
             "Source ID is required for fetching source captures."
           );
-        url = `${baseUrl}/captures/source/${id}`;
+        url = `${baseUrl}/sources/${id}/captures`;
         break;
 
       case "all":

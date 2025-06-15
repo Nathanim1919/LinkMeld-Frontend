@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 export const getSources = async (): Promise<string[]> => {
   try {
     const response = await axios.get("http://localhost:3000/api/v1/sources");
@@ -14,6 +15,7 @@ export const getSources = async (): Promise<string[]> => {
     throw error;
   }
 };
+
 
 export const getSourceById = async (id: string): Promise<string> => {
   try {

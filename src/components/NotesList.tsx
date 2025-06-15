@@ -101,7 +101,7 @@ const NotesList: React.FC<NoteListProps> = () => {
       console.warn("Captures is not an array:", captures);
       return [];
     }
-    return captures.map(note => ({
+    return captures.map((note) => ({
       ...note,
       _id: note._id?.toString() || "",
       metadata: {
@@ -148,7 +148,15 @@ const NotesList: React.FC<NoteListProps> = () => {
       <div className="flex flex-col max-h-[80vh] overflow-y-auto space-y-2 pr-1">
         {safeCaptures.map((note) => (
           <Link
-            to={`/captures/${note._id}`}
+            to={
+              filter === "folder" && params.folderId
+                ? `/folders/${params.folderId}/captures/${note._id}`
+                : filter === "source" && params.source
+                ? `/sources/${params.source}/captures/${note._id}`
+                : filter === "bookmarks"
+                ? `/bookmarks/captures/${note._id}`
+                : `/captures/${note._id}` // fallback to default
+            }
             onClick={() => setSelectedCapture(note as Capture)}
             key={note._id}
             className={`cursor-pointer p-2 border-b transition-all rounded-md border border-transparent group
@@ -175,9 +183,7 @@ const NotesList: React.FC<NoteListProps> = () => {
             </div>
 
             <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
-              <span title={note.formattedDate}>
-                {note.timeAgo}
-              </span>
+              <span title={note.formattedDate}>{note.timeAgo}</span>
               <span className="italic">{note.formattedDate}</span>
             </div>
           </Link>
