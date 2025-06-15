@@ -53,3 +53,20 @@ export const getCapturesBasedOnFilter = async (
     throw error;
   }
 };
+
+export const bookMarkOrUnbookMarkCapture = async (
+  captureId: string
+): Promise<Capture> => {
+  const url = `http://localhost:3000/api/v1/captures/${captureId}/bookmark`;
+
+  try {
+    const response = await axios.post<Capture>(url);
+
+    console.log("✅ Capture bookmark status updated:", response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error(`❌ Error bookmarking or unbookmarking capture:`, error);
+    throw error;
+  }
+};

@@ -5,7 +5,6 @@ import { MdDeleteOutline } from "react-icons/md";
 import { useSourceContext } from "../../context/sourceContext";
 import { MdOutlineLanguage } from "react-icons/md";
 
-// --- Component ---
 type SmartSourceCardProps = {
   source: string;
   siteNameCount?: number;
@@ -19,7 +18,6 @@ export const SmartSourceCard: React.FC<SmartSourceCardProps> = ({
   siteNameCount,
   onOpen,
 }) => {
-  
   return (
     <div
       className="relative border-b border-white/10 grid gap-1 w-full p-2 cursor-pointer hover:shadow-md transition-all group"
@@ -29,7 +27,7 @@ export const SmartSourceCard: React.FC<SmartSourceCardProps> = ({
         <div className="flex items-center gap-1 text-blue-700 hover:underline">
           <MdOutlineLanguage />
           <h2 className="text-sm font-semibold " title={source}>
-            {source}
+            {source.length > 30 ? `${source.slice(0, 30)}...` : source}
           </h2>
         </div>
         <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">

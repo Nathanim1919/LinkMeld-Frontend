@@ -4,6 +4,7 @@ import { Link, useParams } from "@tanstack/react-router";
 import type { Capture } from "../types/Capture";
 import { FaFolderClosed } from "react-icons/fa6";
 import { FaHashtag } from "react-icons/fa";
+import { CiBookmark } from "react-icons/ci";
 import { TbCaptureFilled } from "react-icons/tb";
 import { useEffect, useMemo, useState, type JSX } from "react";
 
@@ -26,7 +27,8 @@ const filterIcons: Record<NonNullable<NoteListProps["filter"]>, JSX.Element> = {
 };
 
 const NotesList: React.FC<NoteListProps> = () => {
-  const { captures, setSelectedCapture, fetchCaptures } = useCaptureContext();
+  const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
+    useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -167,12 +169,22 @@ const NotesList: React.FC<NoteListProps> = () => {
               }`}
           >
             <div className="flex flex-col justify-between items-start">
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold group-hover:underline group-hover:text-violet-500">
+              <div className="flex items-center  justify-between w-full">
+                <h3 className="text-sm  font-semibold group-hover:underline group-hover:text-violet-500">
                   {note.metadata.title.length > 50
                     ? `${note.metadata.title.slice(0, 50)}...`
                     : note.metadata.title}
                 </h3>
+                <button
+                  className={`p-1 text-xl cursor-pointer hover:text-violet-600 ${
+                    note.isBookmarked ? "text-violet-600" : "text-gray-400"
+                  }`}
+                  aria-label="Bookmark Note"
+                  title="Bookmark Note"
+                  onClick={() => bookmarkCapture?.(note._id)}
+                >
+                  <CiBookmark className="" />
+                </button>
               </div>
 
               <p className="text-[12px] text-gray-400 mt-1 group-hover:text-gray-500">

@@ -1,11 +1,9 @@
 // CaptureContext.tsx
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-} from "react";
-import { getCapturesBasedOnFilter } from "../api/capture.api";
+import React, { createContext, useContext, useState, useCallback } from "react";
+import {
+  bookMarkOrUnbookMarkCapture,
+  getCapturesBasedOnFilter,
+} from "../api/capture.api";
 import type { Capture } from "../types/Capture";
 
 type FilterType = "all" | "bookmarks" | "folder" | "source";
@@ -15,6 +13,7 @@ interface CaptureContextType {
   selectedCapture: Capture | null;
   setSelectedCapture: React.Dispatch<React.SetStateAction<Capture | null>>;
   fetchCaptures: (filter: FilterType, id?: string | null) => Promise<void>;
+  bookmarkCapture?: (captureId: string) => Promise<void>;
 }
 
 const CaptureContext = createContext<CaptureContextType | undefined>(undefined);
@@ -40,6 +39,26 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     []
   );
 
+  const bookmarkCapture = useCallback(
+    async (captureId: string) => {
+      try {
+        // Implement the bookmarking logic here
+        console.log(`Bookmarking capture with ID: ${captureId}`);
+        await bookMarkOrUnbookMarkCapture(captureId);
+        // Update the captures state if needed
+        const updatedCaptures = captures.map((capture) =>
+          capture._id === captureId
+            ? { ...capture, isBookmarked: !capture.isBookmarked }
+            : capture
+        );
+        setCaptures(updatedCaptures);
+      } catch (error) {
+        console.error(`❌ Error bookmarking or unbookmarking capture:`, error);
+      }
+    },
+    [captures]
+  );
+
   return (
     <CaptureContext.Provider
       value={{
@@ -47,6 +66,7 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
         selectedCapture,
         setSelectedCapture,
         fetchCaptures,
+        bookmarkCapture,
       }}
     >
       {children}
