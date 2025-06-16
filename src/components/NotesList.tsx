@@ -7,6 +7,7 @@ import { FaHashtag } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 import { TbCaptureFilled } from "react-icons/tb";
 import { useEffect, useMemo, useState, type JSX } from "react";
+import { NoteListSkeleton } from "./skeleton/NoteListSkeleton";
 
 interface NoteListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -27,7 +28,8 @@ const filterIcons: Record<NonNullable<NoteListProps["filter"]>, JSX.Element> = {
 };
 
 const NotesList: React.FC<NoteListProps> = () => {
-  const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } = useCaptureContext();
+  const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
+    useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,6 +47,7 @@ const NotesList: React.FC<NoteListProps> = () => {
   const id = useMemo(() => params.folderId || params.source, [params]);
 
   useEffect(() => {
+    console.log("useEffect triggered with filter:", filter, "id:", id);
     const loadCaptures = async () => {
       setLoading(true);
       setError(null);
@@ -57,7 +60,6 @@ const NotesList: React.FC<NoteListProps> = () => {
         setLoading(false);
       }
     };
-
     loadCaptures();
   }, [fetchCaptures, filter, id]);
 
@@ -116,11 +118,7 @@ const NotesList: React.FC<NoteListProps> = () => {
   }, [captures]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-full py-8">
-        <p className="text-gray-500">Loading notes...</p>
-      </div>
-    );
+    return <NoteListSkeleton />;
   }
 
   if (error) {
