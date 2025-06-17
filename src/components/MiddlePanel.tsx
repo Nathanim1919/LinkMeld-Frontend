@@ -9,7 +9,7 @@ import { SmartSourcePreviewGrid } from "./SmartOrganizers/SmartSourceCard";
 
 export const MiddlePanel = () => {
   const router = useRouterState();
-  const {middlePanelCollapsed} = useUI();
+  const { middlePanelCollapsed } = useUI();
 
   if (middlePanelCollapsed) {
     return null;
@@ -20,7 +20,6 @@ export const MiddlePanel = () => {
     return <UserProfile />;
   }
 
-
   if (router.location.pathname.startsWith("/captures/")) {
     return <NotesList filter="all" />;
   }
@@ -29,13 +28,20 @@ export const MiddlePanel = () => {
     return <NotesList filter="bookmarks" />;
   }
 
-
   if (router.location.pathname === "/folders") {
     return <SmartFolderPreviewGrid />;
   }
 
+  if (router.location.pathname === "/folders/") {
+    return <NotesList filter="folder"  />;
+  }
+
   if (router.location.pathname === "/sources") {
     return <SmartSourcePreviewGrid />;
+  }
+
+  if (router.location.pathname.startsWith("/sources/")) {
+    return <NotesList filter="source" />;
   }
 
   if (router.location.pathname === "/clusters") {

@@ -17,20 +17,21 @@ export const FolderList: React.FC = () => {
     if (!selectedCapture) return;
     try {
       await addCaptureToFolder(folderId, selectedCapture._id);
-      setIsFolderListOpen(false);
+      setIsFolderListOpen?.(false);
     } catch (error) {
       console.error("Error adding capture to folder:", error);
     }
   };
 
   return (
-    <div className="flex absolute top-[8%] border border-white/20 z-999 rounded-lg right-[15%] flex-col items-center justify-center bg-black shadow-lg ">
+    <div className="flex absolute top-[8%] border border-[#2f2b2b] overflow-hidden border-b-0 z-999 rounded-lg right-[10%] flex-col items-center justify-center bg-[#201f1f] shadow-lg ">
       {loadingStates.fetch ? (
         <p className="text-gray-600">Loading...</p>
       ) : folders.length === 0 ? (
         <p className="text-gray-600">No folders available.</p>
       ) : (
         <div className="flex flex-col">
+        
           {folders.map((folder) => (
             <div
               key={folder._id}
@@ -49,8 +50,8 @@ export const FolderList: React.FC = () => {
                   <FaFolderOpen className="text-gray-500 w-4 h-4" />
                 )}
                 <h3 className="text-[13px] capitalize">
-                  {folder.name.length > 20
-                    ? folder.name.slice(0, 20) + "..."
+                  {folder.name.length > 15
+                    ? folder.name.slice(0, 15) + "..."
                     : folder.name}
                 </h3>
               </div>

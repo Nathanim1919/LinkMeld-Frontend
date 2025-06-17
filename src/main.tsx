@@ -18,5 +18,5 @@ createRoot(document.getElementById("root")!).render(
         </FolderProvider>
       </UIProvider>
     </CaptureProvider>
-  </StrictMode>
+ </StrictMode>
 );

@@ -17,7 +17,7 @@ interface NoteViewProps {
 }
 
 export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
-  const { collapsed, middlePanelCollapsed, setIsFolderListOpen } = useUI();
+  const { collapsed, middlePanelCollapsed, setIsFolderListOpen, isFolderListOpen } = useUI();
   return (
     <div
       className={`p-4 ${
@@ -45,7 +45,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           <RiDeleteBin6Line className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
           <Share2 className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
           <FaFolderPlus
-            onClick={() => setIsFolderListOpen?.(true)}
+            onClick={() => setIsFolderListOpen?.(!isFolderListOpen)}
             data-testid="add-folder-button"
             className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white"
           />

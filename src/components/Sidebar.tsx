@@ -13,22 +13,22 @@ const navItems = [
   {
     icon: <FiHome />,
     label: "Home",
-    path: "/",
+    path: "/in",
   },
   {
     icon: <BsBookmarkHeart />,
     label: "Bookmarks",
-    path: "/bookmarks",
+    path: "/in/bookmarks",
   },
   {
     icon: <LuFolderOpen />,
     label: "Folders",
-    path: "/folders",
+    path: "/in/folders",
   },
   {
     icon: <MdOutlineLanguage />,
     label: "Sources",
-    path: "/sources",
+    path: "/in/sources",
   },
 ];
 

@@ -2,7 +2,7 @@ export interface Capture {
   _id: string;
   url: string;
   timestamp: string;
-  isBookmarked: boolean;
+  bookmarked: boolean;
   folder?: {
     _id: string;
     name: string;
