@@ -16,6 +16,8 @@ import NotesList from "./components/NotesList";
 import { useCaptureContext } from "./context/CaptureContext";
 import FoldersPanel from "./components/panels/FoldersPanel";
 import { PublicLayout } from "./layout/PublicLayout";
+import { RegisterPage } from "./pages/RegisterPage";
+import { LoginPage } from "./pages/LoginPage";
 
 const Home = () => <NotesList />;
 
@@ -76,6 +78,19 @@ const publicRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: PublicLayout,
+});
+
+
+const RegisterRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "register",
+  component: RegisterPage,
+});
+
+const LoginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "login",
+  component:LoginPage
 });
 
 // Authenticated routes (wrapped in MainShell)
@@ -166,6 +181,8 @@ const profileRoute = createRoute({
 // --- Final Tree --- //
 export const routeTree = rootRoute.addChildren([
   publicRoute,
+  RegisterRoute,
+  LoginRoute,
   mainShellRoute.addChildren([
     contentRoute.addChildren([
       homeRoute,
