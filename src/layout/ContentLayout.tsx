@@ -18,12 +18,12 @@ export const ContentLayout = () => {
       )}
     >
       {/* Left panel (Sidebar + Panel like folders/bookmarks) */}
-      <div className="bg-[#1A1A1C] p-2 border-r border-zinc-800 overflow-y-auto">
+      <div className={`bg-[#1A1A1C] ${middlePanelCollapsed ? "p-0" : "p-2"} border-r border-zinc-800 overflow-y-auto`}>
         <Outlet />
       </div>
 
       {/* Right panel (Note view or empty) */}
-      <div className="bg-[#1d1f1d] overflow-y-auto">
+      <div className="bg-[#232326] overflow-y-auto">
         {selectedCapture ? (
           <NoteView capture={selectedCapture} />
         ) : (

@@ -1,12 +1,13 @@
 import { useUI } from "../context/UIContext";
 import { FiHome } from "react-icons/fi";
 import { BsBookmarkHeart } from "react-icons/bs";
-import { MdKeyboardDoubleArrowLeft, MdOutlineLanguage } from "react-icons/md";
+import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useCaptureContext } from "../context/CaptureContext";
+import { Brain } from "lucide-react";
 
 const navItems = [
   {
@@ -40,16 +41,19 @@ const Sidebar = () => {
         ${collapsed ? "w-[60px]" : "w-full"} text-zinc-100 pl-2 flex flex-col \
         relative justify-between items-center pb-4 transition-all duration-300`}
     >
-      {/* Collapse Toggle */}
-      {!collapsed && (
-        <div
-          className="border-b border-[#2c2929] w-full bg-[#171616] grid place-items-end p-2 cursor-pointer hover:bg-zinc-800"
-          onClick={() => setCollapsed(true)}
+      {/* Logo */}
+      <div className="flex items-center justify-center pt-4">
+        <Link
+          to="/in"
+          onClick={() => setCollapsed(!collapsed)}
+          className={`flex items-center gap-2 ${
+            collapsed ? "text-2xl" : "text-lg"
+          } font-bold text-violet-500`}
         >
-          <MdKeyboardDoubleArrowLeft size={20} />
-        </div>
-      )}
-
+          <Brain className="w-6 h-6" />
+          {!collapsed && <span className="text-lg font-bold">Cluelet</span>}
+        </Link>
+      </div>
       {/* Top Nav */}
       <div className="mt-10 w-full">
         <nav className="flex flex-col gap-3">
@@ -68,7 +72,7 @@ const Sidebar = () => {
       {/* Footer */}
       <div className="pt-6 border-t border-zinc-800 mt-auto">
         <Link
-          onClick={() => setCollapsed(false)}
+          onClick={() => setCollapsed(!collapsed)}
           to="/profile"
           className="flex items-center space-x-3"
         >
@@ -115,21 +119,21 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
         to={path}
         activeOptions={{ exact: true }}
         onClick={handleClick}
-        className={`relative z-10 [&.active]:bg-[#1A1A1C] flex items-center ${
+        className={`relative rounded-l-full  z-10 [&.active]:bg-[#1A1A1C] flex items-center ${
           collapsed ? "gap-0" : "gap-3"
-        } px-2 py-2 transition-all w-full duration-200 
+        } px-2 py-3 transition-all w-full duration-200 
         text-sm font-medium text-zinc-400 hover:bg-zinc-950 
         [&.active]:text-violet-500 active-link`}
       >
         {isActive && (
           <>
             <b
-              className="absolute w-full h-[60%] bg-[#1A1A1C] -top-5 right-0
+              className="absolute w-full h-[60%] bg-[#1A1A1C] -top-6 right-0
         before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-br-[40px] before:border-violet-500
         "
             ></b>
             <b
-              className="absolute w-full h-[60%] bg-[#1A1A1C] -bottom-5 right-0
+              className="absolute w-full h-[60%] bg-[#1A1A1C] -bottom-6 right-0
         before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-tr-[40px]
         "
             ></b>
