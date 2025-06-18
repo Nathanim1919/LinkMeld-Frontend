@@ -18,6 +18,7 @@ import FoldersPanel from "./components/panels/FoldersPanel";
 import { PublicLayout } from "./layout/PublicLayout";
 import { RegisterPage } from "./pages/RegisterPage";
 import { LoginPage } from "./pages/LoginPage";
+import { PricingPage } from "./pages/Pricing";
 
 const Home = () => <NotesList />;
 
@@ -91,6 +92,13 @@ const LoginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "login",
   component:LoginPage
+});
+
+
+const PricingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "pricing",
+  component: PricingPage,
 });
 
 // Authenticated routes (wrapped in MainShell)
@@ -183,6 +191,7 @@ export const routeTree = rootRoute.addChildren([
   publicRoute,
   RegisterRoute,
   LoginRoute,
+  PricingRoute,
   mainShellRoute.addChildren([
     contentRoute.addChildren([
       homeRoute,
