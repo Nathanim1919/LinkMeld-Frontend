@@ -1,11 +1,10 @@
 import { useUI } from "../context/UIContext";
 import { FiHome } from "react-icons/fi";
-import { IoMdDocument } from "react-icons/io";
 import { BsBookmarkHeart } from "react-icons/bs";
 import { MdKeyboardDoubleArrowLeft, MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link } from "@tanstack/react-router";
+import { Link, useMatchRoute } from "@tanstack/react-router";
 import type { JSX } from "react";
 import { useCaptureContext } from "../context/CaptureContext";
 
@@ -37,9 +36,9 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`h-screen border-r border-[#222020] bg-black \
-        ${collapsed ? "w-[60px]" : "w-40"} text-zinc-100 flex flex-col \
-        relative justify-between items-center shadow-xl pb-4 transition-all duration-300`}
+      className={`h-screen bg-[#0F0F10] \
+        ${collapsed ? "w-[60px]" : "w-full"} text-zinc-100 pl-2 flex flex-col \
+        relative justify-between items-center pb-4 transition-all duration-300`}
     >
       {/* Collapse Toggle */}
       {!collapsed && (
@@ -52,7 +51,7 @@ const Sidebar = () => {
       )}
 
       {/* Top Nav */}
-      <div className="mt-10">
+      <div className="mt-10 w-full">
         <nav className="flex flex-col gap-3">
           {navItems.map((item) => (
             <SidebarItem
@@ -97,6 +96,8 @@ interface SidebarItemProps {
 const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   const { setMiddlePanelCollapsed, setCollapsed } = useUI();
   const { setSelectedCapture } = useCaptureContext(); // Add this from CaptureContext
+  const matchRoute = useMatchRoute();
+  const isActive = !!matchRoute({ to: path, exact: false });
 
   const handleClick = () => {
     setCollapsed(false);
@@ -107,25 +108,43 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   };
 
   return (
-    <Link
-      to={path}
-      activeOptions={{ exact: true }}
-      onClick={handleClick}
-      className={`flex items-center ${
-        collapsed ? "gap-0" : "gap-3"
-      } px-2 py-2 rounded-md transition-all duration-200 \
-        text-sm font-medium text-zinc-400 hover:bg-zinc-950 \
-       [&.active]:text-violet-500 [&.active]:bg-violet-500/10`}
-    >
-      <span className={`flex-shrink-0 ${collapsed ? "text-2xl" : "text-lg"}`}>
-        {icon}
-      </span>
-      {!collapsed && (
-        <span className={`flex-1  hover:text-violet-500`} title={label}>
-          {label}
+    <div className="relative w-full">
+      {/* Active Background with curves */}
+
+      <Link
+        to={path}
+        activeOptions={{ exact: true }}
+        onClick={handleClick}
+        className={`relative z-10 [&.active]:bg-[#1A1A1C] flex items-center ${
+          collapsed ? "gap-0" : "gap-3"
+        } px-2 py-2 transition-all w-full duration-200 
+        text-sm font-medium text-zinc-400 hover:bg-zinc-950 
+        [&.active]:text-violet-500 active-link`}
+      >
+        {isActive && (
+          <>
+            <b
+              className="absolute w-full h-[60%] bg-[#1A1A1C] -top-5 right-0
+        before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-br-[40px] before:border-violet-500
+        "
+            ></b>
+            <b
+              className="absolute w-full h-[60%] bg-[#1A1A1C] -bottom-5 right-0
+        before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-tr-[40px]
+        "
+            ></b>
+          </>
+        )}
+        <span className={`flex-shrink-0 ${collapsed ? "text-2xl" : "text-lg"}`}>
+          {icon}
         </span>
-      )}
-    </Link>
+        {!collapsed && (
+          <span className="flex-1 hover:text-violet-500" title={label}>
+            {label}
+          </span>
+        )}
+      </Link>
+    </div>
   );
 };
 
