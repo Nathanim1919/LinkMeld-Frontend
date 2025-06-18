@@ -112,7 +112,7 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
         {filterIcons[filter]} {filterLabels[filter]}
       </h3>
 
-      <div className="flex flex-col max-h-[80vh] overflow-y-auto space-y-2 pr-1">
+      <div className="flex flex-col max-h-[90vh] overflow-y-auto space-y-2 pr-1">
         {safeCaptures.map((note) => (
           <Link
             key={note._id}

@@ -15,6 +15,7 @@ import SourcePanel from "./components/panels/SourcePanel";
 import NotesList from "./components/NotesList";
 import { useCaptureContext } from "./context/CaptureContext";
 import FoldersPanel from "./components/panels/FoldersPanel";
+import { PublicLayout } from "./layout/PublicLayout";
 
 const Home = () => <NotesList />;
 
@@ -68,12 +69,24 @@ const BookmarkDetail = () => {
 };
 
 // --- Routes --- //
-const rootRoute = createRootRoute({
+const rootRoute = createRootRoute();
+
+// Public routes (completely separate from MainShell)
+const publicRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  component: PublicLayout,
+});
+
+// Authenticated routes (wrapped in MainShell)
+const mainShellRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  id: "mainShell",
   component: MainShell,
 });
 
 const contentRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => mainShellRoute,
   path: "/in",
   component: ContentLayout,
 });
@@ -145,23 +158,26 @@ const bookmarkDetail = createRoute({
 });
 
 const profileRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => mainShellRoute,
   path: "/profile",
   component: UserProfile,
 });
 
 // --- Final Tree --- //
 export const routeTree = rootRoute.addChildren([
-  contentRoute.addChildren([
-    homeRoute,
-    capturesPanel.addChildren([captureDetail]),
-    foldersPanel,
-    folderNotes.addChildren([folderNoteDetail]),
-    sourcesPanel,
-    sourceNotes.addChildren([sourceNoteDetail]),
-    bookmarksPanel.addChildren([bookmarkDetail]),
+  publicRoute,
+  mainShellRoute.addChildren([
+    contentRoute.addChildren([
+      homeRoute,
+      capturesPanel.addChildren([captureDetail]),
+      foldersPanel,
+      folderNotes.addChildren([folderNoteDetail]),
+      sourcesPanel,
+      sourceNotes.addChildren([sourceNoteDetail]),
+      bookmarksPanel.addChildren([bookmarkDetail]),
+    ]),
+    profileRoute,
   ]),
-  profileRoute,
 ]);
 
 export const router = createRouter({ routeTree });
