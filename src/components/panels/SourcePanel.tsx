@@ -2,6 +2,8 @@
 import React from "react";
 import { useSourceContext } from "../../context/sourceContext";
 import { Link } from "@tanstack/react-router";
+import {MdOutlineLanguage } from "react-icons/md";
+
 
 const SourcePanel: React.FC = () => {
   const { sources, siteNameCounts } = useSourceContext();
@@ -19,12 +21,16 @@ const SourcePanel: React.FC = () => {
             key={source}
             to={`/in/sources/${source}`}
             // onClick={() => setSelectedSource(source)}
-            className="cursor-pointer hover:bg-gray-100 p-2 rounded"
+            className="cursor-pointer flex text-violet-600 hover:underline text-sm p-1"
           >
-            <span>{source}</span>
+            <span className="flex items-center gap-2"> <MdOutlineLanguage/>{source
+              .length > 20
+                ? source.slice(0, 20) + "..."
+                : source
+            }</span>
             {siteNameCounts[source] !== undefined && (
               <span className="text-sm text-gray-500 ml-2">
-                ({siteNameCounts[source]})
+               ({siteNameCounts[source]})
               </span>
             )}
           </Link>

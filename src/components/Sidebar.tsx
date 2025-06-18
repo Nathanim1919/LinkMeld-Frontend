@@ -37,17 +37,19 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`h-screen bg-black \
+      className={`h-screen border-r border-[#222020] bg-black \
         ${collapsed ? "w-[60px]" : "w-40"} text-zinc-100 flex flex-col \
-        relative justify-between items-center py-6 px-4 shadow-xl transition-all duration-300`}
+        relative justify-between items-center shadow-xl pb-4 transition-all duration-300`}
     >
       {/* Collapse Toggle */}
-      <div
-        className="absolute top-2 right-2 p-1 cursor-pointer rounded-md hover:bg-zinc-800"
-        onClick={() => setCollapsed(true)}
-      >
-        {!collapsed ? <MdKeyboardDoubleArrowLeft size={20} /> : null}
-      </div>
+      {!collapsed && (
+        <div
+          className="border-b border-[#2c2929] w-full bg-[#171616] grid place-items-end p-2 cursor-pointer hover:bg-zinc-800"
+          onClick={() => setCollapsed(true)}
+        >
+          <MdKeyboardDoubleArrowLeft size={20} />
+        </div>
+      )}
 
       {/* Top Nav */}
       <div className="mt-10">
@@ -99,7 +101,7 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   const handleClick = () => {
     setCollapsed(false);
     setMiddlePanelCollapsed(false);
-    if (path === "/") {
+    if (path === "/in") {
       setSelectedCapture(null); // Clear selectedCapture for Home
     }
   };
