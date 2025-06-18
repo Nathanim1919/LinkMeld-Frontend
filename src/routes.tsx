@@ -122,7 +122,7 @@ const sourcesPanel = createRoute({
 
 const sourceNotes = createRoute({
   getParentRoute: () => contentRoute,
-  path: "$sourceId",
+  path: "sources/$sourceId",
   component: SourceNotes,
 });
 

@@ -4,14 +4,14 @@ import { useSourceContext } from "../../context/sourceContext";
 import { Link } from "@tanstack/react-router";
 
 const SourcePanel: React.FC = () => {
-  const { sources, setSelectedSource } = useSourceContext();
+  const { sources, siteNameCounts } = useSourceContext();
 
   if (!sources || sources.length === 0) {
     return <div className="p-4 text-gray-500">No sources found.</div>;
   }
 
   return (
-    <div className="p-4">
+    <div className="">
       <h2 className="text-xl font-semibold mb-4">Sources</h2>
       <ul className="space-y-2 flex flex-col">
         {sources.map((source: string) => (
@@ -21,7 +21,12 @@ const SourcePanel: React.FC = () => {
             // onClick={() => setSelectedSource(source)}
             className="cursor-pointer hover:bg-gray-100 p-2 rounded"
           >
-            {source}
+            <span>{source}</span>
+            {siteNameCounts[source] !== undefined && (
+              <span className="text-sm text-gray-500 ml-2">
+                ({siteNameCounts[source]})
+              </span>
+            )}
           </Link>
         ))}
       </ul>

@@ -14,11 +14,11 @@ export const ContentLayout = () => {
     <div
       className={clsx(
         "h-full grid transition-all duration-300 ease-in-out",
-        middlePanelCollapsed ? "grid-cols-[0fr_1fr]" : "grid-cols-[0.3fr_1fr]"
+        middlePanelCollapsed ? "grid-cols-[0fr_1fr]" : "grid-cols-[0.25fr_1fr]"
       )}
     >
       {/* Left panel (Sidebar + Panel like folders/bookmarks) */}
-      <div className="bg-[#131313] border-r border-zinc-800 overflow-y-auto">
+      <div className="bg-[#131313] p-2 border-r border-zinc-800 overflow-y-auto">
         <Outlet />
       </div>
 
