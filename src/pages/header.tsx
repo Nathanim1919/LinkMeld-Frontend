@@ -87,7 +87,7 @@ export const Header = () => {
 
             {/* Cyber Navigation */}
             <nav className="hidden md:flex items-center gap-12">
-              {["FEATURES", "PRICING", "LOGIN"].map((item) => (
+              {["HOME", "FEATURES", "PRICING", "FAQs"].map((item, index) => (
                 <motion.div
                   key={item}
                   onHoverStart={() => setHovered(item)}
@@ -95,7 +95,7 @@ export const Header = () => {
                   className="relative"
                 >
                   <Link
-                    to={`/${item.toLowerCase()}`}
+                    to={index !== 0 ? `/${item.toLowerCase()}` : "/"}
                     className="text-sm font-bold [&.active]:border-b-2 border-blue-400 tracking-widest uppercase text-gray-300 hover:text-white transition-all duration-300"
                   >
                     {item}
@@ -164,16 +164,18 @@ export const Header = () => {
               className="md:hidden overflow-hidden bg-[rgba(10,5,30,0.98)] border-t border-[rgba(255,0,240,0.1)]"
             >
               <div className="px-6 py-4 space-y-6">
-                {["FEATURES", "PRICING", "LOGIN"].map((item) => (
-                  <Link
-                    key={item}
-                    to={`/${item.toLowerCase()}`}
-                    className="block text-lg font-bold tracking-widest uppercase text-gray-300 hover:text-white transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {item}
-                  </Link>
-                ))}
+                {["HOME", "FEATURES", "PRICING", "FAQs", "LOGIN"].map(
+                  (item, index) => (
+                    <Link
+                      key={item}
+                      to={index !== 0 ? `/${item.toLowerCase()}` : "/"}
+                      className="block text-lg font-bold tracking-widest uppercase text-gray-300 hover:text-white transition-colors"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item}
+                    </Link>
+                  )
+                )}
                 <Link
                   to="/get-started"
                   className="inline-block mt-4 px-6 py-3 text-sm font-bold tracking-widest uppercase text-black bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"

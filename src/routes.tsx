@@ -21,6 +21,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { PricingPage } from "./pages/Pricing";
 import HeroPage from "./pages/hero";
 import { Features } from "./pages/features";
+import { FAQ } from "./pages/FAQ";
 
 const Home = () => <NotesList />;
 const CapturesPanel = () => <NotesList filter="all" />;
@@ -100,6 +101,12 @@ const pricingRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "pricing",
   component: PricingPage,
+});
+
+const FAQRoute = createRoute({
+  getParentRoute: () => publicRoute,
+  path: "faqs",
+  component: FAQ,
 });
 
 const FeaturesRoute = createRoute({
@@ -207,7 +214,7 @@ const profileRoute = createRoute({
 
 // --- Final Tree --- //
 export const routeTree = rootRoute.addChildren([
-  publicRoute.addChildren([heroRoute, pricingRoute, FeaturesRoute]), // Correctly nest children of PublicLayout
+  publicRoute.addChildren([heroRoute, pricingRoute, FeaturesRoute, FAQRoute]), // Correctly nest children of PublicLayout
   RegisterRoute,
   LoginRoute,
   mainShellRoute.addChildren([
