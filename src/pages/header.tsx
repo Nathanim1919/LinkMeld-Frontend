@@ -119,13 +119,13 @@ export const Header = () => {
             {/* Cyber CTA */}
             <motion.div className="hidden md:block relative">
               <Link
-                to="/get-started"
+                to="/login"
                 className="inline-block px-6 py-3 text-sm font-bold tracking-widest uppercase text-white hover:text-violet-500 rounded-full"
               >
                 LOGIN
               </Link>
               <Link
-                to="/get-started"
+                to="/register"
                 className="relative z-10 px-8 py-3 text-sm font-bold tracking-widest uppercase text-black bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full overflow-hidden"
               >
                 <span className="relative z-10">GET STARTED</span>
@@ -177,7 +177,7 @@ export const Header = () => {
                   )
                 )}
                 <Link
-                  to="/get-started"
+                  to="/register"
                   className="inline-block mt-4 px-6 py-3 text-sm font-bold tracking-widest uppercase text-black bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"
                 >
                   GET STARTED
