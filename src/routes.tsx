@@ -23,6 +23,7 @@ import { PricingPage } from "./pages/Pricing";
 const Home = () => <NotesList />;
 
 const CapturesPanel = () => <NotesList filter="all" />;
+
 const CaptureDetail = () => {
   const { selectedCapture } = useCaptureContext();
   return selectedCapture ? (
@@ -81,6 +82,12 @@ const publicRoute = createRoute({
   component: PublicLayout,
 });
 
+const PricingRoute = createRoute({
+  getParentRoute: () => publicRoute,
+  path: "pricing",
+  component: PricingPage,
+});
+
 
 const RegisterRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -92,13 +99,6 @@ const LoginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "login",
   component:LoginPage
-});
-
-
-const PricingRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "pricing",
-  component: PricingPage,
 });
 
 // Authenticated routes (wrapped in MainShell)

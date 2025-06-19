@@ -12,33 +12,7 @@ const HeroPage = () => {
         <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
       </div>
 
-      {/* === Navigation (Zero-Gravity Float) === */}
-      <motion.nav 
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="flex justify-between items-center mb-24"
-      >
-        <h1 className="text-2xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-violet-600">
-          lnked
-        </h1>
-        <div className="flex items-center gap-6">
-          {['Features', 'Pricing', 'Login'].map((item) => (
-            <Link 
-              key={item}
-              to={`#${item.toLowerCase()}`}
-              className="text-sm text-gray-400 hover:text-white transition-all duration-300 hover:scale-[1.02]"
-            >
-              {item}
-            </Link>
-          ))}
-          <Link 
-            to="#get-started" 
-            className="text-sm bg-white/90 text-black px-4 py-2 rounded-full hover:bg-white transition-all duration-300 flex items-center gap-1 hover:shadow-glow"
-          >
-            Get Started <FiArrowRight className="mt-0.5" />
-          </Link>
-        </div>
-      </motion.nav>
+    
 
       {/* === Hero Content (Warp-Speed Entrance) === */}
       <motion.section 
