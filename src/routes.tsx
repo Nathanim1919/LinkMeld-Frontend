@@ -19,9 +19,10 @@ import { PublicLayout } from "./layout/PublicLayout";
 import { RegisterPage } from "./pages/RegisterPage";
 import { LoginPage } from "./pages/LoginPage";
 import { PricingPage } from "./pages/Pricing";
+import HeroPage from "./pages/hero";
+import { Features } from "./pages/features";
 
 const Home = () => <NotesList />;
-
 const CapturesPanel = () => <NotesList filter="all" />;
 
 const CaptureDetail = () => {
@@ -39,6 +40,7 @@ const FolderNotes = () => {
   const { folderId } = useParams({ strict: false });
   return <NotesList filter="folder" folderId={folderId} />;
 };
+
 const FolderNoteDetail = () => {
   const { selectedCapture } = useCaptureContext();
   return selectedCapture ? (
@@ -49,10 +51,12 @@ const FolderNoteDetail = () => {
 };
 
 const SourcesPanel = () => <SourcePanel />;
+
 const SourceNotes = () => {
   const { sourceId } = useParams({ strict: false });
   return <NotesList filter="source" sourceId={sourceId} />;
 };
+
 const SourceNoteDetail = () => {
   const { selectedCapture } = useCaptureContext();
   return selectedCapture ? (
@@ -63,6 +67,7 @@ const SourceNoteDetail = () => {
 };
 
 const BookmarksPanel = () => <BookmarkPanel />;
+
 const BookmarkDetail = () => {
   const { selectedCapture } = useCaptureContext();
   return selectedCapture ? (
@@ -73,21 +78,35 @@ const BookmarkDetail = () => {
 };
 
 // --- Routes --- //
+
 const rootRoute = createRootRoute();
 
-// Public routes (completely separate from MainShell)
+// Public routes (wrapped in PublicLayout)
 const publicRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/",
+  id: "public", // It's good practice to give layout routes a unique ID
   component: PublicLayout,
 });
 
-const PricingRoute = createRoute({
+// Home route (renders HeroPage) - This is now the index route for publicRoute
+const heroRoute = createRoute({
+  getParentRoute: () => publicRoute,
+  path: "/",
+  component: HeroPage,
+});
+
+// Pricing route (renders PricingPage)
+const pricingRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "pricing",
   component: PricingPage,
 });
 
+const FeaturesRoute = createRoute({
+  getParentRoute: () => publicRoute,
+  path: "/features",
+  component: Features,
+});
 
 const RegisterRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -98,7 +117,7 @@ const RegisterRoute = createRoute({
 const LoginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "login",
-  component:LoginPage
+  component: LoginPage,
 });
 
 // Authenticated routes (wrapped in MainShell)
@@ -188,10 +207,9 @@ const profileRoute = createRoute({
 
 // --- Final Tree --- //
 export const routeTree = rootRoute.addChildren([
-  publicRoute,
+  publicRoute.addChildren([heroRoute, pricingRoute, FeaturesRoute]), // Correctly nest children of PublicLayout
   RegisterRoute,
   LoginRoute,
-  PricingRoute,
   mainShellRoute.addChildren([
     contentRoute.addChildren([
       homeRoute,

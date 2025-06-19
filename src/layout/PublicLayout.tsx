@@ -1,16 +1,16 @@
-import { Outlet } from "@tanstack/react-router";
 import { CallToAction } from "../pages/CallToAction";
-import { Footer } from "../pages/footer";
-import HeroPage from "../pages/hero";
+import { Outlet } from "@tanstack/react-router";
 import { Header } from "../pages/header";
+import { Footer } from "../pages/footer";
 
 export const PublicLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <Header/>
-      <HeroPage />
-      <Outlet />
-      <CallToAction />
+      <Header />
+      <main className="flex-grow">
+        <Outlet /> {/* Dynamically render child components */}
+      </main>
+      <CallToAction/>
       <Footer />
     </div>
   );
