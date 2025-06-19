@@ -117,11 +117,13 @@ export const Header = () => {
             </nav>
 
             {/* Cyber CTA */}
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="hidden md:block relative"
-            >
+            <motion.div className="hidden md:block relative">
+              <Link
+                to="/get-started"
+                className="inline-block px-6 py-3 text-sm font-bold tracking-widest uppercase text-white hover:text-violet-500 rounded-full"
+              >
+                LOGIN
+              </Link>
               <Link
                 to="/get-started"
                 className="relative z-10 px-8 py-3 text-sm font-bold tracking-widest uppercase text-black bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full overflow-hidden"
