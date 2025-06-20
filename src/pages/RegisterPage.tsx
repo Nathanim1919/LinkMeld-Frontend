@@ -9,6 +9,7 @@ import {
   FiEyeOff,
 } from "react-icons/fi";
 import { useState } from "react";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 export const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,6 +21,12 @@ export const RegisterPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0a20] via-[#1a0a30] to-[#0a0a20] text-white flex items-center justify-center p-4 relative overflow-hidden">
+      <Link
+        to={"/"}
+        className="absolute top-6 left-6 text-violet-400 hover:text-violet-300 transition-colors"
+      >
+        <FaArrowLeftLong className="w-6 h-6" />
+      </Link>
       {/* === Cosmic Background Elements === */}
       <div className="absolute inset-0 -z-20">
         {/* Violet nebula glow */}

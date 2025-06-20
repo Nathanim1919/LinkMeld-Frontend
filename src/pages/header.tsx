@@ -3,11 +3,10 @@ import {
   motion,
   useMotionValue,
   useTransform,
-  animate,
   AnimatePresence,
 } from "framer-motion";
 import { useEffect, useState } from "react";
-import { FiArrowRight, FiMenu, FiX } from "react-icons/fi";
+import { FiMenu, FiX } from "react-icons/fi";
 
 export const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);

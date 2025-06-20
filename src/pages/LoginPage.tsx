@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { FiArrowRight, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { useState } from "react";
 
 export const LoginPage = () => {
@@ -13,6 +14,12 @@ export const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0a20] via-[#1a0a30] to-[#0a0a20] text-white flex items-center justify-center p-4 relative overflow-hidden">
       {/* === Cosmic Background Elements === */}
+      <Link
+        to={"/"}
+        className="absolute top-6 left-6 text-violet-400 hover:text-violet-300 transition-colors"
+      >
+        <FaArrowLeftLong className="w-6 h-6" />
+      </Link>
       <div className="absolute inset-0 -z-20">
         {/* Violet nebula glow */}
         <div className="absolute top-1/3 left-1/2 w-[1200px] h-[1200px] bg-[radial-gradient(circle_at_center,#7F5AF0_0%,transparent_70%)] opacity-[0.15] blur-[120px] animate-pulse-slow" />
