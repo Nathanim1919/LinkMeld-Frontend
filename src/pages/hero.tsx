@@ -67,7 +67,7 @@ const HeroPage = () => {
         className="mt-4 relative"
       >
         <div className="absolute inset-0 bg-violet-600/20 blur-3xl rounded-full -z-10" />
-        <div className="rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-[#111111] to-[#0A0A0A] shadow-2xl w-full max-w-6xl mx-auto">
+        <div className="rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-[#111111] to-[#0A0A0A] shadow-2xl w-full max-w-7xl mx-auto">
           <img
             src={Image}
             alt="App UI floating in space"
