@@ -2,14 +2,30 @@ import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { authClient } from "../lib/auth-client";
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
+
+  const handleSignIn = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await authClient.signIn.email({
+      ...formData,
+      callbackURL: "/in",
+    }, {
+      onSuccess(context) {
+        // Handle successful login, e.g., redirect or show a message
+        console.log("Login successful", context);
+        setFormData({ email: "", password: "" });
+      },
+    })
+  }, [formData]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0a20] via-[#1a0a30] to-[#0a0a20] text-white flex items-center justify-center p-4 relative overflow-hidden">
@@ -23,10 +39,10 @@ export const LoginPage = () => {
       <div className="absolute inset-0 -z-20">
         {/* Violet nebula glow */}
         <div className="absolute top-1/3 left-1/2 w-[1200px] h-[1200px] bg-[radial-gradient(circle_at_center,#7F5AF0_0%,transparent_70%)] opacity-[0.15] blur-[120px] animate-pulse-slow" />
-        
+
         {/* Distant stars */}
         {[...Array(100)].map((_, i) => (
-          <div 
+          <div
             key={i}
             className="absolute rounded-full bg-white"
             style={{
@@ -34,7 +50,7 @@ export const LoginPage = () => {
               height: `${Math.random() * 2 + 1}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              opacity: Math.random() * 0.8 + 0.2
+              opacity: Math.random() * 0.8 + 0.2,
             }}
           />
         ))}
@@ -65,7 +81,7 @@ export const LoginPage = () => {
       ))}
 
       {/* === Login Container === */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -86,9 +102,7 @@ export const LoginPage = () => {
             <h2 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-violet-300">
               Welcome Back
             </h2>
-            <p className="text-violet-200/80">
-              Sign in to your account
-            </p>
+            <p className="text-violet-200/80">Sign in to your account</p>
           </motion.div>
 
           {/* Login Form */}
@@ -97,10 +111,14 @@ export const LoginPage = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
             className="space-y-6"
+            onSubmit={handleSignIn}
           >
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-violet-100 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-violet-100 mb-2"
+              >
                 Email Address
               </label>
               <div className="relative">
@@ -113,14 +131,19 @@ export const LoginPage = () => {
                   className="w-full pl-10 pr-4 py-3 bg-[#0d0a25]/70 border border-violet-500/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-violet-400/50 text-white placeholder-violet-400/50 transition-all"
                   placeholder="your@email.com"
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-violet-100 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-violet-100 mb-2"
+              >
                 Password
               </label>
               <div className="relative">
@@ -133,7 +156,9 @@ export const LoginPage = () => {
                   className="w-full pl-10 pr-12 py-3 bg-[#0d0a25]/70 border border-violet-500/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-violet-400/50 text-white placeholder-violet-400/50 transition-all"
                   placeholder="••••••••"
                   value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                 />
                 <button
                   type="button"
@@ -144,8 +169,8 @@ export const LoginPage = () => {
                 </button>
               </div>
               <div className="flex justify-end mt-2">
-                <Link 
-                  to="/forgot-password" 
+                <Link
+                  to="/forgot-password"
                   className="text-xs text-violet-400/70 hover:text-violet-300 transition-colors"
                 >
                   Forgot password?

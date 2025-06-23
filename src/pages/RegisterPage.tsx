@@ -8,7 +8,7 @@ import {
   FiEye,
   FiEyeOff,
 } from "react-icons/fi";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { authClient } from "../lib/auth-client";
 export const RegisterPage = () => {
@@ -20,21 +20,28 @@ export const RegisterPage = () => {
     password: "",
   });
 
-  const handleRegistration = async (e: React.FormEvent) => {
+  const handleRegistration = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    const data = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-    };
-    const res = await authClient.signUp.email({
-      ...data,
-      callbackURL: "/in/home",
-    });
-    console.log(res);
-    // Reset form after submission
-    setFormData({ name: "", email: "", password: "" });
-  };
+    await authClient.signUp.email(
+      {
+        ...formData,
+        callbackURL: "/login",
+      },
+      {
+        onRequest(context) {
+          console.log("Registration request initiated", context);
+        },
+        onSuccess(context) {
+          console.log("Registration successful", context);
+          setFormData({ name: "", email: "", password: "" });
+        },
+        onError(error) {
+          console.error("Registration failed", error);
+        },
+      }
+    );
+    
+  }, [formData]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0a20] via-[#1a0a30] to-[#0a0a20] text-white flex items-center justify-center p-4 relative overflow-hidden">
