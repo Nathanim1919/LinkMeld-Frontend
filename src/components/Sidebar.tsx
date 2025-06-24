@@ -4,10 +4,13 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link, useMatchRoute } from "@tanstack/react-router";
-import type { JSX } from "react";
+import { Link, useMatchRoute, useNavigate } from "@tanstack/react-router";
+import { useState, type JSX } from "react";
 import { useCaptureContext } from "../context/CaptureContext";
+import { IoLogOutOutline } from "react-icons/io5";
 import { Brain } from "lucide-react";
+import { authClient } from "../lib/auth-client";
+import { VscLoading } from "react-icons/vsc";
 
 const navItems = [
   {
@@ -32,13 +35,29 @@ const navItems = [
   },
 ];
 
-const Sidebar:React.FC<{user:{
-  id: string,
-  email: string;
-  name: string;
-  token:string
-}}> = ({user}) => {
+const Sidebar: React.FC<{
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    token: string;
+  };
+}> = ({ user }) => {
   const { collapsed, setCollapsed } = useUI();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogOut = async () => {
+    setLoading(true);
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          navigate({ to: "/login" });
+        },
+      },
+    });
+    setLoading(false);
+  };
 
   return (
     <div
@@ -75,20 +94,34 @@ const Sidebar:React.FC<{user:{
       </div>
 
       {/* Footer */}
-      <div className="pt-6 border-t border-zinc-800 mt-auto">
-        <Link
-          onClick={() => setCollapsed(!collapsed)}
-          to="/profile"
-          className="flex items-center space-x-3"
+      <div className="flex flex-col mt-auto gap-3">
+        <div className="pt-6 border-t border-zinc-800">
+          <Link
+            onClick={() => setCollapsed(!collapsed)}
+            to="/profile"
+            className="flex items-center space-x-3"
+          >
+            <FaRegUserCircle size={30} className="text-zinc-400" />
+            {!collapsed && (
+              <div>
+                <p className="text-sm font-semibold leading-tight">
+                  {user.name}
+                </p>
+              </div>
+            )}
+          </Link>
+        </div>
+        <button
+          onClick={handleLogOut}
+          className="flex cursor-pointer items-center gap-2 bg-gray-800 p-1 rounded-md"
         >
-          <FaRegUserCircle size={30} className="text-zinc-400" />
-          {!collapsed && (
-            <div>
-              <p className="text-sm font-semibold leading-tight">{user.name}</p>
-              <p className="text-xs text-zinc-500">Personal</p>
-            </div>
+          {loading ? (
+            <VscLoading className="animate-spin w-5 h-5 text-white" />
+          ) : (
+            <IoLogOutOutline />
           )}
-        </Link>
+          {!collapsed && <span>Logout</span>}
+        </button>
       </div>
     </div>
   );

@@ -25,6 +25,7 @@ export const RegisterPage = () => {
   const handleRegistration = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+
       await authClient.signUp.email(
         {
           ...formData,
