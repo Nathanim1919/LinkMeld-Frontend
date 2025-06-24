@@ -4,28 +4,44 @@ import { FiArrowRight, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import React, { useCallback, useState } from "react";
 import { authClient } from "../lib/auth-client";
+import { VscLoading } from "react-icons/vsc";
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const handleSignIn = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSignIn = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    await authClient.signIn.email({
-      ...formData,
-      callbackURL: "/in",
-    }, {
-      onSuccess(context) {
-        // Handle successful login, e.g., redirect or show a message
-        console.log("Login successful", context);
-        setFormData({ email: "", password: "" });
-      },
-    })
-  }, [formData]);
+      await authClient.signIn.email(
+        {
+          ...formData,
+          callbackURL: "/in",
+        },
+        {
+          onRequest(context) {
+            setLoading(true);
+            console.log("Login request initiated", context);
+          },
+          onSuccess() {
+            // Handle successful login, e.g., redirect or show a message
+            setFormData({ email: "", password: "" });
+            setLoading(false);
+          },
+          onError(error) {
+            setLoading(false);
+            console.error("Login failed", error);
+          },
+        }
+      );
+    },
+    [formData]
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0a20] via-[#1a0a30] to-[#0a0a20] text-white flex items-center justify-center p-4 relative overflow-hidden">
@@ -183,9 +199,17 @@ export const LoginPage = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full bg-gradient-to-r from-violet-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-violet-500/30 transition-all"
+              className={`w-full bg-gradient-to-r ${
+                loading
+                  ? "from-violet-400 to-purple-400 cursor-not-allowed"
+                  : "from-violet-600 to-purple-600 cursor-pointer"
+              } text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-violet-500/30 transition-all`}
             >
-              Sign In <FiArrowRight />
+              {loading && (
+                <VscLoading className="animate-spin w-5 h-5 text-white" />
+              )}
+              {loading ? "Signing In..." : "Sign In"}{" "}
+              {!loading && <FiArrowRight />}
             </motion.button>
           </motion.form>
 

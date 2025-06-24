@@ -11,37 +11,44 @@ import {
 import { useCallback, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { authClient } from "../lib/auth-client";
+import { VscLoading } from "react-icons/vsc";
 export const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  const handleRegistration = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    await authClient.signUp.email(
-      {
-        ...formData,
-        callbackURL: "/login",
-      },
-      {
-        onRequest(context) {
-          console.log("Registration request initiated", context);
+  const handleRegistration = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      await authClient.signUp.email(
+        {
+          ...formData,
+          callbackURL: "/in",
         },
-        onSuccess(context) {
-          console.log("Registration successful", context);
-          setFormData({ name: "", email: "", password: "" });
-        },
-        onError(error) {
-          console.error("Registration failed", error);
-        },
-      }
-    );
-    
-  }, [formData]);
+        {
+          onRequest(context) {
+            console.log("Registration request initiated", context);
+            setLoading(true);
+          },
+          onSuccess(context) {
+            console.log("Registration successful", context);
+            setLoading(false);
+            setFormData({ name: "", email: "", password: "" });
+          },
+          onError(error) {
+            console.error("Registration failed", error);
+            setLoading(false);
+          },
+        }
+      );
+    },
+    [formData]
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0a20] via-[#1a0a30] to-[#0a0a20] text-white flex items-center justify-center p-4 relative overflow-hidden">
@@ -219,9 +226,17 @@ export const RegisterPage = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full bg-gradient-to-r from-violet-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-violet-500/30 transition-all"
+              className={`w-full bg-gradient-to-r ${
+                loading
+                  ? "from-violet-400 to-purple-400 cursor-not-allowed"
+                  : "from-violet-600 to-purple-600 cursor-pointer"
+              } text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-violet-500/30 transition-all`}
             >
-              Create Account <FiArrowRight />
+              {loading && (
+                <VscLoading className="animate-spin w-5 h-5 text-white" />
+              )}
+              {loading ? "Creating account..." : "Create Account"}{" "}
+              {!loading && <FiArrowRight />}
             </motion.button>
           </motion.form>
 
