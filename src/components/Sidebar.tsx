@@ -32,7 +32,12 @@ const navItems = [
   },
 ];
 
-const Sidebar = () => {
+const Sidebar:React.FC<{user:{
+  id: string,
+  email: string;
+  name: string;
+  token:string
+}}> = ({user}) => {
   const { collapsed, setCollapsed } = useUI();
 
   return (
@@ -79,7 +84,7 @@ const Sidebar = () => {
           <FaRegUserCircle size={30} className="text-zinc-400" />
           {!collapsed && (
             <div>
-              <p className="text-sm font-semibold leading-tight">Nathanim T</p>
+              <p className="text-sm font-semibold leading-tight">{user.name}</p>
               <p className="text-xs text-zinc-500">Personal</p>
             </div>
           )}
