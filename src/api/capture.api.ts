@@ -38,7 +38,9 @@ export const getCapturesBasedOnFilter = async (
         break;
     }
 
-    const response = await axios.get<Capture[]>(url);
+    const response = await axios.get<Capture[]>(url, {
+      withCredentials: true, // Include credentials in the request
+    });
     return response.data;
   } catch (error) {
     console.error("❌ Error fetching captures based on filter:", error);
@@ -52,7 +54,9 @@ export const bookMarkOrUnbookMarkCapture = async (
   const url = `http://localhost:3000/api/v1/captures/${captureId}/bookmark`;
 
   try {
-    const response = await axios.post<Capture>(url);
+    const response = await axios.post<Capture>(url, null, {
+      withCredentials: true, // Include credentials in the request
+    });
 
     return response.data;
   } catch (error) {

@@ -18,7 +18,12 @@ export const MainShell = () => {
     session: Session;
     user: User;
   } | null>(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<{
+    code?: string;
+    message?: string;
+    status: number;
+    statusText: string;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -34,7 +39,14 @@ export const MainShell = () => {
         }
       } catch (err) {
         console.error("Unexpected error loading session:", err);
-        setError(err);
+        setError(
+          err as {
+            code?: string;
+            message?: string;
+            status: number;
+            statusText: string;
+          }
+        );
       } finally {
         setIsLoading(false);
       }
