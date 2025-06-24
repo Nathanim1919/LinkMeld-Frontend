@@ -1,22 +1,30 @@
 // src/layout/MainShell.tsx
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "@tanstack/react-router";
+import { VscLoading } from "react-icons/vsc";
+
 import Sidebar from "../components/Sidebar";
+
 import { CaptureProvider } from "../context/CaptureContext";
 import { UIProvider } from "../context/UIContext";
 import { FolderProvider } from "../context/FolderContext";
 import { SourceProvider } from "../context/sourceContext";
+
 import { authClient } from "../lib/auth-client";
-import { useEffect, useState } from "react";
-import { VscLoading } from "react-icons/vsc";
+import type { Session, User } from "better-auth/types";
 
 export const MainShell = () => {
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<{
+    session: Session;
+    user: User;
+  } | null>(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchSession = async () => {
+    const loadSession = async () => {
       try {
         const { data, error } = await authClient.getSession();
         if (error) {
@@ -25,26 +33,35 @@ export const MainShell = () => {
           setSession(data);
         }
       } catch (err) {
+        console.error("Unexpected error loading session:", err);
         setError(err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    fetchSession();
+    loadSession();
   }, []);
 
-  if (loading)
+  useEffect(() => {
+    if (!isLoading && !session) {
+      navigate({ to: "/login" });
+    }
+  }, [session, isLoading, navigate]);
+
+  if (isLoading) {
+    return <CenteredLoader message="Loading session..." />;
+  }
+
+  if (error) {
     return (
-      <div className="h-screen w-screen bg-black flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center">
-          <VscLoading className="animate-spin w-8 h-8 text-white mx-auto m-0" />
-          <p className="text-white mt-4">Loading session...</p>
-        </div>
+      <div className="h-screen w-screen flex items-center justify-center bg-black text-red-500">
+        <p>Error loading session: {error.message || "Unknown error"}</p>
       </div>
     );
-  if (error) return <div>Error loading session</div>;
-  if (!session) navigate({ to: "/login" });
+  }
+
+  if (!session) return null; // wait for redirect
 
   return (
     <CaptureProvider>
@@ -53,9 +70,9 @@ export const MainShell = () => {
           <SourceProvider>
             <div className="h-screen w-screen bg-black text-white grid grid-cols-[auto_1fr]">
               <Sidebar user={session.user} />
-              <div className="overflow-hidden h-full">
+              <main className="overflow-hidden h-full">
                 <Outlet />
-              </div>
+              </main>
             </div>
           </SourceProvider>
         </FolderProvider>
@@ -63,3 +80,13 @@ export const MainShell = () => {
     </CaptureProvider>
   );
 };
+
+// Small reusable component for centralized loading feedback
+const CenteredLoader = ({ message }: { message: string }) => (
+  <div className="h-screen w-screen bg-black flex items-center justify-center">
+    <div className="flex flex-col items-center">
+      <VscLoading className="animate-spin w-8 h-8 text-white" />
+      <p className="text-white mt-4">{message}</p>
+    </div>
+  </div>
+);
