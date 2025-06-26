@@ -7,7 +7,10 @@ export interface Capture {
   contentHash: string;
   bookmarked: boolean;
   canonicalUrl: string;
-  
+  collection: {
+    _id: string;
+    name: string;
+  };
   // Content
   content: {
     clean: string;

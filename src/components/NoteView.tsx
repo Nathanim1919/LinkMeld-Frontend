@@ -64,14 +64,14 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         </div>
       </div>
       <NoteHeader
-        // folder={
-        //   capture.folder
-        //     ? {
-        //         name: capture.folder.name,
-        //         id: capture.folder._id,
-        //       }
-        //     : { name: "Uncategorized", id: "uncategorized" }
-        // }
+        collection={
+          capture.collection
+            ? {
+                name: capture.collection.name,
+                id: capture.collection._id,
+              }
+            : { name: "Uncategorized", id: "uncategorized" }
+        }
         title={capture.title}
         description={capture.metadata.description || ""}
         tags={
