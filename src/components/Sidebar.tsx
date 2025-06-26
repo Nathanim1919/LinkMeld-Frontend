@@ -99,7 +99,7 @@ const Sidebar: React.FC<{
           <Link
             onClick={() => setCollapsed(!collapsed)}
             to="/profile"
-            className="flex items-center space-x-2 border border-gray-800  p-1 rounded-full"
+            className="flex items-center space-x-2 border border-gray-800  p-1 rounded-md"
           >
             <FaRegUserCircle size={25} className="text-zinc-400" />
             {!collapsed && (
@@ -115,12 +115,12 @@ const Sidebar: React.FC<{
         </div>
         <button
           onClick={handleLogOut}
-          className="flex cursor-pointer items-center gap-2 bg-gray-800 p-1 rounded-md"
+          className="flex border border-gray-800 cursor-pointer items-center gap-2 bg-gray-900 p-1 rounded-md"
         >
           {loading ? (
-            <VscLoading className="animate-spin w-5 h-5 text-white" />
+            <VscLoading className="animate-spin w-6 h-6 text-white" />
           ) : (
-            <IoLogOutOutline />
+            <IoLogOutOutline className="w-6 h-6 text-white" />
           )}
           {!collapsed && <span>Logout</span>}
         </button>
@@ -159,24 +159,16 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
         to={path}
         activeOptions={{ exact: true }}
         onClick={handleClick}
-        className={`relative rounded-l-full  z-10 [&.active]:bg-[#1A1A1C] flex items-center ${
+        className={`relative rounded  z-10  [&.active]:border-l-4 [&.active]:font-bold [&.active]:bg-[#1A1A1C] flex items-center ${
           collapsed ? "gap-0" : "gap-3"
         } px-2 py-3 transition-all w-full duration-200 
-        text-sm font-medium text-zinc-400 hover:bg-zinc-950 
+        text-sm font-medium text-zinc-400 hover:bg-zinc-950
         [&.active]:text-violet-500 active-link`}
       >
         {isActive && (
           <>
-            <b
-              className="absolute w-full h-[60%] bg-[#1A1A1C] -top-6 right-0
-        before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-br-[40px] before:border-violet-500
-        "
-            ></b>
-            <b
-              className="absolute w-full h-[60%] bg-[#1A1A1C] -bottom-6 right-0
-        before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-tr-[40px]
-        "
-            ></b>
+            <b className="absolute w-full h-[55%] bg-[#1A1A1C] -top-6 right-0 before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-br-full before:border-violet-500"></b>
+            <b className="absolute w-full h-[55%] bg-[#1A1A1C] -bottom-6 right-0 before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-tr-full"></b>
           </>
         )}
         <span className={`flex-shrink-0 ${collapsed ? "text-2xl" : "text-lg"}`}>

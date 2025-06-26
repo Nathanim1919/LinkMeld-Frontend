@@ -112,23 +112,31 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
         {filterIcons[filter]} {filterLabels[filter]}
       </h3>
 
-      <div className="flex flex-col max-h-[90vh] overflow-y-auto space-y-2 pr-1">
+      <div className="flex flex-col max-h-[90vh] overflow-y-auto space-y-2 pr-1 overflow-hidden">
         {safeCaptures.map((note) => (
           <Link
             key={note._id}
             to={buildLink(note._id)}
             onClick={() => setSelectedCapture(note as Capture)}
-            className={`cursor-pointer p-2 rounded-md border border-transparent group transition-all
+            className={`cursor-pointer p-2 border-b border-violet-600/20 group transition-all
               ${
                 activeCaptureId === note._id
-                  ? "bg-[#1d1f1d] border-violet-500/25 text-violet-500"
+                  ? "bg-[#1d1f1d] rounded-md border-violet-500/25 text-violet-500"
                   : "hover:bg-[#1d1f1d] hover:border-violet-500/25"
               }`}
           >
             <div className="flex items-center justify-between">
+              <div className="mb-2">
               <h3 className="text-sm font-semibold truncate group-hover:underline">
-                {note.title.length > 50 ? note.title.slice(0, 50) + "..." : note.title}
+                {note.title.length > 50 ? note.title.slice(0, 30) + "..." : note.title}
               </h3>
+              <span className="flex items-center gap-1 text-xs text-gray-500">
+               {note.metadata.favicon &&  <img src={note.metadata.favicon} className="w-6 h-6"/>}
+                {note.metadata.siteName || "Unknown Source"}
+                <span className="bg-gray-800 font-bold py-[3px] px-2 border border-violet-800 rounded-2xl">{note.metadata.type}</span>
+              </span>
+
+              </div>
               <button
                 onClick={(e) => {
                   e.preventDefault();

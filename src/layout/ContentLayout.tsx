@@ -5,9 +5,11 @@ import { useUI } from "../context/UIContext";
 import { useCaptureContext } from "../context/CaptureContext";
 import NoteView from "../components/NoteView";
 import EmptyNoteView from "../components/EmptyNoteView";
+import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+
 
 export const ContentLayout = () => {
-  const { middlePanelCollapsed } = useUI();
+  const { middlePanelCollapsed, setMiddlePanelCollapsed } = useUI();
   const { selectedCapture } = useCaptureContext();
 
   return (
@@ -18,7 +20,12 @@ export const ContentLayout = () => {
       )}
     >
       {/* Left panel (Sidebar + Panel like folders/bookmarks) */}
-      <div className={`bg-[#1A1A1C] ${middlePanelCollapsed ? "p-0" : "p-2"} border-r border-zinc-800 overflow-y-auto`}>
+      <div className={`bg-[#1A1A1C] ${middlePanelCollapsed ? "p-0" : "p-2"} relative border-r border-zinc-800 overflow-y-auto`}>
+        <div className="w-8 h-8 cursor-pointer text-2xl grid place-items-center absolute top-2 right-0"
+        onClick={() => setMiddlePanelCollapsed(!middlePanelCollapsed)}
+        >
+          <MdOutlineKeyboardDoubleArrowLeft/>
+        </div>
         <Outlet />
       </div>
 
