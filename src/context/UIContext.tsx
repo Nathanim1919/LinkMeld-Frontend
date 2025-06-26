@@ -12,6 +12,8 @@ type SidebarContextType = {
   setOpenGlobalSearch?: (open: boolean) => void;
   isFolderListOpen?: boolean;
   setIsFolderListOpen?: (isOpen: boolean) => void;
+  openActionBar?: boolean;
+  setOpenActionBar?: (open: boolean) => void;
 };
 
 const UIContext = createContext<SidebarContextType | undefined>(undefined);
@@ -22,6 +24,7 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
   const [mainContentCollapsed, setMainContentCollapsed] = useState(true);
   const [openGlobalSearch, setOpenGlobalSearch] = useState(false);
   const [isFolderListOpen, setIsFolderListOpen] = useState(false);
+  const [openActionBar, setOpenActionBar] = useState(false);
 
   return (
     <UIContext.Provider
@@ -36,6 +39,8 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
         setOpenGlobalSearch,
         isFolderListOpen,
         setIsFolderListOpen,
+        openActionBar,
+        setOpenActionBar,
       }}
     >
       {children}

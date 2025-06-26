@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { useUI } from "../../context/UIContext";
 
 type Action = {
   icon: React.ReactNode;
@@ -18,6 +19,7 @@ type Action = {
 
 export const NoteActionBar = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const {openActionBar} = useUI();
 
   const actions: Action[] = [
     {
@@ -55,12 +57,12 @@ export const NoteActionBar = () => {
   return (
     <div
       className={clsx(
-        "fixed right-0 top-0 z-999 h-full transition-all duration-300 flex",
-        activeIndex !== null ? "w-96" : "w-14"
+        "fixed right-0 top-0 z-999 h-full border-l border-gray-800 transition-all duration-300 flex mt-14",
+        (activeIndex === null && openActionBar) ? "w-14" : activeIndex !== null ? "w-96" : "w-0",
       )}
     >
       {/* Icon Sidebar */}
-      <div className="flex flex-col bg-black h-full items-center p-2 gap-2 w-14">
+      <div className="flex flex-col bg-[#1b1919] h-full items-center p-2 gap-2 w-14">
         {actions.map((action, i) => (
           <div key={i} className="relative flex items-center">
             <button

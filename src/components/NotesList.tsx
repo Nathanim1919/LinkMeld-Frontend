@@ -7,7 +7,7 @@ import type { Capture } from "../types/Capture";
 import { FaFolderClosed } from "react-icons/fa6";
 import { FaHashtag } from "react-icons/fa";
 import { TbCaptureFilled } from "react-icons/tb";
-import { CiBookmark } from "react-icons/ci";
+import { CiBookmark, CiStickyNote } from "react-icons/ci";
 import { NoteListSkeleton } from "./skeleton/NoteListSkeleton";
 
 interface NotesListProps {
@@ -23,15 +23,23 @@ const filterLabels: Record<NonNullable<NotesListProps["filter"]>, string> = {
   source: "Source Notes",
 };
 
-const filterIcons: Record<NonNullable<NotesListProps["filter"]>, JSX.Element> = {
+const filterIcons: Record<
+  NonNullable<NotesListProps["filter"]>,
+  JSX.Element
+> = {
   all: <TbCaptureFilled className="text-purple-500" />,
   bookmarks: <CiBookmark className="text-purple-500" />,
   folder: <FaFolderClosed className="text-yellow-500" />,
   source: <FaHashtag className="text-blue-400" />,
 };
 
-const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceId }) => {
-  const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } = useCaptureContext();
+const NotesList: React.FC<NotesListProps> = ({
+  filter = "all",
+  folderId,
+  sourceId,
+}) => {
+  const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
+    useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -91,11 +99,11 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
     });
   }, [captures]);
 
-
-
   const buildLink = (id: string) => {
-    if (filter === "folder" && folderId) return `/in/folders/${folderId}/captures/${id}`;
-    if (filter === "source" && sourceId) return `/in/sources/${sourceId}/captures/${id}`;
+    if (filter === "folder" && folderId)
+      return `/in/folders/${folderId}/captures/${id}`;
+    if (filter === "source" && sourceId)
+      return `/in/sources/${sourceId}/captures/${id}`;
     if (filter === "bookmarks") return `/in/bookmarks/captures/${id}`;
     return `/in/captures/${id}`;
   };
@@ -104,7 +112,6 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
   if (error) return <div className="text-red-500 p-4">{error}</div>;
   if (!safeCaptures.length)
     return <div className="text-gray-400 p-4">No notes available.</div>;
-
 
   return (
     <div className="">
@@ -127,15 +134,18 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
           >
             <div className="flex items-center justify-between">
               <div className="mb-2">
-              <h3 className="text-sm font-semibold truncate group-hover:underline">
-                {note.title.length > 50 ? note.title.slice(0, 30) + "..." : note.title}
-              </h3>
-              <span className="flex items-center gap-1 text-xs text-gray-500">
-               {note.metadata.favicon &&  <img src={note.metadata.favicon} className="w-6 h-6"/>}
-                {note.metadata.siteName || "Unknown Source"}
-                <span className="bg-gray-800 font-bold py-[3px] px-2 border border-violet-800 rounded-2xl">{note.metadata.type}</span>
-              </span>
-
+                <h3 className="text-sm flex items-center gap-1 font-semibold truncate group-hover:underline">
+                  <CiStickyNote className="text-amber-500 dark:text-amber-400" />
+                  {note.title.length > 50
+                    ? note.title.slice(0, 30) + "..."
+                    : note.title}
+                </h3>
+                <span className="flex items-center gap-1 text-xs text-gray-500">
+                  {note.metadata.favicon && (
+                    <img src={note.metadata.favicon} className="w-4 h-4" />
+                  )}
+                  {note.metadata.siteName || "Unknown Source"}
+                </span>
               </div>
               <button
                 onClick={(e) => {
@@ -144,13 +154,17 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
                 }}
                 title="Bookmark"
                 className={`text-xl hover:bg-violet-500/10 p-1 rounded-md cursor-pointer hover:text-violet-600 ${
-                  note.bookmarked ? "text-violet-600 bg-violet-500/10" : "text-gray-400"
+                  note.bookmarked
+                    ? "text-violet-600 bg-violet-500/10"
+                    : "text-gray-400"
                 }`}
               >
                 <CiBookmark />
               </button>
             </div>
-            <p className="text-xs mt-1 text-gray-400 line-clamp-2">{note.description}</p>
+            <p className="text-xs mt-1 text-gray-400 line-clamp-2">
+              {note.description}
+            </p>
             <div className="flex justify-between mt-2 text-xs text-gray-500">
               <span title={note.formattedDate}>{note.timeAgo}</span>
               <span className="italic">{note.formattedDate}</span>
