@@ -19,7 +19,7 @@ type Action = {
 
 export const NoteActionBar = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const {openActionBar} = useUI();
+  const {openActionBar, setOpenActionBar} = useUI();
 
   const actions: Action[] = [
     {
@@ -57,7 +57,7 @@ export const NoteActionBar = () => {
   return (
     <div
       className={clsx(
-        "fixed right-0 top-0 z-999 h-full border-l border-gray-800 transition-all duration-300 flex mt-14",
+        "fixed right-0 top-0 z-999 h-full border-l border-gray-800 transition-all duration-300 flex mt-12",
         (activeIndex === null && openActionBar) ? "w-14" : activeIndex !== null ? "w-96" : "w-0",
       )}
     >
@@ -92,7 +92,7 @@ export const NoteActionBar = () => {
         <div className="bg-zinc-900 text-white flex-1 p-4 border-l border-zinc-800">
           <button
             className="absolute cursor-pointer top-4 right-4 text-zinc-400 hover:text-white"
-            onClick={() => setActiveIndex(null)}
+            onClick={() => {setActiveIndex(null); setOpenActionBar?.(false);}}
           >
             <MdKeyboardDoubleArrowRight className="w-5 h-5" />
           </button>

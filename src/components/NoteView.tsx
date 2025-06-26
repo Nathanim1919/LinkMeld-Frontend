@@ -13,7 +13,7 @@ import { FaFolderPlus } from "react-icons/fa6";
 import { FolderList } from "./cards/FolderList";
 import { FaFolder } from "react-icons/fa6";
 import { CiStickyNote } from "react-icons/ci";
-import { FiChevronRight } from "react-icons/fi";
+import { FiChevronRight, FiMoreHorizontal } from "react-icons/fi";
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -26,10 +26,10 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setIsFolderListOpen,
     isFolderListOpen,
     setOpenActionBar,
+    openActionBar
   } = useUI();
 
-  console.log("Rendering NoteView with capture:", capture);
-
+  
   if (!capture) {
     return (
       <div className="p-4 mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen">
@@ -49,10 +49,10 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     >
       <NoteActionBar />
       <FolderList />
-      <div className="flex border-b border-gray-800 items-center justify-around sticky top-0  z-1000 bg-[#1A1A1C] py-2 px-4">
+      <div className="flex border-b py-3 border-gray-800 items-center justify-around sticky top-0  z-1000 bg-[#1A1A1C]">
         <div className="relative">
           {/* Visual folder path indicator */}
-          <div className="flex items-center gap-1 px-3 py-2 rounded-lg  dark:border-gray-700 w-fit">
+          <div className="flex items-center gap-1 rounded-lg  border-gray-700 w-fit">
            {capture.collection?.name && <FaFolder className="text-blue-500 dark:text-blue-400" />}
             {capture.collection?.name && <span className="font-medium text-gray-700 dark:text-gray-300">
               {capture?.collection?.name.length > 20
@@ -70,20 +70,43 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             </div>
           </div>
         </div>
-        <div className="flex self-end items-center justify-between gap-3 relative z-100">
-          <CiBookmark className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
-          <RiDeleteBin6Line className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white" />
-          <Share2
-            onClick={() => setOpenActionBar?.(true)}
-            data-testid="share-button"
-            className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white"
-          />
-          <FaFolderPlus
-            onClick={() => setIsFolderListOpen?.(!isFolderListOpen)}
-            data-testid="add-folder-button"
-            className=" cursor-pointer text-gray-300 w-6 h-6 p-1 bg-gray-800 relative z-100  hover:text-white"
-          />
-        </div>
+        <div className="flex items-center gap-1 rounded-full">
+  {/* Bookmark */}
+  <button
+    className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+    title="Bookmark"
+  >
+    <CiBookmark className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-blue-500" />
+  </button>
+
+  {/* Share */}
+  <button
+    className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+    title="Share"
+    data-testid="share-button"
+  >
+    <Share2 className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-purple-500" />
+  </button>
+
+  {/* Folder */}
+  <button
+    className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+    onClick={() => setIsFolderListOpen?.(!isFolderListOpen)}
+    title="Add to folder"
+    data-testid="add-folder-button"
+  >
+    <FaFolderPlus className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-green-500" />
+  </button>
+
+  {/* More options (three dots) */}
+  <button
+     onClick={() => setOpenActionBar?.(!openActionBar)}
+    className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+    title="More options"
+  >
+    <FiMoreHorizontal className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+  </button>
+</div>
       </div>
       <div
         className={`mx-auto ${
