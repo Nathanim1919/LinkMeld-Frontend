@@ -60,7 +60,7 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
     if (!Array.isArray(captures)) return [];
 
     return captures.map((note) => {
-      const timestamp = new Date(note.timestamp);
+      const timestamp = new Date(note.metadata.capturedAt);
       const now = new Date();
       const seconds = Math.floor((now.getTime() - timestamp.getTime()) / 1000);
       const minutes = Math.floor(seconds / 60);
@@ -70,7 +70,7 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
       return {
         ...note,
         _id: note._id.toString(),
-        title: note.metadata?.title || "Untitled",
+        title: note?.title || "Untitled",
         description: note.metadata?.description || "",
         timeAgo:
           days > 0
@@ -92,7 +92,6 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
   }, [captures]);
 
 
-  console.log("All captures are: ", captures);
 
   const buildLink = (id: string) => {
     if (filter === "folder" && folderId) return `/in/folders/${folderId}/captures/${id}`;
@@ -105,6 +104,7 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
   if (error) return <div className="text-red-500 p-4">{error}</div>;
   if (!safeCaptures.length)
     return <div className="text-gray-400 p-4">No notes available.</div>;
+
 
   return (
     <div className="">

@@ -3,13 +3,14 @@ import { motion } from "framer-motion";
 import { formatDistanceToNow } from "date-fns";
 import { Link } from "@tanstack/react-router";
 import { IoFolderOpen } from "react-icons/io5";
+import { useCaptureContext } from "../../context/CaptureContext";
 
 type NoteHeaderProps = {
   title: string;
-  folder: {
-    id: string;
-    name: string;
-  };
+  // folder: {
+  //   id: string;
+  //   name: string;
+  // };
   description?: string;
   tags?: string[];
   capturedAt?: string;
@@ -17,7 +18,7 @@ type NoteHeaderProps = {
 
 export const NoteHeader: React.FC<NoteHeaderProps> = ({
   title,
-  folder,
+  // folder,
   description = "",
   tags = [],
   capturedAt,
@@ -28,13 +29,13 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
       animate={{ opacity: 1, y: 0 }}
       className="p-2 border-b border-gray-600"
     >
-      <Link
+      {/* <Link
         to={`/folders/${folder.id}`}
         className="text-blue-500 flex items-center gap-1 hover:underline"
       >
         <IoFolderOpen />
         {folder.name || "Uncategorized"}
-      </Link>
+      </Link> */}
       <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
         {capturedAt && (
           <span>Captured {formatDistanceToNow(new Date(capturedAt))} ago</span>

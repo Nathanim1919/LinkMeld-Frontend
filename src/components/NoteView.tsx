@@ -18,6 +18,18 @@ interface NoteViewProps {
 
 export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
   const { collapsed, middlePanelCollapsed, setIsFolderListOpen, isFolderListOpen } = useUI();
+
+  console.log("Rendering NoteView with capture:", capture);
+
+  if (!capture) {
+    return (
+      <div className="p-4 mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen">
+        <h2 className="text-xl font-semibold text-gray-300">No Note Selected</h2>
+        <p className="text-gray-500">Please select a note to view its content.</p>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`p-4 ${
@@ -33,7 +45,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       <div className="flex items-center justify-between mb-4 sticky top-[-1rem]  z-50 backdrop-blur-[15rem] py-2 px-4">
         <div>
           <a
-            href={capture?.metadata.url}
+            href={capture.url}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -52,33 +64,33 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         </div>
       </div>
       <NoteHeader
-        folder={
-          capture?.folder
-            ? {
-                name: capture.folder.name,
-                id: capture.folder._id,
-              }
-            : { name: "Uncategorized", id: "uncategorized" }
-        }
-        title={capture?.metadata.title || "Untitled Note"}
-        description={capture?.metadata.description || ""}
+        // folder={
+        //   capture.folder
+        //     ? {
+        //         name: capture.folder.name,
+        //         id: capture.folder._id,
+        //       }
+        //     : { name: "Uncategorized", id: "uncategorized" }
+        // }
+        title={capture.title}
+        description={capture.metadata.description || ""}
         tags={
-          capture?.metadata.keywords
+          capture.metadata.keywords
             ? // this is not array but a string with comma separated values
-              capture.metadata.keywords.split(",").map((tag) => tag.trim())
+              capture.metadata.keywords.map((tag) => tag.trim())
             : []
         }
-        capturedAt={capture?.timestamp}
+        capturedAt={capture.metadata.capturedAt}
       />
       <NoteSummary
-        summary={capture?.mainText.slice(0, 200) ?? null}
-        loading={!capture?.mainText}
+        summary={capture.content.clean.slice(0, 200) ?? null}
+        loading={!capture.content}
         onRefresh={() => {
           // maybe call your backend to regenerate summary
         }}
       />
 
-      <NoteMainText text={capture?.mainText || ""} />
+      <NoteMainText text={capture.content.clean || ""} />
       <NoteMetaBox
         domain="dev.to"
         savedAt="2025-06-01T08:15:00Z"

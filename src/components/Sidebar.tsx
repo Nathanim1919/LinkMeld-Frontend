@@ -75,7 +75,7 @@ const Sidebar: React.FC<{
           } font-bold text-violet-500`}
         >
           <Brain className="w-6 h-6" />
-          {!collapsed && <span className="text-lg font-bold">Cluelet</span>}
+          {!collapsed && <span className="text-lg font-bold">Lnkd.</span>}
         </Link>
       </div>
       {/* Top Nav */}
@@ -99,13 +99,15 @@ const Sidebar: React.FC<{
           <Link
             onClick={() => setCollapsed(!collapsed)}
             to="/profile"
-            className="flex items-center space-x-3"
+            className="flex items-center space-x-2 border border-gray-800  p-1 rounded-full"
           >
-            <FaRegUserCircle size={30} className="text-zinc-400" />
+            <FaRegUserCircle size={25} className="text-zinc-400" />
             {!collapsed && (
               <div>
-                <p className="text-sm font-semibold leading-tight">
-                  {user.name}
+                <p className="text-sm font-semibold leading-tight text-gray-500">
+                  {user.name.length > 7
+                    ? `${user.name.slice(0, 7)}...`
+                    : user.name}
                 </p>
               </div>
             )}

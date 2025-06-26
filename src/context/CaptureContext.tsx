@@ -28,7 +28,17 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     async (filter: FilterType, id: string | null = null) => {
       try {
         const response = await getCapturesBasedOnFilter(filter, id);
-        setCaptures(response);
+        const formattedCaptures = response.map((capture: Capture) => ({
+          ...capture,
+          title: capture.title || 'Untitled', // Fallback only if title is missing
+        }));
+
+        console.log(
+          `✅ Successfully fetched captures for filter: ${filter}`,
+          formattedCaptures
+        );
+        
+        setCaptures(formattedCaptures);
       } catch (error) {
         console.error("Failed to fetch captures", error);
       }
@@ -40,12 +50,11 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     async (captureId: string) => {
       try {
         // Implement the bookmarking logic here
-        console.log(`Bookmarking capture with ID: ${captureId}`);
         await bookMarkOrUnbookMarkCapture(captureId);
         // Update the captures state if needed
         const updatedCaptures = captures.map((capture) =>
           capture._id === captureId
-            ? { ...capture, isBookmarked: !capture.isBookmarked }
+            ? { ...capture, bookmarked: !capture.bookmarked }
             : capture
         );
         setCaptures(updatedCaptures);

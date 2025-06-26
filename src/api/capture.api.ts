@@ -41,6 +41,8 @@ export const getCapturesBasedOnFilter = async (
     const response = await axios.get<Capture[]>(url, {
       withCredentials: true, // Include credentials in the request
     });
+
+    console.log(`✅ Successfully fetched captures for filter: ${filter}`, response.data);
     return response.data;
   } catch (error) {
     console.error("❌ Error fetching captures based on filter:", error);
