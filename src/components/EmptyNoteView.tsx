@@ -1,91 +1,112 @@
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  Brain,
-  ChevronRight,
-  Sparkles,
-  Clock,
-  BookOpen,
-  Link2,
-  Zap,
-} from "lucide-react";
+import { FiDownload, FiMousePointer, FiBookmark } from "react-icons/fi";
+import { FaChrome } from "react-icons/fa";
 
 const EmptyNoteView = () => {
-  const prompts = [
+  // Time-based greeting
+  const time = new Date().getHours();
+  const greeting = time < 12 ? "Morning" : time < 18 ? "Afternoon" : "Evening";
+  const userName = "Nathan"; // Would come from user context in real app
+
+  const steps = [
     {
-      text: "Continue reading where I left off",
-      icon: <BookOpen className="w-4 h-4" />,
+      icon: <FiDownload className="w-5 h-5 text-blue-500" />,
+      text: "Add to Chrome",
+      subtext: "One-click install, free forever",
+      action: "Install"
     },
     {
-      text: "What was I researching yesterday?",
-      icon: <Clock className="w-4 h-4" />,
+      icon: <FiMousePointer className="w-5 h-5 text-purple-500" />,
+      text: "Click the capture button",
+      subtext: "It appears in your browser toolbar",
+      action: "Try it"
     },
     {
-      text: "Show related notes about current project",
-      icon: <Link2 className="w-4 h-4" />,
-    },
-    {
-      text: "Summarize recent highlights",
-      icon: <Sparkles className="w-4 h-4" />,
-    },
-    {
-      text: "Install browser extension",
-      icon: <Zap className="w-4 h-4" />,
-    },
+      icon: <FiBookmark className="w-5 h-5 text-green-500" />,
+      text: "Boom! It's saved",
+      subtext: "Access anytime from your library",
+      action: "View"
+    }
   ];
 
   return (
-    <div
-      className="grid place-items-center h-screen relative overflow-hidden
-      before:absolute before:w-[200px] before:h-[200px] before:transform before:rotate-45 before:rounded-full before:content-[] before:bg-blue-700 before:top-[30%] before:right-[0%]
-        after:absolute after:w-[200px] after:h-[200px] after:transform after:rotate-45 after:rounded-full after:content-[] after:bg-blue-700 after:top-[30%] after:left-[0%]
-
-    "
-    >
-      <div
-        className="flex flex-col items-center justify-center h-screen p-6 backdrop-blur-[8rem] w-full relative z-10
-    "
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="mb-8 text-indigo-500"
+    <div className="min-h-screen flex items-center justify-center p-6 bg-white dark:bg-[#121212]">
+      <div className="max-w-md w-full space-y-10">
+        {/* Header with greeting */}
+        <motion.div 
+          className="text-center space-y-4"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
         >
-          <Brain className="w-14 h-14" />
+          <motion.div
+            className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gray-100 dark:bg-gray-800 mb-2"
+            whileHover={{ rotate: 5, scale: 1.05 }}
+            transition={{ type: "spring" }}
+          >
+            <FiBookmark className="w-6 h-6 text-blue-500 dark:text-blue-400" />
+          </motion.div>
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            Good {greeting}, {userName}
+          </p>
+          <h1 className="text-3xl font-light text-gray-900 dark:text-white">
+            Ready to capture the web?
+          </h1>
         </motion.div>
 
-        <div className="max-w-md w-full space-y-1">
-          <h1 className="text-4xl font-extrabold text-center text-gray-800 dark:text-gray-200">
-            Your Second Brain
-          </h1>
-
-          <p className="text-gray-500 dark:text-gray-400 text-center mb-8">
-            Where would you like to start?
-          </p>
-
-          <div className="space-y-2">
-            {prompts.map((prompt, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ x: 4 }}
-                className="flex items-center py-3 px-4 bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
-                onClick={() => console.log(prompt.text)}
-              >
-                <span className="mr-3 text-gray-500 dark:text-gray-400">
-                  {prompt.icon}
-                </span>
-                <span className="text-gray-700 dark:text-gray-300">
-                  {prompt.text}
-                </span>
-                <ChevronRight className="ml-auto w-4 h-4 text-gray-400" />
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-10 text-center text-sm text-gray-400 dark:text-gray-500">
-            <p>Try saving your first note or asking about your knowledge</p>
-          </div>
+        {/* Step list */}
+        <div className="space-y-6">
+          {steps.map((step, i) => (
+            <motion.div
+              key={i}
+              className="group flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 * i + 0.2 }}
+            >
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 mt-0.5 text-sm font-medium">
+                {i + 1}
+              </div>
+              <div className="flex-1 space-y-1">
+                <div className="flex items-center gap-3">
+                  <div className="p-1.5 rounded-lg bg-gray-100 dark:bg-gray-700">
+                    {step.icon}
+                  </div>
+                  <p className="font-medium text-gray-900 dark:text-white">{step.text}</p>
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 ml-11">{step.subtext}</p>
+              </div>
+              {i === 0 && (
+                <motion.button
+                  className="px-3 py-1.5 rounded-lg cursor-pointer bg-blue-500 hover:bg-blue-600 text-white text-sm flex items-center gap-1 shadow-sm"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <FaChrome className="w-3 h-3" />
+                  {step.action}
+                </motion.button>
+              )}
+            </motion.div>
+          ))}
         </div>
+
+        {/* Visual indicator */}
+        <motion.div 
+          className="flex justify-center pt-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          <div className="h-1.5 w-24 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+            <motion.div 
+              className="h-full bg-blue-500 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 1.5, delay: 0.7 }}
+            />
+          </div>
+        </motion.div>
       </div>
     </div>
   );

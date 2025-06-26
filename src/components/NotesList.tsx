@@ -118,11 +118,11 @@ const NotesList: React.FC<NotesListProps> = ({ filter = "all", folderId, sourceI
             key={note._id}
             to={buildLink(note._id)}
             onClick={() => setSelectedCapture(note as Capture)}
-            className={`cursor-pointer p-2 border-b border-violet-600/20 group transition-all
+            className={`cursor-pointer p-2 border  border-violet-600/20 group transition-all
               ${
                 activeCaptureId === note._id
-                  ? "bg-[#1d1f1d] rounded-md border-violet-500/25 text-violet-500"
-                  : "hover:bg-[#1d1f1d] hover:border-violet-500/25"
+                  ? "bg-violet-500/5 rounded-md border-1 border-violet-500/25 text-violet-500"
+                  : "hover:bg-violet-500/5 hover:border hover:border-violet-500/25 border-t-transparent border-l-transparent border-r-transparent"
               }`}
           >
             <div className="flex items-center justify-between">

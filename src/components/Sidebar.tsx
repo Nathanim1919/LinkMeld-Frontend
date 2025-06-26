@@ -162,8 +162,8 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
         className={`relative rounded  z-10  [&.active]:border-l-4 [&.active]:font-bold [&.active]:bg-[#1A1A1C] flex items-center ${
           collapsed ? "gap-0" : "gap-3"
         } px-2 py-3 transition-all w-full duration-200 
-        text-sm font-medium text-zinc-400 hover:bg-zinc-950
-        [&.active]:text-violet-500 active-link`}
+        text-sm font-medium text-zinc-400 hover:text-violet-700
+        [&.active]:text-violet-500  active-link`}
       >
         {isActive && (
           <>
@@ -171,7 +171,7 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
             <b className="absolute w-full h-[55%] bg-[#1A1A1C] -bottom-6 right-0 before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-tr-full"></b>
           </>
         )}
-        <span className={`flex-shrink-0 ${collapsed ? "text-2xl" : "text-lg"}`}>
+        <span className={`flex-shrink-0 relative z-1000 ${collapsed ? "text-2xl" : "text-lg"}`}>
           {icon}
         </span>
         {!collapsed && (
