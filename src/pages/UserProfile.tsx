@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiSettings, FiTrash2, FiRefreshCw, FiUpload, FiKey, FiStar, FiX, FiCheck } from "react-icons/fi";
 import { RiShieldKeyholeLine } from "react-icons/ri";
+import { resetData } from "../api/account.api";
 
 export const UserProfile = () => {
   const [activeModal, setActiveModal] = useState<null | 
@@ -57,6 +58,20 @@ export const UserProfile = () => {
       </div>
     </motion.button>
   );
+
+
+  const handleResetData = async () => {
+    try {
+      // Simulate API call to reset data
+      console.log("Resetting all data...");
+      await resetData(); // Uncomment when actual API is available
+      closeModal();
+      alert("All data has been reset successfully.");
+    } catch (error) {
+      console.error("Error resetting data:", error);
+      alert("Failed to reset data. Please try again later.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 p-4 md:p-8">
@@ -305,6 +320,7 @@ export const UserProfile = () => {
               </div>
               <div className="flex gap-3">
                 <motion.button
+                  onClick={handleResetData}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="px-6 py-3 bg-red-600/20 hover:bg-red-600/30 border border-red-600/50 text-red-400 rounded-lg font-medium flex-1"

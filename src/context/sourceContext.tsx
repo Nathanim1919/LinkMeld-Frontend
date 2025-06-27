@@ -33,9 +33,10 @@ export const SourceProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchSources = async () => {
       setLoading(true);
       try {
-        // const response = await getSources();
-        // setSources(response.siteNames);
-        // setSiteNameCounts(response.siteNameCounts || {});
+        const response = await getSources();
+        console.log("Fetched Sources:", response);
+        setSources(response.siteNames);
+        setSiteNameCounts(response.siteNameCounts || {});
       } catch (err) {
         console.error("Error fetching Sources:", err);
         setError(err instanceof Error ? err.message : "Unknown error");
