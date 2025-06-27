@@ -7,7 +7,6 @@ const HeroPage = () => {
       className="w-full h-full bg-black relative overflow-hidden
     before:absolute before:w-full before:h-[80px] before:transform before:top-[100%] before:-rotate-30  before:content-[''] before:bg-violet-600
         after:absolute after:w-full after:h-[80px] after:transform after:top-[100%] after:rotate-30  after:content-[''] after:bg-violet-600
-
     "
     >
       <div className="min-h-screen w-full backdrop-blur-[3rem] z-1000  text-white relative overflow-hidden isolate">

@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Linkify from "react-linkify";
 import { useUI } from "../../context/UIContext";
 import { AnimatePresence, motion } from "framer-motion";
+import { CiStickyNote } from "react-icons/ci";
 
 type NoteMainTextProps = {
   text: string;
@@ -24,8 +25,9 @@ export const NoteMainText: React.FC<NoteMainTextProps> = ({ text }) => {
   }, [text]);
 
   return (
-    <div className="relative w-full dark:prose-invert">
-      <h2 className="text-xl font-semibold mb-3 text-white/90">📝 Captured Content</h2>
+    <div className="relative mt-4 w-full dark:prose-invert">
+      <h2 className="text-xl flex items-center gap-1 font-semibold mb-3 text-white/90"><CiStickyNote className="text-amber-500 dark:text-amber-400" />
+       Captured Content</h2>
 
       <motion.div
         animate={{ maxHeight: mainContentCollapsed ? 300 : 9999 }}
