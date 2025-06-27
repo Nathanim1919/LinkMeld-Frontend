@@ -5,11 +5,11 @@ const HeroPage = () => {
   return (
     <div
       className="w-full h-full bg-black relative overflow-hidden
-    before:absolute before:w-full before:h-[80px] before:transform before:top-[100%] before:-rotate-30  before:content-[''] before:bg-violet-600
-        after:absolute after:w-full after:h-[80px] after:transform after:top-[100%] after:rotate-30  after:content-[''] after:bg-violet-600
+    before:absolute before:w-full before:h-[90%] before:transform before:top-[90%] before:rotate-90  before:content-[''] before:bg-violet-600
+        after:absolute after:w-full after:h-[70%]  after:transform after:bottom-[0%]  after:content-[''] after:bg-gradient-to-t after:from-black
     "
     >
-      <div className="min-h-screen w-full backdrop-blur-[3rem] z-1000  text-white relative overflow-hidden isolate">
+      <div className="min-h-screen w-full backdrop-blur-[7rem]  text-white relative overflow-hidden isolate">
         {/* Ultra-minimal background with dynamic lighting */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/3 left-1/2 w-[800px] h-[800px] -translate-x-1/2 -translate-y-1/2 bg-violet-900/10 rounded-full blur-[100px]" />

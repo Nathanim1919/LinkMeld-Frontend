@@ -5,7 +5,8 @@ export const createFolder = async (folder: string): Promise<IFolder> => {
   try {
     const res = await axios.post<IFolder>(
       "http://localhost:3000/api/v1/folders",
-      { name: folder }
+      { name: folder },
+      { withCredentials: true }
     );
     return res.data;
   } catch (error) {
@@ -17,7 +18,8 @@ export const createFolder = async (folder: string): Promise<IFolder> => {
 export const getFolders = async (): Promise<IFolder[]> => {
   try {
     const res = await axios.get<IFolder[]>(
-      "http://localhost:3000/api/v1/folders"
+      "http://localhost:3000/api/v1/folders",
+      { withCredentials: true }
     );
     return res.data;
   } catch (error) {
@@ -29,7 +31,8 @@ export const getFolders = async (): Promise<IFolder[]> => {
 export const getFolderById = async (id: string): Promise<IFolder> => {
   try {
     const res = await axios.get<IFolder>(
-      `http://localhost:3000/api/v1/folders/${id}`
+      `http://localhost:3000/api/v1/folders/${id}`,
+      { withCredentials: true }
     );
     return res.data;
   } catch (error) {
@@ -45,7 +48,8 @@ export const appendCaptureToFolder = async (
   try {
     const res = await axios.post<IFolder>(
       `http://localhost:3000/api/v1/folders/${folderId}/capture`,
-      { captureId }
+      { captureId },
+      { withCredentials: true }
     );
     return res.data;
   } catch (error) {
@@ -59,7 +63,8 @@ export const removeCaptureFromFolder = async (
 ): Promise<IFolder> => {
   try {
     const res = await axios.delete<IFolder>(
-      `http://localhost:3000/api/v1/folders/${folderId}/captures/${captureId}`
+      `http://localhost:3000/api/v1/folders/${folderId}/captures/${captureId}`,
+      { withCredentials: true }
     );
     return res.data;
   } catch (error) {

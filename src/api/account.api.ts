@@ -1,5 +1,4 @@
 import axios from "axios";
-import type { Capture } from "../types/Capture";
 
 export const resetData = async (
 ): Promise<void> => {

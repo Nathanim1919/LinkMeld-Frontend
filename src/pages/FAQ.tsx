@@ -5,35 +5,37 @@ import { FiChevronDown } from "react-icons/fi";
 export const FAQ = () => {
   const faqs = [
     {
-      question: "How does CanvasFlow differ from other design tools?",
-      answer:
-        "CanvasFlow reimagines collaborative design with real-time multi-user editing, AI-powered design suggestions, and seamless integration across all your devices. Unlike traditional tools, it maintains pixel-perfect precision while enabling true teamwork.",
+      question: "How does Lnkd differ from traditional knowledge management tools?",
+      answer: "Lnkd reimagines knowledge work with neural connections between ideas rather than rigid folders. Our AI surfaces relevant connections as you work, and everything syncs instantly across all your devices with end-to-end encryption."
     },
     {
-      question: "What platforms does CanvasFlow support?",
-      answer:
-        "CanvasFlow is available on macOS, Windows, iPadOS, and through any modern web browser. Our iOS and Android apps allow for reviewing and light editing on mobile devices.",
+      question: "What makes Lnkd's privacy approach different?",
+      answer: "We built Lnkd on zero-knowledge architecture. Your data is encrypted before it leaves your device, and we never store decryption keys on our servers. Even we can't access your content."
     },
     {
-      question: "How does CanvasFlow protect my design files?",
-      answer:
-        "All files are encrypted in transit and at rest with enterprise-grade security. We offer version history with unlimited undo and optional blockchain-based timestamping for intellectual property protection.",
+      question: "How does the AI assistant work without compromising privacy?",
+      answer: "Our AI processes information locally on your device when possible. For cloud processing, we use homomorphic encryption that allows computation on encrypted data without decryption."
     },
     {
-      question: "Can I use CanvasFlow offline?",
-      answer:
-        "Yes. CanvasFlow automatically syncs your work when you reconnect. All core functionality is available offline, with cloud features becoming available once connection is restored.",
+      question: "Can I use Lnkd offline?",
+      answer: "Yes. Lnkd works fully offline, with all changes syncing automatically when you reconnect. We use conflict-free replicated data types (CRDTs) to ensure seamless merging of offline edits."
     },
     {
-      question: "What collaboration features does CanvasFlow include?",
-      answer:
-        "Teams enjoy live cursors with avatar identification, threaded comments, change tracking, and presentation mode with remote control handoff. Enterprise plans include dedicated team workspaces with advanced permissions.",
+      question: "What platforms does Lnkd support?",
+      answer: "Lnkd is available on macOS, Windows, iOS, and Android, with a web version for browsers. All platforms maintain feature parity and real-time sync through our custom protocol."
     },
     {
-      question: "How often does CanvasFlow receive updates?",
-      answer:
-        "We release meaningful updates every month with new features, performance improvements, and quality refinements. All updates are included with your subscription at no additional cost.",
+      question: "How does Lnkd handle team collaboration?",
+      answer: "Teams get granular permission controls, live presence indicators, and version history with intelligent merge capabilities. All collaboration happens over encrypted channels with per-user access controls."
     },
+    {
+      question: "What file types can I work with in Lnkd?",
+      answer: "Lnkd natively supports over 200 file types with rich previews, including documents, code, images, videos, and 3D models. You can connect any file to your knowledge graph."
+    },
+    {
+      question: "How often is Lnkd updated?",
+      answer: "We ship meaningful updates every two weeks. Our architecture allows seamless updates without downtime or data migration headaches."
+    }
   ];
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -43,32 +45,28 @@ export const FAQ = () => {
   };
 
   return (
-    <div className="relative isolate py-24 sm:py-32 bg-black overflow-hidden">
-      {/* Subtle dark grid background */}
-      <div className="absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,transparent,black_20%)]">
-        <div className="absolute inset-0 [background:linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [background-position:calc(50%-1.75rem)_calc(50%-1.75rem)]" />
-      </div>
+    <div className="relative py-24 px-6 bg-black">
+      {/* Ultra-subtle background texture */}
+      <div className="absolute inset-0 -z-10 opacity-5 [background-image:radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
       
-      {/* Very subtle blue tint overlay */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-900/5 to-gray-900" />
-
-      <div className="mx-auto max-w-4xl px-6 lg:px-8">
-        {/* Clean, typography-focused header */}
+      <div className="mx-auto max-w-3xl">
+        {/* Precise Apple-style typography */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl font-semibold tracking-tight text-gray-50 sm:text-5xl">
-            CanvasFlow FAQs
+          <h2 className="text-5xl font-light tracking-tight text-gray-50 mb-4">
+            Lnkd
           </h2>
-          <p className="mt-4 text-xl text-gray-400 max-w-2xl mx-auto">
-            Quick answers to common questions about our design platform.
+          <div className="w-12 h-px bg-gray-700 mx-auto mb-6" />
+          <p className="text-xl text-gray-400 font-light max-w-xl mx-auto">
+            Answers to common questions about the future of knowledge work.
           </p>
         </motion.div>
 
-        {/* Minimalist FAQ items with Apple-like precision */}
+        {/* Minimalist FAQ items with surgical precision */}
         <motion.div 
           initial="hidden"
           animate="visible"
@@ -81,7 +79,7 @@ export const FAQ = () => {
               }
             }
           }}
-          className="space-y-1 divide-y divide-gray-800"
+          className="space-y-1"
         >
           {faqs.map((faq, index) => (
             <motion.div
@@ -90,21 +88,21 @@ export const FAQ = () => {
                 hidden: { opacity: 0, y: 5 },
                 visible: { opacity: 1, y: 0 }
               }}
-              className="group"
+              className="border-b border-gray-800/70"
             >
               <button
                 onClick={() => toggleQuestion(index)}
-                className="flex w-full items-start justify-between text-left py-6 px-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 rounded-lg"
+                className="flex w-full items-start justify-between text-left py-6 focus:outline-none"
               >
-                <span className="text-lg font-medium text-gray-100 group-hover:text-blue-300 transition-colors duration-200">
+                <span className="text-lg text-gray-100 font-light tracking-wide">
                   {faq.question}
                 </span>
                 <motion.div
                   animate={{ rotate: activeIndex === index ? 180 : 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="ml-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full group-hover:bg-gray-800 transition-colors duration-200"
+                  transition={{ duration: 0.3 }}
+                  className="ml-4 flex h-6 w-6 items-center justify-center"
                 >
-                  <FiChevronDown className="h-4 w-4 text-gray-400 group-hover:text-blue-300 transition-colors duration-200" />
+                  <FiChevronDown className="h-4 w-4 text-gray-500" />
                 </motion.div>
               </button>
 
@@ -130,7 +128,7 @@ export const FAQ = () => {
                     }}
                     className="overflow-hidden"
                   >
-                    <div className="px-4 pb-6 text-gray-400 font-light leading-relaxed">
+                    <div className="pb-6 text-gray-400 font-light leading-relaxed tracking-normal">
                       {faq.answer}
                     </div>
                   </motion.div>
@@ -140,27 +138,16 @@ export const FAQ = () => {
           ))}
         </motion.div>
 
-        {/* Understated CTA */}
+        {/* Understated Apple-style footnote */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="mt-16 text-center"
+          className="mt-20 pt-6 border-t border-gray-800/50 text-center"
         >
-          <p className="text-gray-500 mb-6 text-lg">
-            Need more detailed information?
+          <p className="text-gray-500 text-sm">
+            For additional questions, contact <span className="text-gray-400">support@lnkd.design</span>
           </p>
-          <motion.a
-            href="#"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center px-6 py-3 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-500 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70"
-          >
-            <span>Contact CanvasFlow Support</span>
-            <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </motion.a>
         </motion.div>
       </div>
     </div>
