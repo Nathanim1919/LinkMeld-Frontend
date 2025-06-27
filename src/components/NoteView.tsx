@@ -1,12 +1,9 @@
-import { FaExternalLinkAlt } from "react-icons/fa";
 import type { Capture } from "../types/Capture";
 import { NoteHeader } from "./noteview/NoteHeader";
-import { NoteSummary } from "./noteview/NoteSummary";
 import { NoteMainText } from "./noteview/NoteMainContent";
 import { NoteMetaBox } from "./noteview/NoteMetaAccordion";
 import { NoteActionBar } from "./noteview/NoteSmartActions";
 import { CiBookmark } from "react-icons/ci";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { Share2 } from "lucide-react";
 import { useUI } from "../context/UIContext";
 import { FaFolderPlus } from "react-icons/fa6";
@@ -48,7 +45,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     >
       <NoteActionBar />
       <FolderList />
-      <div className="flex border-b py-3 border-gray-800 items-center justify-around sticky top-0  z-1000 bg-[#1A1A1C]">
+      <div className="flex border-b py-3 border-gray-800 items-center justify-around sticky top-0  z-999 bg-[#1A1A1C]">
         <div className="relative">
           {/* Visual folder path indicator */}
           <div className="flex items-center gap-1 rounded-lg  border-gray-700 w-fit">

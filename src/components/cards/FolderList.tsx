@@ -1,9 +1,11 @@
+import { motion, AnimatePresence } from "framer-motion";
 import { useFolderContext } from "../../context/FolderContext";
-import { FaFolderOpen } from "react-icons/fa";
+import { FaFolder } from "react-icons/fa";
 import { useUI } from "../../context/UIContext";
 import { useCaptureContext } from "../../context/CaptureContext";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useState } from "react";
+import { FiChevronRight, FiPlus } from "react-icons/fi";
 
 export const FolderList: React.FC = () => {
   const { folders, loadingStates, addCaptureToFolder } = useFolderContext();
@@ -11,55 +13,92 @@ export const FolderList: React.FC = () => {
   const { selectedCapture } = useCaptureContext();
   const [appendToFolderId, setAppendToFolderId] = useState<string | null>(null);
 
-  if (!isFolderListOpen) return null;
-
   const setCaptureFolder = async (folderId: string) => {
     if (!selectedCapture) return;
     try {
+      setAppendToFolderId(folderId);
       await addCaptureToFolder(folderId, selectedCapture._id);
       setIsFolderListOpen?.(false);
     } catch (error) {
       console.error("Error adding capture to folder:", error);
+    } finally {
+      setAppendToFolderId(null);
     }
   };
 
   return (
-    <div className="flex absolute top-[8%] border border-[#2f2b2b] overflow-hidden border-b-0 z-999 rounded-lg right-[10%] flex-col items-center justify-center bg-[#201f1f] shadow-lg ">
-      {loadingStates.fetch ? (
-        <p className="text-gray-600">Loading...</p>
-      ) : folders.length === 0 ? (
-        <p className="text-gray-600">No folders available.</p>
-      ) : (
-        <div className="flex flex-col">
-        
-          {folders.map((folder) => (
-            <div
-              key={folder._id}
-              onClick={() => {
-                setAppendToFolderId(folder._id);
-                setCaptureFolder(folder._id);
-              }}
-              data-testid="folder-item"
-              className="folder-item hover:bg-white/10 border-b px-2 py-1 border-white/10 cursor-pointer flex items-center justify-between gap-4"
-            >
-              <div className="flex items-center gap-2">
-                {loadingStates.append && appendToFolderId === folder._id ? (
-                  <CgSpinnerTwoAlt className="text-gray-500 w-4 h-4 animate-spin" />
-                ) : (
-                  // Use folder icon if available, otherwise use default folder icon
-                  <FaFolderOpen className="text-gray-500 w-4 h-4" />
-                )}
-                <h3 className="text-[13px] capitalize">
-                  {folder.name.length > 15
-                    ? folder.name.slice(0, 15) + "..."
-                    : folder.name}
-                </h3>
-              </div>
-              <p>{folder.captures.length}</p>
+    <AnimatePresence>
+      {isFolderListOpen && (
+        <motion.div
+          className="fixed top-[6%] right-[8%] z-[1000]"
+        >
+          <motion.div
+            className="flex flex-col w-60 bg-black/30 backdrop-blur-xl rounded-xl border border-gray-700/50 shadow-2xl overflow-hidden"
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            transition={{ type: "spring", bounce: 0.2 }}
+          >
+            <div className="p-3 border-b border-gray-800">
+              <h3 className="font-medium text-sm text-gray-300 flex items-center gap-2">
+                <FiPlus className="text-blue-400" />
+                Add to folder
+              </h3>
             </div>
-          ))}
-        </div>
+
+            {loadingStates.fetch ? (
+              <motion.div 
+                className="flex items-center justify-center p-4"
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+              >
+                <CgSpinnerTwoAlt className="text-gray-500 w-5 h-5 animate-spin" />
+              </motion.div>
+            ) : folders.length === 0 ? (
+              <motion.p 
+                className="p-3 text-sm text-gray-500 text-center"
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+              >
+                No folders available
+              </motion.p>
+            ) : (
+              <motion.ul className="divide-y divide-gray-800/50">
+                {folders.map((folder) => (
+                  <motion.li
+                    key={folder._id}
+                    initial={{ opacity: 1, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * folders.indexOf(folder) }}
+                    whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
+                    className="px-3 py-2.5 cursor-pointer transition-colors"
+                    onClick={() => setCaptureFolder(folder._id)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        {loadingStates.append && appendToFolderId === folder._id ? (
+                          <CgSpinnerTwoAlt className="text-blue-400 w-4 h-4 animate-spin" />
+                        ) : (
+                          <FaFolder className="text-blue-400/80 w-4 h-4" />
+                        )}
+                        <span className="text-sm text-gray-300 truncate max-w-[140px]">
+                          {folder.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500 bg-gray-800/50 px-1.5 py-0.5 rounded-full">
+                          {folder.captures.length}
+                        </span>
+                        <FiChevronRight className="text-gray-500 w-3 h-3" />
+                      </div>
+                    </div>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            )}
+          </motion.div>
+        </motion.div>
       )}
-    </div>
+    </AnimatePresence>
   );
 };
