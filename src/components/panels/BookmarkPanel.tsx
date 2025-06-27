@@ -10,10 +10,8 @@ const BookmarkPanel: React.FC = () => {
     return <div className="p-4 text-gray-500">No bookmarks found.</div>;
   }
 
-  // Here we assume NotesList can accept a list of captures directly (customize if needed)
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Bookmarked Notes</h2>
+    <div className="">
       <NotesList filter="bookmarks"/>
     </div>
   );

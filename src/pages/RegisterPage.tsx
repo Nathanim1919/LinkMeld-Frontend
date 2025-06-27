@@ -1,7 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
-import { FaArrowLeft } from "react-icons/fa";
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiEye,
+  FiEyeOff,
+  FiArrowRight,
+} from "react-icons/fi";
+import { FaArrowLeft, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { authClient } from "../lib/auth-client";
 import { VscLoading } from "react-icons/vsc";
@@ -28,6 +35,19 @@ export const RegisterPage = () => {
       console.error("Registration failed", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/in",
+    });
+    if (data.error) {
+      console.error("Google sign-in failed", data.error);
+    } else {
+      // Handle successful Google sign-in
+      console.log("Google sign-in successful", data);
     }
   };
 
@@ -59,7 +79,10 @@ export const RegisterPage = () => {
           <form onSubmit={handleRegistration} className="space-y-5">
             {/* Name Field */}
             <div>
-              <label htmlFor="name" className="block text-sm text-gray-300 mb-2">
+              <label
+                htmlFor="name"
+                className="block text-sm text-gray-300 mb-2"
+              >
                 Full Name
               </label>
               <div className="relative">
@@ -70,7 +93,9 @@ export const RegisterPage = () => {
                   className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 transition-all"
                   placeholder="John Doe"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -78,7 +103,10 @@ export const RegisterPage = () => {
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm text-gray-300 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm text-gray-300 mb-2"
+              >
                 Email Address
               </label>
               <div className="relative">
@@ -89,7 +117,9 @@ export const RegisterPage = () => {
                   className="w-full pl-10 pr-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 transition-all"
                   placeholder="your@email.com"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -97,7 +127,10 @@ export const RegisterPage = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm text-gray-300 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm text-gray-300 mb-2"
+              >
                 Password
               </label>
               <div className="relative">
@@ -108,7 +141,9 @@ export const RegisterPage = () => {
                   className="w-full pl-10 pr-12 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 transition-all"
                   placeholder="••••••••"
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   required
                 />
                 <button
@@ -146,11 +181,20 @@ export const RegisterPage = () => {
               )}
             </motion.button>
           </form>
+          <button
+            onClick={handleGoogleSignIn}
+            className="w-full mt-2 flex items-center justify-center gap-3 py-2.5 px-6 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors mb-6"
+          >
+            <FaGoogle className="text-blue-400" />
+            Continue with Google
+          </button>
 
           {/* Divider */}
           <div className="flex items-center my-6">
             <div className="flex-1 border-t border-gray-700"></div>
-            <span className="px-3 text-gray-500 text-sm">Already registered?</span>
+            <span className="px-3 text-gray-500 text-sm">
+              Already registered?
+            </span>
             <div className="flex-1 border-t border-gray-700"></div>
           </div>
 

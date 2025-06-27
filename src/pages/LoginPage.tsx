@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { FaArrowLeft, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
@@ -28,9 +27,20 @@ export const LoginPage = () => {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    authClient.signIn.google({ callbackURL: "/in" });
+  
+  const handleGoogleSignIn = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/in",
+  });
+    if (data.error) {
+      console.error("Google sign-in failed", data.error);
+    } else {
+      // Handle successful Google sign-in
+      console.log("Google sign-in successful", data);
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4">
