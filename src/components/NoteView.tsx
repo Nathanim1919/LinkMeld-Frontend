@@ -11,6 +11,8 @@ import { FolderList } from "./cards/FolderList";
 import { FaFolder } from "react-icons/fa6";
 import { CiStickyNote } from "react-icons/ci";
 import { FiChevronRight, FiMoreHorizontal } from "react-icons/fi";
+import { Link } from "@tanstack/react-router";
+import { useFolderContext } from "../context/FolderContext";
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -25,6 +27,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setOpenActionBar,
     openActionBar,
   } = useUI();
+  const {setSelectedFolder} = useFolderContext();
 
   if (!capture) {
     return (
@@ -38,6 +41,8 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       </div>
     );
   }
+
+
 
   return (
     <div
@@ -53,11 +58,19 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               <FaFolder className="text-blue-500 dark:text-blue-400" />
             )}
             {capture.collection?.name && (
-              <span className="font-medium text-gray-700 dark:text-gray-300">
+              <Link
+               to={`/in/folders/${capture.collection._id}`} 
+                onClick={() => setSelectedFolder({
+                  ...capture.collection,
+                  captures: [],
+                  createdAt: "",
+                  updatedAt: ""
+                })}
+               className="font-medium hover:text-violet-600 hover:underline text-gray-700 dark:text-gray-300">
                 {capture?.collection?.name.length > 20
                   ? capture.collection?.name.slice(0, 17) + "..."
                   : capture.collection?.name}
-              </span>
+              </Link>
             )}
             {capture.collection?.name && (
               <FiChevronRight className="text-gray-400 mx-1" />

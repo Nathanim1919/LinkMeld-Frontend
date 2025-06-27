@@ -3,12 +3,13 @@ import React, { useEffect, useMemo, useState, type JSX } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useCaptureContext } from "../context/CaptureContext";
 import type { Capture } from "../types/Capture";
-
+import { FaFolder } from "react-icons/fa6";
 import { FaFolderClosed } from "react-icons/fa6";
 import { FaHashtag } from "react-icons/fa";
 import { TbCaptureFilled } from "react-icons/tb";
 import { CiBookmark, CiStickyNote } from "react-icons/ci";
 import { NoteListSkeleton } from "./skeleton/NoteListSkeleton";
+import { useFolderContext } from "../context/FolderContext";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -40,6 +41,7 @@ const NotesList: React.FC<NotesListProps> = ({
 }) => {
   const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
     useCaptureContext();
+  const {selectedFolder} = useFolderContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -118,7 +120,13 @@ const NotesList: React.FC<NotesListProps> = ({
       <h3 className="text-sm flex gap-2 items-center font-bold text-white border-b border-white/10 py-2 mb-1">
         {filterIcons[filter]} {filterLabels[filter]}
       </h3>
-
+      {(selectedFolder && filter === 'folder') && (
+        <div className="text-md  text-violet-500 mb-2 flex items-center gap-1">
+          <FaFolder/>{selectedFolder.name.length > 20
+            ? selectedFolder.name.slice(0, 20) + "..."
+            : selectedFolder.name}
+        </div>
+      )}
       <div className="flex flex-col max-h-[90vh] overflow-y-auto space-y-2 pr-1 overflow-hidden">
         {safeCaptures.map((note) => (
           <Link

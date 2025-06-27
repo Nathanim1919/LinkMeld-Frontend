@@ -28,7 +28,7 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [folders, setFolders] = useState<IFolder[]>([]);
-  const [selectedFolder, setSelectedFolder] = useState<IFolder | null>(null);
+  const [selectedFolder, setSelectedFolder] = useState<Partial<IFolder> | null>(null);
   const [loadingStates, setLoadingStates] = useState({
     fetch: false,
     append: false,
