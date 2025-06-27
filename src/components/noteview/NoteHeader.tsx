@@ -26,20 +26,8 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-2 border-b border-gray-600"
+      className="p-2 py-4 border-b border-gray-600"
     >
-      <Link
-        to={`/folders/${collection.id}`}
-        className="text-blue-500 flex items-center gap-1 hover:underline"
-      >
-        <IoFolderOpen />
-        {collection.name || "Uncategorized"}
-      </Link>
-      <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-        {capturedAt && (
-          <span>Captured {formatDistanceToNow(new Date(capturedAt))} ago</span>
-        )}
-      </div>
       <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
         {title}
       </h1>
@@ -48,7 +36,7 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
           {description}
         </p>
       )}
-      {tags.length > 0 && (
+      {/* {tags.length > 0 && (
         <div className="mt-2 flex gap-2 flex-wrap">
           {tags.map((tag, index) => (
             <span
@@ -59,7 +47,7 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
             </span>
           ))}
         </div>
-      )}
+      )} */}
     </motion.div>
   );
 };

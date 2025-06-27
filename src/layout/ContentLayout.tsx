@@ -30,7 +30,7 @@ export const ContentLayout = () => {
       </div>
 
       {/* Right panel (Note view or empty) */}
-      <div className="bg-[#232326] overflow-y-auto">
+      <div className="bg-[#161617] overflow-y-auto">
         {selectedCapture ? (
           <NoteView capture={selectedCapture} />
         ) : (

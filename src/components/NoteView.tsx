@@ -26,10 +26,9 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setIsFolderListOpen,
     isFolderListOpen,
     setOpenActionBar,
-    openActionBar
+    openActionBar,
   } = useUI();
 
-  
   if (!capture) {
     return (
       <div className="p-4 mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen">
@@ -53,13 +52,19 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         <div className="relative">
           {/* Visual folder path indicator */}
           <div className="flex items-center gap-1 rounded-lg  border-gray-700 w-fit">
-           {capture.collection?.name && <FaFolder className="text-blue-500 dark:text-blue-400" />}
-            {capture.collection?.name && <span className="font-medium text-gray-700 dark:text-gray-300">
-              {capture?.collection?.name.length > 20
-                ? capture.collection?.name.slice(0, 17) + "..."
-                : capture.collection?.name}
-            </span>}
-          {capture.collection?.name &&  <FiChevronRight className="text-gray-400 mx-1" />}
+            {capture.collection?.name && (
+              <FaFolder className="text-blue-500 dark:text-blue-400" />
+            )}
+            {capture.collection?.name && (
+              <span className="font-medium text-gray-700 dark:text-gray-300">
+                {capture?.collection?.name.length > 20
+                  ? capture.collection?.name.slice(0, 17) + "..."
+                  : capture.collection?.name}
+              </span>
+            )}
+            {capture.collection?.name && (
+              <FiChevronRight className="text-gray-400 mx-1" />
+            )}
             <div className="flex items-center gap-1">
               <CiStickyNote className="text-amber-500 dark:text-amber-400" />
               <span className="text-gray-600 dark:text-gray-400">
@@ -71,42 +76,42 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           </div>
         </div>
         <div className="flex items-center gap-1 rounded-full">
-  {/* Bookmark */}
-  <button
-    className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-    title="Bookmark"
-  >
-    <CiBookmark className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-blue-500" />
-  </button>
+          {/* Bookmark */}
+          <button
+            className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            title="Bookmark"
+          >
+            <CiBookmark className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-blue-500" />
+          </button>
 
-  {/* Share */}
-  <button
-    className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-    title="Share"
-    data-testid="share-button"
-  >
-    <Share2 className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-purple-500" />
-  </button>
+          {/* Share */}
+          <button
+            className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            title="Share"
+            data-testid="share-button"
+          >
+            <Share2 className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-purple-500" />
+          </button>
 
-  {/* Folder */}
-  <button
-    className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-    onClick={() => setIsFolderListOpen?.(!isFolderListOpen)}
-    title="Add to folder"
-    data-testid="add-folder-button"
-  >
-    <FaFolderPlus className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-green-500" />
-  </button>
+          {/* Folder */}
+          <button
+            className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            onClick={() => setIsFolderListOpen?.(!isFolderListOpen)}
+            title="Add to folder"
+            data-testid="add-folder-button"
+          >
+            <FaFolderPlus className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-green-500" />
+          </button>
 
-  {/* More options (three dots) */}
-  <button
-     onClick={() => setOpenActionBar?.(!openActionBar)}
-    className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-    title="More options"
-  >
-    <FiMoreHorizontal className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-  </button>
-</div>
+          {/* More options (three dots) */}
+          <button
+            onClick={() => setOpenActionBar?.(!openActionBar)}
+            className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            title="More options"
+          >
+            <FiMoreHorizontal className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+          </button>
+        </div>
       </div>
       <div
         className={`mx-auto ${
@@ -136,13 +141,13 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           }
           capturedAt={capture.metadata.capturedAt}
         />
-        <NoteSummary
+        {/* <NoteSummary
           summary={capture.content.clean.slice(0, 200) ?? null}
           loading={!capture.content}
           onRefresh={() => {
             // maybe call your backend to regenerate summary
           }}
-        />
+        /> */}
 
         <NoteMainText text={capture.content.clean || ""} />
         <NoteMetaBox

@@ -45,6 +45,8 @@ const Sidebar: React.FC<{
 }> = ({ user }) => {
   const { collapsed, setCollapsed } = useUI();
   const [loading, setLoading] = useState(false);
+  const { setSelectedCapture } = useCaptureContext(); // Add this from CaptureContext
+
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
@@ -62,19 +64,22 @@ const Sidebar: React.FC<{
   return (
     <div
       className={`h-screen bg-[#0F0F10] \
-        ${collapsed ? "w-[60px]" : "w-full"} text-zinc-100 pl-2 flex flex-col \
+        ${collapsed ? "w-12" : "w-32"} text-zinc-100 flex flex-col \
         relative justify-between items-center pb-4 transition-all duration-300`}
     >
       {/* Logo */}
-      <div className="flex items-center justify-center pt-4">
+      <div className="pt-4">
         <Link
           to="/in"
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            setCollapsed(!collapsed);
+            setSelectedCapture(null);
+          }} // Reset selected capture on logo click
           className={`flex items-center gap-2 ${
-            collapsed ? "text-2xl" : "text-lg"
+            collapsed ? "text-lg" : "text-lg"
           } font-bold text-violet-500`}
         >
-          <Brain className="w-6 h-6" />
+          <Brain className="w-8 h-8" />
           {!collapsed && <span className="text-lg font-bold">Lnkd.</span>}
         </Link>
       </div>
@@ -139,16 +144,12 @@ interface SidebarItemProps {
 
 const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   const { setMiddlePanelCollapsed, setCollapsed } = useUI();
-  const { setSelectedCapture } = useCaptureContext(); // Add this from CaptureContext
   const matchRoute = useMatchRoute();
   const isActive = !!matchRoute({ to: path, exact: false });
 
   const handleClick = () => {
     setCollapsed(false);
     setMiddlePanelCollapsed(false);
-    if (path === "/in") {
-      setSelectedCapture(null); // Clear selectedCapture for Home
-    }
   };
 
   return (
@@ -171,7 +172,11 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
             <b className="absolute w-full h-[55%] bg-[#1A1A1C] -bottom-6 right-0 before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-tr-full"></b>
           </>
         )}
-        <span className={`flex-shrink-0 relative z-1000 ${collapsed ? "text-2xl" : "text-lg"}`}>
+        <span
+          className={`flex-shrink-0 relative z-1000 ${
+            collapsed ? "text-2xl" : "text-lg"
+          }`}
+        >
           {icon}
         </span>
         {!collapsed && (
