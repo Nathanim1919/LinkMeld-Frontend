@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { FiArrowRight, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
-import { FaArrowLeftLong } from "react-icons/fa6";
-import React, { useCallback, useState } from "react";
+import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FaArrowLeft, FaGoogle } from "react-icons/fa";
+import { useState } from "react";
 import { authClient } from "../lib/auth-client";
-import { VscLoading } from "react-icons/vsc";
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,226 +13,120 @@ export const LoginPage = () => {
     password: "",
   });
 
-  const handleSignIn = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await authClient.signIn.email({
+        ...formData,
+        callbackURL: "/in",
+      });
+    } catch (error) {
+      console.error("Login failed", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      await authClient.signIn.email(
-        {
-          ...formData,
-          callbackURL: "/in",
-        },
-        {
-          onRequest(context) {
-            setLoading(true);
-            console.log("Login request initiated", context);
-          },
-          onSuccess() {
-            // Handle successful login, e.g., redirect or show a message
-            setFormData({ email: "", password: "" });
-            setLoading(false);
-          },
-          onError(error) {
-            setLoading(false);
-            console.error("Login failed", error);
-          },
-        }
-      );
-    },
-    [formData]
-  );
+  const handleGoogleSignIn = () => {
+    authClient.signIn.google({ callbackURL: "/in" });
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0a20] via-[#1a0a30] to-[#0a0a20] text-white flex items-center justify-center p-4 relative overflow-hidden">
-      {/* === Cosmic Background Elements === */}
-      <Link
-        to={"/"}
-        className="absolute top-6 left-6 text-violet-400 hover:text-violet-300 transition-colors"
-      >
-        <FaArrowLeftLong className="w-6 h-6" />
-      </Link>
-      <div className="absolute inset-0 -z-20">
-        {/* Violet nebula glow */}
-        <div className="absolute top-1/3 left-1/2 w-[1200px] h-[1200px] bg-[radial-gradient(circle_at_center,#7F5AF0_0%,transparent_70%)] opacity-[0.15] blur-[120px] animate-pulse-slow" />
-
-        {/* Distant stars */}
-        {[...Array(100)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white"
-            style={{
-              width: `${Math.random() * 2 + 1}px`,
-              height: `${Math.random() * 2 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              opacity: Math.random() * 0.8 + 0.2,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* === Floating Space Particles === */}
-      {[...Array(15)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full bg-violet-500/20 backdrop-blur-sm"
-          style={{
-            width: `${Math.random() * 8 + 4}px`,
-            height: `${Math.random() * 8 + 4}px`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            y: [0, Math.random() * 100 - 50],
-            x: [0, Math.random() * 100 - 50],
-            opacity: [0.2, 0.8, 0.2],
-          }}
-          transition={{
-            duration: Math.random() * 30 + 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* === Login Container === */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-md relative"
-      >
-        {/* Cosmic Glow Effect */}
-        <div className="absolute -inset-4 bg-violet-600/20 rounded-2xl blur-xl -z-10" />
-
-        {/* Main Card */}
-        <div className="bg-[#0a0a20]/80 backdrop-blur-lg border border-violet-500/20 rounded-xl p-8 shadow-2xl">
+    <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4">
+        <Link
+              to="/"
+              className="absolute top-6 left-6 text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2"
+            >
+              <FaArrowLeft className="w-5 h-5" />
+            </Link>
+      <div className="w-full max-w-md">
+        {/* Card */}
+        <div className="bg-gray-800 rounded-xl p-8 shadow-2xl border border-gray-700">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-center mb-10"
-          >
-            <h2 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-violet-300">
-              Welcome Back
-            </h2>
-            <p className="text-violet-200/80">Sign in to your account</p>
-          </motion.div>
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold mb-1">Welcome back</h1>
+            <p className="text-gray-400">Sign in to continue</p>
+          </div>
 
-          {/* Login Form */}
-          <motion.form
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="space-y-6"
-            onSubmit={handleSignIn}
+          {/* Google Button */}
+          <button
+            onClick={handleGoogleSignIn}
+            className="w-full flex items-center justify-center gap-3 py-2.5 px-6 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors mb-6"
           >
-            {/* Email Field */}
+            <FaGoogle className="text-blue-400" />
+            Continue with Google
+          </button>
+
+          {/* Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-1 border-t border-gray-700"></div>
+            <span className="px-3 text-gray-500 text-sm">OR</span>
+            <div className="flex-1 border-t border-gray-700"></div>
+          </div>
+
+          {/* Email Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-violet-100 mb-2"
-              >
-                Email Address
-              </label>
+              <label className="block text-sm text-gray-300 mb-1">Email</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiMail className="text-violet-400" />
-                </div>
+                <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                 <input
-                  id="email"
                   type="email"
-                  className="w-full pl-10 pr-4 py-3 bg-[#0d0a25]/70 border border-violet-500/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-violet-400/50 text-white placeholder-violet-400/50 transition-all"
-                  placeholder="your@email.com"
                   value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full pl-10 pr-4 py-2.5 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="your@email.com"
+                  required
                 />
               </div>
             </div>
 
-            {/* Password Field */}
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-violet-100 mb-2"
-              >
-                Password
-              </label>
+              <label className="block text-sm text-gray-300 mb-1">Password</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="text-violet-400" />
-                </div>
+                <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                 <input
-                  id="password"
                   type={showPassword ? "text" : "password"}
-                  className="w-full pl-10 pr-12 py-3 bg-[#0d0a25]/70 border border-violet-500/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-violet-400/50 text-white placeholder-violet-400/50 transition-all"
-                  placeholder="••••••••"
                   value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  className="w-full pl-10 pr-10 py-2.5 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="••••••••"
+                  required
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-violet-400/70 hover:text-violet-300 transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200"
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
-              <div className="flex justify-end mt-2">
-                <Link
-                  to="/forgot-password"
-                  className="text-xs text-violet-400/70 hover:text-violet-300 transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
             </div>
 
-            {/* Submit Button */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              className={`w-full bg-gradient-to-r ${
-                loading
-                  ? "from-violet-400 to-purple-400 cursor-not-allowed"
-                  : "from-violet-600 to-purple-600 cursor-pointer"
-              } text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-violet-500/30 transition-all`}
-            >
-              {loading && (
-                <VscLoading className="animate-spin w-5 h-5 text-white" />
-              )}
-              {loading ? "Signing In..." : "Sign In"}{" "}
-              {!loading && <FiArrowRight />}
-            </motion.button>
-          </motion.form>
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 px-6 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex justify-center items-center"
+              >
+                {loading ? "Signing in..." : "Sign in"}
+              </button>
+            </div>
+          </form>
 
-          {/* Divider */}
-          <div className="relative my-8">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-violet-500/20" />
-            </div>
-            <div className="relative flex justify-center">
-              <span className="bg-[#0a0a20] px-3 text-sm text-violet-400/50">
-                Don't have an account?
-              </span>
-            </div>
+          {/* Footer Links */}
+          <div className="mt-6 text-center text-sm text-gray-400">
+            <Link to="/forgot-password" className="hover:text-blue-400 transition-colors">
+              Forgot password?
+            </Link>
+            <span className="mx-2">•</span>
+            <Link to="/register" className="hover:text-blue-400 transition-colors">
+              Create account
+            </Link>
           </div>
-
-          {/* Sign Up Link */}
-          <Link
-            to="/register"
-            className="block w-full text-center py-3 px-6 rounded-lg font-medium text-violet-300 border border-violet-500/30 hover:bg-violet-500/10 transition-colors"
-          >
-            Create Account
-          </Link>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

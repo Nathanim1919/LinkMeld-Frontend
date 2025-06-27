@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
-import Image from "../assets/image.png";
+import Image from "../assets/img.png";
 
 const HeroPage = () => {
   return (
