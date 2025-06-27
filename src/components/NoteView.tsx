@@ -13,6 +13,7 @@ import { CiStickyNote } from "react-icons/ci";
 import { FiChevronRight, FiMoreHorizontal } from "react-icons/fi";
 import { Link } from "@tanstack/react-router";
 import { useFolderContext } from "../context/FolderContext";
+import { useCaptureContext } from "../context/CaptureContext";
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -27,7 +28,9 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setOpenActionBar,
     openActionBar,
   } = useUI();
-  const {setSelectedFolder} = useFolderContext();
+  const { setSelectedFolder } = useFolderContext();
+  const {bookmarkCapture } =
+      useCaptureContext();
 
   if (!capture) {
     return (
@@ -41,8 +44,6 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       </div>
     );
   }
-
-
 
   return (
     <div
@@ -59,14 +60,17 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             )}
             {capture.collection?.name && (
               <Link
-               to={`/in/folders/${capture.collection._id}`} 
-                onClick={() => setSelectedFolder({
-                  ...capture.collection,
-                  captures: [],
-                  createdAt: "",
-                  updatedAt: ""
-                })}
-               className="font-medium hover:text-violet-600 hover:underline text-gray-700 dark:text-gray-300">
+                to={`/in/folders/${capture.collection._id}`}
+                onClick={() =>
+                  setSelectedFolder({
+                    ...capture.collection,
+                    captures: [],
+                    createdAt: "",
+                    updatedAt: "",
+                  })
+                }
+                className="font-medium hover:text-violet-600 hover:underline text-gray-700 dark:text-gray-300"
+              >
                 {capture?.collection?.name.length > 20
                   ? capture.collection?.name.slice(0, 17) + "..."
                   : capture.collection?.name}
@@ -88,10 +92,16 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         <div className="flex items-center gap-1 rounded-full">
           {/* Bookmark */}
           <button
-            className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              bookmarkCapture?.(capture._id);
+            }}
+            className={`p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors
+            ${capture.bookmarked ? "bg-blue-500/10" : "text-gray-600 dark:text-gray-300"}
+              `}
             title="Bookmark"
           >
-            <CiBookmark className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-blue-500" />
+            <CiBookmark className={`w-4 h-4 ${capture.bookmarked ? "text-blue-500" : "text-gray-600 dark:text-gray-300"} hover:text-blue-500`} />
           </button>
 
           {/* Share */}

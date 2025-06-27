@@ -143,7 +143,7 @@ const NotesList: React.FC<NotesListProps> = ({
             <div className="flex items-center justify-between">
               <div className="mb-2">
                 <h3 className="text-sm flex items-center gap-1 font-semibold truncate group-hover:underline">
-                  <CiStickyNote className="text-amber-500 dark:text-amber-400" />
+                  <CiStickyNote className="text-amber-500 text-lg dark:text-amber-400" />
                   {note.title.length > 30
                     ? note.title.slice(0, 30) + "..."
                     : note.title}

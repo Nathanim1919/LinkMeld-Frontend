@@ -148,7 +148,7 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   const isActive = !!matchRoute({ to: path, exact: false });
 
   const handleClick = () => {
-    setCollapsed(false);
+    setCollapsed(!collapsed);
     setMiddlePanelCollapsed(false);
   };
 
