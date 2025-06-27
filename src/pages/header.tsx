@@ -1,191 +1,149 @@
 import { Link } from "@tanstack/react-router";
-import {
-  motion,
-  useMotionValue,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 
 export const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const cursorX = useMotionValue(0);
-  const cursorY = useMotionValue(0);
-  const cursorOpacity = useMotionValue(0);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  // Cyberpunk color scheme
-  const colors = {
-    primary: "#00f0ff",
-    secondary: "#ff00f0",
-    bg: "rgba(10, 5, 30, 0.95)",
-    text: "#e0e0ff",
-    accent: "#00ffa3",
-  };
-
-  // Track mouse for cursor effects
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX - 15);
-      cursorY.set(e.clientY - 15);
-      cursorOpacity.set(1);
-    };
-
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
-
-    window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Custom cursor rotation
-  const rotateX = useTransform(cursorY, [0, window.innerHeight], [15, -15]);
-  const rotateY = useTransform(cursorX, [0, window.innerWidth], [-15, 15]);
+  const navItems = ["Features", "Pricing", "FAQs"];
 
   return (
-    <>
-      {/* Cyberpunk Cursor */}
-      <motion.div
-        className="fixed w-8 h-8 rounded-full pointer-events-none z-50 mix-blend-difference"
-        style={{
-          x: cursorX,
-          y: cursorY,
-          opacity: cursorOpacity,
-          rotateX,
-          rotateY,
-          background: `radial-gradient(circle, ${colors.primary}, transparent 70%)`,
-        }}
-        transition={{ type: "spring", damping: 20 }}
-      />
-
-      {/* Main Header */}
-      <header
-        className={` w-full z-40 transition-all duration-500 ${
-          scrolled
-            ? "backdrop-blur-xl bg-[rgba(12,12,12,0.98)] border-b border-[rgba(255,0,240,0.1)]"
-            : "backdrop-blur-lg bg-[#05030f]"
-        }`}
-      >
-        <div className="max-w-8xl mx-auto px-6">
-          <div className="flex items-center justify-around h-24">
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Link to="/" className="text-2xl font-extrabold tracking-tighter">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-500">
-                  lnkd
-                </span>
-                <span className="text-gray-300">.</span>
+    <header className="relative bg-[#030409] w-full z-50">
+      {/* Main header with glass effect */}
+      <div className={`relative transition-all duration-300 `}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo with subtle gradient */}
+            <motion.div 
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center"
+            >
+              <Link to="/" className="text-xl font-medium">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white font-light">lnkd</span>
+                <span className="text-blue-400">.</span>
               </Link>
             </motion.div>
 
-            {/* Cyber Navigation */}
-            <nav className="hidden md:flex items-center gap-12">
-              {["HOME", "FEATURES", "PRICING", "FAQs"].map((item, index) => (
+            {/* Desktop Navigation - Apple style */}
+            <nav className="hidden md:flex items-center space-x-8">
+              {navItems.map((item) => (
                 <motion.div
                   key={item}
-                  onHoverStart={() => setHovered(item)}
-                  onHoverEnd={() => setHovered(null)}
-                  className="relative"
+                  onHoverStart={() => setHoveredItem(item)}
+                  onHoverEnd={() => setHoveredItem(null)}
+                  className="relative py-1"
                 >
                   <Link
-                    to={index !== 0 ? `/${item.toLowerCase()}` : "/"}
-                    className="text-sm font-bold [&.active]:border-b-2 border-blue-400 tracking-widest uppercase text-gray-300 hover:text-white transition-all duration-300"
+                    to={`/${item.toLowerCase()}`}
+                    className={`text-xs font-medium tracking-wider ${
+                      hoveredItem === item ? 'text-white' : 'text-gray-400'
+                    } transition-colors duration-200`}
                   >
                     {item}
                   </Link>
-
-                  {/* Hover effect */}
-                  {hovered === item && (
-                    <>
-                      <motion.div
-                        className="absolute -inset-2 rounded-md bg-[rgba(0,240,255,0.1)] -z-10"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    </>
+                  
+                  {/* Apple-style subtle indicator */}
+                  {hoveredItem === item && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-400 to-transparent"
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: '100%' }}
+                      transition={{ type: 'spring', stiffness: 500 }}
+                    />
                   )}
                 </motion.div>
               ))}
             </nav>
 
-            {/* Cyber CTA */}
-            <motion.div className="hidden md:block relative">
-              <Link
-                to="/login"
-                className="inline-block px-6 py-3 text-sm font-bold tracking-widest uppercase text-white hover:text-violet-500 rounded-full"
-              >
-                LOGIN
-              </Link>
-              <Link
-                to="/register"
-                className="relative z-10 px-8 py-3 text-sm font-bold tracking-widest uppercase text-black bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full overflow-hidden"
-              >
-                <span className="relative z-10">GET STARTED</span>
-                <motion.div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                <motion.div
-                  className="absolute -inset-1 rounded-full blur-md opacity-0 hover:opacity-30 transition-opacity duration-500"
-                  style={{
-                    background: `conic-gradient(from 90deg, ${colors.primary}, ${colors.secondary}, ${colors.primary})`,
-                  }}
-                />
-              </Link>
-            </motion.div>
-
-            {/* Mobile Toggle */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden text-gray-300 hover:text-white p-2"
-            >
-              {mobileOpen ? (
-                <FiX className="w-6 h-6" />
-              ) : (
-                <FiMenu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Cyber Mobile Menu */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden bg-[rgba(10,5,30,0.98)] border-t border-[rgba(255,0,240,0.1)]"
-            >
-              <div className="px-6 py-4 space-y-6">
-                {["HOME", "FEATURES", "PRICING", "FAQs", "LOGIN"].map(
-                  (item, index) => (
-                    <Link
-                      key={item}
-                      to={index !== 0 ? `/${item.toLowerCase()}` : "/"}
-                      className="block text-lg font-bold tracking-widest uppercase text-gray-300 hover:text-white transition-colors"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {item}
-                    </Link>
-                  )
-                )}
+            {/* CTA - Apple-style minimal buttons */}
+            <div className="hidden md:flex items-center space-x-3">
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  to="/login"
+                  className="px-4 py-1.5 text-xs font-medium text-gray-300 hover:text-white transition-colors"
+                >
+                  Sign In
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   to="/register"
-                  className="inline-block mt-4 px-6 py-3 text-sm font-bold tracking-widest uppercase text-black bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"
+                  className="px-4 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-blue-500/90 to-blue-600/90 rounded-full transition-all hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)]"
                 >
-                  GET STARTED
+                  Get Started
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Mobile Toggle - Minimal icon */}
+            <motion.button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-1 -mr-1 text-gray-400 hover:text-white"
+              whileTap={{ scale: 0.9 }}
+            >
+              {mobileOpen ? (
+                <FiX className="w-5 h-5" />
+              ) : (
+                <FiMenu className="w-5 h-5" />
+              )}
+            </motion.button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu - Dark glass panel */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="md:hidden bg-gray-900/95 backdrop-blur-lg border-b border-gray-800/30"
+          >
+            <div className="px-6 py-3 space-y-5">
+              {navItems.map((item) => (
+                <Link
+                  key={item}
+                  to={`/${item.toLowerCase()}`}
+                  className="block py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors border-b border-gray-800/30"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item}
+                </Link>
+              ))}
+              <div className="pt-3 space-y-3">
+                <Link
+                  to="/login"
+                  className="block w-full px-4 py-2 text-sm font-medium text-center text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="block w-full px-4 py-2 text-sm font-medium text-center text-white bg-gradient-to-r from-blue-500/90 to-blue-600/90 rounded-full transition-all hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)]"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Get Started
                 </Link>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
-    </>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 };

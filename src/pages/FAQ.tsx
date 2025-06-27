@@ -5,29 +5,34 @@ import { FiChevronDown } from "react-icons/fi";
 export const FAQ = () => {
   const faqs = [
     {
-      question: "Can I change plans later?",
+      question: "How does CanvasFlow differ from other design tools?",
       answer:
-        "Yes, you can upgrade or downgrade your plan at any time. Changes will be prorated based on your billing cycle.",
+        "CanvasFlow reimagines collaborative design with real-time multi-user editing, AI-powered design suggestions, and seamless integration across all your devices. Unlike traditional tools, it maintains pixel-perfect precision while enabling true teamwork.",
     },
     {
-      question: "Do you offer discounts for students?",
+      question: "What platforms does CanvasFlow support?",
       answer:
-        "We offer a 50% discount for verified students. Contact our support team with your academic email for verification.",
+        "CanvasFlow is available on macOS, Windows, iPadOS, and through any modern web browser. Our iOS and Android apps allow for reviewing and light editing on mobile devices.",
     },
     {
-      question: "What payment methods do you accept?",
+      question: "How does CanvasFlow protect my design files?",
       answer:
-        "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise plans.",
+        "All files are encrypted in transit and at rest with enterprise-grade security. We offer version history with unlimited undo and optional blockchain-based timestamping for intellectual property protection.",
     },
     {
-      question: "Is there a free trial?",
+      question: "Can I use CanvasFlow offline?",
       answer:
-        "The Starter plan is completely free. For Pro features, we offer a 14-day free trial with no credit card required.",
+        "Yes. CanvasFlow automatically syncs your work when you reconnect. All core functionality is available offline, with cloud features becoming available once connection is restored.",
     },
     {
-      question: "How do I cancel my subscription?",
+      question: "What collaboration features does CanvasFlow include?",
       answer:
-        "You can cancel anytime from your account settings. Cancellations take effect at the end of your billing period with no additional charges.",
+        "Teams enjoy live cursors with avatar identification, threaded comments, change tracking, and presentation mode with remote control handoff. Enterprise plans include dedicated team workspaces with advanced permissions.",
+    },
+    {
+      question: "How often does CanvasFlow receive updates?",
+      answer:
+        "We release meaningful updates every month with new features, performance improvements, and quality refinements. All updates are included with your subscription at no additional cost.",
     },
   ];
 
@@ -38,35 +43,32 @@ export const FAQ = () => {
   };
 
   return (
-    <div className="relative isolate py-20 sm:py-28 bg-gray-950 overflow-hidden">
-      {/* Advanced gradient background */}
-      <div className="absolute inset-0 -z-10 overflow-hidden opacity-40">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-900/10 via-transparent to-transparent" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] sm:w-[80%] aspect-square bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-transparent rounded-full blur-3xl" />
-      </div>
-      
-      {/* Floating grid pattern */}
-      <div className="absolute inset-0 -z-20 opacity-20 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]">
+    <div className="relative isolate py-24 sm:py-32 bg-black overflow-hidden">
+      {/* Subtle dark grid background */}
+      <div className="absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,transparent,black_20%)]">
         <div className="absolute inset-0 [background:linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [background-position:calc(50%-1.75rem)_calc(50%-1.75rem)]" />
       </div>
+      
+      {/* Very subtle blue tint overlay */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-900/5 to-gray-900" />
 
       <div className="mx-auto max-w-4xl px-6 lg:px-8">
-        {/* Animated header */}
+        {/* Clean, typography-focused header */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-violet-300 to-purple-300">
-            Frequently Asked Questions
+          <h2 className="text-4xl font-semibold tracking-tight text-gray-50 sm:text-5xl">
+            CanvasFlow FAQs
           </h2>
           <p className="mt-4 text-xl text-gray-400 max-w-2xl mx-auto">
-            Everything you need to know about our product and services.
+            Quick answers to common questions about our design platform.
           </p>
         </motion.div>
 
-        {/* FAQ Items with staggered animation */}
+        {/* Minimalist FAQ items with Apple-like precision */}
         <motion.div 
           initial="hidden"
           animate="visible"
@@ -75,34 +77,34 @@ export const FAQ = () => {
             visible: {
               opacity: 1,
               transition: {
-                staggerChildren: 0.1
+                staggerChildren: 0.08
               }
             }
           }}
-          className="space-y-4"
+          className="space-y-1 divide-y divide-gray-800"
         >
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
               variants={{
-                hidden: { opacity: 0, y: 10 },
+                hidden: { opacity: 0, y: 5 },
                 visible: { opacity: 1, y: 0 }
               }}
               className="group"
             >
               <button
                 onClick={() => toggleQuestion(index)}
-                className="flex w-full items-start justify-between text-left p-6 hover:bg-gray-900/50 transition-all duration-300 rounded-xl border border-gray-800 hover:border-violet-400/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50"
+                className="flex w-full items-start justify-between text-left py-6 px-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 rounded-lg"
               >
-                <span className="text-lg font-medium text-gray-100 group-hover:text-violet-300 transition-colors duration-200">
+                <span className="text-lg font-medium text-gray-100 group-hover:text-blue-300 transition-colors duration-200">
                   {faq.question}
                 </span>
                 <motion.div
                   animate={{ rotate: activeIndex === index ? 180 : 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="ml-4 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-gray-800 group-hover:bg-violet-500/10 transition-colors duration-200"
+                  className="ml-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full group-hover:bg-gray-800 transition-colors duration-200"
                 >
-                  <FiChevronDown className="h-5 w-5 text-violet-400 group-hover:text-violet-300 transition-colors duration-200" />
+                  <FiChevronDown className="h-4 w-4 text-gray-400 group-hover:text-blue-300 transition-colors duration-200" />
                 </motion.div>
               </button>
 
@@ -114,21 +116,21 @@ export const FAQ = () => {
                       opacity: 1, 
                       height: "auto",
                       transition: { 
-                        opacity: { duration: 0.2 },
-                        height: { duration: 0.3, ease: "easeInOut" }
+                        opacity: { duration: 0.15 },
+                        height: { duration: 0.25, ease: [0.33, 1, 0.68, 1] }
                       }
                     }}
                     exit={{ 
                       opacity: 0, 
                       height: 0,
                       transition: { 
-                        opacity: { duration: 0.15 },
-                        height: { duration: 0.25, ease: "easeInOut" }
+                        opacity: { duration: 0.1 },
+                        height: { duration: 0.2, ease: [0.33, 1, 0.68, 1] }
                       }
                     }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 pb-6 text-gray-300 font-light leading-relaxed">
+                    <div className="px-4 pb-6 text-gray-400 font-light leading-relaxed">
                       {faq.answer}
                     </div>
                   </motion.div>
@@ -138,24 +140,27 @@ export const FAQ = () => {
           ))}
         </motion.div>
 
-        {/* Enhanced CTA */}
+        {/* Understated CTA */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
           className="mt-16 text-center"
         >
-          <p className="text-gray-400 mb-6 text-lg">
-            Still have questions? We're happy to help.
+          <p className="text-gray-500 mb-6 text-lg">
+            Need more detailed information?
           </p>
-          <motion.button
-            whileHover={{ scale: 1.03 }}
+          <motion.a
+            href="#"
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="relative overflow-hidden px-8 py-3.5 rounded-xl font-medium text-white bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-violet-500/30"
+            className="inline-flex items-center px-6 py-3 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-500 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70"
           >
-            <span className="relative z-10">Contact Support</span>
-            <span className="absolute inset-0 bg-gradient-to-r from-violet-700 to-purple-700 opacity-0 hover:opacity-100 transition-opacity duration-300" />
-          </motion.button>
+            <span>Contact CanvasFlow Support</span>
+            <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </motion.a>
         </motion.div>
       </div>
     </div>
