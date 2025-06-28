@@ -29,7 +29,21 @@ export interface Capture {
       name?: string;
     }[];
   };
-  
+
+  ai: {
+    summary: string;
+    // tags: string[];
+    // entities: {
+    //   type: string;
+    //   text: string;
+    //   position: number[];
+    // }[];
+    // sentiment: {
+    //   score: number;
+    //   label: 'positive' | 'neutral' | 'negative';
+    // };
+  };
+
   // Metadata
   metadata: {
     description: string;
@@ -43,17 +57,17 @@ export interface Capture {
     readingTime: number;
     capturedAt: string;
   };
-  
+
   // System
-  status: 'active' | 'archived' | 'deleted';
-  privacy: 'private' | 'workspace' | 'public';
+  status: "active" | "archived" | "deleted";
+  privacy: "private" | "workspace" | "public";
   version: number;
   source: {
     ip: string;
     userAgent: string;
     extensionVersion: string;
   };
-  
+
   // Timestamps
   createdAt: string;
   updatedAt: string;
