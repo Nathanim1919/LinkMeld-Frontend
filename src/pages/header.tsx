@@ -47,7 +47,7 @@ export const Header = () => {
                 >
                   <Link
                     to={`/${item.toLowerCase()}`}
-                    className={`text-xs font-medium tracking-wider ${
+                    className={`text-md font-medium tracking-wider ${
                       hoveredItem === item ? 'text-white' : 'text-gray-400'
                     } transition-colors duration-200`}
                   >
@@ -72,7 +72,7 @@ export const Header = () => {
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                 <Link
                   to="/login"
-                  className="px-4 py-1.5 text-xs font-medium text-gray-300 hover:text-white transition-colors"
+                  className="px-4 py-1.5 text-md font-medium text-gray-300 hover:text-white transition-colors"
                 >
                   Sign In
                 </Link>
@@ -80,7 +80,7 @@ export const Header = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   to="/register"
-                  className="px-4 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-blue-500/90 to-blue-600/90 rounded-full transition-all hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)]"
+                  className="px-4 py-1.5 text-md font-medium text-white bg-gradient-to-r from-blue-500/90 to-blue-600/90 rounded-full transition-all hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)]"
                 >
                   Get Started
                 </Link>

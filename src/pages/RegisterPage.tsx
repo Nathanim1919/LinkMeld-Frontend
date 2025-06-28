@@ -39,6 +39,7 @@ export const RegisterPage = () => {
   };
 
   const handleGoogleSignIn = async () => {
+    setLoading(true);
     const data = await authClient.signIn.social({
       provider: "google",
       callbackURL: "/in",
@@ -49,6 +50,7 @@ export const RegisterPage = () => {
       // Handle successful Google sign-in
       console.log("Google sign-in successful", data);
     }
+    setLoading(false);
   };
 
   return (
@@ -165,8 +167,10 @@ export const RegisterPage = () => {
               whileTap={{ scale: 0.99 }}
               type="submit"
               disabled={loading}
-              className={`w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 ${
-                loading ? "bg-blue-600" : "bg-blue-600 hover:bg-blue-500"
+              className={`w-full  py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 ${
+                loading
+                  ? "bg-blue-600 cursor-not-allowed"
+                  : "bg-blue-600 cursor-pointer hover:bg-blue-500"
               } text-white transition-colors shadow-md`}
             >
               {loading ? (
@@ -183,7 +187,9 @@ export const RegisterPage = () => {
           </form>
           <button
             onClick={handleGoogleSignIn}
-            className="w-full mt-2 flex items-center justify-center gap-3 py-2.5 px-6 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors mb-6"
+            className={`w-full mt-2 flex items-center justify-center gap-3 py-2.5 px-6 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors mb-6 ${
+              loading ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
           >
             <FaGoogle className="text-blue-400" />
             Continue with Google
@@ -192,7 +198,11 @@ export const RegisterPage = () => {
           {/* Divider */}
           <div className="flex items-center my-6">
             <div className="flex-1 border-t border-gray-700"></div>
-            <span className="px-3 text-gray-500 text-sm">
+            <span
+              className={`px-3 text-gray-500 text-sm ${
+                loading ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
+            >
               Already registered?
             </span>
             <div className="flex-1 border-t border-gray-700"></div>
@@ -201,7 +211,9 @@ export const RegisterPage = () => {
           {/* Login Link */}
           <Link
             to="/login"
-            className="block w-full text-center py-2.5 px-6 rounded-lg font-medium text-blue-400 border border-gray-700 hover:bg-gray-700/50 transition-colors"
+            className={`block w-full ${
+              loading ? "cursor-not-allowed" : "cursor-pointer"
+            } text-center py-2.5 px-6 rounded-lg font-medium text-blue-400 border border-gray-700 hover:bg-gray-700/50 transition-colors`}
           >
             Sign in to your account
           </Link>

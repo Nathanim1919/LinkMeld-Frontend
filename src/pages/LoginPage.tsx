@@ -27,29 +27,30 @@ export const LoginPage = () => {
     }
   };
 
-  
   const handleGoogleSignIn = async () => {
+    setLoading(true);
     const data = await authClient.signIn.social({
       provider: "google",
       callbackURL: "/in",
-  });
+    });
     if (data.error) {
       console.error("Google sign-in failed", data.error);
     } else {
       // Handle successful Google sign-in
       console.log("Google sign-in successful", data);
     }
-  };
 
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4">
-        <Link
-              to="/"
-              className="absolute top-6 left-6 text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2"
-            >
-              <FaArrowLeft className="w-5 h-5" />
-            </Link>
+      <Link
+        to="/"
+        className="absolute top-6 left-6 text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2"
+      >
+        <FaArrowLeft className="w-5 h-5" />
+      </Link>
       <div className="w-full max-w-md">
         {/* Card */}
         <div className="bg-gray-800 rounded-xl p-8 shadow-2xl border border-gray-700">
@@ -62,7 +63,9 @@ export const LoginPage = () => {
           {/* Google Button */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 py-2.5 px-6 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors mb-6"
+            className={`${
+              loading ? "cursor-not-allowed" : "cursor-pointer"
+            } w-full flex items-center justify-center gap-3 py-2.5 px-6 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors mb-6`}
           >
             <FaGoogle className="text-blue-400" />
             Continue with Google
@@ -84,7 +87,9 @@ export const LoginPage = () => {
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="your@email.com"
                   required
@@ -93,13 +98,17 @@ export const LoginPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-300 mb-1">Password</label>
+              <label className="block text-sm text-gray-300 mb-1">
+                Password
+              </label>
               <div className="relative">
                 <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   className="w-full pl-10 pr-10 py-2.5 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="••••••••"
                   required
@@ -118,7 +127,9 @@ export const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-6 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex justify-center items-center"
+                className={`w-full ${
+                  loading ? "cursor-not-allowed" : "cursor-pointer"
+                } py-2.5 px-6 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex justify-center items-center`}
               >
                 {loading ? "Signing in..." : "Sign in"}
               </button>
@@ -127,11 +138,21 @@ export const LoginPage = () => {
 
           {/* Footer Links */}
           <div className="mt-6 text-center text-sm text-gray-400">
-            <Link to="/forgot-password" className="hover:text-blue-400 transition-colors">
+            <Link
+              to="/forgot-password"
+              className={`hover:text-blue-400 ${
+                loading ? "cursor-not-allowed" : "cursor-pointer"
+              } transition-colors`}
+            >
               Forgot password?
             </Link>
             <span className="mx-2">•</span>
-            <Link to="/register" className="hover:text-blue-400 transition-colors">
+            <Link
+              to="/register"
+              className={`hover:text-blue-400 ${
+                loading ? "cursor-not-allowed" : "cursor-pointer"
+              } transition-colors`}
+            >
               Create account
             </Link>
           </div>
