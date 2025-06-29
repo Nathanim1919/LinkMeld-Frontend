@@ -2,57 +2,118 @@ import { useState } from "react";
 import { ChatView } from "./ChatView";
 import { SourcesView } from "./SourcesView";
 import { useUI } from "../../context/UIContext";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { BsStars } from "react-icons/bs";
-
+import { X, ChevronDown } from "lucide-react";
 
 export const AIChatContainer = () => {
   const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
-    const {openAiChat, setOpenAiChat} = useUI();
-
-  if (!openAiChat) return null;
+  const { openAiChat, setOpenAiChat } = useUI();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 100 }}
-      transition={{ duration: 0.3 }}
-     className="flex absolute flex-col overflow-hidden right-4 h-[97%] mt-2 rounded-2xl max-w-[450px] shadow-2xl border border-[#252323] z-1000 bg-[#151313] text-gray-200">
-      {/* Header */}
-      <header className="px-4 py-2 border-b border-gray-800 flex justify-between items-center">
-        <h1 
-        onClick={() => setOpenAiChat?.(false)}
-        className="text-md cursor-pointer font-semibold tracking-tight">
-          <BsStars className="inline-block mr-1 text-violet-500" />
-          AI Chat
-        </h1>
-        <div className="flex space-x-2">
-          <button
-            className={`px-3 py-1 rounded-full text-sm ${
-              activeTab === "chat" ? "bg-gray-800 text-white" : "text-gray-400"
-            }`}
-            onClick={() => setActiveTab("chat")}
+    <AnimatePresence>
+      {openAiChat && (
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: { type: "spring", damping: 25, stiffness: 300 }
+          }}
+          exit={{
+            opacity: 0,
+            y: 20,
+            scale: 0.95,
+            transition: { duration: 0.15 }
+          }}
+          className="fixed flex flex-col overflow-hidden right-4 bottom-4 top-4 rounded-2xl w-[400px] shadow-2xl border border-gray-800/50 z-[1000] bg-gray-900/80 backdrop-blur-3xl text-gray-200"
+          style={{
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+            transformOrigin: "bottom right"
+          }}
+        >
+          {/* Header with Apple-style materials */}
+          <motion.header 
+            className="px-5 py-3 border-b border-gray-800/50 flex justify-between items-center bg-gray-900/30"
+            whileTap={{ scale: 0.98 }}
           >
-            Chat
-          </button>
-          <button
-            className={`px-3 py-1 rounded-full text-sm ${
-              activeTab === "sources"
-                ? "bg-gray-800 text-white"
-                : "text-gray-400"
-            }`}
-            onClick={() => setActiveTab("sources")}
-          >
-            Sources
-          </button>
-        </div>
-      </header>
+            <div className="flex items-center space-x-2">
+              <BsStars className="text-blue-400/90" size={18} />
+              <h1 className="text-sm font-medium tracking-tight text-gray-200">
+                AI Assistant
+              </h1>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <motion.div 
+                className="flex rounded-full bg-gray-800/70"
+                whileHover={{ backgroundColor: "rgba(55, 65, 81, 0.8)" }}
+              >
+                <button
+                  className={`px-3 py-1.5 text-xs ${
+                    activeTab === "chat" 
+                      ? "text-white bg-gray-700/50" 
+                      : "text-gray-400"
+                  } rounded-l-full`}
+                  onClick={() => setActiveTab("chat")}
+                >
+                  Chat
+                </button>
+                <button
+                  className={`px-3 py-1.5 text-xs ${
+                    activeTab === "sources"
+                      ? "text-white bg-gray-700/50"
+                      : "text-gray-400"
+                  } rounded-r-full`}
+                  onClick={() => setActiveTab("sources")}
+                >
+                  Sources
+                </button>
+              </motion.div>
+              
+              <motion.button
+                onClick={() => setOpenAiChat?.(false)}
+                className="p-1.5 rounded-full text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <X size={16} />
+              </motion.button>
+            </div>
+          </motion.header>
 
-      {/* Dynamic Content Area */}
-      <main className="flex-1 overflow-hidden">
-        {activeTab === "chat" ? <ChatView /> : <SourcesView />}
-      </main>
-    </motion.div>
+          {/* Dynamic Content Area with subtle parallax effect */}
+          <motion.main 
+            className="flex-1 overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ y: 5, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -5, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="h-full"
+              >
+                {activeTab === "chat" ? <ChatView /> : <SourcesView />}
+              </motion.div>
+            </AnimatePresence>
+          </motion.main>
+
+          {/* Subtle Apple-style resize handle */}
+          <motion.div 
+            className="absolute bottom-0 left-0 right-0 h-2 flex justify-center cursor-ns-resize"
+            whileHover={{ opacity: 1 }}
+            initial={{ opacity: 0.3 }}
+          >
+            <ChevronDown className="text-gray-500" size={16} />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

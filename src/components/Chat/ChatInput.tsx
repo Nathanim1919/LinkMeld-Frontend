@@ -23,7 +23,7 @@ export const ChatInput = () => {
     <div className="px-5 py-4 border-t border-gray-700/50 bg-gray-900/30 backdrop-blur-2xl">
       {/* Suggested Prompts */}
       <div className="flex gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
-        {["Explain like I'm 5", "Give me examples", "Related concepts"].map(
+        {["Explain like I'm 5", "Give me examples"].map(
           (prompt) => (
             <button
               key={prompt}

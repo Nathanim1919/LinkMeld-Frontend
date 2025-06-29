@@ -173,7 +173,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       </div>
       <button
         onClick={() => setOpenAiChat?.(!openAiChat)}
-        className="p-1 transition-all duration-300 hover:rotate-12 border border-violet-500/20 fixed z-1001 bottom-1 right-1 rounded-full grid place-items-center cursor-pointer bg-[#1b1a1a]"
+        className="p-1 transition-all duration-300 hover:rotate-12 fixed z-1001 bottom-1 right-1 rounded-full grid place-items-center cursor-pointer bg-[#161617]"
         title="More options"
       >
         <RiGeminiFill className="w-8 h-8 text-violet-600" />
