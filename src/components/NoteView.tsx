@@ -14,6 +14,7 @@ import { FiChevronRight, FiMoreHorizontal } from "react-icons/fi";
 import { Link } from "@tanstack/react-router";
 import { useFolderContext } from "../context/FolderContext";
 import { useCaptureContext } from "../context/CaptureContext";
+import { NoteSummary } from "./noteview/NoteSummary";
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -161,15 +162,15 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           }
           capturedAt={capture.metadata.capturedAt}
         />
-        {/* <NoteSummary
-          summary={capture.content.clean.slice(0, 200) ?? null}
+        <NoteSummary
+          summary={capture.ai.summary ?? null}
           loading={!capture.content}
           onRefresh={() => {
             // maybe call your backend to regenerate summary
           }}
-        /> */}
+        />
 
-        <NoteMainText text={capture.content.clean || ""} />
+        {/* <NoteMainText text={capture.content.clean || ""} /> */}
         <NoteMetaBox
           domain="dev.to"
           savedAt="2025-06-01T08:15:00Z"

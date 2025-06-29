@@ -54,7 +54,7 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-2">
       {/* Back Button */}
       <Link
         to="/"
@@ -72,7 +72,7 @@ export const RegisterPage = () => {
       >
         <div className="bg-gray-800 rounded-xl p-8 shadow-xl border border-gray-700">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center">
             <h2 className="text-2xl font-bold mb-2">Create your account</h2>
             <p className="text-gray-400">Join us today</p>
           </div>
