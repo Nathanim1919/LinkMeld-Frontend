@@ -4,7 +4,13 @@ import ReactMarkdown from "react-markdown";
 import { ReferenceCard } from "./ReferenceCard";
 import { Clipboard, MoreHorizontal } from "lucide-react"; // Added Lucide icon imports
 
-export const MessageBubble = ({ role, content, references }) => {
+interface MessageBubbleProps {
+  role: 'user' | 'assistant';
+  content: string;
+  references?: { id: string; title: string; url: string }[]; // Adjusted type for references
+}
+
+export const MessageBubble = ({ role, content, references }: MessageBubbleProps) => {
     const [isHovered, setIsHovered] = useState(false);
   
     return (
