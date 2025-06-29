@@ -29,6 +29,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setOpenActionBar,
     openActionBar,
   } = useUI();
+
   const { setSelectedFolder } = useFolderContext();
   const { bookmarkCapture } = useCaptureContext();
   const {openAiChat, setOpenAiChat} = useUI();
@@ -170,7 +171,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       </div>
       <button
         onClick={() => setOpenAiChat?.(!openAiChat)}
-        className="p-1 fixed z-1001 bottom-4 right-4 rounded-full grid place-items-center cursor-pointer bg-[#1b1a1a] transition-colors"
+        className="p-1 transition-all duration-300 hover:rotate-12 border border-violet-500/20 fixed z-1001 bottom-1 right-1 rounded-full grid place-items-center cursor-pointer bg-[#1b1a1a]"
         title="More options"
       >
         <RiGeminiFill className="w-8 h-8 text-violet-600" />
