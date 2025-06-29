@@ -79,7 +79,7 @@ export const ChatView = () => {
     return (
       <div className="h-full flex flex-col">
         {/* Message History */}
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
           {messages.map((msg, index) => (
             <MessageBubble 
               key={index}

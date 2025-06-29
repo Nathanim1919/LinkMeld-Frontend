@@ -8,7 +8,7 @@ import { BsStars } from "react-icons/bs";
 
 export const AIChatContainer = () => {
   const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
-    const {openAiChat} = useUI();
+    const {openAiChat, setOpenAiChat} = useUI();
 
   if (!openAiChat) return null;
 
@@ -21,7 +21,9 @@ export const AIChatContainer = () => {
      className="flex absolute flex-col overflow-hidden right-4 h-[97%] mt-2 rounded-2xl max-w-[450px] shadow-2xl border border-[#252323] z-1000 bg-[#151313] text-gray-200">
       {/* Header */}
       <header className="px-4 py-2 border-b border-gray-800 flex justify-between items-center">
-        <h1 className="text-md font-semibold tracking-tight">
+        <h1 
+        onClick={() => setOpenAiChat?.(false)}
+        className="text-md cursor-pointer font-semibold tracking-tight">
           <BsStars className="inline-block mr-1 text-violet-500" />
           AI Chat
         </h1>

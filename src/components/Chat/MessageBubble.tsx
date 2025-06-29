@@ -16,7 +16,7 @@ export const MessageBubble = ({ role, content, references }) => {
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
       >
-        <div className={`relative text-md max-w-[85%] rounded-2xl p-2 ${
+        <div className={`relative text-md max-w-[85%] rounded-2xl text-[14px] p-2 ${
           role === 'user' 
             ? 'bg-blue-600/0 rounded-br-none text-gray-400 ' 
             : 'bg-gray-900 rounded-bl-none border border-gray-800/50'
@@ -29,14 +29,14 @@ export const MessageBubble = ({ role, content, references }) => {
           {/* Message Actions (Appear on hover) */}
           {isHovered && (
             <motion.div 
-              className="absolute -top-3 right-2 flex space-x-1 bg-gray-800 rounded-full p-1 shadow-lg"
+              className="absolute -top-3 right-2 flex space-x-1  rounded-full p-1 shadow-lg"
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <button className="p-1 text-gray-300 hover:text-white">
+              <button className="p-1 cursor-pointer text-gray-300 hover:text-white">
                 <Clipboard className="h-3 w-3" /> {/* Replaced icon */}
               </button>
-              <button className="p-1 text-gray-300 hover:text-white">
+              <button className="p-1 cursor-pointer text-gray-300 hover:text-white">
                 <MoreHorizontal className="h-3 w-3" /> {/* Replaced icon */}
               </button>
             </motion.div>
