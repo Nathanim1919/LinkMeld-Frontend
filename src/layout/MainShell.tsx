@@ -12,6 +12,7 @@ import { SourceProvider } from "../context/sourceContext";
 
 import { authClient } from "../lib/auth-client";
 import type { Session, User } from "better-auth/types";
+import { ChatProvider } from "../context/ChatContext";
 
 export const MainShell = () => {
   const [session, setSession] = useState<{
@@ -78,16 +79,18 @@ export const MainShell = () => {
   return (
     <CaptureProvider>
       <UIProvider>
-        <FolderProvider>
-          <SourceProvider>
-            <div className="h-screen w-screen bg-black text-white grid grid-cols-[auto_1fr]">
-              <Sidebar user={session.user} />
-              <main className="overflow-hidden h-full">
-                <Outlet />
-              </main>
-            </div>
-          </SourceProvider>
-        </FolderProvider>
+        <ChatProvider>
+          <FolderProvider>
+            <SourceProvider>
+              <div className="h-screen w-screen bg-black text-white grid grid-cols-[auto_1fr]">
+                <Sidebar user={session.user} />
+                <main className="overflow-hidden h-full">
+                  <Outlet />
+                </main>
+              </div>
+            </SourceProvider>
+          </FolderProvider>
+        </ChatProvider>
       </UIProvider>
     </CaptureProvider>
   );

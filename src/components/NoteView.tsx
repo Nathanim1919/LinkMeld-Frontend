@@ -47,6 +47,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     );
   }
 
+
   return (
     <div
       className={`mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen`}
@@ -159,6 +160,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         <NoteSummary
           summary={capture.ai.summary ?? null}
           loading={!capture.content}
+          onQuestionClick={()=>setOpenAiChat?.(true)}
         />
 
         {/* <NoteMainText text={capture.content.clean || ""} /> */}

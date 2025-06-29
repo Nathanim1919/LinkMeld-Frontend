@@ -1,4 +1,5 @@
 import { createContext, useState, useContext } from "react";
+import { sendMessage } from "../api/chat.api";
 
 type IMessage = {
   role: "user" | "assistant";
@@ -28,8 +29,36 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearMessages = () => setMessages([]);
 
-  const addMessage = (message: IMessage) =>
-    setMessages((prev) => [...prev, message]);
+  const addMessage = (message: IMessage) => {
+    try {
+      if (message.content !== "") {
+        setMessages((prev) => [...prev, message]);
+        setIsLoading(true);
+        setIsStreaming(true);
+        sendMessage(message.content)
+          .then((response) => {
+            const newMessage: IMessage = {
+              role: "assistant",
+              content: response.response,
+              references: response.references,
+            };
+            setMessages((prev) => [...prev, newMessage]);
+            setIsLoading(false);
+            setIsStreaming(false);
+          })
+          .catch((error) => {
+            console.error("Error sending message:", error);
+            setIsLoading(false);
+            setIsStreaming(false);
+          });
+      }
+    } catch (error) {
+      console.error("Error adding message:", error);
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
+  };
+  // setMessages((prev) => [...prev, message]);
 
   const updateMessage = (index: number, message: IMessage) => {
     setMessages((prev) => {

@@ -5,7 +5,7 @@ type NoteSummaryProps = {
   summary: string | null;
   loading: boolean;
   error?: Error | null;
-  onQuestionClick?: (question: string) => void;
+  onQuestionClick?: () => void;
   className?: string;
 };
 
@@ -38,6 +38,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
     takeaways: [],
     questions: []
   };
+  
 
   if (loading) {
     return (
@@ -121,7 +122,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             {sections.questions.map((question, i) => (
               <button
                 key={i}
-                onClick={() => onQuestionClick?.(question)}
+                onClick={onQuestionClick}
                 className="text-sm bg-violet-700/10 hover:underline cursor-pointer border border-violet-600/20 text-violet-600 px-2 py-1 rounded-lg transition-colors duration-150"
               >
                 {question}
