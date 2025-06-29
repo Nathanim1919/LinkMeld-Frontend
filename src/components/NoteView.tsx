@@ -1,20 +1,20 @@
 import type { Capture } from "../types/Capture";
 import { NoteHeader } from "./noteview/NoteHeader";
-import { NoteMainText } from "./noteview/NoteMainContent";
 import { NoteMetaBox } from "./noteview/NoteMetaAccordion";
 import { NoteActionBar } from "./noteview/NoteSmartActions";
 import { CiBookmark } from "react-icons/ci";
-import { Share2 } from "lucide-react";
 import { useUI } from "../context/UIContext";
 import { FaFolderPlus } from "react-icons/fa6";
 import { FolderList } from "./cards/FolderList";
 import { FaFolder } from "react-icons/fa6";
 import { CiStickyNote } from "react-icons/ci";
-import { FiChevronRight, FiMoreHorizontal } from "react-icons/fi";
+import { FiChevronRight } from "react-icons/fi";
 import { Link } from "@tanstack/react-router";
 import { useFolderContext } from "../context/FolderContext";
 import { useCaptureContext } from "../context/CaptureContext";
 import { NoteSummary } from "./noteview/NoteSummary";
+import { RiGeminiFill } from "react-icons/ri";
+import { AIChatContainer } from "./Chat/AIChatContainer";
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -30,8 +30,8 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     openActionBar,
   } = useUI();
   const { setSelectedFolder } = useFolderContext();
-  const {bookmarkCapture } =
-      useCaptureContext();
+  const { bookmarkCapture } = useCaptureContext();
+  const {openAiChat, setOpenAiChat} = useUI();
 
   if (!capture) {
     return (
@@ -50,7 +50,8 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     <div
       className={`mx-auto flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-screen`}
     >
-      <NoteActionBar />
+      {/* <NoteActionBar /> */}
+      <AIChatContainer />
       <FolderList />
       <div className="flex border-b py-3 border-gray-800 items-center justify-around sticky top-0  z-999 bg-[#1A1A1C]">
         <div className="relative">
@@ -90,7 +91,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-1 rounded-full">
+        <div className="flex items-center gap-2 text-2xl rounded-full">
           {/* Bookmark */}
           <button
             onClick={(e) => {
@@ -98,20 +99,21 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               bookmarkCapture?.(capture._id);
             }}
             className={`p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors
-            ${capture.bookmarked ? "bg-blue-500/10" : "text-gray-600 dark:text-gray-300"}
+            ${
+              capture.bookmarked
+                ? "bg-blue-500/10 text-violet-500"
+                : "text-gray-600 dark:text-gray-300"
+            }
               `}
             title="Bookmark"
           >
-            <CiBookmark className={`w-4 h-4 ${capture.bookmarked ? "text-blue-500" : "text-gray-600 dark:text-gray-300"} hover:text-blue-500`} />
-          </button>
-
-          {/* Share */}
-          <button
-            className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-            title="Share"
-            data-testid="share-button"
-          >
-            <Share2 className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-purple-500" />
+            <CiBookmark
+              className={`w-4 h-4 ${
+                capture.bookmarked
+                  ? "text-blue-500"
+                  : "text-gray-600 dark:text-gray-300"
+              } hover:text-blue-500`}
+            />
           </button>
 
           {/* Folder */}
@@ -122,15 +124,6 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             data-testid="add-folder-button"
           >
             <FaFolderPlus className="w-4 h-4 text-gray-600 dark:text-gray-300 hover:text-green-500" />
-          </button>
-
-          {/* More options (three dots) */}
-          <button
-            onClick={() => setOpenActionBar?.(!openActionBar)}
-            className="p-1 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-            title="More options"
-          >
-            <FiMoreHorizontal className="w-4 h-4 text-gray-600 dark:text-gray-300" />
           </button>
         </div>
       </div>
@@ -165,9 +158,6 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         <NoteSummary
           summary={capture.ai.summary ?? null}
           loading={!capture.content}
-          onRefresh={() => {
-            // maybe call your backend to regenerate summary
-          }}
         />
 
         {/* <NoteMainText text={capture.content.clean || ""} /> */}
@@ -178,6 +168,13 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           tags={["productivity", "web3", "reading"]}
         />
       </div>
+      <button
+        onClick={() => setOpenAiChat?.(!openAiChat)}
+        className="p-1 fixed z-1001 bottom-4 right-4 rounded-full grid place-items-center cursor-pointer bg-[#1b1a1a] transition-colors"
+        title="More options"
+      >
+        <RiGeminiFill className="w-8 h-8 text-violet-600" />
+      </button>
     </div>
   );
 };

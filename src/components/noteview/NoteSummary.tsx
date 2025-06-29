@@ -122,7 +122,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
               <button
                 key={i}
                 onClick={() => onQuestionClick?.(question)}
-                className="text-sm bg-gray-800 hover:bg-gray-700 text-gray-200 px-3.5 py-1.5 rounded-full transition-colors duration-150"
+                className="text-sm bg-violet-700/10 hover:underline cursor-pointer border border-violet-600/20 text-violet-600 px-2 py-1 rounded-lg transition-colors duration-150"
               >
                 {question}
               </button>

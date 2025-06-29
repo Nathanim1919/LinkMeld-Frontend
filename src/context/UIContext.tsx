@@ -14,6 +14,8 @@ type SidebarContextType = {
   setIsFolderListOpen?: (isOpen: boolean) => void;
   openActionBar?: boolean;
   setOpenActionBar?: (open: boolean) => void;
+  openAiChat?: boolean;
+  setOpenAiChat?: (open: boolean) => void;
 };
 
 const UIContext = createContext<SidebarContextType | undefined>(undefined);
@@ -25,6 +27,7 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
   const [openGlobalSearch, setOpenGlobalSearch] = useState(false);
   const [isFolderListOpen, setIsFolderListOpen] = useState(false);
   const [openActionBar, setOpenActionBar] = useState(false);
+  const [openAiChat, setOpenAiChat] = useState(false);
 
   return (
     <UIContext.Provider
@@ -41,6 +44,8 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
         setIsFolderListOpen,
         openActionBar,
         setOpenActionBar,
+        openAiChat,
+        setOpenAiChat,
       }}
     >
       {children}
