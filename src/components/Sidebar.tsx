@@ -11,6 +11,7 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { Brain } from "lucide-react";
 import { authClient } from "../lib/auth-client";
 import { VscLoading } from "react-icons/vsc";
+import { motion } from "framer-motion";
 
 const navItems = [
   {
@@ -45,8 +46,7 @@ const Sidebar: React.FC<{
 }> = ({ user }) => {
   const { collapsed, setCollapsed } = useUI();
   const [loading, setLoading] = useState(false);
-  const { setSelectedCapture } = useCaptureContext(); // Add this from CaptureContext
-
+  const { setSelectedCapture } = useCaptureContext();
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
@@ -62,30 +62,38 @@ const Sidebar: React.FC<{
   };
 
   return (
-    <div
-      className={`h-screen bg-[#0F0F10] \
-        ${collapsed ? "w-12" : "w-32"} text-zinc-100 flex flex-col \
-        relative justify-between items-center pb-4 transition-all duration-300`}
+    <motion.div
+      className={`h-screen bg-[#161618] border-r border-gray-800/40
+        ${collapsed ? "w-16" : "w-56"} text-gray-300 flex flex-col
+        relative justify-between pb-6 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
     >
       {/* Logo */}
-      <div className="pt-4">
+      <div className="pt-6 w-full px-4">
         <Link
           to="/in"
           onClick={() => {
             setCollapsed(!collapsed);
             setSelectedCapture(null);
-          }} // Reset selected capture on logo click
-          className={`flex items-center gap-2 ${
-            collapsed ? "text-lg" : "text-lg"
-          } font-bold text-violet-500`}
+          }}
+          className={`flex items-center gap-3 ${
+            collapsed ? "justify-center" : "px-2"
+          }`}
         >
-          <Brain className="w-8 h-8" />
-          {!collapsed && <span className="text-lg font-bold">Lnkd.</span>}
+          <div className="p-2 bg-gray-700/50 rounded-lg backdrop-blur-sm">
+            <Brain className="w-5 h-5 text-gray-300" />
+          </div>
+          {!collapsed && (
+            <span className="text-lg font-medium text-gray-200">Lnkd.</span>
+          )}
         </Link>
       </div>
-      {/* Top Nav */}
-      <div className="mt-10 w-full">
-        <nav className="flex flex-col gap-3">
+
+      {/* Navigation */}
+      <div className="mt-8 w-full px-2">
+        <nav className="flex flex-col gap-0.5">
           {navItems.map((item) => (
             <SidebarItem
               key={item.path}
@@ -98,49 +106,49 @@ const Sidebar: React.FC<{
         </nav>
       </div>
 
-      {/* Footer */}
-      <div className="flex flex-col mt-auto gap-3">
-        <div className="pt-6 border-t border-zinc-800">
+      {/* User & Logout */}
+      <div className="flex flex-col w-full px-2 gap-1 mt-auto">
+        <div className="pt-2 border-t border-gray-800/40">
           <Link
             onClick={() => setCollapsed(!collapsed)}
             to="/profile"
-            className="flex items-center space-x-2 border border-gray-800  p-1 rounded-md"
+            className={`flex items-center space-x-3 p-2 rounded-lg transition-colors duration-200 hover:bg-gray-800/40 ${
+              collapsed ? "justify-center" : ""
+            }`}
           >
-            <FaRegUserCircle size={25} className="text-zinc-400" />
+            <div className="relative">
+              <FaRegUserCircle size={20} className="text-gray-400" />
+              <span className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-gray-900"></span>
+            </div>
             {!collapsed && (
-              <div>
-                <p className="text-sm font-semibold leading-tight text-gray-500">
-                  {user.name.length > 7
-                    ? `${user.name.slice(0, 7)}...`
-                    : user.name}
+              <div className="overflow-hidden">
+                <p className="text-sm font-medium text-gray-300 truncate">
+                  {user.name}
                 </p>
+                <p className="text-xs text-gray-500 truncate">{user.email}</p>
               </div>
             )}
           </Link>
         </div>
-        <button
+        <motion.button
           onClick={handleLogOut}
-          className="flex border border-gray-800 cursor-pointer items-center gap-2 bg-gray-900 p-1 rounded-md"
+          whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+          whileTap={{ scale: 0.98 }}
+          className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+            collapsed ? "justify-center" : ""
+          }`}
         >
           {loading ? (
-            <VscLoading className="animate-spin w-6 h-6 text-white" />
+            <VscLoading className="animate-spin w-5 h-5 text-gray-400" />
           ) : (
-            <IoLogOutOutline className="w-6 h-6 text-white" />
+            <IoLogOutOutline className="w-5 h-5 text-gray-400" />
           )}
-          {!collapsed && <span>Logout</span>}
-        </button>
+          {!collapsed && <span className="text-sm text-gray-400">Logout</span>}
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 };
-
-interface SidebarItemProps {
-  icon: JSX.Element;
-  label: string;
-  path: string;
-  collapsed: boolean;
-  active?: boolean;
-}
 
 const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   const { setMiddlePanelCollapsed, setCollapsed } = useUI();
@@ -153,39 +161,37 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   };
 
   return (
-    <div className="relative w-full">
-      {/* Active Background with curves */}
-
+    <motion.div whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}>
       <Link
         to={path}
         activeOptions={{ exact: true }}
         onClick={handleClick}
-        className={`relative rounded  z-10  [&.active]:border-l-4 [&.active]:font-bold [&.active]:bg-[#1A1A1C] flex items-center ${
-          collapsed ? "gap-0" : "gap-3"
-        } px-2 py-3 transition-all w-full duration-200 
-        text-sm font-medium text-zinc-400 hover:text-violet-700
-        [&.active]:text-violet-500  active-link`}
+        className={`relative flex items-center ${
+          collapsed ? "justify-center" : "px-3"
+        } py-2.5 rounded-lg transition-all duration-200
+        ${isActive ? "bg-gray-800/50" : ""}`}
       >
-        {isActive && (
-          <>
-            <b className="absolute w-full h-[55%] bg-[#1A1A1C] -top-6 right-0 before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-br-full before:border-violet-500"></b>
-            <b className="absolute w-full h-[55%] bg-[#1A1A1C] -bottom-6 right-0 before:absolute before:w-full before:h-full before:bg-[#0F0F10] before:top-0 before:left-0 before:rounded-tr-full"></b>
-          </>
-        )}
         <span
-          className={`flex-shrink-0 relative z-1000 ${
-            collapsed ? "text-2xl" : "text-lg"
-          }`}
+          className={`relative z-10 ${
+            isActive ? "text-blue-400" : "text-gray-400"
+          } ${collapsed ? "text-xl" : "text-lg"}`}
         >
           {icon}
         </span>
         {!collapsed && (
-          <span className="flex-1 hover:text-violet-500" title={label}>
+          <span
+            className={`ml-3 text-sm ${
+              isActive ? "font-medium text-white" : "font-normal text-gray-300"
+            }`}
+          >
             {label}
           </span>
         )}
+        {isActive && !collapsed && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-blue-400"></div>
+        )}
       </Link>
-    </div>
+    </motion.div>
   );
 };
 

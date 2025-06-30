@@ -1,41 +1,67 @@
-// src/components/panels/SourcePanel.tsx
 import React from "react";
 import { useSourceContext } from "../../context/sourceContext";
 import { Link } from "@tanstack/react-router";
-import {MdOutlineLanguage } from "react-icons/md";
-
+import { MdOutlineLanguage } from "react-icons/md";
+import { motion } from "framer-motion";
 
 const SourcePanel: React.FC = () => {
   const { sources, siteNameCounts } = useSourceContext();
 
-  if (!sources || sources.length === 0) {
-    return <div className="p-4 text-gray-500">No sources found.</div>;
-  }
-
   return (
-    <div className="">
-      <h2 className="text-xl font-semibold mb-4">Sources</h2>
-      <ul className="space-y-2 flex flex-col">
-        {sources.map((source: string) => (
-          <Link
-            key={source}
-            to={`/in/sources/${source}`}
-            // onClick={() => setSelectedSource(source)}
-            className="cursor-pointer flex text-violet-600 hover:underline text-sm p-1"
-          >
-            <span className="flex items-center gap-2"> <MdOutlineLanguage/>{source
-              .length > 20
-                ? source.slice(0, 20) + "..."
-                : source
-            }</span>
-            {siteNameCounts[source] !== undefined && (
-              <span className="text-sm text-gray-500 ml-2">
-               ({siteNameCounts[source]})
-              </span>
-            )}
-          </Link>
-        ))}
-      </ul>
+    <div className="h-full flex flex-col bg-[#1e1e1e] border-r border-gray-800/30">
+      {/* Header - Apple-style with subtle gradient */}
+      <div className="sticky top-0 z-10 px-5 py-3 border-b border-gray-800/30 bg-gradient-to-b from-[#2a2a2a] to-[#1e1e1e]">
+        <h2 className="text-[13px] font-medium text-gray-400 tracking-wider uppercase">
+          SOURCES
+        </h2>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-3 py-4">
+        {!sources || sources.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center px-4">
+            <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
+              <MdOutlineLanguage className="text-[24px]" />
+            </div>
+            <p className="text-[13px] text-gray-500">
+              No sources found
+            </p>
+          </div>
+        ) : (
+          <motion.ul className="space-y-[2px]">
+            {sources.map((source: string) => (
+              <motion.li
+                key={source}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Link
+                  to={`/in/sources/${source}`}
+                  className="relative flex items-center justify-between px-3 py-2.5 rounded-[6px] hover:bg-gray-700/30 transition-colors group"
+                  activeOptions={{ exact: true }}
+                  activeProps={{
+                    className: "bg-blue-500/10"
+                  }}
+                >
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <MdOutlineLanguage className="flex-shrink-0 text-[16px] text-gray-500 group-[.active]:text-blue-500" />
+                    <span className="truncate text-[13px] text-gray-300 group-[.active]:text-white">
+                      {source.length > 24 ? `${source.slice(0, 24)}...` : source}
+                    </span>
+                  </div>
+
+                  {siteNameCounts[source] !== undefined && (
+                    <span className="text-[11px] px-[6px] py-[2px] rounded-full bg-gray-700/50 text-gray-400 group-[.active]:bg-blue-500/20 group-[.active]:text-blue-400">
+                      {siteNameCounts[source]}
+                    </span>
+                  )}
+                </Link>
+              </motion.li>
+            ))}
+          </motion.ul>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,15 +1,14 @@
-// src/components/NotesList.tsx
 import React, { useEffect, useMemo, useState, type JSX } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useCaptureContext } from "../context/CaptureContext";
 import type { Capture } from "../types/Capture";
-import { FaFolder } from "react-icons/fa6";
-import { FaFolderClosed } from "react-icons/fa6";
+import { FaFolder, FaFolderOpen } from "react-icons/fa6";
 import { FaHashtag } from "react-icons/fa";
 import { TbCaptureFilled } from "react-icons/tb";
 import { CiBookmark, CiStickyNote } from "react-icons/ci";
 import { NoteListSkeleton } from "./skeleton/NoteListSkeleton";
 import { useFolderContext } from "../context/FolderContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -28,10 +27,10 @@ const filterIcons: Record<
   NonNullable<NotesListProps["filter"]>,
   JSX.Element
 > = {
-  all: <TbCaptureFilled className="text-purple-500" />,
-  bookmarks: <CiBookmark className="text-purple-500" />,
-  folder: <FaFolderClosed className="text-yellow-500" />,
-  source: <FaHashtag className="text-blue-400" />,
+  all: <TbCaptureFilled className="text-blue-400" />,
+  bookmarks: <CiBookmark className="text-amber-400" />,
+  folder: <FaFolderOpen className="text-green-400" />,
+  source: <FaHashtag className="text-purple-400" />,
 };
 
 const NotesList: React.FC<NotesListProps> = ({
@@ -41,12 +40,12 @@ const NotesList: React.FC<NotesListProps> = ({
 }) => {
   const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
     useCaptureContext();
-  const {selectedFolder} = useFolderContext();
+  const { selectedFolder } = useFolderContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const location = useLocation();
-  const activeCaptureId = location.pathname.split("/").pop(); // naive active highlight
+  const activeCaptureId = location.pathname.split("/").pop();
 
   const targetId = folderId || sourceId || null;
 
@@ -80,20 +79,19 @@ const NotesList: React.FC<NotesListProps> = ({
       return {
         ...note,
         _id: note._id.toString(),
-        title: note?.title || "Untitled",
+        title: note?.title || "Untitled Capture",
         description: note.metadata?.description || "",
         timeAgo:
           days > 0
-            ? `${days} day${days > 1 ? "s" : ""} ago`
+            ? `${days}d`
             : hours > 0
-            ? `${hours} hour${hours > 1 ? "s" : ""} ago`
+            ? `${hours}h`
             : minutes > 0
-            ? `${minutes} minute${minutes > 1 ? "s" : ""} ago`
-            : `${seconds} second${seconds > 1 ? "s" : ""} ago`,
+            ? `${minutes}m`
+            : `${seconds}s`,
         formattedDate: timestamp.toLocaleString("en-US", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
+          month: "short",
+          day: "numeric",
           hour: "2-digit",
           minute: "2-digit",
         }),
@@ -111,74 +109,131 @@ const NotesList: React.FC<NotesListProps> = ({
   };
 
   if (loading) return <NoteListSkeleton />;
-  if (error) return <div className="text-red-500 p-4">{error}</div>;
+  if (error) return <div className="text-red-400 p-4 text-sm">{error}</div>;
   if (!safeCaptures.length)
-    return <div className="text-gray-400 p-4">No notes available.</div>;
+    return (
+      <div className="text-gray-500 p-4 text-sm text-center">
+        No captures found
+      </div>
+    );
 
   return (
-    <div className="">
-      <h3 className="text-sm flex gap-2 items-center font-bold text-white border-b border-white/10 py-2 mb-1">
-        {filterIcons[filter]} {filterLabels[filter]}
-      </h3>
-      {(selectedFolder && filter === 'folder') && (
-        <div className="text-md  text-violet-500 mb-2 flex items-center gap-1">
-          <FaFolder/>{selectedFolder.name.length > 20
-            ? selectedFolder.name.slice(0, 20) + "..."
-            : selectedFolder.name}
+    <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-gray-800/50">
+        <div className="flex items-center gap-2">
+          {filterIcons[filter]}
+          <h3 className="text-sm font-medium text-gray-300">
+            {filterLabels[filter]}
+          </h3>
+          {selectedFolder && filter === "folder" && (
+            <span className="ml-2 text-xs font-medium text-green-400 bg-green-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+              <FaFolder className="text-xs" />
+              {selectedFolder.name.length > 20
+                ? selectedFolder.name.slice(0, 20) + "..."
+                : selectedFolder.name}
+            </span>
+          )}
         </div>
-      )}
-      <div className="flex flex-col max-h-[90vh] overflow-y-auto space-y-2 pr-1 overflow-hidden">
-        {safeCaptures.map((note) => (
-          <Link
-            key={note._id}
-            to={buildLink(note._id)}
-            onClick={() => setSelectedCapture(note as Capture)}
-            className={`cursor-pointer p-2 border  border-violet-600/20 group transition-all
-              ${
-                activeCaptureId === note._id
-                  ? "bg-violet-500/5 rounded-md border-1 border-violet-500/25 text-violet-500"
-                  : "hover:bg-violet-500/5 hover:border hover:border-violet-500/25 border-t-transparent border-l-transparent border-r-transparent"
-              }`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="mb-2">
-                <h3 className="text-sm flex items-center gap-1 font-semibold truncate group-hover:underline">
-                  <CiStickyNote className="text-amber-500 text-lg dark:text-amber-400" />
-                  {note.title.length > 30
-                    ? note.title.slice(0, 30) + "..."
-                    : note.title}
-                </h3>
-                <span className="flex items-center gap-1 text-xs text-gray-500">
-                  {note.metadata.favicon && (
-                    <img src={note.metadata.favicon} className="w-4 h-4" />
-                  )}
-                  {note.metadata.siteName || "Unknown Source"}
-                </span>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  bookmarkCapture?.(note._id);
-                }}
-                title="Bookmark"
-                className={`text-xl hover:bg-violet-500/10 p-1 rounded-md cursor-pointer hover:text-violet-600 ${
-                  note.bookmarked
-                    ? "text-violet-600 bg-violet-500/10"
-                    : "text-gray-400"
+      </div>
+
+      {/* Notes List */}
+      <div className="flex-1 overflow-y-auto px-2 py-3 space-y-2">
+        <AnimatePresence>
+          {safeCaptures.map((note) => (
+            <motion.div
+              key={note._id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Link
+                to={buildLink(note._id)}
+                onClick={() => setSelectedCapture(note as Capture)}
+                className={`block rounded-lg p-3 transition-all duration-200 ${
+                  activeCaptureId === note._id
+                    ? "bg-gray-800/50 border-l-2 border-blue-400 shadow-lg"
+                    : "hover:bg-gray-800/30"
                 }`}
               >
-                <CiBookmark />
-              </button>
-            </div>
-            <p className="text-xs mt-1 text-gray-400 line-clamp-2">
-              {note.description}
-            </p>
-            <div className="flex justify-between mt-2 text-xs text-gray-500">
-              <span title={note.formattedDate}>{note.timeAgo}</span>
-              <span className="italic">{note.formattedDate}</span>
-            </div>
-          </Link>
-        ))}
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CiStickyNote
+                        className={`flex-shrink-0 ${
+                          activeCaptureId === note._id
+                            ? "text-blue-400"
+                            : "text-gray-500"
+                        }`}
+                      />
+                      <h3
+                        className={`text-sm font-medium truncate ${
+                          activeCaptureId === note._id
+                            ? "text-white"
+                            : "text-gray-300"
+                        }`}
+                      >
+                        {note.title}
+                      </h3>
+                    </div>
+
+                    {note.metadata.favicon && (
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <img
+                          src={note.metadata.favicon}
+                          className="w-3 h-3 rounded-sm"
+                          alt=""
+                        />
+                        <span className="text-xs text-gray-500 truncate">
+                          {note.metadata.siteName || "Unknown Source"}
+                        </span>
+                      </div>
+                    )}
+
+                    <p className="text-xs text-gray-400 line-clamp-2 mb-2">
+                      {note.description}
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`text-xs ${
+                          activeCaptureId === note._id
+                            ? "text-blue-300"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        {note.timeAgo}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {note.formattedDate}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      bookmarkCapture?.(note._id);
+                    }}
+                    className={`ml-2 p-1 rounded-md transition-colors ${
+                      note.bookmarked
+                        ? "text-amber-400 hover:bg-amber-900/20"
+                        : "text-gray-500 hover:bg-gray-700/50 hover:text-gray-300"
+                    }`}
+                  >
+                    <CiBookmark
+                      className={`w-4 h-4 transition-transform ${
+                        note.bookmarked ? "scale-110" : ""
+                      }`}
+                    />
+                  </button>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );

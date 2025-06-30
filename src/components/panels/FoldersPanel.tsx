@@ -3,10 +3,9 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { useFolderContext } from "../../context/FolderContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { NewFolderFormCard } from "../cards/newFolderFormCard";
-import { IoFolderOpen } from "react-icons/io5";
-import { FaFolderMinus, FaFolderPlus } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
-import { MdDeleteOutline } from "react-icons/md";
+import { FaFolder, FaFolderPlus } from "react-icons/fa6";
+import { FiEdit2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 
 const FoldersPanel: React.FC = () => {
   const { folders, loadingStates, setSelectedFolder } = useFolderContext();
@@ -15,21 +14,22 @@ const FoldersPanel: React.FC = () => {
   const [hoveredFolder, setHoveredFolder] = useState<string | null>(null);
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="sticky top-0 z-10 px-4 py-3 border-b border-gray-800">
-          <div className="flex items-center  gap-2">
-            {/* <IoFolderOpen className="text-lg text-blue-400" /> */}
-          <button
+    <div className="h-full flex flex-col  border-r border-gray-800/30">
+      {/* Header - Apple-style with subtle gradient */}
+      <div className="sticky top-0 z-10 px-5 py-3 border-b border-gray-800/30">
+        <div className="flex items-center justify-between">
+          <h2 className="text-[13px] font-medium text-gray-400 tracking-wider uppercase">
+            COLLECTIONS
+          </h2>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setOpenNewFolderForm(true)}
-            className="p-1.5 rounded-full cursor-pointer text-gray-400 hover:text-blue-400 hover:bg-gray-800 transition-colors"
+            className="p-1.5 rounded-full text-gray-400 hover:text-blue-500 transition-colors"
             aria-label="Create new collection"
           >
-            <FaFolderPlus className="text-lg" />
-          </button>
-            <h2 className="text-md font-medium text-gray-200 tracking-wide">
-              COLLECTIONS
-            </h2>
+            <FaFolderPlus className="text-[16px]" />
+          </motion.button>
         </div>
       </div>
 
@@ -42,107 +42,125 @@ const FoldersPanel: React.FC = () => {
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-2 py-3">
         {loadingStates.fetch ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-500">
+          <div className="flex flex-col items-center justify-center h-full">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-              className="mb-3"
+              transition={{ duration: 1.8, repeat: Infinity, ease: "linear" }}
+              className="mb-4 text-gray-500"
             >
-              <IoFolderOpen className="text-2xl" />
+              <FaFolder className="text-[24px]" />
             </motion.div>
-            <p className="text-sm">Loading collections...</p>
+            <p className="text-[13px] text-gray-500">Loading collections...</p>
           </div>
         ) : folders.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
-            <FaFolderMinus className="text-3xl text-gray-600 mb-3" />
-            <p className="text-sm text-gray-500 mb-4">
-              No collections yet. Create one to organize your knowledge.
+            <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
+              <FaFolder className="text-[24px]" />
+            </div>
+            <p className="text-[13px] text-gray-500 mb-4 max-w-[180px]">
+              No collections found
             </p>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setOpenNewFolderForm(true)}
-              className="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-500 transition-colors"
+              className="px-4 py-1.5 text-[13px] font-medium rounded bg-blue-500 text-white hover:bg-blue-400 transition-colors"
             >
-              Create Collection
-            </button>
+              New Collection
+            </motion.button>
           </div>
         ) : (
-          <motion.ul className="">
+          <motion.ul className="space-y-[2px]">
             <AnimatePresence>
-              {folders.map((folder) => (
-                <motion.li
-                  onClick={() => setSelectedFolder(folder)}
-                  key={folder._id}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  onHoverStart={() => setHoveredFolder(folder._id)}
-                  onHoverEnd={() => setHoveredFolder(null)}
-                >
-                  <Link
-                    to={`/in/folders/${folder._id}`}
-                    className={`relative flex items-center justify-between border border-transparent hover:border-violet-600/10 px-3 py-2 rounded-lg transition-colors ${
-                      router.state.location.pathname.includes(folder._id)
-                        ? "bg-blue-900/20 text-blue-400"
-                        : "hover:bg-gray-800/50 text-gray-300"
-                    }`}
-                    activeOptions={{ exact: true }}
+              {folders.map((folder) => {
+                const isActive = router.state.location.pathname.includes(folder._id);
+                return (
+                  <motion.li
+                    key={folder._id}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    onHoverStart={() => setHoveredFolder(folder._id)}
+                    onHoverEnd={() => setHoveredFolder(null)}
                   >
-                    <div className="flex items-center gap-3 overflow-hidden">
-                      <FaFolderMinus 
-                        className={`flex-shrink-0 ${
-                          router.state.location.pathname.includes(folder._id)
-                            ? "text-blue-400"
-                            : "text-gray-500"
-                        }`} 
-                      />
-                      <span className="truncate text-sm font-medium">
-                        {folder.name}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      {folder.captures.length > 0 && (
-                        <span className="text-xs px-1.5 py-0.5 rounded-full bg-gray-800 text-gray-400">
-                          {folder.captures.length}
+                    <Link
+                      to={`/in/folders/${folder._id}`}
+                      onClick={() => setSelectedFolder(folder)}
+                      className={`relative flex items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${
+                        isActive
+                          ? "bg-blue-500/10"
+                          : "hover:bg-gray-700/30"
+                      }`}
+                      activeOptions={{ exact: true }}
+                    >
+                      <div className="flex items-center gap-3 overflow-hidden">
+                        <FaFolder
+                          className={`flex-shrink-0 text-[16px] ${
+                            isActive ? "text-blue-500" : "text-gray-500"
+                          }`}
+                        />
+                        <span className={`truncate text-[13px] ${
+                          isActive ? "text-white" : "text-gray-300"
+                        }`}>
+                          {folder.name}
                         </span>
-                      )}
-                      
-                      {/* <AnimatePresence>
-                        {(hoveredFolder === folder._id || router.state.location.pathname.includes(folder._id)) && (
-                          <motion.div
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 10 }}
-                            className="flex items-center gap-1 bg-gray-800/80 backdrop-blur-sm rounded-lg p-0.5"
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {folder.captures.length > 0 && (
+                          <span
+                            className={`text-[11px] px-[6px] py-[2px] rounded-full ${
+                              isActive
+                                ? "bg-blue-500/20 text-blue-400"
+                                : "bg-gray-700/50 text-gray-400"
+                            }`}
                           >
-                            <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                router.navigate({
-                                  to: `/in/folders/${folder._id}/edit`,
-                                  params: { folderId: folder._id },
-                                });
-                              }}
-                              className="p-1 rounded-md hover:bg-gray-700 text-gray-400 hover:text-blue-400 transition-colors"
-                              aria-label="Edit collection"
-                            >
-                              <CiEdit className="text-sm" />
-                            </button>
-                            <button
-                              onClick={(e) => e.preventDefault()}
-                              className="p-1 rounded-md hover:bg-gray-700 text-gray-400 hover:text-red-400 transition-colors"
-                              aria-label="Delete collection"
-                            >
-                              <MdDeleteOutline className="text-sm" />
-                            </button>
-                          </motion.div>
+                            {folder.captures.length}
+                          </span>
                         )}
-                      </AnimatePresence> */}
-                    </div>
-                  </Link>
-                </motion.li>
-              ))}
+
+                        <div className="flex items-center gap-1">
+                          <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ 
+                              opacity: hoveredFolder === folder._id || isActive ? 1 : 0,
+                              transition: { duration: 0.15 }
+                            }}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.navigate({
+                                to: `/in/folders/${folder._id}/edit`,
+                                params: { folderId: folder._id },
+                              });
+                            }}
+                            className="p-1 text-gray-400 hover:text-blue-500 transition-colors"
+                            aria-label="Edit collection"
+                          >
+                            <FiEdit2 className="text-[14px]" />
+                          </motion.button>
+                          <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ 
+                              opacity: hoveredFolder === folder._id || isActive ? 1 : 0,
+                              transition: { duration: 0.15 }
+                            }}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={(e) => e.preventDefault()}
+                            className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                            aria-label="Delete collection"
+                          >
+                            <FiTrash2 className="text-[14px]" />
+                          </motion.button>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.li>
+                );
+              })}
             </AnimatePresence>
           </motion.ul>
         )}

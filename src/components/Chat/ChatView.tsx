@@ -12,7 +12,7 @@ export const ChatView = () => {
     }, [messages]);
   
     return (
-      <div className="h-full flex flex-col">
+      <div className="h-full bg-[#18181b] flex flex-col">
         {/* Message History */}
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
           {messages.map((msg, index) => (
@@ -26,7 +26,7 @@ export const ChatView = () => {
           <div ref={messagesEndRef} />
           {isLoading && (
             <div className="text-gray-500 text-sm italic text-center">
-              <p>Loading...</p>
+              <p>Thinking...</p>
             </div>
           )}
         </div>
