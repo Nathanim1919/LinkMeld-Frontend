@@ -1,6 +1,7 @@
+import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
-import { FaArrowLeft, FaGoogle } from "react-icons/fa";
+import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
+import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { authClient } from "../lib/auth-client";
 
@@ -29,135 +30,198 @@ export const LoginPage = () => {
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    const data = await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/in",
-    });
-    if (data.error) {
-      console.error("Google sign-in failed", data.error);
-    } else {
-      // Handle successful Google sign-in
-      console.log("Google sign-in successful", data);
+    try {
+      const data = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/in",
+      });
+      if (data.error) {
+        console.error("Google sign-in failed", data.error);
+      }
+    } catch (error) {
+      console.error("Google sign-in error", error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4">
-      <Link
-        to="/"
-        className="absolute top-6 left-6 text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2"
+    <div className="min-h-screen bg-[#000000] text-[#f5f5f7] flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Subtle background texture */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjAuNSIgLz48L3N2Zz4=')] opacity-5" />
+      
+      {/* Back button */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+        className="absolute top-8 left-8"
       >
-        <FaArrowLeft className="w-5 h-5" />
-      </Link>
-      <div className="w-full max-w-md">
-        {/* Card */}
-        <div className="bg-gray-800 rounded-xl p-8 shadow-2xl border border-gray-700">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold mb-1">Welcome back</h1>
-            <p className="text-gray-400">Sign in to continue</p>
-          </div>
+        <Link
+          to="/"
+          className="text-[#2997ff] hover:text-[#64b5ff] transition-colors flex items-center gap-2 group"
+        >
+          <FiArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
+          <span className="text-sm font-medium">Back</span>
+        </Link>
+      </motion.div>
 
-          {/* Google Button */}
-          <button
-            onClick={handleGoogleSignIn}
-            className={`${
-              loading ? "cursor-not-allowed" : "cursor-pointer"
-            } w-full flex items-center justify-center gap-3 py-2.5 px-6 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors mb-6`}
+      {/* Login card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="w-full max-w-md"
+      >
+        <div className="bg-[#1c1c1e] rounded-2xl p-8 shadow-xl border border-[#2c2c2e] overflow-hidden">
+          {/* Header with subtle animation */}
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-center mb-8"
           >
-            <FaGoogle className="text-blue-400" />
-            Continue with Google
-          </button>
+            <h1 className="text-2xl font-semibold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-[#f5f5f7] to-[#a1a1a6]">
+              Welcome Back
+            </h1>
+            <p className="text-[#aeaeb2] text-sm">Sign in to your account</p>
+          </motion.div>
 
-          {/* Divider */}
-          <div className="flex items-center my-6">
-            <div className="flex-1 border-t border-gray-700"></div>
-            <span className="px-3 text-gray-500 text-sm">OR</span>
-            <div className="flex-1 border-t border-gray-700"></div>
-          </div>
+          {/* Google button with hover effect */}
+          <motion.button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            whileHover={{ scale: loading ? 1 : 1.02 }}
+            whileTap={{ scale: loading ? 1 : 0.98 }}
+            className={`w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl ${
+              loading ? "bg-[#2c2c2e] cursor-not-allowed" : "bg-[#2c2c2e] hover:bg-[#3a3a3c] cursor-pointer"
+            } transition-all mb-6 relative overflow-hidden`}
+          >
+            <div className="absolute inset-0 bg-white/5 opacity-0 hover:opacity-100 transition-opacity" />
+            <FaGoogle className="text-[#4285f4] text-lg" />
+            <span className="text-sm font-medium">Continue with Google</span>
+          </motion.button>
 
-          {/* Email Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm text-gray-300 mb-1">Email</label>
+          {/* Animated divider */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="flex items-center my-6"
+          >
+            <div className="flex-1 border-t border-[#2c2c2e]"></div>
+            <span className="px-3 text-[#636366] text-xs">OR</span>
+            <div className="flex-1 border-t border-[#2c2c2e]"></div>
+          </motion.div>
+
+          {/* Form with field animations */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <label className="block text-sm text-[#aeaeb2] mb-2">Email</label>
               <div className="relative">
-                <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#636366]" />
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="w-full pl-10 pr-4 py-2.5 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full pl-12 pr-4 py-3 bg-[#2c2c2e] rounded-xl focus:ring-2 focus:ring-[#0071e3] focus:outline-none border border-transparent hover:border-[#3a3a3c] transition-all"
                   placeholder="your@email.com"
                   required
+                  disabled={loading}
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div>
-              <label className="block text-sm text-gray-300 mb-1">
-                Password
-              </label>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <label className="block text-sm text-[#aeaeb2] mb-2">Password</label>
               <div className="relative">
-                <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#636366]" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="w-full pl-10 pr-10 py-2.5 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full pl-12 pr-11 py-3 bg-[#2c2c2e] rounded-xl focus:ring-2 focus:ring-[#0071e3] focus:outline-none border border-transparent hover:border-[#3a3a3c] transition-all"
                   placeholder="••••••••"
                   required
+                  disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#636366] hover:text-[#aeaeb2] transition-colors"
+                  disabled={loading}
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="pt-2">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="pt-1"
+            >
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full ${
-                  loading ? "cursor-not-allowed" : "cursor-pointer"
-                } py-2.5 px-6 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex justify-center items-center`}
+                className={`w-full py-3.5 px-6 rounded-xl ${
+                  loading ? "bg-[#0071e3]/70 cursor-not-allowed" : "bg-[#0071e3] hover:bg-[#2997ff] cursor-pointer"
+                } transition-all flex justify-center items-center gap-2 relative overflow-hidden`}
               >
-                {loading ? "Signing in..." : "Sign in"}
+                <div className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity" />
+                {loading ? (
+                  <motion.span
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                  />
+                ) : (
+                  <span className="font-medium">Sign In</span>
+                )}
               </button>
-            </div>
+            </motion.div>
           </form>
 
-          {/* Footer Links */}
-          <div className="mt-6 text-center text-sm text-gray-400">
+          {/* Footer links with animation */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="mt-6 text-center text-sm text-[#636366]"
+          >
             <Link
               to="/forgot-password"
-              className={`hover:text-blue-400 ${
+              className={`hover:text-[#2997ff] ${
                 loading ? "cursor-not-allowed" : "cursor-pointer"
-              } transition-colors`}
+              } transition-colors inline-block mx-1`}
             >
               Forgot password?
             </Link>
-            <span className="mx-2">•</span>
+            <span className="mx-2 text-[#3a3a3c]">•</span>
             <Link
               to="/register"
-              className={`hover:text-blue-400 ${
+              className={`hover:text-[#2997ff] ${
                 loading ? "cursor-not-allowed" : "cursor-pointer"
-              } transition-colors`}
+              } transition-colors inline-block mx-1`}
             >
               Create account
             </Link>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

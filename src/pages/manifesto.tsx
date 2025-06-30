@@ -29,49 +29,90 @@ export const Manifesto: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-gray-100">
-      <div className="max-w-2xl mx-auto px-6 py-24">
+    <div className="min-h-screen bg-[#000000] text-[#f5f5f7]">
+      {/* Subtle background texture */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjAuNSIgLz48L3N2Zz4=')] opacity-5" />
+      
+      <div className="max-w-4xl mx-auto px-8 py-32 relative">
         {/* Title Section */}
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="mb-24"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-32"
         >
-          <h1 className="text-5xl font-light mb-6 tracking-tight">
-            Knowledge.<br />
-            <span className="text-gray-400">Reimagined.</span>
+          <h1 className="text-6xl font-light mb-8 tracking-tight leading-[1.1]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#f5f5f7] to-[#a1a1a6]">
+              Knowledge.
+            </span>
+            <br />
+            <span className="text-[#a1a1a6]">Reimagined.</span>
           </h1>
-          <div className="h-px w-16 bg-gray-700 mb-8"></div>
-          <p className="text-xl text-gray-400 font-light leading-relaxed">
+          <motion.div 
+            className="h-[1px] w-20 bg-[#2c2c2e] mb-10"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          />
+          <p className="text-2xl text-[#a1a1a6] font-light leading-relaxed max-w-2xl">
             A manifesto for tools that think like you do.
           </p>
         </motion.div>
 
         {/* Manifesto Content */}
-        <div className="space-y-24">
+        <div className="space-y-32">
           {manifestoContent.map((section, index) => (
             <motion.section
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: index * 0.15,
+                ease: [0.22, 1, 0.36, 1]
+              }}
+              className="relative"
             >
-              <h2 className="text-2xl font-light text-gray-300 mb-6 tracking-wide">
+              {/* Section indicator (like Apple's subtle design elements) */}
+              <motion.div 
+                className="absolute -left-10 top-1 h-2 w-2 rounded-full bg-[#2997ff]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.15 + 0.3 }}
+              />
+              
+              <h2 className="text-3xl font-light text-[#f5f5f7] mb-8 tracking-tight">
                 {section.heading}
               </h2>
-              <div className="space-y-6">
+              
+              <div className="space-y-8 pl-4">
                 {section.paragraphs.map((paragraph, pIndex) => (
-                  <p 
+                  <motion.p
                     key={pIndex}
-                    className="text-lg text-gray-400 font-light leading-relaxed"
+                    className="text-xl text-[#a1a1a6] font-light leading-relaxed"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ 
+                      delay: index * 0.15 + pIndex * 0.1 + 0.3,
+                      ease: [0.22, 1, 0.36, 1]
+                    }}
                   >
                     {paragraph}
-                  </p>
+                  </motion.p>
                 ))}
               </div>
+
               {index < manifestoContent.length - 1 && (
-                <div className="h-px w-full bg-gray-800 mt-16"></div>
+                <motion.div 
+                  className="h-[1px] w-full bg-[#2c2c2e] mt-24"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ 
+                    delay: index * 0.15 + section.paragraphs.length * 0.1 + 0.3,
+                    duration: 0.8,
+                    ease: [0.22, 1, 0.36, 1]
+                  }}
+                />
               )}
             </motion.section>
           ))}
@@ -81,10 +122,10 @@ export const Manifesto: React.FC = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="mt-32 pt-8 border-t border-gray-800"
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="mt-40 pt-8 border-t border-[#2c2c2e]"
         >
-          <p className="text-gray-500 text-sm">Est. 2023</p>
+          <p className="text-[#636366] text-sm tracking-wider">ESTABLISHED 2023</p>
         </motion.div>
       </div>
     </div>
