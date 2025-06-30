@@ -18,7 +18,7 @@ export const NoteMetaBox: React.FC<NoteMetaBoxProps> = ({
   const readingTime = Math.ceil(wordCount / 200); // Assuming ~200wpm
 
   return (
-    <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl shadow-sm text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
+    <div className="dark:border-zinc-800 p-4 rounded-xl shadow-sm text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
       <div className="flex flex-wrap gap-4">
         <MetaItem icon={<Globe className="w-4 h-4" />} label={domain} />
         <MetaItem
@@ -35,7 +35,7 @@ export const NoteMetaBox: React.FC<NoteMetaBoxProps> = ({
         />
       </div>
 
-      {tags.length > 0 && (
+      {/* {tags.length > 0 && (
         <div className="flex flex-wrap gap-2 pt-2">
           {tags.map((tag, idx) => (
             <span
@@ -46,7 +46,7 @@ export const NoteMetaBox: React.FC<NoteMetaBoxProps> = ({
             </span>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

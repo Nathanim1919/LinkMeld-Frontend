@@ -134,6 +134,12 @@ const NotesList: React.FC<NotesListProps> = ({
                 : selectedFolder.name}
             </span>
           )}
+          {sourceId && filter === "source" && (
+            <span className="ml-2 text-xs font-medium text-purple-400 bg-purple-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+              <FaHashtag className="text-xs" />
+              {sourceId.length > 15 ? sourceId.slice(0, 15) + "..." : sourceId}
+            </span>
+          )}
         </div>
       </div>
 

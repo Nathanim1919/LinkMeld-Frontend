@@ -189,7 +189,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setOpenAiChat?.(!openAiChat)}
-        className={`fixed z-30 bottom-6 right-6 p-3.5 rounded-full shadow-xl ${
+        className={`fixed z-30 bottom-6 cursor-pointer right-6 p-3.5 rounded-full shadow-xl ${
           openAiChat 
             ? "bg-gray-800/90 border border-gray-700/50 backdrop-blur-md" 
             : "bg-gradient-to-br from-blue-500/90 to-blue-600/90 backdrop-blur-md"
