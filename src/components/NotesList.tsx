@@ -120,7 +120,7 @@ const NotesList: React.FC<NotesListProps> = ({
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-800/50">
+      <div className="px-3 py-3 border-b border-gray-800/50">
         <div className="flex items-center gap-2">
           {filterIcons[filter]}
           <h3 className="text-sm font-medium text-gray-300">
