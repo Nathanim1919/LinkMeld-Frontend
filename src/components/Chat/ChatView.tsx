@@ -5,7 +5,7 @@ import { useChat } from "../../context/ChatContext";
 
 export const ChatView = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const {messages} = useChat();
+    const { messages, isLoading } = useChat();
   
     useEffect(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -24,6 +24,11 @@ export const ChatView = () => {
             />
           ))}
           <div ref={messagesEndRef} />
+          {isLoading && (
+            <div className="text-gray-500 text-sm italic text-center">
+              <p>Loading...</p>
+            </div>
+          )}
         </div>
   
         {/* Input Area */}

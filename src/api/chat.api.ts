@@ -1,20 +1,24 @@
 import axios from "axios";
+import type { IMessage } from "../context/ChatContext";
 // import { IChat } from "../types/chat.type";
 
-
-interface IChat {  id: string;
-  message: string;
-  response: string;
-  createdAt: string;
-  updatedAt: string;
-  references?: { id: string; title: string; url: string }[]; // Adjusted type for references
+interface IChat {
+  id: string;
+  success: boolean;
+  data: {
+    response: string;
+  };
+  references?: { id: string; title: string; url: string }[];
 }
 
-export const sendMessage = async (message: string): Promise<IChat> => {
+export const sendMessage = async (
+  messages: IMessage[],
+  captureId: string
+): Promise<IChat> => {
   try {
     const res = await axios.post<IChat>(
-      "http://localhost:3000/api/v1/chat",
-      { message },
+      "http://localhost:3000/api/v1/chat/converse",
+      { messages, captureId },
       { withCredentials: true }
     );
     return res.data;

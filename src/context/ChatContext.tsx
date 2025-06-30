@@ -1,7 +1,7 @@
 import { createContext, useState, useContext } from "react";
 import { sendMessage } from "../api/chat.api";
 
-type IMessage = {
+export type IMessage = {
   role: "user" | "assistant";
   content: string;
   references?: { id: string; title: string; url: string }[]; // Adjusted type for references
@@ -15,7 +15,7 @@ type ChatContextType = {
   isStreaming: boolean;
   setIsStreaming: (streaming: boolean) => void;
   clearMessages: () => void;
-  addMessage: (message: IMessage) => void;
+  addMessage: (message: string, captureId: string) => void;
   updateMessage: (index: number, message: IMessage) => void;
   removeMessage: (index: number) => void;
 };
@@ -29,35 +29,37 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearMessages = () => setMessages([]);
 
-  const addMessage = (message: IMessage) => {
-    try {
-      if (message.content !== "") {
-        setMessages((prev) => [...prev, message]);
-        setIsLoading(true);
-        setIsStreaming(true);
-        sendMessage(message.content)
-          .then((response) => {
-            const newMessage: IMessage = {
-              role: "assistant",
-              content: response.response,
-              references: response.references,
-            };
-            setMessages((prev) => [...prev, newMessage]);
-            setIsLoading(false);
-            setIsStreaming(false);
-          })
-          .catch((error) => {
-            console.error("Error sending message:", error);
-            setIsLoading(false);
-            setIsStreaming(false);
-          });
-      }
-    } catch (error) {
-      console.error("Error adding message:", error);
-      setIsLoading(false);
-      setIsStreaming(false);
-    }
+  const addMessage = (message: string, captureId: string) => {
+    if (!message.trim()) return;
+
+    const userMessage: IMessage = { role: "user", content: message.trim() };
+    const updatedMessages = [...messages, userMessage]; // include the new message
+
+    setMessages(updatedMessages); // update state
+    setIsLoading(true);
+    setIsStreaming(true);
+
+    sendMessage(updatedMessages, captureId)
+      .then((response) => {
+        const newMessage: IMessage = {
+          role: "assistant",
+          content: response.data.response, // not `response.data.response`, since you're already returning `res.data` directly
+          references: response.references,
+        };
+        setMessages((prev) => [...prev, newMessage]);
+      })
+      .catch((error) => {
+        console.error("Error sending message:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsStreaming(false);
+      });
+
+    console.log("Message added:", message);
+    console.log("ALL MESSAGES:", updatedMessages);
   };
+
   // setMessages((prev) => [...prev, message]);
 
   const updateMessage = (index: number, message: IMessage) => {

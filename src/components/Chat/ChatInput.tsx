@@ -1,42 +1,39 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
-import { SendHorizonal } from 'lucide-react';
+import { SendHorizonal } from "lucide-react";
+import { useCaptureContext } from "../../context/CaptureContext";
 
 export const ChatInput = () => {
   const [message, setMessage] = useState("");
+  const {selectedCapture} = useCaptureContext()
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { addMessage } = useChat();
 
   const handleSend = () => {
     if (message.trim()) {
-      addMessage({
-        role: "user",
-        content: message.trim(),
-        references: [],
-      });
+      addMessage(message.trim(), selectedCapture?._id || "");
       setMessage("");
       textareaRef.current?.focus();
     }
   };
 
+
   return (
     <div className="px-5 py-4 border-t border-gray-700/50 bg-gray-900/30 backdrop-blur-2xl">
       {/* Suggested Prompts */}
       <div className="flex gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
-        {["Explain like I'm 5", "Give me examples"].map(
-          (prompt) => (
-            <button
-              key={prompt}
-              className="text-xs bg-gray-800 text-gray-300 px-3.5 py-2 rounded-full whitespace-nowrap flex-shrink-0 hover:bg-gray-700 active:bg-gray-600 transition-colors duration-150"
-              onClick={() => {
-                setMessage(prompt);
-                textareaRef.current?.focus();
-              }}
-            >
-              {prompt}
-            </button>
-          )
-        )}
+        {["Explain like I'm 5", "Give me examples"].map((prompt) => (
+          <button
+            key={prompt}
+            className="text-xs bg-gray-800 text-gray-300 px-3.5 py-2 rounded-full whitespace-nowrap flex-shrink-0 hover:bg-gray-700 active:bg-gray-600 transition-colors duration-150"
+            onClick={() => {
+              setMessage(prompt);
+              textareaRef.current?.focus();
+            }}
+          >
+            {prompt}
+          </button>
+        ))}
       </div>
 
       {/* Text Input */}
@@ -57,8 +54,8 @@ export const ChatInput = () => {
         />
         <button
           className={`absolute right-2 bottom-3 p-2 rounded-full transition-all ${
-            message.trim() 
-              ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700" 
+            message.trim()
+              ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700"
               : "bg-gray-700 text-gray-500"
           }`}
           onClick={handleSend}
