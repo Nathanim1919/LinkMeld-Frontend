@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Image from "../assets/img.png";
+import Image from "../assets/img2.png";
 
 const HeroPage = () => {
   return (

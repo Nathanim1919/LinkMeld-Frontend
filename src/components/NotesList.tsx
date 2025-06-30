@@ -129,8 +129,8 @@ const NotesList: React.FC<NotesListProps> = ({
           {selectedFolder && filter === "folder" && (
             <span className="ml-2 text-xs font-medium text-green-400 bg-green-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
               <FaFolder className="text-xs" />
-              {selectedFolder.name.length > 20
-                ? selectedFolder.name.slice(0, 20) + "..."
+              {selectedFolder.name.length > 15
+                ? selectedFolder.name.slice(0, 15) + "..."
                 : selectedFolder.name}
             </span>
           )}

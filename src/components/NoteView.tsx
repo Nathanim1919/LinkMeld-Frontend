@@ -78,7 +78,7 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       <FolderList />
 
       {/* Premium Header with Glass Morphism */}
-      <div className="sticky top-0 z-10 border-b border-gray-800/30 bg-gray-900/70 backdrop-blur-2xl px-6 py-3">
+      <div className="sticky top-0 z-10 border-b border-gray-800/30 bg-[#1A1A1C] backdrop-blur-2xl px-6 py-3">
         <div className="flex items-center justify-between">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center overflow-hidden">

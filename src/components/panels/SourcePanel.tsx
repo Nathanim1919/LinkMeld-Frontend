@@ -8,7 +8,7 @@ const SourcePanel: React.FC = () => {
   const { sources, siteNameCounts } = useSourceContext();
 
   return (
-    <div className="h-full flex flex-col border-r border-gray-800/30">
+    <div className="h-full flex flex-col">
       {/* Header - Apple-style with subtle gradient */}
       <div className="sticky top-0 z-10 px-5 py-3 border-b border-gray-800/30">
         <h2 className="text-[13px] font-medium text-gray-400 tracking-wider uppercase">

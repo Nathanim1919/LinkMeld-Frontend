@@ -64,7 +64,7 @@ const Sidebar: React.FC<{
   return (
     <motion.div
       className={`h-screen bg-[#161618] border-r border-gray-800/40
-        ${collapsed ? "w-16" : "w-56"} text-gray-300 flex flex-col
+        ${collapsed ? "w-16" : "w-42"} text-gray-300 flex flex-col
         relative justify-between pb-6 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

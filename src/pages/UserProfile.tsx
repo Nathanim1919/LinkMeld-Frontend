@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSettings, FiTrash2, FiRefreshCw, FiUpload, FiKey, FiStar, FiX, FiCheck } from "react-icons/fi";
+import { FiTrash2, FiRefreshCw, FiUpload, FiStar, FiX, FiCheck } from "react-icons/fi";
 import { RiShieldKeyholeLine } from "react-icons/ri";
-import { resetData } from "../api/account.api";
+import { resetData, setGeminiApiKey } from "../api/account.api";
 
 export const UserProfile = () => {
   const [activeModal, setActiveModal] = useState<null | 
@@ -10,6 +10,23 @@ export const UserProfile = () => {
   >(null);
   const [apiKey, setApiKey] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
+
+
+  const handleSettingGeminiApiKey = async ()=> {
+    if (!apiKey) {
+      alert("Please enter a valid Gemini API Key.");
+      return;
+    }
+    try {
+      console.log("Setting Gemini API Key:", apiKey);
+      await setGeminiApiKey(apiKey);
+      alert("Gemini API Key has been set successfully.");
+      closeModal();
+    } catch (error) {
+      console.error("Error setting Gemini API Key:", error);
+      alert("Failed to set Gemini API Key. Please try again later.");
+    }
+  }
 
   const closeModal = () => setActiveModal(null);
 
@@ -210,6 +227,7 @@ export const UserProfile = () => {
               </div>
               <div className="flex gap-3">
                 <motion.button
+                  onClick={handleSettingGeminiApiKey}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-xl font-medium flex-1 text-center transition-colors"

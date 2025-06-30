@@ -27,7 +27,7 @@ export const AIChatContainer = () => {
             scale: 0.95,
             transition: { duration: 0.15 }
           }}
-          className="fixed flex flex-col overflow-hidden right-4 bottom-4 top-4 rounded-2xl w-[450px] shadow-2xl border border-gray-800/50 z-[1000] bg-gray-900/80 backdrop-blur-3xl text-gray-200"
+          className="fixed flex flex-col overflow-hidden right-4 bottom-4 top-4 rounded-2xl w-[450px] shadow-2xl border border-gray-800/50 z-[1000] bg-[#161618] backdrop-blur-3xl text-gray-200"
           style={{
             boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
             transformOrigin: "bottom right"
@@ -35,7 +35,7 @@ export const AIChatContainer = () => {
         >
           {/* Header with Apple-style materials */}
           <motion.header 
-            className="px-5 py-3 border-b border-gray-800/50 flex justify-between items-center bg-gray-900/30"
+            className="px-5 py-3 border-b border-gray-800/50 flex justify-between items-center"
             whileTap={{ scale: 0.98 }}
           >
             <div className="flex items-center space-x-2">

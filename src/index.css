@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 @import "tailwindcss";
 
+
 :root {
    --stellar-purple-100: #e0d7ff;
    --stellar-purple-300: #b399ff;

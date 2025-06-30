@@ -3,6 +3,8 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { ReferenceCard } from "./ReferenceCard";
 import { Clipboard, MoreHorizontal } from "lucide-react"; // Added Lucide icon imports
+import { RiGeminiFill } from "react-icons/ri";
+
 
 interface MessageBubbleProps {
   role: 'user' | 'assistant';
@@ -25,12 +27,21 @@ export const MessageBubble = ({ role, content, references }: MessageBubbleProps)
         <div className={`relative text-md max-w-[85%] rounded-2xl text-[14px] p-2 ${
           role === 'user' 
             ? 'bg-blue-600/0 rounded-br-none text-gray-400 ' 
-            : 'bg-gray-900 rounded-bl-none border border-gray-800/50'
+            : 'bg-[#161618] rounded-bl-none border text-[#ffffff] border-gray-800/50'
         }`}>
+          {/* Added Gemini icon */}
+          {
+          role === 'assistant' && 
+          <span className="absolute -top-2 left-2 text-gray-500">
+             <RiGeminiFill className="h-4 w-4 text-violet-500" /> 
+          </span>
+          }
+         
           {/* Message Content */}
           <ReactMarkdown>
             {content}
           </ReactMarkdown>
+          
   
           {/* Message Actions (Appear on hover) */}
           {isHovered && (
@@ -59,6 +70,7 @@ export const MessageBubble = ({ role, content, references }: MessageBubbleProps)
               </div>
             </div>
           )}
+
         </div>
       </motion.div>
     );
