@@ -98,7 +98,7 @@ const Sidebar: React.FC<{
 
       {/* Navigation */}
       <div className="mt-8 w-full px-2">
-        <nav className="flex flex-col gap-0.5">
+        <nav className="flex flex-col gap-2">
           {navItems.map((item) => (
             <SidebarItem
               key={item.path}
@@ -156,12 +156,7 @@ const Sidebar: React.FC<{
 };
 
 
-interface SidebarItemProps {
-  icon: JSX.Element;
-  label: string;
-  path: string;
-  collapsed: boolean;
-}
+
 
 const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   const { setMiddlePanelCollapsed, setCollapsed } = useUI();
@@ -208,4 +203,4 @@ const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   );
 };
 
-export default Sidebar;
+export default Sidebar
