@@ -35,7 +35,7 @@ export const setGeminiApiKey = async (geminiApiKey: string): Promise<void> => {
     console.log(`✅ Successfully set Gemini API key:`, response.data);
     return; // Added return statement to indicate completion
   } catch (error) {
-    console.error(`❌ Error resetting data:`, error);
+    console.error(`❌ Error setting Gemini API key:`, error);
     throw error;
   }
 };

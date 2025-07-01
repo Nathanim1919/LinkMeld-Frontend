@@ -124,7 +124,9 @@ export const FolderList: React.FC = () => {
                           <FaFolder className="text-blue-500/90 flex-shrink-0" />
                         )}
                         <span className="text-sm text-gray-200 truncate">
-                          {folder.name}
+                          {folder.name.length > 20 
+                            ? `${folder.name.slice(0, 20)}...`
+                            : folder.name}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
