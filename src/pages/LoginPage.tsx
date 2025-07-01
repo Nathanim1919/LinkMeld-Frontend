@@ -4,6 +4,8 @@ import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { authClient } from "../lib/auth-client";
+import { toast } from 'sonner';
+
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,16 +19,25 @@ export const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await authClient.signIn.email({
+      const result = await authClient.signIn.email({
         ...formData,
         callbackURL: "/in",
       });
+  
+      if (result.error) {
+        toast.error(result.error.message || "Invalid credentials");
+        return;
+      }
+  
+      toast.success("Signed in successfully");
     } catch (error) {
+      toast.error("Error occurred while signing in");
       console.error("Login failed", error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleGoogleSignIn = async () => {
     setLoading(true);

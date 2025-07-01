@@ -12,6 +12,7 @@ import { Brain } from "lucide-react";
 import { authClient } from "../lib/auth-client";
 import { VscLoading } from "react-icons/vsc";
 import { motion } from "framer-motion";
+import { toast } from 'sonner';
 
 const navItems = [
   {
@@ -57,7 +58,11 @@ const Sidebar: React.FC<{
           navigate({ to: "/login" });
         },
       },
-    });
+    }).then(()=> {
+      toast.success("Logged out successfully");
+    }).catch(()=> {
+      toast.error('Error occured when logging out')
+    })
     setLoading(false);
   };
 
@@ -150,10 +155,18 @@ const Sidebar: React.FC<{
   );
 };
 
+
+interface SidebarItemProps {
+  icon: JSX.Element;
+  label: string;
+  path: string;
+  collapsed: boolean;
+}
+
 const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
   const { setMiddlePanelCollapsed, setCollapsed } = useUI();
   const matchRoute = useMatchRoute();
-  const isActive = !!matchRoute({ to: path, exact: false });
+  const isActive = !!matchRoute({ to: path });
 
   const handleClick = () => {
     setCollapsed(!collapsed);

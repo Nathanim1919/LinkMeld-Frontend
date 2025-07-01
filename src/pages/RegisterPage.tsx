@@ -1,9 +1,18 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiEye,
+  FiEyeOff,
+  FiArrowRight,
+  FiArrowLeft,
+} from "react-icons/fi";
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { authClient } from "../lib/auth-client";
+import { toast } from "sonner";
 
 export const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,11 +27,15 @@ export const RegisterPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await authClient.signUp.email({
+      const result = await authClient.signUp.email({
         ...formData,
         callbackURL: "/in",
       });
       setFormData({ name: "", email: "", password: "" });
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
     } catch (error) {
       console.error("Registration failed", error);
     } finally {
@@ -51,7 +64,7 @@ export const RegisterPage = () => {
     <div className="min-h-screen bg-[#000000] text-[#f5f5f7] flex items-center justify-center p-6 relative overflow-hidden">
       {/* Subtle background texture */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjAuNSIgLz48L3N2Zz4=')] opacity-5" />
-      
+
       {/* Back button */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -77,7 +90,7 @@ export const RegisterPage = () => {
       >
         <div className="bg-[#1c1c1e] rounded-2xl p-8 shadow-xl border border-[#2c2c2e] overflow-hidden">
           {/* Header with subtle animation */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -97,7 +110,9 @@ export const RegisterPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <label className="block text-sm text-[#aeaeb2] mb-2">Full Name</label>
+              <label className="block text-sm text-[#aeaeb2] mb-2">
+                Full Name
+              </label>
               <div className="relative">
                 <FiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#636366]" />
                 <input
@@ -143,7 +158,9 @@ export const RegisterPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <label className="block text-sm text-[#aeaeb2] mb-2">Password</label>
+              <label className="block text-sm text-[#aeaeb2] mb-2">
+                Password
+              </label>
               <div className="relative">
                 <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#636366]" />
                 <input
@@ -182,14 +199,20 @@ export const RegisterPage = () => {
                 type="submit"
                 disabled={loading}
                 className={`w-full py-3.5 px-6 rounded-xl ${
-                  loading ? "bg-[#0071e3]/70 cursor-not-allowed" : "bg-[#0071e3] hover:bg-[#2997ff] cursor-pointer"
+                  loading
+                    ? "bg-[#0071e3]/70 cursor-not-allowed"
+                    : "bg-[#0071e3] hover:bg-[#2997ff] cursor-pointer"
                 } transition-all flex justify-center items-center gap-2 relative overflow-hidden`}
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity" />
                 {loading ? (
                   <motion.span
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                     className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                   />
                 ) : (
@@ -215,7 +238,9 @@ export const RegisterPage = () => {
               whileHover={{ scale: loading ? 1 : 1.02 }}
               whileTap={{ scale: loading ? 1 : 0.98 }}
               className={`w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl ${
-                loading ? "bg-[#2c2c2e] cursor-not-allowed" : "bg-[#2c2c2e] hover:bg-[#3a3a3c] cursor-pointer"
+                loading
+                  ? "bg-[#2c2c2e] cursor-not-allowed"
+                  : "bg-[#2c2c2e] hover:bg-[#3a3a3c] cursor-pointer"
               } transition-all relative overflow-hidden`}
             >
               <div className="absolute inset-0 bg-white/5 opacity-0 hover:opacity-100 transition-opacity" />
@@ -232,7 +257,9 @@ export const RegisterPage = () => {
             className="flex items-center my-6"
           >
             <div className="flex-1 border-t border-[#2c2c2e]"></div>
-            <span className="px-3 text-[#636366] text-xs">Already registered?</span>
+            <span className="px-3 text-[#636366] text-xs">
+              Already registered?
+            </span>
             <div className="flex-1 border-t border-[#2c2c2e]"></div>
           </motion.div>
 
