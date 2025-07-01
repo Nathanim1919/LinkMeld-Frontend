@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiTrash2,
@@ -14,6 +14,7 @@ import { ActionButton } from "../components/modals/actionButton";
 import { UpgradeModal } from "../components/modals/upgrade.modal";
 import { DeleteAccountModal } from "../components/modals/accountDelete.model";
 import { ExportDataModal } from "../components/modals/exportData.modal";
+import { getUserProfileInfo, type IUserProfile } from "../api/account.api";
 
 export const UserProfile = () => {
   const [activeModal, setActiveModal] = useState<
@@ -21,6 +22,19 @@ export const UserProfile = () => {
   >(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const closeModal = () => setActiveModal(null);
+  const [userProfileData, setUserProfileData] = useState<IUserProfile>();
+
+
+  useEffect(() => {
+    async function getUserProfile() {
+      const data = await getUserProfileInfo();
+      setUserProfileData(data);
+    }
+    getUserProfile();
+  }, []);
+
+
+  console.log(userProfileData)
 
   return (
     <div className="min-h-screen bg-[#000000] text-[#f5f5f7] p-6">
@@ -109,7 +123,7 @@ export const UserProfile = () => {
           <ExportDataModal closeModal={closeModal} />
         )}
 
-        {activeModal === "apiKey" && <SetApiKeyModal closeModal={closeModal} />}
+        {activeModal === "apiKey" && <SetApiKeyModal existingApiKey={userProfileData?.externalServices.gemini.hasApiKey} closeModal={closeModal} />}
 
         {activeModal === "upgrade" && (
           <UpgradeModal

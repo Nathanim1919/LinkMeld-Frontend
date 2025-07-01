@@ -1,9 +1,5 @@
 import axios from "axios";
 
-// interface IResponse {
-//   success: boolean;
-//   data:
-// }
 export const resetData = async (): Promise<void> => {
   const url = `http://localhost:3000/api/v1/account/reset`;
 
@@ -36,6 +32,30 @@ export const setGeminiApiKey = async (geminiApiKey: string): Promise<void> => {
     return; // Added return statement to indicate completion
   } catch (error) {
     console.error(`❌ Error setting Gemini API key:`, error);
+    throw error;
+  }
+};
+
+
+export interface IUserProfile {
+    userId: string,
+    externalServices: {
+        gemini: {
+            hasApiKey: boolean
+        }
+    },
+}
+
+export const getUserProfileInfo = async (): Promise<IUserProfile> => {
+  const url = `http://localhost:3000/api/v1/account/profile`;
+
+  try {
+    const response = await axios.get(url, {
+      withCredentials: true,
+    });
+    return response.data; // Added return statement to indicate completion
+  } catch (error) {
+    console.error(`❌ Error retrieving user profile info:`, error);
     throw error;
   }
 };
