@@ -65,3 +65,22 @@ export const bookMarkOrUnbookMarkCapture = async (
     throw error;
   }
 };
+
+
+export const searchCaptures = async (searchTerm: string): Promise<Capture[]> => {
+  const url = `http://localhost:3000/api/v1/captures/search?query=${encodeURIComponent(searchTerm)}`;
+
+  try {
+    const response = await axios.get<Capture[]>(url, {
+      withCredentials: true, // Include credentials in the request
+    });
+
+
+    console.log(`🔍 Search results for "${searchTerm}":`, response.data);
+
+    return response.data.data;
+  } catch (error) {
+    console.error(`❌ Error searching captures:`, error);
+    throw error;
+  }
+}
