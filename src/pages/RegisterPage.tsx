@@ -271,7 +271,7 @@ export const RegisterPage = () => {
           >
             <Link
               to="/login"
-              className={`block w-full text-center py-3 px-6 rounded-xl font-medium text-[#2997ff] border border-[#2c2c2e] hover:bg-[#2c2c2e] transition-colors ${
+              className={`relative z-1000 block w-full text-center py-3 px-6 rounded-xl font-medium text-[#2997ff] border border-[#2c2c2e] hover:bg-[#2c2c2e] transition-colors ${
                 loading ? "cursor-not-allowed" : "cursor-pointer"
               }`}
             >

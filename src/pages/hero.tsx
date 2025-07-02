@@ -32,7 +32,16 @@ const HeroPage = () => {
               transition={{ delay: 0.3 }}
             >
               <span className="block">Your thoughts,</span>
-              <span className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-white to-violet-200">
+              <span
+               style={{
+                backgroundImage:
+                  "linear-gradient(90deg, #06d1ff, #efff12, #ffffff)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                textFillColor: "transparent",
+              }}
+               className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-white to-violet-200">
                 perfectly preserved
               </span>
             </motion.h1>

@@ -125,20 +125,25 @@ export const Header = () => {
                 </Link>
               ))}
               <div className="pt-3 space-y-3">
-                <Link
-                  to="/login"
-                  className="block w-full px-4 py-2 text-sm font-medium text-center text-gray-300 hover:text-white transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="block w-full px-4 py-2 text-sm font-medium text-center text-white bg-gradient-to-r from-blue-500/90 to-blue-600/90 rounded-full transition-all hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)]"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Get Started
-                </Link>
+              <motion.div 
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-4 py-1.5 text-sm font-medium text-white rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <Link to="/login">
+                Sign In
+              </Link>
+            </motion.div>
+            
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-full transition-all hover:bg-blue-600"
+            >
+              <Link to="/register">
+                Get Started
+              </Link>
+            </motion.div>
               </div>
             </div>
           </motion.div>

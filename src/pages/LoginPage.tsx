@@ -215,7 +215,7 @@ export const LoginPage = () => {
           >
             <Link
               to="/forgot-password"
-              className={`hover:text-[#2997ff] ${
+              className={`relative z-1000 hover:text-[#2997ff] ${
                 loading ? "cursor-not-allowed" : "cursor-pointer"
               } transition-colors inline-block mx-1`}
             >
@@ -224,7 +224,7 @@ export const LoginPage = () => {
             <span className="mx-2 text-[#3a3a3c]">•</span>
             <Link
               to="/register"
-              className={`hover:text-[#2997ff] ${
+              className={`relative z-1000 hover:text-[#2997ff] ${
                 loading ? "cursor-not-allowed" : "cursor-pointer"
               } transition-colors inline-block mx-1`}
             >
