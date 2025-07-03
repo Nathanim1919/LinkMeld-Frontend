@@ -51,7 +51,7 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
               className="px-5 py-3 transition-colors"
             >
               <Link
-                to={`/in/capture/${item._id}`}
+                to={`/in/captures/${item._id}`}
                 onClick={() => setSelectedCapture(item)}
                 className="block"
               >

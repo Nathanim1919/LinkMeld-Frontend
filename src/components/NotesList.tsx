@@ -6,9 +6,9 @@ import { FaFolder, FaFolderOpen } from "react-icons/fa6";
 import { FaHashtag } from "react-icons/fa";
 import { TbCaptureFilled } from "react-icons/tb";
 import { CiBookmark, CiStickyNote } from "react-icons/ci";
-import { NoteListSkeleton } from "./skeleton/NoteListSkeleton";
 import { useFolderContext } from "../context/FolderContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { NoteListSkeleton } from "./skeleton/NoteSkeleton";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -146,7 +146,7 @@ const NotesList: React.FC<NotesListProps> = ({
       {/* Notes List */}
       <div className="flex-1 overflow-y-auto px-2 py-3 space-y-2">
         <AnimatePresence>
-          {safeCaptures.map((note) => (
+           {safeCaptures.map((note) => (
             <motion.div
               key={note._id}
               initial={{ opacity: 0, y: 10 }}
@@ -238,7 +238,7 @@ const NotesList: React.FC<NotesListProps> = ({
                 </div>
               </Link>
             </motion.div>
-          ))}
+          ))} 
         </AnimatePresence>
       </div>
     </div>
