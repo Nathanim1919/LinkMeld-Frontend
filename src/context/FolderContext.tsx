@@ -61,7 +61,6 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    console.log("Fetching folders...");
     const fetchFolders = async () => {
       setLoadingStates((prev) => ({ ...prev, fetch: true }));
       try {

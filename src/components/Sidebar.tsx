@@ -1,10 +1,9 @@
 import { useUI } from "../context/UIContext";
-import { FiHome } from "react-icons/fi";
 import { BsBookmarkHeart } from "react-icons/bs";
 import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link, useMatchRoute, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, type JSX } from "react";
 import { useCaptureContext } from "../context/CaptureContext";
 import { IoLogOutOutline } from "react-icons/io5";
@@ -15,12 +14,12 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { SidebarItem } from "./SidebarItem";
 import { IoSearch } from "react-icons/io5";
-
+import { IoDocumentsOutline } from "react-icons/io5";
 
 const navItems = [
   {
-    icon: <FiHome />,
-    label: "Home",
+    icon: <IoDocumentsOutline />,
+    label: "Captures",
     path: "/in/captures",
   },
   {
@@ -29,9 +28,9 @@ const navItems = [
     path: "/in/bookmarks",
   },
   {
-    icon: <IoSearch/>,
+    icon: <IoSearch />,
     label: "Search",
-    path:"/in"
+    path: "/in",
   },
   {
     icon: <LuFolderOpen />,
@@ -89,7 +88,6 @@ const Sidebar: React.FC<{
       {/* Logo */}
       <div className="pt-6 w-full px-4">
         <div
-
           onClick={() => {
             setCollapsed(!collapsed);
             setSelectedCapture(null);
@@ -165,6 +163,5 @@ const Sidebar: React.FC<{
     </motion.div>
   );
 };
-
 
 export default Sidebar;

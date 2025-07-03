@@ -28,6 +28,7 @@ import { SourceLayout } from "./layout/SourceLayout";
 import { HomeLayout } from "./layout/HomeLayout";
 import { CaptureDetail } from "./components/CaptureDetail";
 import { BookMarkLayout } from "./layout/BookmarkLayout";
+import FeedbackHub from "./pages/FeedbackHub";
 
 const FolderPanel = () => <FoldersPanel />;
 
@@ -92,6 +93,12 @@ const FAQRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "faqs",
   component: FAQ,
+});
+
+const FeedbackRoute = createRoute({
+  getParentRoute: () => publicRoute,
+  path: "feedback",
+  component: FeedbackHub
 });
 
 const FeaturesRoute = createRoute({
@@ -223,6 +230,7 @@ export const routeTree = rootRoute.addChildren([
     ManifestoRoute,
     FeaturesRoute,
     FAQRoute,
+    FeedbackRoute
   ]), // Correctly nest children of PublicLayout
   RegisterRoute,
   LoginRoute,

@@ -49,7 +49,6 @@ const EmptyNoteView = () => {
     debouncedSearch(searchTerm);
   }, [searchTerm, debouncedSearch]);
 
-  console.log("Captures:", captures);
 
   useEffect(() => {
     async function getUserInfo() {

@@ -16,7 +16,7 @@ export const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navItems = ["Features", "Pricing", "Manifesto", "FAQs"];
+  const navItems = ["Features", "Pricing", "Manifesto", "FAQs", "Feedback"];
 
   return (
     <header className="relative bg-[#030409] w-full z-50">
