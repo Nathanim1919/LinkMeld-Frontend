@@ -30,6 +30,9 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setOpenAiChat
   } = useUI();
 
+
+  console.log(capture)
+
   const { setSelectedFolder } = useFolderContext();
   const { bookmarkCapture, getCapture } = useCaptureContext();
 

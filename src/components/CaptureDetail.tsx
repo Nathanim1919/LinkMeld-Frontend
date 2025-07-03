@@ -6,14 +6,12 @@ import { getCaptureById } from "../api/capture.api";
 import type { Capture } from "../types/Capture";
 
 export const CaptureDetail = () => {
-    const params = useParams({ strict: false });
-    console.log("Params are: ", params);
+  const params = useParams({ strict: false });
+  console.log("Params are: ", params);
   const { captureId } = useParams({ strict: false });
   const [capture, setCapture] = useState<Capture | null>(null);
   const [loading, setLoading] = useState(true);
-  
 
-  
   useEffect(() => {
     if (!captureId) {
       setCapture(null);
@@ -24,8 +22,16 @@ export const CaptureDetail = () => {
     setLoading(true);
     getCaptureById(captureId)
       .then((data) => {
-        console.log("Fetched capture data: ", data);
-        setCapture(data);
+        if (
+          !data ||
+          !data.metadata ||
+          typeof data.metadata.description !== "string"
+        ) {
+          console.warn("Invalid capture shape or missing metadata:", data);
+          setCapture(null);
+        } else {
+          setCapture(data);
+        }
       })
       .finally(() => setLoading(false));
   }, [captureId]);

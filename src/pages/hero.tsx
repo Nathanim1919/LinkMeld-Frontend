@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import Image from "../assets/img2.png";
+import { CallToAction } from "./CallToAction";
 
 const HeroPage = () => {
   return (
+    <>
     <div
       className="w-full h-full bg-black relative overflow-hidden
     before:absolute before:w-full before:h-[90%] before:transform before:top-[90%] before:rotate-90  before:content-[''] before:bg-violet-600
@@ -102,6 +104,8 @@ const HeroPage = () => {
         </div>
       </div>
     </div>
+    <CallToAction/>
+    </>
   );
 };
 

@@ -1,4 +1,3 @@
-import { CallToAction } from "../pages/CallToAction";
 import { Outlet } from "@tanstack/react-router";
 import { Header } from "../pages/header";
 import { Footer } from "../pages/footer";
@@ -10,7 +9,6 @@ export const PublicLayout = () => {
       <main className="flex-grow">
         <Outlet /> {/* Dynamically render child components */}
       </main>
-      <CallToAction/>
       <Footer />
     </div>
   );
