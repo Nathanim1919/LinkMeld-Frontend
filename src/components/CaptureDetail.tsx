@@ -22,21 +22,13 @@ export const CaptureDetail = () => {
     setLoading(true);
     getCaptureById(captureId)
       .then((data) => {
-        if (
-          !data ||
-          !data.metadata ||
-          typeof data.metadata.description !== "string"
-        ) {
-          console.warn("Invalid capture shape or missing metadata:", data);
-          setCapture(null);
-        } else {
-          setCapture(data);
-        }
+        setCapture(data);
+      })
+      .catch(() => {
+        setCapture(null);
       })
       .finally(() => setLoading(false));
   }, [captureId]);
-
-  console.log("The rendered capture is: ", capture);
 
   if (loading) return <div>Loading capture...</div>;
 

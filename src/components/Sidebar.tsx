@@ -15,6 +15,8 @@ import { toast } from "sonner";
 import { SidebarItem } from "./SidebarItem";
 import { IoSearch } from "react-icons/io5";
 import { IoDocumentsOutline } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
+
 
 const navItems = [
   {
@@ -78,15 +80,23 @@ const Sidebar: React.FC<{
 
   return (
     <motion.div
-      className={`h-screen bg-[#161618] border-r border-gray-800/40
+      className={`h-screen absolute md:relative bg-[#161618] border-r border-gray-800/40
         ${collapsed ? "w-16" : "w-42"} text-gray-300 flex flex-col
         relative justify-between pb-6 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
+      <div className="absolute top-0 right-0 p-2 z-10 md:hidden">
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="p-2 rounded-lg hover:bg-gray-800/40 transition-colors"
+        >
+          <IoClose className="w-5 h-5 text-gray-400" />
+        </button>
+      </div>
       {/* Logo */}
-      <div className="pt-6 w-full px-4">
+      <div className="pt-6 hidden md:block w-full px-4">
         <div
           onClick={() => {
             setCollapsed(!collapsed);
@@ -148,7 +158,7 @@ const Sidebar: React.FC<{
           onClick={handleLogOut}
           whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
           whileTap={{ scale: 0.98 }}
-          className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+          className={`flex items-center cursor-pointer gap-3 p-2 rounded-lg transition-colors ${
             collapsed ? "justify-center" : ""
           }`}
         >

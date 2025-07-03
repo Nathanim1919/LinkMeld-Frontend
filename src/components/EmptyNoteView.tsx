@@ -121,7 +121,7 @@ const EmptyNoteView = () => {
           transition={{ delay: 0.2 }}
         >
           <div className="absolute inset-0 rounded-xl p-px" />
-          <div className="relative before:absolute shadow-amber-500 before:top-0 before:left-0 rounded-2xl overflow-hidden before:opacity-20 before:transform before:rotate- duration-1000 before:w-full before:h-full before:bg-gradient-to-b before:from-orange-400 before:to-violet-600 p-2">
+          <div className="relative before:absolute shadow-amber-500 before:top-0 before:left-0 rounded-[10px] overflow-hidden before:opacity-100 before:transform before:rotate- duration-1000 before:w-full before:h-full before:bg-gradient-to-b before:from-orange-400 before:to-violet-600 p-[.8px]">
             <div className="relative shadow-2xl flex items-center bg-[#0a0a0a] rounded-[calc(0.75rem-1px)]">
               <FiSearch className="absolute left-4 text-white/40 group-hover:text-white/60 transition-colors" />
               <input
