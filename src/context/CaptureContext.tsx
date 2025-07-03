@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import {
   bookMarkOrUnbookMarkCapture,
+  getCaptureById,
   getCapturesBasedOnFilter,
 } from "../api/capture.api";
 import type { Capture } from "../types/Capture";
@@ -14,6 +15,7 @@ interface CaptureContextType {
   setSelectedCapture: React.Dispatch<React.SetStateAction<Capture | null>>;
   fetchCaptures: (filter: FilterType, id?: string | null) => Promise<void>;
   bookmarkCapture?: (captureId: string) => Promise<void>;
+  getCapture: (captureId: string) => Promise<void>;
 }
 
 const CaptureContext = createContext<CaptureContextType | undefined>(undefined);
@@ -23,6 +25,23 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [captures, setCaptures] = useState<Capture[]>([]);
   const [selectedCapture, setSelectedCapture] = useState<Capture | null>(null);
+
+
+  const getCapture = useCallback(
+    async (captureId: string) => {
+      try {
+        const capture = await getCaptureById(captureId);
+        if (capture) {
+          setSelectedCapture(capture);
+          console.log(`✅ Successfully fetched capture with ID: ${captureId}`);
+        } else {
+          console.warn(`⚠️ Capture with ID ${captureId} not found`);
+        }
+      } catch (error) {
+        console.error(`❌ Error fetching capture with ID ${captureId}:`, error);
+      }
+    }
+  )
 
   const fetchCaptures = useCallback(
     async (filter: FilterType, id: string | null = null) => {
@@ -73,6 +92,7 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
         setSelectedCapture,
         fetchCaptures,
         bookmarkCapture,
+        getCapture
       }}
     >
       {children}

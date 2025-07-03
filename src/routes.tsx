@@ -23,18 +23,11 @@ import HeroPage from "./pages/hero";
 import { Features } from "./pages/features";
 import { FAQ } from "./pages/FAQ";
 import { Manifesto } from "./pages/manifesto";
-
-const Home = () => <NotesList />;
-const CapturesPanel = () => <NotesList filter="all" />;
-
-const CaptureDetail = () => {
-  const { selectedCapture } = useCaptureContext();
-  return selectedCapture ? (
-    <NoteView capture={selectedCapture} />
-  ) : (
-    <EmptyNoteView />
-  );
-};
+import { FolderLayout } from "./layout/FolderLayout";
+import { SourceLayout } from "./layout/SourceLayout";
+import { HomeLayout } from "./layout/HomeLayout";
+import { CaptureDetail } from "./components/CaptureDetail";
+import { BookMarkLayout } from "./layout/BookmarkLayout";
 
 const FolderPanel = () => <FoldersPanel />;
 
@@ -44,12 +37,7 @@ const FolderNotes = () => {
 };
 
 const FolderNoteDetail = () => {
-  const { selectedCapture } = useCaptureContext();
-  return selectedCapture ? (
-    <NoteView capture={selectedCapture} />
-  ) : (
-    <EmptyNoteView />
-  );
+  return <CaptureDetail />;
 };
 
 const SourcesPanel = () => <SourcePanel />;
@@ -60,23 +48,13 @@ const SourceNotes = () => {
 };
 
 const SourceNoteDetail = () => {
-  const { selectedCapture } = useCaptureContext();
-  return selectedCapture ? (
-    <NoteView capture={selectedCapture} />
-  ) : (
-    <EmptyNoteView />
-  );
+  return <CaptureDetail />;
 };
 
 const BookmarksPanel = () => <BookmarkPanel />;
 
 const BookmarkDetail = () => {
-  const { selectedCapture } = useCaptureContext();
-  return selectedCapture ? (
-    <NoteView capture={selectedCapture} />
-  ) : (
-    <EmptyNoteView />
-  );
+  return <CaptureDetail />;
 };
 
 // --- Routes --- //
@@ -103,7 +81,6 @@ const pricingRoute = createRoute({
   path: "pricing",
   component: PricingPage,
 });
-
 
 const ManifestoRoute = createRoute({
   getParentRoute: () => publicRoute,
@@ -151,13 +128,13 @@ const contentRoute = createRoute({
 const homeRoute = createRoute({
   getParentRoute: () => contentRoute,
   path: "/",
-  component: Home,
+  component: EmptyNoteView, // This can be a layout if you want to nest more routes
 });
 
 const capturesPanel = createRoute({
   getParentRoute: () => contentRoute,
   path: "captures",
-  component: CapturesPanel,
+  component: HomeLayout,
 });
 
 const captureDetail = createRoute({
@@ -166,33 +143,45 @@ const captureDetail = createRoute({
   component: CaptureDetail,
 });
 
-const foldersPanel = createRoute({
+const folderLayoutRoute = createRoute({
   getParentRoute: () => contentRoute,
   path: "folders",
+  component: FolderLayout, // This can be a layout if you want to nest more routes
+});
+
+const foldersPanel = createRoute({
+  getParentRoute: () => folderLayoutRoute,
+  path: "/",
   component: FolderPanel,
 });
 
 const folderNotes = createRoute({
-  getParentRoute: () => contentRoute,
-  path: "folders/$folderId",
+  getParentRoute: () => folderLayoutRoute,
+  path: "$folderId",
   component: FolderNotes,
 });
 
 const folderNoteDetail = createRoute({
-  getParentRoute: () => folderNotes,
+  getParentRoute: () => folderNotes, // This must match the $folderId route
   path: "captures/$captureId",
   component: FolderNoteDetail,
 });
 
-const sourcesPanel = createRoute({
+const sourceLayoutRoute = createRoute({
   getParentRoute: () => contentRoute,
   path: "sources",
+  component: SourceLayout, // This can be a layout if you want to nest more routes
+});
+
+const sourcesPanel = createRoute({
+  getParentRoute: () => sourceLayoutRoute,
+  path: "/",
   component: SourcesPanel,
 });
 
 const sourceNotes = createRoute({
-  getParentRoute: () => contentRoute,
-  path: "sources/$sourceId",
+  getParentRoute: () => sourceLayoutRoute,
+  path: "$sourceId",
   component: SourceNotes,
 });
 
@@ -202,9 +191,15 @@ const sourceNoteDetail = createRoute({
   component: SourceNoteDetail,
 });
 
-const bookmarksPanel = createRoute({
+const BookmarkLayout = createRoute({
   getParentRoute: () => contentRoute,
   path: "bookmarks",
+  component: BookMarkLayout, // This can be a layout if you want to nest more routes
+});
+
+const bookmarksPanel = createRoute({
+  getParentRoute: () => BookmarkLayout,
+  path: "/",
   component: BookmarksPanel,
 });
 
@@ -222,18 +217,28 @@ const profileRoute = createRoute({
 
 // --- Final Tree --- //
 export const routeTree = rootRoute.addChildren([
-  publicRoute.addChildren([heroRoute, pricingRoute, ManifestoRoute, FeaturesRoute, FAQRoute]), // Correctly nest children of PublicLayout
+  publicRoute.addChildren([
+    heroRoute,
+    pricingRoute,
+    ManifestoRoute,
+    FeaturesRoute,
+    FAQRoute,
+  ]), // Correctly nest children of PublicLayout
   RegisterRoute,
   LoginRoute,
   mainShellRoute.addChildren([
     contentRoute.addChildren([
       homeRoute,
       capturesPanel.addChildren([captureDetail]),
-      foldersPanel,
-      folderNotes.addChildren([folderNoteDetail]),
-      sourcesPanel,
-      sourceNotes.addChildren([sourceNoteDetail]),
-      bookmarksPanel.addChildren([bookmarkDetail]),
+      folderLayoutRoute.addChildren([
+        foldersPanel,
+        folderNotes.addChildren([folderNoteDetail]),
+      ]),
+      sourceLayoutRoute.addChildren([
+        sourcesPanel,
+        sourceNotes.addChildren([sourceNoteDetail]),
+      ]),
+      BookmarkLayout.addChildren([bookmarksPanel, bookmarkDetail]),
     ]),
     profileRoute,
   ]),

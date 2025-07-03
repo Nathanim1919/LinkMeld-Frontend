@@ -21,7 +21,7 @@ const navItems = [
   {
     icon: <FiHome />,
     label: "Home",
-    path: "/in",
+    path: "/in/captures",
   },
   {
     icon: <BsBookmarkHeart />,
@@ -88,13 +88,13 @@ const Sidebar: React.FC<{
     >
       {/* Logo */}
       <div className="pt-6 w-full px-4">
-        <Link
-          to="/in"
+        <div
+
           onClick={() => {
             setCollapsed(!collapsed);
             setSelectedCapture(null);
           }}
-          className={`flex items-center gap-3 ${
+          className={`flex cursor-pointer items-center gap-3 ${
             collapsed ? "justify-center" : "px-2"
           }`}
         >
@@ -104,7 +104,7 @@ const Sidebar: React.FC<{
           {!collapsed && (
             <span className="text-lg font-medium text-gray-200">Lnkd.</span>
           )}
-        </Link>
+        </div>
       </div>
 
       {/* Navigation */}

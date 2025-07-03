@@ -16,7 +16,7 @@ export const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) 
   const isActive = !!matchRoute({ to: path });
 
   const handleClick = () => {
-    setCollapsed(!collapsed);
+    setCollapsed(false);
     setMiddlePanelCollapsed(false);
   };
 

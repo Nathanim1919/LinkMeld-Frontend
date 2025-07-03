@@ -7,13 +7,14 @@ import { FaFolderPlus, FaFolder } from "react-icons/fa6";
 import { FolderList } from "./cards/FolderList";
 import { CiStickyNote } from "react-icons/ci";
 import { FiChevronRight } from "react-icons/fi";
-import { Link } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
 import { useFolderContext } from "../context/FolderContext";
 import { useCaptureContext } from "../context/CaptureContext";
 import { NoteSummary } from "./noteview/NoteSummary";
 import { RiGeminiFill } from "react-icons/ri";
 import { AIChatContainer } from "./Chat/AIChatContainer";
 import { motion, AnimatePresence } from "framer-motion";
+import { use, useEffect } from "react";
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -30,8 +31,9 @@ export const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
   } = useUI();
 
   const { setSelectedFolder } = useFolderContext();
-  const { bookmarkCapture } = useCaptureContext();
+  const { bookmarkCapture, getCapture } = useCaptureContext();
 
+  
   if (!capture) {
     return (
       <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-[#0a0a0a]">

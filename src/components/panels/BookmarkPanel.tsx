@@ -3,7 +3,7 @@ import React from "react";
 import { useCaptureContext } from "../../context/CaptureContext";
 import NotesList from "../NotesList";
 
-const BookmarkPanel: React.FC = () => {
+export const BookmarkPanel: React.FC = () => {
   const { bookmarkCapture } = useCaptureContext();
 
   if (!bookmarkCapture || bookmarkCapture.length === 0) {

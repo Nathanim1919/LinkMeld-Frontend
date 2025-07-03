@@ -12,6 +12,7 @@ import { SourceProvider } from "../context/sourceContext";
 import { authClient } from "../lib/auth-client";
 import type { Session, User } from "better-auth/types";
 import { ChatProvider } from "../context/ChatContext";
+import { motion } from "framer-motion";
 
 export const MainShell = () => {
   const [session, setSession] = useState<{
@@ -95,12 +96,53 @@ export const MainShell = () => {
   );
 };
 
-// Small reusable component for centralized loading feedback
-const CenteredLoader = ({ message }: { message: string }) => (
-  <div className="h-screen w-screen bg-black flex items-center justify-center">
-    <div className="flex flex-col items-center">
-      <VscLoading className="animate-spin w-8 h-8 text-white" />
-      <p className="text-white mt-4">{message}</p>
-    </div>
-  </div>
+export const CenteredLoader = ({ message = "Loading..." }: { message?: string }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.3 }}
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md"
+  >
+    <motion.div
+      initial={{ scale: 0.95, y: 5 }}
+      animate={{ scale: 1, y: 0 }}
+      transition={{ type: "spring", damping: 20, stiffness: 400 }}
+      className="bg-gray-900/80 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-gray-700/50 flex flex-col items-center"
+    >
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        className="text-gray-300"
+      >
+        <VscLoading className="w-8 h-8" />
+      </motion.div>
+      
+      <motion.p 
+        initial={{ opacity: 0, y: 5 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="mt-4 text-gray-300 font-medium tracking-tight text-lg"
+      >
+        {message}
+      </motion.p>
+      
+      <motion.div 
+        initial={{ width: 0 }}
+        animate={{ width: "60%" }}
+        transition={{ delay: 0.2, duration: 0.8 }}
+        className="h-0.5 bg-gray-700/50 mt-6 rounded-full overflow-hidden"
+      >
+        <motion.div
+          initial={{ x: "-100%" }}
+          animate={{ x: "100%" }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 1.5, 
+            ease: "easeInOut" 
+          }}
+          className="h-full w-1/2 bg-blue-500/90 rounded-full"
+        />
+      </motion.div>
+    </motion.div>
+  </motion.div>
 );

@@ -10,7 +10,7 @@ interface SearchResultCardProps {
   searchTerm: string;
   loading: boolean;
   setSelectedCapture: (capture: Capture) => void;
-  toggleBookmark: (id: string) => void;
+  // toggleBookmark: (id: string) => void;
 }
 
 export const SearchResultCard: React.FC<SearchResultCardProps> = ({
@@ -18,14 +18,14 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
   searchTerm,
   loading,
   setSelectedCapture,
-  toggleBookmark,
+  // toggleBookmark,
 }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="bg-white/5 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/10 shadow-lg"
+      className="bg-white/5 -mt-8 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/10 shadow-lg"
     >
       {/* Header */}
       <div className="px-5 py-3 border-b border-white/5">
@@ -81,7 +81,7 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      toggleBookmark(item._id);
+                      // toggleBookmark(item._id);
                     }}
                     className="ml-2 p-1 text-white/30 hover:text-amber-400 transition-colors"
                     aria-label="Bookmark"

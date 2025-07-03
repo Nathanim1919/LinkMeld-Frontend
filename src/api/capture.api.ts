@@ -84,3 +84,22 @@ export const searchCaptures = async (searchTerm: string): Promise<Capture[]> => 
     throw error;
   }
 }
+
+
+
+export const getCaptureById  = async (captureId: string): Promise<Capture | null> => {
+  const url = `http://localhost:3000/api/v1/captures/${captureId}`;
+
+  try {
+    const response = await axios.get<Capture>(url, {
+      withCredentials: true, // Include credentials in the request
+    });
+
+    console.log(`📄 Capture fetched by ID ${captureId}:`, response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error(`❌ Error fetching capture by ID ${captureId}:`, error);
+    return null;
+  }
+}

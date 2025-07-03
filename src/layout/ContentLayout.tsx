@@ -1,42 +1,29 @@
-// layout/ContentLayout.tsx
-import { Outlet } from "@tanstack/react-router";
-import clsx from "clsx";
+import { Outlet, useLocation } from "@tanstack/react-router";
+import { CaptureDetail } from "../components/CaptureDetail";
 import { useUI } from "../context/UIContext";
-import { useCaptureContext } from "../context/CaptureContext";
-import NoteView from "../components/NoteView";
-import EmptyNoteView from "../components/EmptyNoteView";
-import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
-
+import clsx from "clsx";
 
 export const ContentLayout = () => {
-  const { middlePanelCollapsed, setMiddlePanelCollapsed } = useUI();
-  const { selectedCapture } = useCaptureContext();
+  const { middlePanelCollapsed } = useUI();
+  const location = useLocation();
+
+  const isSearchRoute = location.pathname === "/in";
+
+  const gridCols = isSearchRoute
+    ? "grid-cols-[1fr]"
+    : middlePanelCollapsed
+    ? "grid-cols-[0fr_1fr]"
+    : "grid-cols-[0.3fr_1fr]";
 
   return (
     <div
       className={clsx(
         "h-full grid transition-all duration-300 ease-in-out",
-        middlePanelCollapsed ? "grid-cols-[0fr_1fr]" : "grid-cols-[0.3fr_1fr]"
+        gridCols
       )}
     >
-      {/* Left panel (Sidebar + Panel like folders/bookmarks) */}
-      <div className={`bg-[#1A1A1C] ${middlePanelCollapsed ? "p-0" : "p-2"} relative border-r border-zinc-800 overflow-y-auto`}>
-        <div className="w-8 h-8 rounded-full cursor-pointer hover:bg-transparent text-2xl grid place-items-center absolute top-3 right-0"
-        onClick={() => setMiddlePanelCollapsed(!middlePanelCollapsed)}
-        >
-          <MdOutlineKeyboardDoubleArrowLeft/>
-        </div>
-        <Outlet />
-      </div>
-
-      {/* Right panel (Note view or empty) */}
-      <div className="bg-[#161617] overflow-y-auto">
-        {selectedCapture ? (
-          <NoteView capture={selectedCapture} />
-        ) : (
-          <EmptyNoteView />
-        )}
-      </div>
+      {!isSearchRoute && <Outlet />}
+      <CaptureDetail />
     </div>
   );
 };

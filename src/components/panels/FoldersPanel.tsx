@@ -119,43 +119,6 @@ const FoldersPanel: React.FC = () => {
                             {folder.captures.length}
                           </span>
                         )}
-
-                        {/* <div className="flex items-center gap-1">
-                          <motion.button
-                            initial={{ opacity: 0 }}
-                            animate={{ 
-                              opacity: hoveredFolder === folder._id || isActive ? 1 : 0,
-                              transition: { duration: 0.15 }
-                            }}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              router.navigate({
-                                to: `/in/folders/${folder._id}/edit`,
-                                params: { folderId: folder._id },
-                              });
-                            }}
-                            className="p-1 text-gray-400 hover:text-blue-500 transition-colors"
-                            aria-label="Edit collection"
-                          >
-                            <FiEdit2 className="text-[14px]" />
-                          </motion.button>
-                          <motion.button
-                            initial={{ opacity: 0 }}
-                            animate={{ 
-                              opacity: hoveredFolder === folder._id || isActive ? 1 : 0,
-                              transition: { duration: 0.15 }
-                            }}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={(e) => e.preventDefault()}
-                            className="p-1 text-gray-400 hover:text-red-500 transition-colors"
-                            aria-label="Delete collection"
-                          >
-                            <FiTrash2 className="text-[14px]" />
-                          </motion.button>
-                        </div> */}
                       </div>
                     </Link>
                   </motion.li>
