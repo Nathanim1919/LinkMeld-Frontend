@@ -103,3 +103,22 @@ export const getCaptureById  = async (captureId: string): Promise<Capture | null
     return null;
   }
 }
+
+
+
+export const generateSummary = async (captureId: string): Promise<Capture | null> => {
+  const url = `http://localhost:3000/api/v1/ai/summary`;
+
+  try {
+    const response = await axios.post<Capture>(url, { captureId }, {
+      withCredentials: true, // Include credentials in the request
+    });
+
+    console.log(`📝 Summary generated for capture ID ${captureId}:`, response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error(`❌ Error generating summary for capture ID ${captureId}:`, error);
+    return null;
+  }
+};

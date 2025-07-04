@@ -5,7 +5,9 @@ export const getSources = async (): Promise<{
   siteNameCounts?: Record<string, number>;
 }> => {
   try {
-    const response = await axios.get("http://localhost:3000/api/v1/sources");
+    const response = await axios.get("http://localhost:3000/api/v1/sources",{
+      withCredentials: true
+    });
     if (!response.data || !Array.isArray(response.data.siteNames)) {
       throw new Error("Failed to fetch sources");
     }
@@ -19,12 +21,13 @@ export const getSources = async (): Promise<{
 
 export const getSourceById = async (id: string): Promise<string> => {
   try {
-    const response = await fetch(`http://localhost:3000/api/v1/sources/${id}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch source with ID ${id}`);
+    const response = await axios.get(`http://localhost:3000/api/v1/sources/${id}`, {
+      withCredentials: true
+    });
+    if (!response.data || typeof response.data.source !== "string") {
+      throw new Error("Failed to fetch source by ID");
     }
-    const data = await response.json();
-    return data.source as string;
+    return response.data.source;
   } catch (error) {
     console.error(`Error fetching source by ID ${id}:`, error);
     throw error;

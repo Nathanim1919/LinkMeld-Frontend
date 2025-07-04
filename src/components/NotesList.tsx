@@ -10,6 +10,7 @@ import { useFolderContext } from "../context/FolderContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { NoteListSkeleton } from "./skeleton/NoteSkeleton";
 import { IoDocumentsOutline } from "react-icons/io5";
+import { useUI } from "../context/UIContext";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -41,6 +42,7 @@ const NotesList: React.FC<NotesListProps> = ({
 }) => {
   const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
     useCaptureContext();
+    const {setCollapsed} =useUI()
   const { selectedFolder } = useFolderContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -160,7 +162,7 @@ const NotesList: React.FC<NotesListProps> = ({
             >
               <Link
                 to={buildLink(note._id)}
-                onClick={() => setSelectedCapture(note as Capture)}
+                onClick={() => {setSelectedCapture(note as Capture)}}
                 className={`block rounded-lg p-3 transition-all duration-200 ${
                   activeCaptureId === note._id
                     ? "bg-gray-800/50 border-l-2 border-blue-400 shadow-lg"

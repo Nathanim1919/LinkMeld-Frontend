@@ -14,17 +14,12 @@ import {
   FiFolder,
   FiChevronRight,
   FiZap,
-  FiMessageSquare,
   FiMap,
   FiFileText,
-  FiShare2,
-  FiEdit3,
-  FiLink,
-  FiDownload,
-  FiTrash2,
 } from "react-icons/fi";
-import { RiGeminiFill } from "react-icons/ri";
 import { Link } from "@tanstack/react-router";
+import { RiGeminiFill } from "react-icons/ri";
+import { useState } from "react";
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -41,7 +36,10 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
   } = useUI();
 
   const { setSelectedFolder } = useFolderContext();
-  const { bookmarkCapture } = useCaptureContext();
+  const { bookmarkCapture, generateCaptureSummary, loading } = useCaptureContext();
+
+
+  
 
   if (!capture) {
     return (
@@ -86,11 +84,11 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     {
       icon: <FiZap className="w-4 h-4" />,
       label: "Summarize",
-      action: () => console.log("Summarize"),
+      action: () => generateCaptureSummary?.(capture._id),
       color: "text-blue-500",
     },
     {
-      icon: <FiMessageSquare className="w-4 h-4" />,
+      icon: <RiGeminiFill className="w-4 h-4" />,
       label: "Ask AI",
       action: () => setOpenAiChat?.(true),
       color: "text-purple-500",
@@ -100,35 +98,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       label: "Mind Map",
       action: () => console.log("Mind Map"),
       color: "text-green-500",
-    },
-  ];
-
-  const secondaryActions = [
-    {
-      icon: <FiEdit3 className="w-4 h-4" />,
-      label: "Edit",
-      action: () => console.log("Edit"),
-    },
-    {
-      icon: <FiLink className="w-4 h-4" />,
-      label: "Copy Link",
-      action: () => console.log("Copy Link"),
-    },
-    {
-      icon: <FiDownload className="w-4 h-4" />,
-      label: "Export",
-      action: () => console.log("Export"),
-    },
-    {
-      icon: <FiShare2 className="w-4 h-4" />,
-      label: "Share",
-      action: () => console.log("Share"),
-    },
-    {
-      icon: <FiTrash2 className="w-4 h-4" />,
-      label: "Delete",
-      action: () => console.log("Delete"),
-      color: "text-red-500",
     },
   ];
 
@@ -228,6 +197,17 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           }
           capturedAt={capture.metadata.capturedAt}
         />
+        {loading && (
+          <div>
+            Loading...
+          </div>
+        )}
+       {(capture.ai.summary && !loading) && <NoteSummary
+           summary={capture.ai.summary || ""}
+           loading={false}
+           onQuestionClick={() => console.log("Ask AI")}
+
+        />}
 
         {/* AI Action Buttons - Apple-style segmented control */}
         <div className="my-6">
@@ -238,7 +218,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={action.action}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex cursor-pointer items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   action.color || "text-gray-700 dark:text-gray-300"
                 } bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50`}
               >
@@ -256,26 +236,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           wordCount={capture.content.clean?.length || 0}
           tags={capture.metadata.keywords || []}
         />
-
-        {/* Secondary Actions - Subtle and compact */}
-        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800/50">
-          <div className="flex flex-wrap gap-2">
-            {secondaryActions.map((action, index) => (
-              <motion.button
-                key={index}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={action.action}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                  action.color || "text-gray-500 dark:text-gray-400"
-                } hover:bg-gray-100/50 dark:hover:bg-gray-800/50`}
-              >
-                {action.icon}
-                {action.label}
-              </motion.button>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Floating AI Button - Refined design */}

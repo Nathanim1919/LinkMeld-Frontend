@@ -133,7 +133,7 @@ export const UserProfile = () => {
 
         {activeModal === "apiKey" && (
           <SetApiKeyModal
-            existingApiKey={userProfileData?.externalServices.gemini.hasApiKey}
+            existingApiKey={userProfileData?.externalServices?.gemini?.hasApiKey}
             closeModal={closeModal}
           />
         )}
