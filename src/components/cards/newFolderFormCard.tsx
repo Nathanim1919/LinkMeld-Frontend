@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
 import { FolderService } from "../../api/folder.api";
 import { useFolderContext } from "../../context/FolderContext";
+import { toast } from "sonner";
 
 interface NewFolderFormCardProps {
   open: boolean;
   onClose: () => void;
 }
 
-export const NewFolderFormCard = ({ open, onClose }: NewFolderFormCardProps) => {
+export const NewFolderFormCard = ({
+  open,
+  onClose,
+}: NewFolderFormCardProps) => {
   const [folderName, setFolderName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { setFolders } = useFolderContext();
@@ -25,21 +29,36 @@ export const NewFolderFormCard = ({ open, onClose }: NewFolderFormCardProps) => 
 
   const handleFolderCreation = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!folderName.trim()) {
+      toast.warning("Please enter a collection name");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       const res = await FolderService.create(folderName);
-      setFolders(prev => [...prev, res]);
+
+      // Update to success state
+      toast.success("Collection created successfully");
+
+      setFolders((prev) => [...prev, res]);
       setFolderName("");
       onClose();
     } catch (error) {
       console.error("Folder creation failed:", error);
+
+      // Update to error state
+      toast.error("Failed to create collection", {
+        id: toastId,
+        description:
+          error instanceof Error ? error.message : "Please try again later",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
-
-
 
   if (!open) return null;
 
