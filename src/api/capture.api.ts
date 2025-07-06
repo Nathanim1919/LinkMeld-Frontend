@@ -124,15 +124,20 @@ export const CaptureService = {
    */
   async generateSummary(captureId: string): Promise<{
     success: boolean;
-    data?: Capture;
+    summary?: string;
     error?: ErrorResponse;
   }> {
     try {
-      const response = await apiClient.post<ApiResponse<Capture>>(
-        "/ai/summary",
-        { captureId }
-      );
-      return { success: true, data: response.data.data };
+      const response = await apiClient.post<{
+        success: boolean;
+        message: string;
+        data: { summary: string; captureId: string };
+      }>("/ai/summary", { captureId });
+      
+      return { 
+        success: true, 
+        summary: response.data.data.summary 
+      };
     } catch (error) {
       const axiosError = error as AxiosError;
       return {

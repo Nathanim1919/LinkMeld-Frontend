@@ -165,7 +165,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
       )}
 
       {/* Empty State */}
-      {!summary && !error && (
+      {/* {!summary && !error && (
         <div className="text-center py-12 text-gray-500 space-y-4">
           <p>No summary available</p>
           {captureId && onGenerateSummary ? (
@@ -182,7 +182,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             <p className="text-sm">Content will appear here</p>
           )}
         </div>
-      )}
+      )} */}
 
       {/* Regenerate Button (when summary exists) */}
       {summary && captureId && onGenerateSummary && (

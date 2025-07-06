@@ -1,16 +1,12 @@
-import React, { useEffect, useMemo, useState, type JSX } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useCaptureContext } from "../context/CaptureContext";
 import type { Capture } from "../types/Capture";
-import { FaFolder, FaFolderOpen } from "react-icons/fa6";
-import { FaHashtag } from "react-icons/fa";
 import { TbCaptureFilled } from "react-icons/tb";
 import { CiBookmark, CiStickyNote } from "react-icons/ci";
-import { useFolderContext } from "../context/FolderContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { NoteListSkeleton } from "./skeleton/NoteSkeleton";
 import { IoDocumentsOutline } from "react-icons/io5";
-import { useUI } from "../context/UIContext";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -18,22 +14,15 @@ interface NotesListProps {
   sourceId?: string;
 }
 
-const filterLabels: Record<NonNullable<NotesListProps["filter"]>, string> = {
+const filterLabels = {
   all: "All Captures",
   bookmarks: "Bookmarks",
-  folder: "Folder Notes",
-  source: "Source Notes",
-};
+} as const;
 
-const filterIcons: Record<
-  NonNullable<NotesListProps["filter"]>,
-  JSX.Element
-> = {
+const filterIcons = {
   all: <TbCaptureFilled className="text-blue-400" />,
   bookmarks: <CiBookmark className="text-amber-400" />,
-  folder: <FaFolderOpen className="text-green-400" />,
-  source: <FaHashtag className="text-purple-400" />,
-};
+} as const;
 
 const NotesList: React.FC<NotesListProps> = ({
   filter = "all",
@@ -42,14 +31,11 @@ const NotesList: React.FC<NotesListProps> = ({
 }) => {
   const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
     useCaptureContext();
-    const {setCollapsed} =useUI()
-  const { selectedFolder } = useFolderContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const location = useLocation();
   const activeCaptureId = location.pathname.split("/").pop();
-
   const targetId = folderId || sourceId || null;
 
   useEffect(() => {
@@ -92,64 +78,43 @@ const NotesList: React.FC<NotesListProps> = ({
             : minutes > 0
             ? `${minutes}m`
             : `${seconds}s`,
-        formattedDate: timestamp.toLocaleString("en-US", {
-          month: "short",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
       };
     });
   }, [captures]);
 
   const buildLink = (id: string) => {
-    if (filter === "folder" && folderId)
-      return `/in/folders/${folderId}/captures/${id}`;
-    if (filter === "source" && sourceId)
-      return `/in/sources/${sourceId}/captures/${id}`;
+    if (filter === "folder" && folderId) return `/in/folders/${folderId}/captures/${id}`;
+    if (filter === "source" && sourceId) return `/in/sources/${sourceId}/captures/${id}`;
     if (filter === "bookmarks") return `/in/bookmarks/captures/${id}`;
     return `/in/captures/${id}`;
   };
 
+  const shouldShowHeader = filter === "all" || filter === "bookmarks";
+
   if (loading) return <NoteListSkeleton />;
   if (error) return <div className="text-red-400 p-4 text-sm">{error}</div>;
-  if (!safeCaptures.length)
-    return (
-      <div className="flex flex-col items-center justify-center h-full text-center px-4">
-        <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
-          <IoDocumentsOutline className="text-[24px]" />
-        </div>
-        <p className="text-[13px] text-gray-500">No captures found</p>
+  if (!safeCaptures.length) return (
+    <div className="flex flex-col items-center justify-center h-full text-center px-4">
+      <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
+        <IoDocumentsOutline className="text-[24px]" />
       </div>
-    );
+      <p className="text-[13px] text-gray-500">No captures found</p>
+    </div>
+  );
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="px-3 py-3 border-b border-gray-800/50">
-        <div className="flex items-center gap-2">
-          {filterIcons[filter]}
-          <h3 className="text-sm font-medium text-gray-300">
-            {filterLabels[filter]}
-          </h3>
-          {selectedFolder && filter === "folder" && (
-            <span className="ml-2 text-xs font-medium text-green-400 bg-green-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-              <FaFolder className="text-xs" />
-              {selectedFolder.name.length > 15
-                ? selectedFolder.name.slice(0, 15) + "..."
-                : selectedFolder.name}
-            </span>
-          )}
-          {sourceId && filter === "source" && (
-            <span className="ml-2 text-xs font-medium text-purple-400 bg-purple-900/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-              <FaHashtag className="text-xs" />
-              {sourceId.length > 15 ? sourceId.slice(0, 15) + "..." : sourceId}
-            </span>
-          )}
+      {shouldShowHeader && (
+        <div className="px-3 py-3 border-b border-gray-800/50">
+          <div className="flex items-center gap-2">
+            {filterIcons[filter]}
+            <h3 className="text-sm font-medium text-gray-300">
+              {filterLabels[filter]}
+            </h3>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Notes List */}
       <div className="flex-1 overflow-y-auto px-2 py-3 space-y-2">
         <AnimatePresence>
           {safeCaptures.map((note) => (
@@ -162,10 +127,10 @@ const NotesList: React.FC<NotesListProps> = ({
             >
               <Link
                 to={buildLink(note._id)}
-                onClick={() => {setSelectedCapture(note as Capture)}}
+                onClick={() => setSelectedCapture(note as Capture)}
                 className={`block rounded-lg p-3 transition-all duration-200 ${
                   activeCaptureId === note._id
-                    ? "bg-gray-800/50 border-l-2 border-blue-400 shadow-lg"
+                    ? "bg-gray-800/50 border-l-2 border-blue-400"
                     : "hover:bg-gray-800/30"
                 }`}
               >
@@ -179,13 +144,7 @@ const NotesList: React.FC<NotesListProps> = ({
                             : "text-gray-500"
                         }`}
                       />
-                      <h3
-                        className={`text-sm font-medium truncate ${
-                          activeCaptureId === note._id
-                            ? "text-white"
-                            : "text-gray-300"
-                        }`}
-                      >
+                      <h3 className="text-sm font-medium truncate text-gray-300">
                         {note.title}
                       </h3>
                     </div>
@@ -207,20 +166,9 @@ const NotesList: React.FC<NotesListProps> = ({
                       {note.description}
                     </p>
 
-                    <div className="flex items-center justify-between">
-                      <span
-                        className={`text-xs ${
-                          activeCaptureId === note._id
-                            ? "text-blue-300"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        {note.timeAgo}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {note.formattedDate}
-                      </span>
-                    </div>
+                    <span className="text-xs text-gray-500">
+                      {note.timeAgo}
+                    </span>
                   </div>
 
                   <button

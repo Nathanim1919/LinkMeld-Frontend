@@ -9,11 +9,9 @@ import { MainShell } from "./layout/MainShell";
 import { ContentLayout } from "./layout/ContentLayout";
 import { UserProfile } from "./pages/UserProfile";
 import EmptyNoteView from "./components/EmptyNoteView";
-import NoteView from "./components/NoteView";
 import BookmarkPanel from "./components/panels/BookmarkPanel";
 import SourcePanel from "./components/panels/SourcePanel";
 import NotesList from "./components/NotesList";
-import { useCaptureContext } from "./context/CaptureContext";
 import FoldersPanel from "./components/panels/FoldersPanel";
 import { PublicLayout } from "./layout/PublicLayout";
 import { RegisterPage } from "./pages/RegisterPage";
@@ -29,13 +27,12 @@ import { HomeLayout } from "./layout/HomeLayout";
 import { CaptureDetail } from "./components/CaptureDetail";
 import { BookMarkLayout } from "./layout/BookmarkLayout";
 import FeedbackHub from "./pages/FeedbackHub";
+import { FaHashtag } from "react-icons/fa";
+import { FolderNotes } from "./components/FolderNotes";
+import { SourceNotes } from "./components/SourceNotes";
 
 const FolderPanel = () => <FoldersPanel />;
 
-const FolderNotes = () => {
-  const { folderId } = useParams({ strict: false });
-  return <NotesList filter="folder" folderId={folderId} />;
-};
 
 const FolderNoteDetail = () => {
   return <CaptureDetail />;
@@ -43,10 +40,7 @@ const FolderNoteDetail = () => {
 
 const SourcesPanel = () => <SourcePanel />;
 
-const SourceNotes = () => {
-  const { sourceId } = useParams({ strict: false });
-  return <NotesList filter="source" sourceId={sourceId} />;
-};
+
 
 const SourceNoteDetail = () => {
   return <CaptureDetail />;
@@ -98,7 +92,7 @@ const FAQRoute = createRoute({
 const FeedbackRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "feedback",
-  component: FeedbackHub
+  component: FeedbackHub,
 });
 
 const FeaturesRoute = createRoute({
@@ -230,7 +224,7 @@ export const routeTree = rootRoute.addChildren([
     ManifestoRoute,
     FeaturesRoute,
     FAQRoute,
-    FeedbackRoute
+    FeedbackRoute,
   ]), // Correctly nest children of PublicLayout
   RegisterRoute,
   LoginRoute,
