@@ -10,12 +10,14 @@ export type IMessage = {
 type ChatContextType = {
   messages: IMessage[];
   setMessages: (messages: IMessage[]) => void;
+  userMessage: string;
+  setUserMessage: (message: string) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
   isStreaming: boolean;
   setIsStreaming: (streaming: boolean) => void;
   clearMessages: () => void;
-  addMessage: (message: string, captureId: string) => void;
+  addMessage: (captureId: string) => void;
   updateMessage: (index: number, message: IMessage) => void;
   removeMessage: (index: number) => void;
 };
@@ -26,14 +28,15 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [userMessage, setUserMessage] = useState("");
 
   const clearMessages = () => setMessages([]);
 
-  const addMessage = (message: string, captureId: string) => {
-    if (!message.trim()) return;
+  const addMessage = (captureId: string) => {
+    if (!userMessage.trim()) return;
 
-    const userMessage: IMessage = { role: "user", content: message.trim() };
-    const updatedMessages = [...messages, userMessage]; // include the new message
+    const userMessageObj: IMessage = { role: "user", content: userMessage.trim() };
+    const updatedMessages = [...messages, userMessageObj]; // include the new message
 
     setMessages(updatedMessages); // update state
     setIsLoading(true);
@@ -55,9 +58,6 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(false);
         setIsStreaming(false);
       });
-
-    console.log("Message added:", message);
-    console.log("ALL MESSAGES:", updatedMessages);
   };
 
   // setMessages((prev) => [...prev, message]);
@@ -87,6 +87,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         addMessage,
         updateMessage,
         removeMessage,
+        userMessage,
+        setUserMessage,
       }}
     >
       {children}

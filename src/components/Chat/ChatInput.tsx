@@ -1,22 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useChat } from "../../context/ChatContext";
 import { SendHorizonal } from "lucide-react";
 import { useCaptureContext } from "../../context/CaptureContext";
 
 export const ChatInput = () => {
-  const [message, setMessage] = useState("");
-  const {selectedCapture} = useCaptureContext()
+  const { selectedCapture } = useCaptureContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { addMessage } = useChat();
+  const { addMessage, userMessage, setUserMessage } = useChat();
 
   const handleSend = () => {
-    if (message.trim()) {
-      addMessage(message.trim(), selectedCapture?._id || "");
-      setMessage("");
+    if (userMessage.trim()) {
+      addMessage(selectedCapture?._id || "");
       textareaRef.current?.focus();
     }
   };
-
 
   return (
     <div className="px-5 py-4 border-t border-gray-700/50 bg-[#161618] backdrop-blur-2xl">
@@ -27,7 +24,7 @@ export const ChatInput = () => {
             key={prompt}
             className="text-xs bg-[#232326] text-gray-300 px-3.5 py-2 rounded-full whitespace-nowrap flex-shrink-0 hover:bg-gray-700 active:bg-gray-600 transition-colors duration-150"
             onClick={() => {
-              setMessage(prompt);
+              setUserMessage(prompt);
               textareaRef.current?.focus();
             }}
           >
@@ -40,8 +37,8 @@ export const ChatInput = () => {
       <div className="relative">
         <textarea
           ref={textareaRef}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={userMessage}
+          onChange={(e) => setUserMessage(e.target.value)}
           className="w-full bg-[#1e1e21] backdrop-blur-md rounded-2xl border border-gray-700/30 text-white py-3 px-5 pr-14 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-gray-500 text-sm leading-5 transition-all duration-200 scrollbar-hide"
           placeholder="Ask about the current concept..."
           rows={1}
@@ -54,12 +51,12 @@ export const ChatInput = () => {
         />
         <button
           className={`absolute right-2 bottom-3 p-2 rounded-full transition-all ${
-            message.trim()
+            userMessage.trim()
               ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700"
               : "bg-gray-700 text-gray-500"
           }`}
           onClick={handleSend}
-          disabled={!message.trim()}
+          disabled={!userMessage.trim()}
         >
           <SendHorizonal className="h-5 w-5 text-white" />
         </button>
