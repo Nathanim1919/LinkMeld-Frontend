@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { IFolder } from "../types/Folder";
-import { appendCaptureToFolder, getFolders } from "../api/folder.api";
-
+import {FolderService} from "../api/folder.api";
 interface FolderContextType {
   folders: IFolder[];
   setFolders: React.Dispatch<React.SetStateAction<IFolder[]>>;
@@ -28,9 +27,7 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [folders, setFolders] = useState<IFolder[]>([]);
-  const [selectedFolder, setSelectedFolder] = useState<Partial<IFolder> | null>(
-    null
-  );
+  const [selectedFolder, setSelectedFolder] = useState<IFolder | null>(null);
   const [loadingStates, setLoadingStates] = useState({
     fetch: false,
     append: false,
@@ -40,7 +37,7 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
   const addCaptureToFolder = async (folderId: string, captureId: string) => {
     setLoadingStates((prev) => ({ ...prev, append: true }));
     try {
-      const res = await appendCaptureToFolder(folderId, captureId);
+      const res = await FolderService.addCapture(folderId, captureId);
       if (res) {
         setFolders((prev) =>
           prev.map((folder) =>
@@ -64,7 +61,7 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchFolders = async () => {
       setLoadingStates((prev) => ({ ...prev, fetch: true }));
       try {
-        const response = await getFolders();
+        const response = await FolderService.getAll();
         setFolders(response); // Ensure response is of type IFolder[]
       } catch (err) {
         console.error("Error fetching folders:", err);

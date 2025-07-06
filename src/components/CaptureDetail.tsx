@@ -2,7 +2,7 @@ import { useParams } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import NoteView from "../components/NoteView";
 import EmptyNoteView from "../components/EmptyNoteView";
-import { getCaptureById } from "../api/capture.api";
+import { CaptureService } from "../api/capture.api";
 import type { Capture } from "../types/Capture";
 
 export const CaptureDetail = () => {
@@ -20,7 +20,7 @@ export const CaptureDetail = () => {
     }
 
     setLoading(true);
-    getCaptureById(captureId)
+    CaptureService.getById(captureId)
       .then((data) => {
         setCapture(data);
       })

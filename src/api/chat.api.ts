@@ -17,7 +17,7 @@ export const sendMessage = async (
 ): Promise<IChat> => {
   try {
     const res = await axios.post<IChat>(
-      "http://localhost:3000/api/v1/chat/converse",
+      "http://localhost:3000/api/v1/ai/converse",
       { messages, captureId },
       { withCredentials: true }
     );

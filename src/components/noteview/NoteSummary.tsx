@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 type NoteSummaryProps = {
   summary: string | null;
-  loading: boolean;
+  onQuestionClick?: (question: string) => void;
+  captureId?: string;
+  onGenerateSummary?: (captureId: string) => Promise<void>;
+  loading?: boolean;
   error?: Error | null;
-  onQuestionClick?: () => void;
   className?: string;
 };
 
@@ -27,33 +29,53 @@ const parseSummarySections = (markdown: string) => {
 
 export const NoteSummary: React.FC<NoteSummaryProps> = ({
   summary,
-  loading,
-  error,
   onQuestionClick,
-  className = ""
+  captureId,
+  onGenerateSummary,
+  loading: parentLoading = false,
+  error: parentError = null,
+  className = "",
 }) => {
+  const [localLoading, setLocalLoading] = useState(false);
+  const [localError, setLocalError] = useState<Error | null>(null);
+
+  const handleGenerateSummary = async () => {
+    if (!captureId || !onGenerateSummary) return;
+    try {
+      setLocalLoading(true);
+      setLocalError(null);
+      await onGenerateSummary(captureId);
+    } catch (err) {
+      setLocalError(err as Error);
+    } finally {
+      setLocalLoading(false);
+    }
+  };
+
   const sections = summary ? parseSummarySections(summary) : {
     context: null,
     overview: null,
     takeaways: [],
     questions: []
   };
-  
 
-  if (loading) {
+  const isLoading = parentLoading || localLoading;
+  const error = parentError || localError;
+
+  if (isLoading) {
     return (
       <div className={`space-y-6 ${className}`}>
         <div className="space-y-4">
           {/* Context Loader */}
           <div className="h-5 w-1/4 bg-gray-800 rounded-full animate-pulse"></div>
-          
+
           {/* Overview Loader */}
           <div className="space-y-3">
             <div className="h-6 w-1/3 bg-gray-800 rounded-full"></div>
             <div className="h-4 w-full bg-gray-800 rounded-full"></div>
             <div className="h-4 w-5/6 bg-gray-800 rounded-full"></div>
           </div>
-          
+
           {/* Takeaways Loader */}
           <div className="space-y-3 pt-2">
             <div className="h-5 w-1/3 bg-gray-800 rounded-full"></div>
@@ -61,8 +83,10 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-gray-700"></div>
-                  <div className="h-3 flex-1 bg-gray-800 rounded-full" 
-                       style={{ width: `${80 - (i * 10)}%` }}></div>
+                  <div
+                    className="h-3 flex-1 bg-gray-800 rounded-full"
+                    style={{ width: `${80 - i * 10}%` }}
+                  ></div>
                 </div>
               ))}
             </div>
@@ -79,6 +103,14 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
         <div className="p-4 bg-red-900/20 border border-red-800/50 rounded-lg">
           <p className="text-red-300 font-medium">Summary Error</p>
           <p className="text-red-400/90 text-sm mt-1">{error.message}</p>
+          {captureId && onGenerateSummary && (
+            <button
+              onClick={handleGenerateSummary}
+              className="mt-2 text-sm bg-red-800/30 hover:bg-red-800/40 text-red-200 px-3 py-1 rounded-md"
+            >
+              Retry
+            </button>
+          )}
         </div>
       )}
 
@@ -122,7 +154,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             {sections.questions.map((question, i) => (
               <button
                 key={i}
-                onClick={onQuestionClick}
+                onClick={() => onQuestionClick?.(question)}
                 className="text-sm bg-violet-700/10 hover:underline cursor-pointer border border-violet-600/20 text-violet-600 px-2 py-1 rounded-lg transition-colors duration-150"
               >
                 {question}
@@ -134,9 +166,34 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
 
       {/* Empty State */}
       {!summary && !error && (
-        <div className="text-center py-12 text-gray-500 space-y-1">
+        <div className="text-center py-12 text-gray-500 space-y-4">
           <p>No summary available</p>
-          <p className="text-sm">Content will appear here</p>
+          {captureId && onGenerateSummary ? (
+            <button
+              onClick={handleGenerateSummary}
+              disabled={isLoading}
+              className={`text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg ${
+                isLoading ? 'opacity-70' : ''
+              }`}
+            >
+              {isLoading ? 'Generating...' : 'Generate Summary'}
+            </button>
+          ) : (
+            <p className="text-sm">Content will appear here</p>
+          )}
+        </div>
+      )}
+
+      {/* Regenerate Button (when summary exists) */}
+      {summary && captureId && onGenerateSummary && (
+        <div className="flex justify-end pt-2">
+          <button
+            onClick={handleGenerateSummary}
+            disabled={isLoading}
+            className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded"
+          >
+            {isLoading ? 'Regenerating...' : 'Regenerate'}
+          </button>
         </div>
       )}
     </div>

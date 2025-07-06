@@ -7,6 +7,7 @@ import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useState } from "react";
 import { FiChevronRight, FiPlus } from "react-icons/fi";
 import { RiFolderAddLine } from "react-icons/ri";
+import { toast } from "sonner";
 
 export const FolderList: React.FC = () => {
   const { folders, loadingStates, addCaptureToFolder } = useFolderContext();
@@ -16,11 +17,30 @@ export const FolderList: React.FC = () => {
 
   const setCaptureFolder = async (folderId: string) => {
     if (!selectedCapture) return;
+
+    // Show loading toast immediately
+    const toastId = toast.loading("Adding to collection...");
+
     try {
       setAppendToFolderId(folderId);
       await addCaptureToFolder(folderId, selectedCapture._id);
+
+      // Success - update toast
+      toast.success("Capture added to collection successfully", {
+        id: toastId,
+        duration: 3000,
+      });
+
       setIsFolderListOpen?.(false);
     } catch (error) {
+      // Error - update toast
+      toast.error(
+        error instanceof Error ? error.message : "Failed to add to collection",
+        {
+          id: toastId,
+          duration: 3000,
+        }
+      );
       console.error("Error adding capture to folder:", error);
     } finally {
       setAppendToFolderId(null);
@@ -42,10 +62,10 @@ export const FolderList: React.FC = () => {
             initial={{ scale: 0.95, opacity: 0, y: -20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: -20 }}
-            transition={{ 
+            transition={{
               type: "spring",
               damping: 20,
-              stiffness: 300
+              stiffness: 300,
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -56,13 +76,15 @@ export const FolderList: React.FC = () => {
                 <span>Add to Collection</span>
               </h3>
               <p className="text-xs text-gray-500 mt-1">
-                {selectedCapture?.title ? `"${selectedCapture.title}"` : "Selected item"}
+                {selectedCapture?.title
+                  ? `"${selectedCapture.title}"`
+                  : "Selected item"}
               </p>
             </div>
 
             {/* Loading state */}
             {loadingStates.fetch ? (
-              <motion.div 
+              <motion.div
                 className="flex items-center justify-center p-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -75,7 +97,7 @@ export const FolderList: React.FC = () => {
                 </motion.div>
               </motion.div>
             ) : folders.length === 0 ? (
-              <motion.div 
+              <motion.div
                 className="p-6 text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -83,12 +105,16 @@ export const FolderList: React.FC = () => {
                 <div className="mx-auto w-10 h-10 rounded-full bg-[#2e2e2e] flex items-center justify-center mb-3">
                   <FaFolder className="text-gray-500" />
                 </div>
-                <p className="text-sm text-gray-500">No collections available</p>
-                <p className="text-xs text-gray-600 mt-1">Create one to get started</p>
+                <p className="text-sm text-gray-500">
+                  No collections available
+                </p>
+                <p className="text-xs text-gray-600 mt-1">
+                  Create one to get started
+                </p>
               </motion.div>
             ) : (
-              <motion.ul 
-                className="divide-y divide-[#2a2a2a]"
+              <motion.ul
+                className="divide-y max-h-[400px] overflow-y-auto divide-[#2a2a2a]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
@@ -96,26 +122,31 @@ export const FolderList: React.FC = () => {
                   <motion.li
                     key={folder._id}
                     initial={{ opacity: 0, y: 5 }}
-                    animate={{ 
-                      opacity: 1, 
+                    animate={{
+                      opacity: 1,
                       y: 0,
-                      transition: { 
+                      transition: {
                         delay: index * 0.03,
                         type: "spring",
-                        stiffness: 300
-                      }
+                        stiffness: 300,
+                      },
                     }}
                     whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
                     whileTap={{ backgroundColor: "rgba(255,255,255,0.05)" }}
-                    className="px-4 py-3 cursor-pointer active:bg-[#2a2a2a] transition-colors"
+                    className="px-4 py-2 cursor-pointer active:bg-[#2a2a2a] transition-colors"
                     onClick={() => setCaptureFolder(folder._id)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        {loadingStates.append && appendToFolderId === folder._id ? (
+                        {loadingStates.append &&
+                        appendToFolderId === folder._id ? (
                           <motion.div
                             animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            transition={{
+                              duration: 1,
+                              repeat: Infinity,
+                              ease: "linear",
+                            }}
                             className="flex-shrink-0"
                           >
                             <CgSpinnerTwoAlt className="text-blue-500 w-4 h-4" />
@@ -124,7 +155,7 @@ export const FolderList: React.FC = () => {
                           <FaFolder className="text-blue-500/90 flex-shrink-0" />
                         )}
                         <span className="text-sm text-gray-200 truncate">
-                          {folder.name.length > 20 
+                          {folder.name.length > 20
                             ? `${folder.name.slice(0, 20)}...`
                             : folder.name}
                         </span>
@@ -142,14 +173,15 @@ export const FolderList: React.FC = () => {
             )}
 
             {/* Footer */}
-            <motion.div 
+            <motion.div
               className="p-3 border-t border-[#2e2e2e] bg-[#1a1a1a]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
               <p className="text-xs text-gray-500 text-center">
-                {folders.length} {folders.length === 1 ? 'collection' : 'collections'}
+                {folders.length}{" "}
+                {folders.length === 1 ? "collection" : "collections"}
               </p>
             </motion.div>
           </motion.div>

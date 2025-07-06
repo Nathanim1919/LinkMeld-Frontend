@@ -117,7 +117,7 @@ const Sidebar: React.FC<{
 
       {/* Navigation */}
       <div className="mt-8 w-full px-2">
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-col gap-4">
           {navItems.map((item) => (
             <SidebarItem
               key={item.path}

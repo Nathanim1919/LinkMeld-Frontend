@@ -19,13 +19,13 @@ import {
 } from "react-icons/fi";
 import { Link } from "@tanstack/react-router";
 import { RiGeminiFill } from "react-icons/ri";
-import { useState } from "react";
 
 interface NoteViewProps {
   capture: Capture | null;
+  onGenerateSummary?: () => void;
 }
 
-const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
+const NoteView: React.FC<NoteViewProps> = ({ capture, onGenerateSummary }) => {
   const {
     collapsed,
     middlePanelCollapsed,
@@ -37,9 +37,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
 
   const { setSelectedFolder } = useFolderContext();
   const { bookmarkCapture, generateCaptureSummary, loading } = useCaptureContext();
-
-
-  
 
   if (!capture) {
     return (
@@ -84,7 +81,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     {
       icon: <FiZap className="w-4 h-4" />,
       label: "Summarize",
-      action: () => generateCaptureSummary?.(capture._id),
+      action: () => onGenerateSummary?.(),
       color: "text-blue-500",
     },
     {
@@ -197,17 +194,15 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           }
           capturedAt={capture.metadata.capturedAt}
         />
-        {loading && (
-          <div>
-            Loading...
-          </div>
-        )}
-       {(capture.ai.summary && !loading) && <NoteSummary
-           summary={capture.ai.summary || ""}
-           loading={false}
-           onQuestionClick={() => console.log("Ask AI")}
 
-        />}
+<NoteSummary
+      summary={capture.ai?.summary || null}
+      onQuestionClick={(question) => setOpenAiChat?.(true)}
+      className="mt-6"
+      loading={loading}
+      captureId={capture._id}
+      onGenerateSummary={generateCaptureSummary}
+    />
 
         {/* AI Action Buttons - Apple-style segmented control */}
         <div className="my-6">

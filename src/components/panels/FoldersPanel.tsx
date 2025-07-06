@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useFolderContext } from "../../context/FolderContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { NewFolderFormCard } from "../cards/newFolderFormCard";
 import { FaFolder, FaFolderPlus } from "react-icons/fa6";
-import { FiEdit2 } from "react-icons/fi";
-import { FiTrash2 } from "react-icons/fi";
 
 const FoldersPanel: React.FC = () => {
   const { folders, loadingStates, setSelectedFolder } = useFolderContext();
   const [openNewFolderForm, setOpenNewFolderForm] = useState(false);
   const router = useRouter();
-  const [hoveredFolder, setHoveredFolder] = useState<string | null>(null);
+
+
 
   return (
     <div className="h-full flex flex-col">
@@ -73,7 +72,9 @@ const FoldersPanel: React.FC = () => {
           <motion.ul className="space-y-[2px]">
             <AnimatePresence>
               {folders.map((folder) => {
-                const isActive = router.state.location.pathname.includes(folder._id);
+                const isActive = router.state.location.pathname.includes(
+                  folder._id
+                );
                 return (
                   <motion.li
                     key={folder._id}
@@ -81,44 +82,42 @@ const FoldersPanel: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    onHoverStart={() => setHoveredFolder(folder._id)}
-                    onHoverEnd={() => setHoveredFolder(null)}
                   >
                     <Link
                       to={`/in/folders/${folder._id}`}
                       onClick={() => setSelectedFolder(folder)}
-                      className={`relative flex items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${
-                        isActive
-                          ? "bg-blue-500/10"
-                          : "hover:bg-gray-700/30"
+                      className={`relative flex  items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${
+                        isActive ? "bg-blue-500/10" : "hover:bg-gray-700/30"
                       }`}
                       activeOptions={{ exact: true }}
                     >
                       <div className="flex items-center gap-3 overflow-hidden">
                         <FaFolder
                           className={`flex-shrink-0 text-[16px] ${
-                            isActive ? "text-blue-500" : "text-gray-500"
+                            isActive ? "text-blue-500" : "text-[#4eff8f]"
                           }`}
                         />
-                        <span className={`truncate text-[13px] ${
-                          isActive ? "text-white" : "text-gray-300"
-                        }`}>
+                        <span
+                          className={`truncate text-[13px] ${
+                            isActive ? "text-white" : "text-gray-300"
+                          }`}
+                        >
                           {folder.name}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        {folder.captures.length > 0 && (
-                          <span
-                            className={`text-[11px] px-[6px] py-[2px] rounded-full ${
-                              isActive
-                                ? "bg-blue-500/20 text-blue-400"
-                                : "bg-gray-700/50 text-gray-400"
-                            }`}
-                          >
-                            {folder.captures.length}
-                          </span>
-                        )}
+                        <span
+                          className={`text-[11px] px-[6px] py-[2px] rounded-full ${
+                            isActive
+                              ? "bg-blue-500/20 text-blue-400"
+                              : "bg-gray-700/50 text-gray-400"
+                          }`}
+                        >
+                          {folder.captures.length > 0
+                            ? folder.captures.length
+                            : 0}
+                        </span>
                       </div>
                     </Link>
                   </motion.li>

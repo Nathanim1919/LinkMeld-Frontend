@@ -1,7 +1,5 @@
-import { CaptureDetail } from "../components/CaptureDetail";
 import { useUI } from "../context/UIContext";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
-import clsx from "clsx";
 import NotesList from "../components/NotesList";
 
 export const BookMarkLayout: React.FC = () => {

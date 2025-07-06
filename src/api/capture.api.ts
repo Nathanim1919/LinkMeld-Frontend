@@ -1,124 +1,167 @@
+import axios, { AxiosError } from "axios";
 import type { Capture } from "../types/Capture";
-import axios from "axios";
+
+const API_BASE_URL = "http://localhost:3000/api/v1";
+
+// Configure axios instance
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+  timeout: 10000, // 10 second timeout
+});
 
 // Strongly typed filter
 export type CaptureFilter = "all" | "bookmarks" | "folder" | "source";
 
-export const getCapturesBasedOnFilter = async (
-  filter: CaptureFilter,
-  id: string | null = null
-): Promise<Capture[]> => {
-  const baseUrl = "http://localhost:3000/api/v1";
-  let url = `${baseUrl}/captures`;
+interface ApiResponse<T> {
+  data: T;
+  message?: string;
+}
 
-  try {
-    switch (filter) {
-      case "bookmarks":
-        url = `${baseUrl}/captures/bookmarked`;
-        break;
+interface ErrorResponse {
+  message: string;
+  code?: string;
+  details?: unknown;
+}
 
-      case "folder":
-        if (!id)
-          throw new Error(
-            "Folder ID is required for fetching folder captures."
-          );
-        url = `${baseUrl}/folders/${id}/captures`;
-        break;
+export const CaptureService = {
+  /**
+   * Get captures based on filter
+   * @param {CaptureFilter} filter - Filter type
+   * @param {string | null} id - Optional ID for folder/source filters
+   * @returns {Promise<Capture[]>} Array of captures
+   * @throws {ErrorResponse} If request fails
+   */
+  async getCapturesBasedOnFilter(filter: CaptureFilter, id: string | null = null): Promise<Capture[]> {
+    try {
+      let endpoint = "/captures";
+      
+      switch (filter) {
+        case "bookmarks":
+          endpoint = "/captures/bookmarked";
+          break;
+        case "folder":
+          if (!id) throw new Error("Folder ID is required");
+          endpoint = `/folders/${id}/captures`;
+          break;
+        case "source":
+          if (!id) throw new Error("Source ID is required");
+          endpoint = `/sources/${id}/captures`;
+          break;
+      }
 
-      case "source":
-        if (!id)
-          throw new Error(
-            "Source ID is required for fetching source captures."
-          );
-        url = `${baseUrl}/sources/${id}/captures`;
-        break;
-      case "all":
-      default:
-        url = `${baseUrl}/captures`;
-        break;
+      const response = await apiClient.get<ApiResponse<Capture[]>>(endpoint);
+      return response.data.data;
+    } catch (error) {
+      throw this.handleError(error, "Failed to fetch captures");
     }
+  },
 
-    const response = await axios.get<Capture[]>(url, {
-      withCredentials: true, // Include credentials in the request
+  /**
+   * Toggle bookmark status for a capture
+   * @param {string} captureId - Capture ID
+   * @returns {Promise<Capture>} Updated capture
+   * @throws {ErrorResponse} If request fails
+   */
+  async toggleBookmark(captureId: string): Promise<Capture> {
+    try {
+      const response = await apiClient.patch<ApiResponse<Capture>>(
+        `/captures/${captureId}/bookmark`
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log(error)
+      throw this.handleError(error, "Failed to toggle bookmark");
+    }
+  },
+
+  /**
+   * Search captures
+   * @param {string} searchTerm - Search query
+   * @returns {Promise<Capture[]>} Array of matching captures
+   * @throws {ErrorResponse} If request fails
+   */
+  async search(searchTerm: string): Promise<Capture[]> {
+    try {
+      const response = await apiClient.get<ApiResponse<Capture[]>>(
+        `/captures/search`,
+        { params: { query: searchTerm } }
+      );
+      console.log("Search response:", response.data);
+      return response.data.data;
+    } catch (error) {
+      throw this.handleError(error, "Search failed");
+    }
+  },
+
+  /**
+   * Get capture by ID
+   * @param {string} captureId - Capture ID
+   * @returns {Promise<Capture | null>} Capture or null if not found
+   */
+  async getById(captureId: string): Promise<Capture | null> {
+    try {
+      const response = await apiClient.get<ApiResponse<Capture>>(
+        `/captures/${captureId}`
+      );
+      return response.data.data;
+    } catch (error) {
+      if ((error as AxiosError).response?.status === 404) {
+        return null;
+      }
+      throw this.handleError(error, "Failed to fetch capture");
+    }
+  },
+
+  /**
+   * Generate AI summary for capture
+   * @param {string} captureId - Capture ID
+   * @returns {Promise<{success: boolean, data?: Capture, error?: ErrorResponse}>} Result object
+   */
+  async generateSummary(captureId: string): Promise<{
+    success: boolean;
+    data?: Capture;
+    error?: ErrorResponse;
+  }> {
+    try {
+      const response = await apiClient.post<ApiResponse<Capture>>(
+        "/ai/summary",
+        { captureId }
+      );
+      return { success: true, data: response.data.data };
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return {
+        success: false,
+        error: {
+          message: axiosError.response?.data?.message || axiosError.message || "Summary generation failed",
+          code: axiosError.code,
+          details: axiosError.response?.data
+        }
+      };
+    }
+  },
+
+  /**
+   * Handle API errors consistently
+   * @private
+   */
+handleError(error: unknown, defaultMessage: string): ErrorResponse {
+    const axiosError = error as AxiosError;
+    console.error("API Error:", {
+      message: axiosError.message,
+      code: axiosError.code,
+      response: axiosError.response?.data,
     });
 
-    return response.data;
-  } catch (error) {
-    console.error("❌ Error fetching captures based on filter:", error);
-    throw error;
-  }
-};
-
-export const bookMarkOrUnbookMarkCapture = async (
-  captureId: string
-): Promise<Capture> => {
-  const url = `http://localhost:3000/api/v1/captures/${captureId}/bookmark`;
-
-  try {
-    const response = await axios.post<Capture>(url, null, {
-      withCredentials: true, // Include credentials in the request
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error(`❌ Error bookmarking or unbookmarking capture:`, error);
-    throw error;
-  }
-};
-
-
-export const searchCaptures = async (searchTerm: string): Promise<Capture[]> => {
-  const url = `http://localhost:3000/api/v1/captures/search?query=${encodeURIComponent(searchTerm)}`;
-
-  try {
-    const response = await axios.get<Capture[]>(url, {
-      withCredentials: true, // Include credentials in the request
-    });
-
-
-    console.log(`🔍 Search results for "${searchTerm}":`, response.data);
-
-    return response.data.data;
-  } catch (error) {
-    console.error(`❌ Error searching captures:`, error);
-    throw error;
-  }
-}
-
-
-
-export const getCaptureById  = async (captureId: string): Promise<Capture | null> => {
-  const url = `http://localhost:3000/api/v1/captures/${captureId}`;
-
-  try {
-    const response = await axios.get<Capture>(url, {
-      withCredentials: true, // Include credentials in the request
-    });
-
-    console.log(`📄 Capture fetched by ID ${captureId}:`, response.data);
-
-    return response.data;
-  } catch (error) {
-    console.error(`❌ Error fetching capture by ID ${captureId}:`, error);
-    return null;
-  }
-}
-
-
-
-export const generateSummary = async (captureId: string): Promise<Capture | null> => {
-  const url = `http://localhost:3000/api/v1/ai/summary`;
-
-  try {
-    const response = await axios.post<Capture>(url, { captureId }, {
-      withCredentials: true, // Include credentials in the request
-    });
-
-    console.log(`📝 Summary generated for capture ID ${captureId}:`, response.data);
-
-    return response.data;
-  } catch (error) {
-    console.error(`❌ Error generating summary for capture ID ${captureId}:`, error);
-    return null;
+    return {
+      message: axiosError.response?.data?.message || defaultMessage,
+      code: axiosError.code,
+      details: axiosError.response?.data
+    };
   }
 };

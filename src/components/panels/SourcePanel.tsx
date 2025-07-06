@@ -38,16 +38,16 @@ const SourcePanel: React.FC = () => {
               >
                 <Link
                   to={`/in/sources/${source}`}
-                  className="relative flex items-center justify-between px-3 py-2.5 rounded-[6px] hover:bg-gray-700/30 transition-colors group"
+                  className="relative flex items-center justify-between px-2 py-2.5 rounded-[6px] hover:bg-gray-700/30 transition-colors group"
                   activeOptions={{ exact: true }}
                   activeProps={{
                     className: "bg-blue-500/10"
                   }}
                 >
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <MdOutlineLanguage className="flex-shrink-0 text-[16px] text-gray-500 group-[.active]:text-blue-500" />
-                    <span className="truncate text-[13px] text-gray-300 group-[.active]:text-white">
-                      {source.length > 24 ? `${source.slice(0, 24)}...` : source}
+                  <div className="flex items-center gap-1 overflow-hidden">
+                    <MdOutlineLanguage className="flex-shrink-0 text-blue-500" />
+                    <span className="truncate text-[15px] text-gray-300 group-[.active]:text-white">
+                      {source.length > 25 ? `${source.slice(0, 25)}...` : source}
                     </span>
                   </div>
 

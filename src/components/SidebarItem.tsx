@@ -18,6 +18,12 @@ export const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) 
   const handleClick = () => {
     setCollapsed(false);
     setMiddlePanelCollapsed(false);
+
+    if (path === "/search" || path === "/in") {
+      // If the path is "/in", we want to reset the middle panel
+      setCollapsed(true);
+
+    }
   };
 
   return (
@@ -33,8 +39,8 @@ export const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) 
       >
         <span
           className={`relative z-10 ${
-            isActive ? "text-blue-400" : "text-gray-400"
-          } ${collapsed ? "text-xl" : "text-lg"}`}
+            isActive ? "text-blue-400" : "text-gray-500"
+          } ${collapsed ? "text-2xl" : "text-2xl"}`}
         >
           {icon}
         </span>

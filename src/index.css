@@ -49,3 +49,12 @@ body {
 }
 
 
+/* Add this to your global CSS */
+@keyframes gradient-shift {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-shift {
+  animation: gradient-shift 2s ease infinite;
+}
+

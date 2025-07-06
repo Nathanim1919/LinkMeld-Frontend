@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
-import { createFolder } from "../../api/folder.api";
+import { FolderService } from "../../api/folder.api";
 import { useFolderContext } from "../../context/FolderContext";
 
 interface NewFolderFormCardProps {
@@ -28,7 +28,7 @@ export const NewFolderFormCard = ({ open, onClose }: NewFolderFormCardProps) => 
     setIsSubmitting(true);
 
     try {
-      const res = await createFolder(folderName);
+      const res = await FolderService.create(folderName);
       setFolders(prev => [...prev, res]);
       setFolderName("");
       onClose();

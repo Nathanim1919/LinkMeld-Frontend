@@ -4,7 +4,7 @@ import { FiSearch, FiUser } from "react-icons/fi";
 import type { User } from "better-auth/types";
 import type { Capture } from "../types/Capture";
 import { authClient } from "../lib/auth-client";
-import { searchCaptures } from "../api/capture.api";
+import { CaptureService } from "../api/capture.api";
 import debounce from "lodash.debounce";
 import { useCaptureContext } from "../context/CaptureContext";
 import { SearchResultCard } from "./cards/searchResultCard";
@@ -32,7 +32,7 @@ const EmptyNoteView = () => {
 
       try {
         setLoading(true);
-        const results = await searchCaptures(term);
+        const results = await CaptureService.search(term);
         cache.current.set(term, results);
         setCaptures(results);
       } catch (error) {

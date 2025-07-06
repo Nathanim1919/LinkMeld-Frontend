@@ -1,11 +1,12 @@
 // CaptureContext.tsx
-import React, { createContext, useContext, useState, useCallback, useRef } from "react";
-import {
-  bookMarkOrUnbookMarkCapture,
-  generateSummary,
-  getCaptureById,
-  getCapturesBasedOnFilter,
-} from "../api/capture.api";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
+import { CaptureService } from "../api/capture.api";
 import type { Capture } from "../types/Capture";
 
 type FilterType = "all" | "bookmarks" | "folder" | "source";
@@ -36,57 +37,55 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const clearError = useCallback(() => setError(null), []);
 
-  const getCapture = useCallback(async (captureId: string) => {
-    try {
-      const capture = await getCaptureById(captureId);
-      if (capture) {
-        setSelectedCapture(capture);
+  const getCapture = useCallback(
+    async (captureId: string): Promise<void> => {
+      try {
+        const response = await CaptureService.getById(captureId);
+        setSelectedCapture(response); // Update state with the capture
+      } catch (error) {
+        setError(error as Error);
       }
-      return capture;
-    } catch (error) {
-      setError(error as Error);
-      throw error;
-    }
-  }, []);
+    },
+    []
+  );
 
-  const fetchCaptures = useCallback(async (filter: FilterType, id: string | null = null) => {
-    try {
-      const response = await getCapturesBasedOnFilter(filter, id);
-      const formattedCaptures = response.map((capture: Capture) => ({
-        ...capture,
-        title: capture.title || 'Untitled',
-      }));
-      setCaptures(formattedCaptures);
-      return formattedCaptures;
-    } catch (error) {
-      setError(error as Error);
-      throw error;
-    }
-  }, []);
+  const fetchCaptures = useCallback(
+    async (filter: FilterType, id: string | null = null): Promise<void> => {
+      try {
+        const response = await CaptureService.getCapturesBasedOnFilter(filter, id);
+        const formattedCaptures = response.map((capture: Capture) => ({
+          ...capture,
+          title: capture.title || "Untitled",
+        }));
+        setCaptures(formattedCaptures); // Update state only
+      } catch (error) {
+        setError(error as Error);
+        throw error;
+      }
+    },
+    []
+  );
 
   const generateCaptureSummary = useCallback(async (captureId: string): Promise<Capture> => {
-    // Deduplicate simultaneous requests
     if (pendingRequests.current.has(captureId)) {
       return pendingRequests.current.get(captureId)!;
     }
-
+  
     setLoading(true);
     clearError();
-
+  
     const promise = (async () => {
       try {
-        const {capture} = await generateSummary(captureId);
-        
-        // Update both captures list and selected capture
-        setCaptures(prev => prev.map(c => 
-          c._id === captureId ? { ...c, ai: capture?.ai } : c
-        ));
-        
-        setSelectedCapture(prev => 
-          prev?._id === captureId ? { ...prev, ai: capture.ai } : prev
-        );
-        
-        return capture;
+        const result = await CaptureService.generateSummary(captureId);
+        if (!result.data) {
+          throw new Error("Capture summary data is undefined");
+        }
+  
+        // Return a Capture object with the AI summary included
+        return {
+          ...result.data.capture,
+          summary: result.data.ai?.summary || "",
+        };
       } catch (error) {
         setError(error as Error);
         throw error;
@@ -95,7 +94,7 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
         pendingRequests.current.delete(captureId);
       }
     })();
-
+  
     pendingRequests.current.set(captureId, promise);
     return await promise;
   }, [clearError]);
@@ -103,33 +102,37 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
   const bookmarkCapture = useCallback(async (captureId: string) => {
     try {
       // Optimistic update
-      setCaptures(prev => prev.map(capture => 
-        capture._id === captureId 
-          ? { ...capture, bookmarked: !capture.bookmarked } 
-          : capture
-      ));
-      
-      setSelectedCapture(prev => 
-        prev?._id === captureId 
-          ? { ...prev, bookmarked: !prev.bookmarked } 
+      setCaptures((prev) =>
+        prev.map((capture) =>
+          capture._id === captureId
+            ? { ...capture, bookmarked: !capture.bookmarked }
+            : capture
+        )
+      );
+
+      setSelectedCapture((prev) =>
+        prev?._id === captureId
+          ? { ...prev, bookmarked: !prev.bookmarked }
           : prev
       );
-      
-      await bookMarkOrUnbookMarkCapture(captureId);
+
+      await CaptureService.toggleBookmark(captureId);
     } catch (error) {
       // Revert on error
-      setCaptures(prev => prev.map(capture => 
-        capture._id === captureId 
-          ? { ...capture, bookmarked: !capture.bookmarked } 
-          : capture
-      ));
-      
-      setSelectedCapture(prev => 
-        prev?._id === captureId 
-          ? { ...prev, bookmarked: !prev.bookmarked } 
+      setCaptures((prev) =>
+        prev.map((capture) =>
+          capture._id === captureId
+            ? { ...capture, bookmarked: !capture.bookmarked }
+            : capture
+        )
+      );
+
+      setSelectedCapture((prev) =>
+        prev?._id === captureId
+          ? { ...prev, bookmarked: !prev.bookmarked }
           : prev
       );
-      
+
       setError(error as Error);
       throw error;
     }
