@@ -4,6 +4,7 @@ import { ChatInput } from "./ChatInput";
 import { useChat } from "../../context/ChatContext";
 import { motion } from "framer-motion";
 import { RiGeminiFill } from "react-icons/ri";
+import EmptyChat from "./EmptyChat";
 
 export const ChatView = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -16,6 +17,11 @@ export const ChatView = () => {
   return (
     <div className="h-full bg-[#1A1A1C] flex flex-col">
       {/* Message History */}
+      {
+        messages.length === 0 && !isLoading && (
+         <EmptyChat />
+        )
+      }
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
         {messages.map((msg, index) => (
           <MessageBubble

@@ -134,7 +134,7 @@ const LnkdFeedback = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-6">
+    <div className="min-h-screen relative z-1000 bg-black flex items-center justify-center p-6">
       <div className="max-w-md w-full space-y-6">
         {/* Header with Apple-style gradient */}
         <motion.div
