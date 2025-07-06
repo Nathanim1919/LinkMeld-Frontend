@@ -6,7 +6,6 @@ import type { Capture } from "../types/Capture";
 import { authClient } from "../lib/auth-client";
 import { CaptureService } from "../api/capture.api";
 import debounce from "lodash.debounce";
-import { useCaptureContext } from "../context/CaptureContext";
 import { SearchResultCard } from "./cards/searchResultCard";
 
 const EmptyNoteView = () => {
@@ -14,7 +13,6 @@ const EmptyNoteView = () => {
   const [captures, setCaptures] = useState<Capture[]>([]);
   const [authInfo, setAuthInfo] = useState<User>();
   const [loading, setLoading] = useState(false);
-  const { setSelectedCapture } = useCaptureContext();
   const cache = useRef<Map<string, Capture[]>>(new Map());
 
   // 🌐 Debounced search handler
@@ -48,7 +46,6 @@ const EmptyNoteView = () => {
   useEffect(() => {
     debouncedSearch(searchTerm);
   }, [searchTerm, debouncedSearch]);
-
 
   useEffect(() => {
     async function getUserInfo() {
@@ -142,7 +139,6 @@ const EmptyNoteView = () => {
             captures={captures}
             searchTerm={searchTerm}
             loading={loading}
-            setSelectedCapture={setSelectedCapture}
           />
         )}
       </div>

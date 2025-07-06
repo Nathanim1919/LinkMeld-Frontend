@@ -9,7 +9,6 @@ interface SearchResultCardProps {
   captures: Capture[];
   searchTerm: string;
   loading: boolean;
-  setSelectedCapture: (capture: Capture) => void;
   // toggleBookmark: (id: string) => void;
 }
 
@@ -17,7 +16,6 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
   captures,
   searchTerm,
   loading,
-  setSelectedCapture,
   // toggleBookmark,
 }) => {
   return (
@@ -52,7 +50,6 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
             >
               <Link
                 to={`/in/captures/${item._id}`}
-                onClick={() => setSelectedCapture(item)}
                 className="block"
               >
                 <div className="flex justify-between items-start">

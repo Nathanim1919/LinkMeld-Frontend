@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useCaptureContext } from "../context/CaptureContext";
-import type { Capture } from "../types/Capture";
 import { TbCaptureFilled } from "react-icons/tb";
 import { CiBookmark, CiStickyNote } from "react-icons/ci";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,8 +28,7 @@ const NotesList: React.FC<NotesListProps> = ({
   folderId,
   sourceId,
 }) => {
-  const { captures, setSelectedCapture, fetchCaptures, bookmarkCapture } =
-    useCaptureContext();
+  const { captures, fetchCaptures, bookmarkCapture } = useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -83,8 +81,10 @@ const NotesList: React.FC<NotesListProps> = ({
   }, [captures]);
 
   const buildLink = (id: string) => {
-    if (filter === "folder" && folderId) return `/in/folders/${folderId}/captures/${id}`;
-    if (filter === "source" && sourceId) return `/in/sources/${sourceId}/captures/${id}`;
+    if (filter === "folder" && folderId)
+      return `/in/folders/${folderId}/captures/${id}`;
+    if (filter === "source" && sourceId)
+      return `/in/sources/${sourceId}/captures/${id}`;
     if (filter === "bookmarks") return `/in/bookmarks/captures/${id}`;
     return `/in/captures/${id}`;
   };
@@ -93,14 +93,15 @@ const NotesList: React.FC<NotesListProps> = ({
 
   if (loading) return <NoteListSkeleton />;
   if (error) return <div className="text-red-400 p-4 text-sm">{error}</div>;
-  if (!safeCaptures.length) return (
-    <div className="flex flex-col items-center justify-center h-full text-center px-4">
-      <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
-        <IoDocumentsOutline className="text-[24px]" />
+  if (!safeCaptures.length)
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center px-4">
+        <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
+          <IoDocumentsOutline className="text-[24px]" />
+        </div>
+        <p className="text-[13px] text-gray-500">No captures found</p>
       </div>
-      <p className="text-[13px] text-gray-500">No captures found</p>
-    </div>
-  );
+    );
 
   return (
     <div className="h-full flex flex-col">
@@ -127,7 +128,6 @@ const NotesList: React.FC<NotesListProps> = ({
             >
               <Link
                 to={buildLink(note._id)}
-                onClick={() => setSelectedCapture(note as Capture)}
                 className={`block rounded-lg p-3 transition-all duration-200 ${
                   activeCaptureId === note._id
                     ? "bg-gray-800/50 border-l-2 border-blue-400"

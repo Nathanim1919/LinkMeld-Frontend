@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-} from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 import { CaptureService } from "../api/capture.api";
 import type { Capture } from "../types/Capture";
 import { toast } from "sonner";
@@ -52,13 +47,16 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     async (filter: FilterType, id: string | null = null): Promise<void> => {
       try {
         setLoading(true);
-        const response = await CaptureService.getCapturesBasedOnFilter(filter, id);
-        
+        const response = await CaptureService.getCapturesBasedOnFilter(
+          filter,
+          id
+        );
+
         const formattedCaptures = response.map((capture: Capture) => ({
           ...capture,
           title: capture.title || "Untitled",
         }));
-        
+
         setCaptures(formattedCaptures);
       } catch (error) {
         setError(error as Error);
@@ -75,39 +73,39 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         setLoading(true);
         const result = await CaptureService.generateSummary(captureId);
-        
+
         if (!result.success || !result.summary) {
           throw new Error(result.error?.message || "No summary generated");
         }
-  
+
         // Update both captures array and selected capture
         const updatedSummary = result.summary;
-        setCaptures(prev =>
-          prev.map(capture =>
+        setCaptures((prev) =>
+          prev.map((capture) =>
             capture._id === captureId
-              ? { 
-                  ...capture, 
-                  ai: { 
-                    ...capture.ai, 
-                    summary: updatedSummary 
-                  } 
+              ? {
+                  ...capture,
+                  ai: {
+                    ...capture.ai,
+                    summary: updatedSummary,
+                  },
                 }
               : capture
           )
         );
-        
-        setSelectedCapture(prev => 
-          prev?._id === captureId 
-            ? { 
-                ...prev, 
-                ai: { 
-                  ...prev.ai, 
-                  summary: updatedSummary 
-                } 
-              } 
+
+        setSelectedCapture((prev) =>
+          prev?._id === captureId
+            ? {
+                ...prev,
+                ai: {
+                  ...prev.ai,
+                  summary: updatedSummary,
+                },
+              }
             : prev
         );
-        
+
         return updatedSummary;
       } catch (error) {
         setError(error as Error);
@@ -120,47 +118,52 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     []
   );
 
-  const bookmarkCapture = useCallback(async (captureId: string) => {
-    try {
-      // Optimistic update
-      setCaptures(prev => 
-        prev.map(capture => 
-          capture._id === captureId
-            ? { ...capture, bookmarked: !capture.bookmarked }
-            : capture
-        )
-      );
+  const bookmarkCapture = useCallback(
+    async (captureId: string) => {
+      try {
+        // Optimistic update
+        setCaptures((prev) =>
+          prev.map((capture) =>
+            capture._id === captureId
+              ? { ...capture, bookmarked: !capture.bookmarked }
+              : capture
+          )
+        );
 
-      setSelectedCapture(prev => 
-        prev?._id === captureId
-          ? { ...prev, bookmarked: !prev.bookmarked }
-          : prev
-      );
+        setSelectedCapture((prev) =>
+          prev?._id === captureId
+            ? { ...prev, bookmarked: !prev.bookmarked }
+            : prev
+        );
 
-      await CaptureService.toggleBookmark(captureId);
-      toast.success(
-        `Capture ${selectedCapture?.bookmarked ? "unbookmarked" : "bookmarked"}`
-      );
-    } catch (error) {
-      // Revert on error
-      setCaptures(prev => 
-        prev.map(capture => 
-          capture._id === captureId
-            ? { ...capture, bookmarked: !capture.bookmarked }
-            : capture
-        )
-      );
+        await CaptureService.toggleBookmark(captureId);
+        toast.success(
+          `Capture ${
+            selectedCapture?.bookmarked ? "unbookmarked" : "bookmarked"
+          }`
+        );
+      } catch (error) {
+        // Revert on error
+        setCaptures((prev) =>
+          prev.map((capture) =>
+            capture._id === captureId
+              ? { ...capture, bookmarked: !capture.bookmarked }
+              : capture
+          )
+        );
 
-      setSelectedCapture(prev => 
-        prev?._id === captureId
-          ? { ...prev, bookmarked: !prev.bookmarked }
-          : prev
-      );
+        setSelectedCapture((prev) =>
+          prev?._id === captureId
+            ? { ...prev, bookmarked: !prev.bookmarked }
+            : prev
+        );
 
-      setError(error as Error);
-      toast.error("Failed to update bookmark status");
-    }
-  }, [selectedCapture?.bookmarked]);
+        setError(error as Error);
+        toast.error("Failed to update bookmark status");
+      }
+    },
+    [selectedCapture?.bookmarked]
+  );
 
   const contextValue: CaptureContextType = {
     captures,

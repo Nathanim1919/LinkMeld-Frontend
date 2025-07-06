@@ -5,7 +5,6 @@ import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, type JSX } from "react";
-import { useCaptureContext } from "../context/CaptureContext";
 import { IoLogOutOutline } from "react-icons/io5";
 import { Brain } from "lucide-react";
 import { authClient } from "../lib/auth-client";
@@ -56,7 +55,6 @@ const Sidebar: React.FC<{
 }> = ({ user }) => {
   const { collapsed, setCollapsed } = useUI();
   const [loading, setLoading] = useState(false);
-  const { setSelectedCapture } = useCaptureContext();
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
@@ -100,7 +98,6 @@ const Sidebar: React.FC<{
         <div
           onClick={() => {
             setCollapsed(!collapsed);
-            setSelectedCapture(null);
           }}
           className={`flex cursor-pointer items-center gap-3 ${
             collapsed ? "justify-center" : "px-2"
