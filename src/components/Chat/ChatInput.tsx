@@ -13,6 +13,7 @@ export const ChatInput = () => {
       addMessage(selectedCapture?._id || "");
       textareaRef.current?.focus();
     }
+    setUserMessage(""); // Clear input after sending
   };
 
   return (

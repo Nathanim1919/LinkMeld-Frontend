@@ -53,7 +53,7 @@ export const getUserProfileInfo = async (): Promise<IUserProfile> => {
     const response = await axios.get(url, {
       withCredentials: true,
     });
-    return response.data; // Added return statement to indicate completion
+    return response.data.data; // Added return statement to indicate completion
   } catch (error) {
     console.error(`❌ Error retrieving user profile info:`, error);
     throw error;

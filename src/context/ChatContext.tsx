@@ -57,6 +57,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       .finally(() => {
         setIsLoading(false);
         setIsStreaming(false);
+        setUserMessage(""); // Clear input after sending
       });
   };
 

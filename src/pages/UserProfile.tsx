@@ -17,6 +17,7 @@ import { ExportDataModal } from "../components/modals/exportData.modal";
 import { getUserProfileInfo, type IUserProfile } from "../api/account.api";
 import { authClient } from "../lib/auth-client";
 import type { User } from "better-auth/types";
+import { ApiKeyReminder } from "../components/ApiKeyReminder";
 
 export const UserProfile = () => {
   const [activeModal, setActiveModal] = useState<
@@ -25,7 +26,9 @@ export const UserProfile = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const closeModal = () => setActiveModal(null);
   const [userProfileData, setUserProfileData] = useState<IUserProfile>();
+  console.log(userProfileData);
   const [authInfo, setAuthInfo] = useState<User>();
+  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
   useEffect(() => {
     async function getUserProfile() {
@@ -33,6 +36,7 @@ export const UserProfile = () => {
       setAuthInfo(auth?.data?.user);
       const data = await getUserProfileInfo();
       setUserProfileData(data);
+      setHasApiKey(data.externalServices.gemini.hasApiKey);
     }
     getUserProfile();
   }, []);
@@ -40,8 +44,11 @@ export const UserProfile = () => {
   console.log(userProfileData);
 
   return (
-    <div className="min-h-screen bg-[#000000] text-[#f5f5f7] p-6">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen grid gap-2 place-items-start bg-[#000000] text-[#f5f5f7]">
+      {!hasApiKey && (
+        <ApiKeyReminder onAddKey={() => setActiveModal("apiKey")} />
+      )}
+      <div className="max-w-3xl mx-auto mt-6">
         {/* Profile Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -72,14 +79,14 @@ export const UserProfile = () => {
 
         {/* Action Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <ActionButton
+          {/* <ActionButton
             icon={<FiUpload className="text-xl text-blue-400" />}
             title="Export Data"
             description="Download all your data in JSON format"
             onClick={() => setActiveModal("export")}
             color="bg-[#2c2c2e]"
             borderColor="border-[#3a3a3c]"
-          />
+          /> */}
 
           <ActionButton
             icon={<RiShieldKeyholeLine className="text-xl text-blue-400" />}
@@ -90,7 +97,7 @@ export const UserProfile = () => {
             borderColor="border-[#3a3a3c]"
           />
 
-          <ActionButton
+          {/* <ActionButton
             icon={<FiStar className="text-xl text-amber-400" />}
             title={isSubscribed ? "Premium Member" : "Upgrade Subscription"}
             description={
@@ -103,7 +110,7 @@ export const UserProfile = () => {
             borderColor={
               isSubscribed ? "border-amber-500/30" : "border-[#3a3a3c]"
             }
-          />
+          /> */}
 
           <ActionButton
             icon={<FiRefreshCw className="text-xl text-gray-400" />}
@@ -114,14 +121,14 @@ export const UserProfile = () => {
             borderColor="border-[#3a3a3c]"
           />
 
-          <ActionButton
+          {/* <ActionButton
             icon={<FiTrash2 className="text-xl text-red-400" />}
             title="Delete Account"
             description="Permanently remove your account"
             onClick={() => setActiveModal("delete")}
             color="bg-red-500/10"
             borderColor="border-red-500/30"
-          />
+          /> */}
         </div>
       </div>
 
@@ -133,7 +140,9 @@ export const UserProfile = () => {
 
         {activeModal === "apiKey" && (
           <SetApiKeyModal
-            existingApiKey={userProfileData?.externalServices?.gemini?.hasApiKey}
+            existingApiKey={
+              userProfileData?.externalServices?.gemini?.hasApiKey
+            }
             closeModal={closeModal}
           />
         )}

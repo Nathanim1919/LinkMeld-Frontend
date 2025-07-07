@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { useChat } from "../../context/ChatContext";
+import { useUI } from "../../context/UIContext";
 
 type NoteSummaryProps = {
   summary: string | null;
-  onQuestionClick?: (question: string) => void;
   captureId?: string;
   onGenerateSummary?: (captureId: string) => Promise<void>;
   loading?: boolean;
@@ -29,7 +30,6 @@ const parseSummarySections = (markdown: string) => {
 
 export const NoteSummary: React.FC<NoteSummaryProps> = ({
   summary,
-  onQuestionClick,
   captureId,
   onGenerateSummary,
   loading: parentLoading = false,
@@ -38,6 +38,16 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
 }) => {
   const [localLoading, setLocalLoading] = useState(false);
   const [localError, setLocalError] = useState<Error | null>(null);
+  const {addMessage, setUserMessage} = useChat()
+  const {setOpenAiChat} = useUI()
+
+
+  const handleQuestionClick = (question: string) => {
+    setOpenAiChat?.(true);
+    if (!captureId) return;
+    setUserMessage(question);
+    addMessage(captureId);
+  };
 
   const handleGenerateSummary = async () => {
     if (!captureId || !onGenerateSummary) return;
@@ -154,7 +164,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             {sections.questions.map((question, i) => (
               <button
                 key={i}
-                onClick={() => onQuestionClick?.(question)}
+                onClick={() => handleQuestionClick?.(question)}
                 className="text-sm bg-violet-700/10 hover:underline cursor-pointer border border-violet-600/20 text-violet-600 px-2 py-1 rounded-lg transition-colors duration-150"
               >
                 {question}

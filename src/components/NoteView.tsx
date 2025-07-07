@@ -17,8 +17,11 @@ import {
   FiMap,
   FiFileText,
 } from "react-icons/fi";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { RiGeminiFill } from "react-icons/ri";
+import { doesUserHasApiKey } from "../utils/profile.util";
+import { useEffect, useState } from "react";
+import { ApiKeyReminder } from "./ApiKeyReminder";
 
 interface NoteViewProps {
   capture: Capture | null;
@@ -36,7 +39,20 @@ const NoteView: React.FC<NoteViewProps> = ({ capture, onGenerateSummary }) => {
   } = useUI();
 
   const { setSelectedFolder } = useFolderContext();
-  const { bookmarkCapture, generateCaptureSummary, loading } = useCaptureContext();
+  const navigate = useNavigate();
+  const { bookmarkCapture, generateCaptureSummary, loading } =
+    useCaptureContext();
+
+  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkApiKey = async () => {
+      const result = await doesUserHasApiKey(); // Resolve the promise
+      setHasApiKey(result);
+    };
+
+    checkApiKey();
+  }, []);
 
   if (!capture) {
     return (
@@ -195,35 +211,37 @@ const NoteView: React.FC<NoteViewProps> = ({ capture, onGenerateSummary }) => {
           capturedAt={capture.metadata.capturedAt}
         />
 
-<NoteSummary
-      summary={capture.ai?.summary || null}
-      onQuestionClick={(question) => setOpenAiChat?.(true)}
-      className="mt-6"
-      loading={loading}
-      captureId={capture._id}
-      onGenerateSummary={generateCaptureSummary}
-    />
+        <NoteSummary
+          summary={capture.ai?.summary || null}
+          className="mt-6"
+          loading={loading}
+          captureId={capture._id}
+          onGenerateSummary={generateCaptureSummary}
+        />
 
-        {/* AI Action Buttons - Apple-style segmented control */}
-        <div className="my-6">
-          <div className="flex items-center gap-2 mb-4">
-            {primaryActions.map((action, index) => (
-              <motion.button
-                key={index}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={action.action}
-                className={`flex cursor-pointer items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  action.color || "text-gray-700 dark:text-gray-300"
-                } bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50`}
-              >
-                {action.icon}
-                {action.label}
-              </motion.button>
-            ))}
+        {hasApiKey ? (
+          <div className="my-6">
+            <div className="flex items-center gap-2 mb-4">
+              {primaryActions.map((action, index) => (
+                <motion.button
+                  disabled={!hasApiKey}
+                  key={index}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={action.action}
+                  className={`flex cursor-pointer items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    action.color || "text-gray-700 dark:text-gray-300"
+                  } bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50`}
+                >
+                  {action.icon}
+                  {action.label}
+                </motion.button>
+              ))}
+            </div>
           </div>
-        </div>
-
+        ) : (
+          <ApiKeyReminder onAddKey={() => navigate({ to: "/profile" })} />
+        )}
         {/* Content and Metadata */}
         <NoteMetaBox
           domain={capture.metadata.siteName || "Unknown"}
