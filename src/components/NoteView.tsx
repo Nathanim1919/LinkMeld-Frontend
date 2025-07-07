@@ -157,6 +157,11 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           }
           capturedAt={capture.metadata.capturedAt}
         />
+          <NoteMetaBox
+          domain={capture.metadata.siteName || "Unknown"}
+          savedAt={capture.metadata.capturedAt}
+          wordCount={capture.content.clean?.length || 0}
+        />
 
         {hasApiKey ? (
           <div className="my-6">
@@ -241,13 +246,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           />
         )}
 
-        {/* Content and Metadata */}
-        <NoteMetaBox
-          domain={capture.metadata.siteName || "Unknown"}
-          savedAt={capture.metadata.capturedAt}
-          wordCount={capture.content.clean?.length || 0}
-          tags={capture.metadata.keywords || []}
-        />
+      
       </div>
 
       {/* Floating AI Button - Refined design */}
