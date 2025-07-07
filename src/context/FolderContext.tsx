@@ -4,6 +4,8 @@ import {FolderService} from "../api/folder.api";
 interface FolderContextType {
   folders: IFolder[];
   setFolders: React.Dispatch<React.SetStateAction<IFolder[]>>;
+  openNewFolderForm: boolean;
+  setOpenNewFolderForm: (value: boolean)=> void;
   selectedFolder: IFolder | null;
   setSelectedFolder: React.Dispatch<React.SetStateAction<IFolder | null>>;
   loadingStates: {
@@ -33,6 +35,7 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
     append: false,
   });
   const [error, setError] = useState<string | undefined>(undefined);
+  const [openNewFolderForm, setOpenNewFolderForm]= useState<boolean>(false);
 
   const addCaptureToFolder = async (folderId: string, captureId: string) => {
     setLoadingStates((prev) => ({ ...prev, append: true }));
@@ -86,6 +89,8 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
         error,
         setError,
         addCaptureToFolder,
+        openNewFolderForm,
+        setOpenNewFolderForm
       }}
     >
       {children}

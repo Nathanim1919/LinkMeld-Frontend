@@ -50,11 +50,7 @@ export const NewFolderFormCard = ({
       console.error("Folder creation failed:", error);
 
       // Update to error state
-      toast.error("Failed to create collection", {
-        id: toastId,
-        description:
-          error instanceof Error ? error.message : "Please try again later",
-      });
+      toast.error("Failed to create collection");
     } finally {
       setIsSubmitting(false);
     }
@@ -114,7 +110,7 @@ export const NewFolderFormCard = ({
                 value={folderName}
                 onChange={(e) => setFolderName(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="e.g. Startup Ideas"
+                placeholder="e.g. Programming"
                 required
                 maxLength={50}
               />

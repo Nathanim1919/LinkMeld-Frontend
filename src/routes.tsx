@@ -71,11 +71,11 @@ const heroRoute = createRoute({
 });
 
 // Pricing route (renders PricingPage)
-const pricingRoute = createRoute({
-  getParentRoute: () => publicRoute,
-  path: "pricing",
-  component: PricingPage,
-});
+// const pricingRoute = createRoute({
+//   getParentRoute: () => publicRoute,
+//   path: "pricing",
+//   component: PricingPage,
+// });
 
 const ManifestoRoute = createRoute({
   getParentRoute: () => publicRoute,
@@ -95,11 +95,11 @@ const FeedbackRoute = createRoute({
   component: FeedbackHub,
 });
 
-const FeaturesRoute = createRoute({
-  getParentRoute: () => publicRoute,
-  path: "/features",
-  component: Features,
-});
+// const FeaturesRoute = createRoute({
+//   getParentRoute: () => publicRoute,
+//   path: "/features",
+//   component: Features,
+// });
 
 const RegisterRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -220,9 +220,9 @@ const profileRoute = createRoute({
 export const routeTree = rootRoute.addChildren([
   publicRoute.addChildren([
     heroRoute,
-    pricingRoute,
+    // pricingRoute,
     ManifestoRoute,
-    FeaturesRoute,
+    // FeaturesRoute,
     FAQRoute,
     FeedbackRoute,
   ]), // Correctly nest children of PublicLayout

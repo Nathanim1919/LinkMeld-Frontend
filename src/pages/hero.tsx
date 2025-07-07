@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import Image from "../assets/img2.png";
+import Image from "../assets/image.png";
 import { CallToAction } from "./CallToAction";
+import { Features } from "./features";
 
 const HeroPage = () => {
   return (
@@ -105,6 +106,7 @@ const HeroPage = () => {
       </div>
     </div>
     <CallToAction/>
+    <Features/>
     </>
   );
 };

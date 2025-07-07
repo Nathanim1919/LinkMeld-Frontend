@@ -89,7 +89,7 @@ export const ChatView = () => {
                 ease: "easeInOut"
               }}
             >
-              Thinking...
+              wait a sec...
             </motion.span>
           </motion.div>
         )}

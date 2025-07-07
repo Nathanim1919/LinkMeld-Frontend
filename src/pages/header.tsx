@@ -1,22 +1,31 @@
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 
 export const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const navItems = ["Features", "Pricing", "Manifesto", "FAQs", "Feedback"];
+  const navItems = [
+   {
+     path:'/',
+    label: "Home",
+   }, 
+   {
+    path:"/manifesto",
+    label: "Manifesto"
+  },
+  {
+    path:"/faqs",
+    label:"FAQs"
+  },
+  {
+    path:"/feedback",
+    label:"Feedback"
+  }
+   
+    ];
 
   return (
     <header className="relative bg-[#030409] w-full z-50">
@@ -25,13 +34,15 @@ export const Header = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo with subtle gradient */}
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               className="flex items-center"
             >
               <Link to="/" className="text-xl font-medium">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white font-light">lnkd</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white font-light">
+                  lnkd
+                </span>
                 <span className="text-blue-400">.</span>
               </Link>
             </motion.div>
@@ -40,27 +51,27 @@ export const Header = () => {
             <nav className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
                 <motion.div
-                  key={item}
-                  onHoverStart={() => setHoveredItem(item)}
+                  key={item.path}
+                  onHoverStart={() => setHoveredItem(item.path)}
                   onHoverEnd={() => setHoveredItem(null)}
                   className="relative py-1"
                 >
                   <Link
-                    to={`/${item.toLowerCase()}`}
+                    to={item.path}
                     className={`text-md font-medium tracking-wider ${
-                      hoveredItem === item ? 'text-white' : 'text-gray-400'
+                      hoveredItem === item.path ? "text-white" : "text-gray-400"
                     } transition-colors duration-200`}
                   >
-                    {item}
+                    {item.label}
                   </Link>
-                  
+
                   {/* Apple-style subtle indicator */}
-                  {hoveredItem === item && (
+                  {hoveredItem === item.path && (
                     <motion.div
                       className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-400 to-transparent"
                       initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: '100%' }}
-                      transition={{ type: 'spring', stiffness: 500 }}
+                      animate={{ opacity: 1, width: "100%" }}
+                      transition={{ type: "spring", stiffness: 500 }}
                     />
                   )}
                 </motion.div>
@@ -69,7 +80,10 @@ export const Header = () => {
 
             {/* CTA - Apple-style minimal buttons */}
             <div className="hidden md:flex items-center space-x-3">
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <Link
                   to="/login"
                   className="px-4 py-1.5 text-md font-medium text-gray-300 hover:text-white transition-colors"
@@ -77,7 +91,10 @@ export const Header = () => {
                   Sign In
                 </Link>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Link
                   to="/register"
                   className="px-4 py-1.5 text-md font-medium text-white bg-gradient-to-r from-blue-500/90 to-blue-600/90 rounded-full transition-all hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)]"
@@ -116,34 +133,30 @@ export const Header = () => {
             <div className="px-6 py-3 space-y-5">
               {navItems.map((item) => (
                 <Link
-                  key={item}
-                  to={`/${item.toLowerCase()}`}
+                  key={item.path}
+                  to={item.path}
                   className="block py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors border-b border-gray-800/30"
                   onClick={() => setMobileOpen(false)}
                 >
-                  {item}
+                  {item.label}
                 </Link>
               ))}
               <div className="pt-3 space-y-3">
-              <motion.div 
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-4 py-1.5 text-sm font-medium text-white rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              <Link to="/login">
-                Sign In
-              </Link>
-            </motion.div>
-            
-            <motion.div 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-full transition-all hover:bg-blue-600"
-            >
-              <Link to="/register">
-                Get Started
-              </Link>
-            </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-4 py-1.5 text-sm font-medium text-white rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                >
+                  <Link to="/login">Sign In</Link>
+                </motion.div>
+
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-full transition-all hover:bg-blue-600"
+                >
+                  <Link to="/register">Get Started</Link>
+                </motion.div>
               </div>
             </div>
           </motion.div>

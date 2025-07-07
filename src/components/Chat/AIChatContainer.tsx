@@ -22,7 +22,6 @@ export const AIChatContainer = () => {
       const result = await doesUserHasApiKey(); // Resolve the promise
       setHasApiKey(result);
     };
-
     checkApiKey();
   }, []);
 

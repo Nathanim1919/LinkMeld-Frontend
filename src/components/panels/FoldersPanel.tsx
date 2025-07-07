@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useFolderContext } from "../../context/FolderContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { NewFolderFormCard } from "../cards/newFolderFormCard";
 import { FaFolder, FaFolderPlus } from "react-icons/fa6";
 
 const FoldersPanel: React.FC = () => {
-  const { folders, loadingStates, setSelectedFolder } = useFolderContext();
-  const [openNewFolderForm, setOpenNewFolderForm] = useState(false);
+  const { folders, loadingStates, setSelectedFolder, setOpenNewFolderForm, openNewFolderForm } = useFolderContext();
   const router = useRouter();
-
 
 
   return (
@@ -32,11 +29,6 @@ const FoldersPanel: React.FC = () => {
         </div>
       </div>
 
-      {/* New Folder Form */}
-      <NewFolderFormCard
-        open={openNewFolderForm}
-        onClose={() => setOpenNewFolderForm(false)}
-      />
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-2 py-3">

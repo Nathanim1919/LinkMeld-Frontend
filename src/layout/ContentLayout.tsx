@@ -2,9 +2,13 @@ import { Outlet, useLocation } from "@tanstack/react-router";
 import { CaptureDetail } from "../components/CaptureDetail";
 import { useUI } from "../context/UIContext";
 import clsx from "clsx";
+import { NewFolderFormCard } from "../components/cards/newFolderFormCard";
+import { useFolderContext } from "../context/FolderContext";
 
 export const ContentLayout = () => {
   const { middlePanelCollapsed } = useUI();
+    const {setOpenNewFolderForm, openNewFolderForm } = useFolderContext();
+  
   const location = useLocation();
 
   const isSearchRoute = location.pathname === "/in";
@@ -22,6 +26,10 @@ export const ContentLayout = () => {
         gridCols
       )}
     >
+        <NewFolderFormCard
+        open={openNewFolderForm}
+        onClose={() => setOpenNewFolderForm(false)}
+      />
       {!isSearchRoute && <Outlet />}
       <CaptureDetail />
     </div>

@@ -1,16 +1,16 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useFolderContext } from "../../context/FolderContext";
-import { FaFolder } from "react-icons/fa";
+import { FaFolder, FaFolderPlus } from "react-icons/fa";
 import { useUI } from "../../context/UIContext";
 import { useCaptureContext } from "../../context/CaptureContext";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useState } from "react";
-import { FiChevronRight, FiPlus } from "react-icons/fi";
+import { FiChevronRight } from "react-icons/fi";
 import { RiFolderAddLine } from "react-icons/ri";
 import { toast } from "sonner";
 
 export const FolderList: React.FC = () => {
-  const { folders, loadingStates, addCaptureToFolder } = useFolderContext();
+  const { folders, loadingStates, addCaptureToFolder, openNewFolderForm, setOpenNewFolderForm } = useFolderContext();
   const { isFolderListOpen, setIsFolderListOpen } = useUI();
   const { selectedCapture } = useCaptureContext();
   const [appendToFolderId, setAppendToFolderId] = useState<string | null>(null);
@@ -174,7 +174,7 @@ export const FolderList: React.FC = () => {
 
             {/* Footer */}
             <motion.div
-              className="p-3 border-t border-[#2e2e2e] bg-[#1a1a1a]"
+              className="p-3 flex justify-between items-center border-t border-[#2e2e2e] bg-[#1a1a1a]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -183,6 +183,12 @@ export const FolderList: React.FC = () => {
                 {folders.length}{" "}
                 {folders.length === 1 ? "collection" : "collections"}
               </p>
+              <button
+              onClick={()=> setOpenNewFolderForm(true)}
+              className="cursor-pointer hover:text-violet-500"
+              >
+              <FaFolderPlus/>
+              </button>
             </motion.div>
           </motion.div>
         </motion.div>

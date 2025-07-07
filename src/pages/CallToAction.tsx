@@ -61,7 +61,7 @@ export const CallToAction = () => {
           }}
           viewport={{ once: true }}
         >
-          Instantly save web content with our thoughtfully designed extension. Organize inspiration with Apple-caliber precision.
+          Instantly save web content with our thoughtfully designed extension.
         </motion.p>
 
         {/* Buttons with tactile feel */}
