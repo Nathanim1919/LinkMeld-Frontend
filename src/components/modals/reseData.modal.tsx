@@ -11,10 +11,8 @@ export const ResetDataModal:React.FC<{closeModal: ()=> void}> = ({
           console.log("Resetting all data...");
           await resetData();
           closeModal();
-          alert("All data has been reset successfully.");
         } catch (error) {
           console.error("Error resetting data:", error);
-          alert("Failed to reset data. Please try again later.");
         }
       };
     return (

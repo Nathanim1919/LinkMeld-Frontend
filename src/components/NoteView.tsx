@@ -59,28 +59,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       ? "w-[70%]"
       : "w-[80%]";
 
-  // Apple-inspired action buttons
-  const primaryActions = [
-    {
-      icon: <FiZap className="w-4 h-4" />,
-      label: "Summarize",
-      action: () => generateCaptureSummary?.(capture._id),
-      color: "text-blue-500",
-    },
-    {
-      icon: <RiGeminiFill className="w-4 h-4" />,
-      label: "Ask AI",
-      action: () => setOpenAiChat?.(true),
-      color: "text-purple-500",
-    },
-    {
-      icon: <FiMap className="w-4 h-4" />,
-      label: "Mind Map",
-      action: () => console.log("Mind Map"),
-      color: "text-green-500",
-    },
-  ];
-
   return (
     <div className="flex flex-col h-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a]">
       <AnimatePresence>{openAiChat && <AIChatContainer />}</AnimatePresence>
@@ -178,39 +156,87 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           capturedAt={capture.metadata.capturedAt}
         />
 
+{hasApiKey ? (
+        <div className="my-6">
+          <div className="flex items-center gap-3 mb-4">
+            {/* Generate Summary Button */}
+            <motion.button
+              disabled={!hasApiKey || loading}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => generateCaptureSummary?.(capture._id)}
+              className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 overflow-hidden ${
+                loading
+                  ? "bg-gradient-to-r from-blue-500/10 to-blue-600/10"
+                  : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-500/90 hover:to-blue-600/90"
+              } text-white shadow-lg hover:shadow-blue-500/20`}
+            >
+              {loading ? (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-blue-600/30 animate-shimmer" />
+                  <FiZap className="w-4 h-4 animate-pulse" />
+                  <span>Generating...</span>
+                </>
+              ) : (
+                <>
+                  <FiZap className="w-4 h-4" />
+                  {selectedCapture?.ai.summary ? "Regenerate Summary" : "Generate Summary"}
+                </>
+              )}
+              <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400/40 to-blue-500/40 rounded-xl blur-sm"></div>
+              </span>
+            </motion.button>
+
+            {/* Ask AI Button */}
+            <motion.button
+              disabled={!hasApiKey}
+              whileHover={{ 
+                scale: 1.03,
+                boxShadow: "0 5px 15px -3px rgba(139, 92, 246, 0.3)"
+              }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setOpenAiChat?.(true)}
+              className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-500/90 hover:to-purple-600/90 transition-all duration-300 shadow-lg hover:shadow-violet-500/20"
+            >
+              <RiGeminiFill className="w-4 h-4" />
+              Ask AI
+              <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute -inset-1 bg-gradient-to-r from-violet-400/40 to-purple-500/40 rounded-xl blur-sm"></div>
+              </span>
+            </motion.button>
+
+            {/* Mind Map Button */}
+            <motion.button
+              disabled={!hasApiKey}
+              whileHover={{ 
+                scale: 1.03,
+                boxShadow: "0 5px 15px -3px rgba(16, 185, 129, 0.3)"
+              }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => console.log("Mind Map")}
+              className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-500/90 hover:to-teal-600/90 transition-all duration-300 shadow-lg hover:shadow-emerald-500/20"
+            >
+              <FiMap className="w-4 h-4" />
+              Mind Map
+              <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400/40 to-teal-500/40 rounded-xl blur-sm"></div>
+              </span>
+            </motion.button>
+          </div>
+        </div>
+      ) : (
+        <ApiKeyReminder onAddKey={() => navigate({ to: "/profile" })} />
+      )}
         {loading ? (
           <NoteSummarySkeleton />
         ) : (
           <NoteSummary
             summary={selectedCapture?.ai.summary || null}
             captureId={capture._id}
-            error={new Error("Error Occured")}
           />
         )}
 
-        {hasApiKey ? (
-          <div className="my-6">
-            <div className="flex items-center gap-2 mb-4">
-              {primaryActions.map((action, index) => (
-                <motion.button
-                  disabled={!hasApiKey}
-                  key={index}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={action.action}
-                  className={`flex cursor-pointer items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    action.color || "text-gray-700 dark:text-gray-300"
-                  } bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50`}
-                >
-                  {action.icon}
-                  {action.label}
-                </motion.button>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <ApiKeyReminder onAddKey={() => navigate({ to: "/profile" })} />
-        )}
         {/* Content and Metadata */}
         <NoteMetaBox
           domain={capture.metadata.siteName || "Unknown"}

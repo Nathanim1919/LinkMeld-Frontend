@@ -1,27 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
 @import "tailwindcss";
 
-
 :root {
-   --stellar-purple-100: #e0d7ff;
-   --stellar-purple-300: #b399ff;
-   --stellar-purple-900: #2a1b6e;
-   --neon-blue-300: #6bd3ff;
-   --neon-blue-400: #00a8ff;
-   --stellar-gray-100: #f0f0f5;
-   --stellar-gray-300: #c4c4d4;
-   --stellar-gray-400: #8a8a9a;
-   --space-black: #0a0a12;
- }
-
+  --stellar-purple-100: #e0d7ff;
+  --stellar-purple-300: #b399ff;
+  --stellar-purple-900: #2a1b6e;
+  --neon-blue-300: #6bd3ff;
+  --neon-blue-400: #00a8ff;
+  --stellar-gray-100: #f0f0f5;
+  --stellar-gray-300: #c4c4d4;
+  --stellar-gray-400: #8a8a9a;
+  --space-black: #0a0a12;
+}
 
 body {
   font-family: "Space Grotesk", sans-serif;
 }
 
 @keyframes slow-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-spin-slow {
@@ -48,13 +50,54 @@ body {
   background: #555;
 }
 
-
 /* Add this to your global CSS */
 @keyframes gradient-shift {
-  0% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 .animate-gradient-shift {
   animation: gradient-shift 2s ease infinite;
 }
 
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.animate-shine {
+  animation: shine 1.5s infinite;
+}
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
