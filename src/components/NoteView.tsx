@@ -22,13 +22,13 @@ import { RiGeminiFill } from "react-icons/ri";
 import { doesUserHasApiKey } from "../utils/profile.util";
 import { useEffect, useState } from "react";
 import { ApiKeyReminder } from "./ApiKeyReminder";
+import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
 
 interface NoteViewProps {
-  capture: Capture | null;
-  onGenerateSummary?: () => void;
+  capture: Capture;
 }
 
-const NoteView: React.FC<NoteViewProps> = ({ capture, onGenerateSummary }) => {
+const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
   const {
     collapsed,
     middlePanelCollapsed,
@@ -38,52 +38,19 @@ const NoteView: React.FC<NoteViewProps> = ({ capture, onGenerateSummary }) => {
     setOpenAiChat,
   } = useUI();
 
+  const { bookmarkCapture, selectedCapture, generateCaptureSummary, loading } =
+    useCaptureContext();
+  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
   const { setSelectedFolder } = useFolderContext();
   const navigate = useNavigate();
-  const { bookmarkCapture, generateCaptureSummary, loading } =
-    useCaptureContext();
-
-  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
   useEffect(() => {
     const checkApiKey = async () => {
-      const result = await doesUserHasApiKey(); // Resolve the promise
+      const result = await doesUserHasApiKey();
       setHasApiKey(result);
     };
-
     checkApiKey();
   }, []);
-
-  if (!capture) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-[#fafafa] dark:bg-[#0a0a0a]">
-        <motion.div
-          className="w-16 h-16 rounded-full bg-gray-200/70 dark:bg-gray-800/30 flex items-center justify-center mb-4"
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <FiFileText className="text-gray-500 text-2xl" />
-        </motion.div>
-        <motion.h2
-          className="text-xl font-medium text-gray-800 dark:text-gray-300 mb-2"
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          No Note Selected
-        </motion.h2>
-        <motion.p
-          className="text-gray-500 max-w-md"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-        >
-          Select a note from your collection to view its contents
-        </motion.p>
-      </div>
-    );
-  }
 
   const containerWidth =
     collapsed && middlePanelCollapsed
@@ -97,7 +64,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture, onGenerateSummary }) => {
     {
       icon: <FiZap className="w-4 h-4" />,
       label: "Summarize",
-      action: () => onGenerateSummary?.(),
+      action: () => generateCaptureSummary?.(capture._id),
       color: "text-blue-500",
     },
     {
@@ -211,13 +178,15 @@ const NoteView: React.FC<NoteViewProps> = ({ capture, onGenerateSummary }) => {
           capturedAt={capture.metadata.capturedAt}
         />
 
-        <NoteSummary
-          summary={capture.ai?.summary || null}
-          className="mt-6"
-          loading={loading}
-          captureId={capture._id}
-          onGenerateSummary={generateCaptureSummary}
-        />
+        {loading ? (
+          <NoteSummarySkeleton />
+        ) : (
+          <NoteSummary
+            summary={selectedCapture?.ai.summary || null}
+            captureId={capture._id}
+            error={new Error("Error Occured")}
+          />
+        )}
 
         {hasApiKey ? (
           <div className="my-6">

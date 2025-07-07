@@ -70,9 +70,10 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const generateCaptureSummary = useCallback(
     async (captureId: string): Promise<string> => {
+      alert('Capure id is: ' + captureId);
       try {
         setLoading(true);
-        const result = await CaptureService.generateSummary(captureId);
+        const result = await CaptureService.generateSummary(captureId || "");
 
         if (!result.success || !result.summary) {
           throw new Error(result.error?.message || "No summary generated");
