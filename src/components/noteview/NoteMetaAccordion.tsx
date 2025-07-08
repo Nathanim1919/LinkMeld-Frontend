@@ -13,7 +13,7 @@ export const NoteMetaBox: React.FC<NoteMetaBoxProps> = ({
   savedAt,
   wordCount,
 }) => {
-  const readingTime = Math.ceil(wordCount / 200); // ~200wpm reading speed
+  const readingTime = Math.ceil(wordCount / 200);
 
   return (
     <div className="rounded-2xl mt-6 p-5 bg-white/70 dark:bg-white/[0.02] border border-zinc-200 dark:border-white/10 shadow-sm transition-all">

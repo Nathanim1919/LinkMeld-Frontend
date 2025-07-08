@@ -13,6 +13,8 @@ interface CaptureContextType {
   bookmarkCapture: (captureId: string) => Promise<void>;
   getCapture: (captureId: string) => Promise<void>;
   generateCaptureSummary: (captureId: string) => Promise<string>;
+  loadingSummary: boolean;
+  setLoadingSummary: (loading: boolean) => void;
   loading: boolean;
   error: Error | null;
   clearError: () => void;
@@ -26,6 +28,7 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
   const [captures, setCaptures] = useState<Capture[]>([]);
   const [selectedCapture, setSelectedCapture] = useState<Capture | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingSummary, setLoadingSummary] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const clearError = useCallback(() => setError(null), []);
@@ -71,7 +74,7 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
   const generateCaptureSummary = useCallback(
     async (captureId: string): Promise<string> => {
       try {
-        setLoading(true);
+        setLoadingSummary(true);
         const result = await CaptureService.generateSummary(captureId || "");
 
         if (!result.success || !result.summary) {
@@ -112,7 +115,7 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
         toast.error("Failed to generate summary");
         throw error;
       } finally {
-        setLoading(false);
+        setLoadingSummary(false);
       }
     },
     []
@@ -169,6 +172,8 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     captures,
     selectedCapture,
     setSelectedCapture,
+    setLoadingSummary,
+    loadingSummary,
     fetchCaptures,
     bookmarkCapture,
     getCapture,

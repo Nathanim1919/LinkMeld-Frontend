@@ -23,6 +23,8 @@ import { doesUserHasApiKey } from "../utils/profile.util";
 import { useEffect, useState } from "react";
 import { ApiKeyReminder } from "./ApiKeyReminder";
 import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
+import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
+import { NoteHeaderSkeleton } from "./skeleton/NoteHeaderSkeleton";
 
 interface NoteViewProps {
   capture: Capture;
@@ -38,8 +40,13 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setOpenAiChat,
   } = useUI();
 
-  const { bookmarkCapture, selectedCapture, generateCaptureSummary, loading } =
-    useCaptureContext();
+  const {
+    bookmarkCapture,
+    selectedCapture,
+    generateCaptureSummary,
+    loading,
+    loadingSummary,
+  } = useCaptureContext();
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
   const { setSelectedFolder } = useFolderContext();
   const navigate = useNavigate();
@@ -139,29 +146,37 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       <div
         className={`mx-auto ${containerWidth} flex-1 overflow-y-auto py-8 px-6`}
       >
-        <NoteHeader
-          collection={
-            capture.collection
-              ? {
-                  name: capture.collection.name,
-                  id: capture.collection._id,
-                }
-              : { name: "Uncategorized", id: "uncategorized" }
-          }
-          title={capture.title}
-          description={capture.metadata.description || ""}
-          tags={
-            capture.metadata.keywords
-              ? capture.metadata.keywords.map((tag) => tag.trim())
-              : []
-          }
-          capturedAt={capture.metadata.capturedAt}
-        />
+        {loading ? (
+          <NoteHeaderSkeleton />
+        ) : (
+          <NoteHeader
+            collection={
+              capture.collection
+                ? {
+                    name: capture.collection.name,
+                    id: capture.collection._id,
+                  }
+                : { name: "Uncategorized", id: "uncategorized" }
+            }
+            title={capture.title}
+            description={capture.metadata.description || ""}
+            tags={
+              capture.metadata.keywords
+                ? capture.metadata.keywords.map((tag) => tag.trim())
+                : []
+            }
+            capturedAt={capture.metadata.capturedAt}
+          />
+        )}
+        {loading ? (
+          <NoteMetaBoxSkeleton />
+        ) : (
           <NoteMetaBox
-          domain={capture.metadata.siteName || "Unknown"}
-          savedAt={capture.metadata.capturedAt}
-          wordCount={capture.content.clean?.length || 0}
-        />
+            domain={capture.metadata.siteName || "Unknown"}
+            savedAt={capture.metadata.capturedAt}
+            wordCount={capture.content.clean?.length || 0}
+          />
+        )}
 
         {hasApiKey ? (
           <div className="my-6">
@@ -237,7 +252,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
         ) : (
           <ApiKeyReminder onAddKey={() => navigate({ to: "/profile" })} />
         )}
-        {loading ? (
+        {loadingSummary ? (
           <NoteSummarySkeleton />
         ) : (
           <NoteSummary
@@ -245,8 +260,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             captureId={capture._id}
           />
         )}
-
-      
       </div>
 
       {/* Floating AI Button - Refined design */}
