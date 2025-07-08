@@ -35,8 +35,8 @@ const navItems = [
   },
   {
     icon: <LuFolderOpen />,
-    label: "Folders",
-    path: "/in/folders",
+    label: "Collections",
+    path: "/in/collections",
   },
   {
     icon: <MdOutlineLanguage />,

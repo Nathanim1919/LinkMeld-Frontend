@@ -82,7 +82,7 @@ const NotesList: React.FC<NotesListProps> = ({
 
   const buildLink = (id: string) => {
     if (filter === "folder" && folderId)
-      return `/in/folders/${folderId}/captures/${id}`;
+      return `/in/collections/${folderId}/captures/${id}`;
     if (filter === "source" && sourceId)
       return `/in/sources/${sourceId}/captures/${id}`;
     if (filter === "bookmarks") return `/in/bookmarks/captures/${id}`;

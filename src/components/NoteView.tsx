@@ -187,13 +187,13 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => generateCaptureSummary?.(capture._id)}
-                className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 overflow-hidden ${
-                  loading
+                className={`cursor-pointer relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 overflow-hidden ${
+                  loadingSummary
                     ? "bg-gradient-to-r from-blue-500/10 to-blue-600/10"
                     : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-500/90 hover:to-blue-600/90"
                 } text-white shadow-lg hover:shadow-blue-500/20`}
               >
-                {loading ? (
+                {loadingSummary ? (
                   <>
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-blue-600/30 animate-shimmer" />
                     <FiZap className="w-4 h-4 animate-pulse" />
@@ -221,7 +221,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setOpenAiChat?.(true)}
-                className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-500/90 hover:to-purple-600/90 transition-all duration-300 shadow-lg hover:shadow-violet-500/20"
+                className="cursor-pointer relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-500/90 hover:to-purple-600/90 transition-all duration-300 shadow-lg hover:shadow-violet-500/20"
               >
                 <RiGeminiFill className="w-4 h-4" />
                 Ask AI
@@ -239,7 +239,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => console.log("Mind Map")}
-                className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-500/90 hover:to-teal-600/90 transition-all duration-300 shadow-lg hover:shadow-emerald-500/20"
+                className="cursor-pointer relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-500/90 hover:to-teal-600/90 transition-all duration-300 shadow-lg hover:shadow-emerald-500/20"
               >
                 <FiMap className="w-4 h-4" />
                 Mind Map

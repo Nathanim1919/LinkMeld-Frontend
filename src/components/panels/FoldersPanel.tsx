@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaFolder, FaFolderPlus } from "react-icons/fa6";
 
 const FoldersPanel: React.FC = () => {
-  const { folders, loadingStates, setSelectedFolder, setOpenNewFolderForm, openNewFolderForm } = useFolderContext();
+  const { folders, loadingStates, setSelectedFolder, setOpenNewFolderForm } = useFolderContext();
   const router = useRouter();
 
 
@@ -76,7 +76,7 @@ const FoldersPanel: React.FC = () => {
                     transition={{ duration: 0.2 }}
                   >
                     <Link
-                      to={`/in/folders/${folder._id}`}
+                      to={`/in/collections/${folder._id}`}
                       onClick={() => setSelectedFolder(folder)}
                       className={`relative flex  items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${
                         isActive ? "bg-blue-500/10" : "hover:bg-gray-700/30"

@@ -146,7 +146,7 @@ const captureDetail = createRoute({
 
 const folderLayoutRoute = createRoute({
   getParentRoute: () => contentRoute,
-  path: "folders",
+  path: "collections",
   component: FolderLayout, // This can be a layout if you want to nest more routes
 });
 
