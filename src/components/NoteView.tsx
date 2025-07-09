@@ -20,11 +20,14 @@ import {
 import { Link, useNavigate } from "@tanstack/react-router";
 import { RiGeminiFill } from "react-icons/ri";
 import { doesUserHasApiKey } from "../utils/profile.util";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { ApiKeyReminder } from "./ApiKeyReminder";
 import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
 import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
 import { NoteHeaderSkeleton } from "./skeleton/NoteHeaderSkeleton";
+import { Heading } from "lucide-react";
+import React from "react";
+import HeadingOutline from "./HeadingOutline";
 
 interface NoteViewProps {
   capture: Capture;
@@ -80,7 +83,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             {capture.collection?.name && (
               <>
                 <Link
-                  to={`/in/folders/${capture.collection._id}`}
+                  to={`/in/collections/${capture.collection._id}`}
                   onClick={() => {
                     setSelectedFolder({
                       ...capture.collection,
@@ -168,6 +171,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             capturedAt={capture.metadata.capturedAt}
           />
         )}
+        <HeadingOutline headings={capture.headings} />
         {loading ? (
           <NoteMetaBoxSkeleton />
         ) : (
@@ -177,6 +181,8 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             wordCount={capture.content.clean?.length || 0}
           />
         )}
+
+        
 
         {hasApiKey ? (
           <div className="my-6">

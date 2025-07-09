@@ -10,7 +10,13 @@ import { RiFolderAddLine } from "react-icons/ri";
 import { toast } from "sonner";
 
 export const FolderList: React.FC = () => {
-  const { folders, loadingStates, addCaptureToFolder, openNewFolderForm, setOpenNewFolderForm } = useFolderContext();
+  const {
+    folders,
+    loadingStates,
+    addCaptureToFolder,
+    openNewFolderForm,
+    setOpenNewFolderForm,
+  } = useFolderContext();
   const { isFolderListOpen, setIsFolderListOpen } = useUI();
   const { selectedCapture } = useCaptureContext();
   const [appendToFolderId, setAppendToFolderId] = useState<string | null>(null);
@@ -184,10 +190,13 @@ export const FolderList: React.FC = () => {
                 {folders.length === 1 ? "collection" : "collections"}
               </p>
               <button
-              onClick={()=> setOpenNewFolderForm(true)}
-              className="cursor-pointer hover:text-violet-500"
+                onClick={() => {
+                  setOpenNewFolderForm(true);
+                  setIsFolderListOpen?.(false);
+                }}
+                className="cursor-pointer hover:text-violet-500"
               >
-              <FaFolderPlus/>
+                <FaFolderPlus />
               </button>
             </motion.div>
           </motion.div>

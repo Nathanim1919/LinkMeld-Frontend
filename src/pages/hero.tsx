@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Image from "../assets/image.png";
+import Image from "../assets/img1.png";
 import { CallToAction } from "./CallToAction";
 import { Features } from "./features";
 
@@ -34,7 +34,7 @@ const HeroPage = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <span className="block">Your thoughts,</span>
+              <span className="block">Capture. Organize.</span>
               <span
                style={{
                 backgroundImage:
@@ -45,7 +45,7 @@ const HeroPage = () => {
                 textFillColor: "transparent",
               }}
                className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-white to-violet-200">
-                perfectly preserved
+                Understand Instantly.
               </span>
             </motion.h1>
 

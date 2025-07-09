@@ -4,6 +4,10 @@ export interface Capture {
   url: string;
   title: string; // This should come directly from the top level
   slug: string;
+  headings: {
+    level: number;
+    text: string;
+  }[];
   contentHash: string;
   bookmarked: boolean;
   canonicalUrl: string;

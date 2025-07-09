@@ -5,6 +5,9 @@ import EmptyNoteView from "../components/EmptyNoteView";
 import { CaptureService } from "../api/capture.api";
 import type { Capture } from "../types/Capture";
 import { useCaptureContext } from "../context/CaptureContext";
+import { NoteHeaderSkeleton } from "./skeleton/NoteHeaderSkeleton";
+import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
+import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
 
 export const CaptureDetail = () => {
   const params = useParams({ strict: false });
@@ -33,7 +36,11 @@ export const CaptureDetail = () => {
       .finally(() => setLoading(false));
   }, [captureId, setSelectedCapture]);
 
-  if (loading) return <div>Loading capture...</div>;
+  if (loading) return <div className="w-[60%] mx-auto mt-6">
+    <NoteHeaderSkeleton/>
+    <NoteMetaBoxSkeleton/>
+    <NoteSummarySkeleton/>
+  </div>;
 
   return capture ? <NoteView capture={capture} /> : <EmptyNoteView />;
 };

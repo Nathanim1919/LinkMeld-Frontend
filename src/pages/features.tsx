@@ -1,121 +1,138 @@
-import { motion } from "framer-motion";
-import { 
-  FiZap, 
-  FiFolder, 
-  FiCloud, 
-  FiEye,
-  FiArrowRight 
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FiZap,
+  FiFolder,
+  FiCloud,
+  FiSearch,
+  FiMessageCircle,
+  FiFilter,
+  FiArrowRight,
 } from "react-icons/fi";
 
 const features = [
   {
-    title: "Instant Capture",
-    description: "Save anything from the web with a single click. Our extension works seamlessly across all browsers.",
+    title: "Instant Web Capture",
+    description:
+      "Clip articles, tweets, and PDFs in a click. Our Chrome extension makes saving effortless.",
     icon: <FiZap size={20} />,
     color: "from-blue-500 to-blue-600",
-    delay: 0.1
+    delay: 0.1,
   },
   {
-    title: "Smart Organization",
-    description: "Automatically categorizes your content with AI-powered tags that learn from your behavior.",
+    title: "AI Summaries & Key Points",
+    description:
+      "Quickly grasp what matters most. Our AI distills pages into digestible summaries.",
+    icon: <FiSearch size={20} />,
+    color: "from-emerald-500 to-teal-500",
+    delay: 0.2,
+  },
+  {
+    title: "Chat With Your Content",
+    description:
+      "Ask questions or brainstorm with AI on any saved page. It remembers context for smarter replies.",
+    icon: <FiMessageCircle size={20} />,
+    color: "from-purple-500 to-indigo-500",
+    delay: 0.3,
+  },
+  {
+    title: "Smart Collections",
+    description:
+      "Group and organize content by topic, project, or goal. Stay effortlessly structured.",
     icon: <FiFolder size={20} />,
-    color: "from-purple-500 to-purple-600",
-    delay: 0.2
+    color: "from-pink-500 to-fuchsia-600",
+    delay: 0.4,
   },
   {
-    title: "Universal Sync",
-    description: "Access your library from any device. Changes appear instantly across all platforms.",
+    title: "Universal Access",
+    description:
+      "Sync across devices in real-time. Your brain is always with you — anytime, anywhere.",
     icon: <FiCloud size={20} />,
-    color: "from-teal-500 to-emerald-500",
-    delay: 0.3
+    color: "from-yellow-400 to-amber-500",
+    delay: 0.5,
   },
   {
-    title: "Focus Mode",
-    description: "Eliminate distractions with a clean reading interface optimized for deep work.",
-    icon: <FiEye size={20} />,
-    color: "from-amber-500 to-orange-500",
-    delay: 0.4
+    title: "Filter by Source",
+    description:
+      "Narrow down your captured content by domain or type — like having a smart librarian.",
+    icon: <FiFilter size={20} />,
+    color: "from-gray-500 to-gray-700",
+    delay: 0.6,
   },
 ];
 
 export const Features = () => {
   return (
-    <motion.section 
+    <motion.section
       className="relative py-32 px-6 bg-black"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
     >
-      {/* Apple-style subtle noise texture */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjAyIiBudW1PY3RhdmVzPSI1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvc3ZnPg==')] opacity-[0.02] pointer-events-none" />
-      
-      {/* Precise gradient elements */}
+     
+      {/* Gradient elements - more precise positioning */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-[20%] left-[15%] w-[400px] h-[400px] bg-gradient-to-br from-blue-900/5 to-transparent rounded-full blur-[120px]" />
-        <div className="absolute bottom-[25%] right-[20%] w-[300px] h-[300px] bg-purple-900/5 rounded-full blur-[100px]" />
+        <div className="absolute top-[15%] left-[10%] w-[500px] h-[500px] bg-gradient-to-br from-blue-900/3 to-transparent rounded-full blur-[150px]" />
+        <div className="absolute bottom-[15%] right-[10%] w-[400px] h-[400px] bg-gradient-to-br from-purple-900/3 to-transparent rounded-full blur-[120px]" />
       </div>
 
       <div className="max-w-6xl mx-auto">
-        {/* Header with Apple typography */}
+        {/* Section Header - tighter tracking */}
         <motion.div
           className="text-center mb-24"
           initial={{ y: 20, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
-          transition={{ 
+          transition={{
             type: "spring",
-            stiffness: 100,
-            damping: 10
+            stiffness: 120,
+            damping: 12,
           }}
           viewport={{ once: true }}
         >
-          <h2 className="text-5xl md:text-6xl font-light tracking-tight mb-6 leading-[1.1]">
-            <span className="text-white">A better way to</span>{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">
-              save and organize
+          <h2 className="text-5xl md:text-6xl font-light tracking-tighter mb-6 leading-[1.08]">
+            <span className="text-white">Capture once,</span>{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r font-bold from-blue-400 to-blue-500">
+              recall forever
             </span>
           </h2>
-          <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-            Thoughtfully designed tools that adapt to your workflow.
+          <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed tracking-tight">
+            AI-enhanced memory for modern minds. Organize and interact with your
+            web knowledge like never before.
           </p>
         </motion.div>
 
-        {/* Feature grid - Apple card style */}
-        <div className="grid gap-6 md:grid-cols-2">
+        {/* Feature Cards - Apple Card-inspired design */}
+        <div className="grid gap-6 md:grid-cols-2 w-[90%] mx-auto">
           {features.map((feature, idx) => (
             <motion.div
               key={idx}
               initial={{ y: 40, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
-              transition={{ 
+              transition={{
                 delay: feature.delay,
                 type: "spring",
-                stiffness: 100,
-                damping: 10
+                stiffness: 120,
+                damping: 12,
               }}
               viewport={{ once: true, margin: "-50px" }}
-              whileHover={{ y: -5 }}
               className="group"
             >
-              <div className="h-full p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/5 hover:border-white/10 transition-all duration-300">
+              <div className="h-full p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.05] hover:border-white/[0.1] transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_48px_rgba(0,0,0,0.2)]">
                 <div className="flex items-start gap-6">
-                  {/* Icon with gradient background */}
-                  <div className={`flex items-center justify-center rounded-xl bg-gradient-to-br ${feature.color} w-12 h-12 flex-shrink-0`}>
-                    <div className="text-white">
-                      {feature.icon}
-                    </div>
+                  {/* Icon container - more refined gradient */}
+                  <div
+                    className={`flex items-center justify-center rounded-xl bg-gradient-to-br ${feature.color} w-12 h-12 flex-shrink-0 shadow-inner`}
+                  >
+                    <div className="text-white">{feature.icon}</div>
                   </div>
 
-                  {/* Content */}
+                  {/* Content - improved typography */}
                   <div>
-                    <h3 className="text-xl font-medium text-white mb-3 tracking-tight">
+                    <h3 className="text-xl font-medium text-white mb-3 tracking-tight leading-snug">
                       {feature.title}
                     </h3>
-                    <p className="text-white/60 mb-4 leading-relaxed">
+                    <p className="text-white/50 mb-4 leading-relaxed tracking-tight">
                       {feature.description}
                     </p>
-                    <button className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors group-hover:translate-x-1 duration-300">
-                      Learn more <FiArrowRight className="mt-0.5 transition-transform group-hover:translate-x-1 duration-300" />
-                    </button>
                   </div>
                 </div>
               </div>
@@ -123,15 +140,15 @@ export const Features = () => {
           ))}
         </div>
 
-        {/* Footer microcopy - Apple style */}
+        {/* Footer microcopy - more refined */}
         <motion.div
-          className="text-center mt-20 text-sm text-white/40 tracking-wide"
+          className="text-center mt-20 text-sm text-white/50 tracking-wide"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
           viewport={{ once: true }}
         >
-          Available on all devices • End-to-end encryption • Free forever
+          Chrome Extension • AI-Powered • Privacy-First • Free to Start
         </motion.div>
       </div>
     </motion.section>
