@@ -25,7 +25,7 @@ import { ApiKeyReminder } from "./ApiKeyReminder";
 import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
 import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
 import { NoteHeaderSkeleton } from "./skeleton/NoteHeaderSkeleton";
-import { Heading } from "lucide-react";
+import { Heading, Sparkles } from "lucide-react";
 import React from "react";
 import HeadingOutline from "./HeadingOutline";
 
@@ -149,73 +149,75 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       <div
         className={`mx-auto ${containerWidth} flex-1 overflow-y-auto py-8 px-6`}
       >
-        {loading ? (
-          <NoteHeaderSkeleton />
-        ) : (
-          <NoteHeader
-            collection={
-              capture.collection
-                ? {
-                    name: capture.collection.name,
-                    id: capture.collection._id,
-                  }
-                : { name: "Uncategorized", id: "uncategorized" }
-            }
-            title={capture.title}
-            description={capture.metadata.description || ""}
-            tags={
-              capture.metadata.keywords
-                ? capture.metadata.keywords.map((tag) => tag.trim())
-                : []
-            }
-            capturedAt={capture.metadata.capturedAt}
-          />
-        )}
-        <HeadingOutline headings={capture.headings} />
-        {loading ? (
-          <NoteMetaBoxSkeleton />
-        ) : (
-          <NoteMetaBox
-            domain={capture.metadata.siteName || "Unknown"}
-            savedAt={capture.metadata.capturedAt}
-            wordCount={capture.content.clean?.length || 0}
-          />
+        <NoteHeader
+          collection={
+            capture.collection
+              ? {
+                  name: capture.collection.name,
+                  id: capture.collection._id,
+                }
+              : { name: "Uncategorized", id: "uncategorized" }
+          }
+          title={capture.title}
+          description={capture.metadata.description || ""}
+          tags={
+            capture.metadata.keywords
+              ? capture.metadata.keywords.map((tag) => tag.trim())
+              : []
+          }
+          capturedAt={capture.metadata.capturedAt}
+        />
+
+        {capture.headings.length > 0 && (
+          <HeadingOutline headings={capture.headings} />
         )}
 
-        
+        <NoteMetaBox
+          domain={capture.metadata.siteName || "Unknown"}
+          savedAt={capture.metadata.capturedAt}
+          wordCount={capture.content.clean?.length || 0}
+        />
 
         {hasApiKey ? (
           <div className="my-6">
             <div className="flex items-center gap-3 mb-4">
               {/* Generate Summary Button */}
               <motion.button
-                disabled={!hasApiKey || loading}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
                 onClick={() => generateCaptureSummary?.(capture._id)}
-                className={`cursor-pointer relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 overflow-hidden ${
-                  loadingSummary
-                    ? "bg-gradient-to-r from-blue-500/10 to-blue-600/10"
-                    : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-500/90 hover:to-blue-600/90"
-                } text-white shadow-lg hover:shadow-blue-500/20`}
+                disabled={!hasApiKey || loadingSummary}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.985 }}
+                className={`
+    relative flex items-center justify-center gap-2
+    px-5 py-2.5 rounded-2xl text-sm font-medium transition-all duration-300 ease-out
+    shadow-sm backdrop-blur-md
+    ${
+      loadingSummary
+        ? "bg-white/10 text-zinc-400 cursor-wait"
+        : "bg-zinc-900 text-white hover:bg-zinc-800 active:bg-zinc-700"
+    }
+    ${!hasApiKey || loadingSummary ? "opacity-60 cursor-not-allowed" : ""}
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/20
+  `}
+                aria-busy={loadingSummary}
+                aria-label="Generate AI Summary"
               >
                 {loadingSummary ? (
                   <>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-blue-600/30 animate-shimmer" />
-                    <FiZap className="w-4 h-4 animate-pulse" />
-                    <span>Generating...</span>
+                    <div className="absolute inset-0 bg-white/10 animate-pulse rounded-2xl" />
+                    <Sparkles className="w-4 h-4 z-10 animate-pulse" />
+                    <span className="z-10">Generating…</span>
                   </>
                 ) : (
                   <>
-                    <FiZap className="w-4 h-4" />
-                    {selectedCapture?.ai.summary
-                      ? "Regenerate Summary"
-                      : "Generate Summary"}
+                    <Sparkles className="w-4 h-4" />
+                    <span>
+                      {selectedCapture?.ai.summary
+                        ? "Regenerate Summary"
+                        : "Generate Summary"}
+                    </span>
                   </>
                 )}
-                <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-400/40 to-blue-500/40 rounded-xl blur-sm"></div>
-                </span>
               </motion.button>
 
               {/* Ask AI Button */}
