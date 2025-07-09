@@ -167,20 +167,39 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             >
               Explore Further
             </motion.h2>
-            <motion.div className="flex flex-wrap gap-2">
-              {sections.questions.map((question, i) => (
-                <motion.button
-                  key={i}
-                  variants={listItemVariants}
-                  onClick={() => handleQuestionClick?.(question)}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="text-sm bg-violet-700/10 hover:bg-violet-700/20 cursor-pointer border border-violet-600/20 text-violet-400 px-3 py-1.5 rounded-lg transition-all duration-150"
-                >
-                  {question}
-                </motion.button>
-              ))}
-            </motion.div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-3xl mx-auto">
+  {sections.questions.map((question, i) => (
+    <button
+      key={i}
+      onClick={() => handleQuestionClick?.(question)}
+      className={`
+        w-full text-left
+        px-4 py-3.5 rounded-xl
+        border border-neutral-700
+        bg-neutral-950/90
+        backdrop-blur-md
+        text-neutral-200
+        hover:bg-neutral-900/60
+        active:bg-neutral-800
+        transition-colors duration-200
+        focus:outline-none focus:ring-1 focus:ring-blue-500/70 cursor-pointer group
+      `}
+    >
+      <div className="flex items-center justify-between">
+        <span className="font-medium text-[14px] tracking-tight text-gray-400 group-hover:text-white">{question}</span>
+        <svg 
+          className="w-5 h-5 text-neutral-500" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </div>
+    </button>
+  ))}
+</div>
           </motion.div>
         )}
       </AnimatePresence>

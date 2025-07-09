@@ -18,7 +18,7 @@ import {
 import { Link, useNavigate } from "@tanstack/react-router";
 import { RiGeminiFill } from "react-icons/ri";
 import { doesUserHasApiKey } from "../utils/profile.util";
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useState } from "react";
 import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
 import React from "react";
 import HeadingOutline from "./HeadingOutline";
@@ -47,7 +47,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
   } = useCaptureContext();
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
   const { setSelectedFolder } = useFolderContext();
-  const { setMiddlePanelCollapsed } = useUI();
+  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,6 +66,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     } else {
       setOpenAiChat(true);
       setMiddlePanelCollapsed(true);
+      setCollapsed(true);
     }
   };
 
@@ -182,7 +183,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           generateCaptureSummary={generateCaptureSummary}
           hasApiKey={hasApiKey}
           loadingSummary={loadingSummary}
-          setOpenAiChat={setOpenAiChat}
+          handleOpenChat={handleOpenChat}
         />
 
         {loadingSummary ? (

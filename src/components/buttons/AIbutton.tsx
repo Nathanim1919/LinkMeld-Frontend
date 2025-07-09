@@ -9,34 +9,23 @@ interface AIbuttonProps {
   generateCaptureSummary: (captureId: string) => void;
   hasApiKey: boolean;
   loadingSummary: boolean;
-  setOpenAiChat: (value: boolean) => void;
+  handleOpenChat: () => void;
 }
 
 export const AIbuttons: React.FC<AIbuttonProps> = ({
   generateCaptureSummary,
   hasApiKey,
   loadingSummary,
-  setOpenAiChat,
+  handleOpenChat,
 }) => {
   const { selectedCapture } = useCaptureContext();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleGenerateSummary = () => {
-    if (hasApiKey){
+    if (hasApiKey) {
       generateCaptureSummary?.(selectedCapture?._id || "");
     } else {
       toast.error("Please add an API key to generate summaries.");
-      navigate({ to: "/profile" });
-      return;
-    }
-  };
-
-
-  const handleAskAI = () => {
-    if (hasApiKey) {
-      setOpenAiChat(true);
-    } else {
-      toast.error("Please add an API key to use AI features.");
       navigate({ to: "/profile" });
       return;
     }
@@ -62,7 +51,11 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
                 ? "bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-400 cursor-wait"
                 : "bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white hover:from-violet-900 hover:to-zinc-800"
             }
-            ${!hasApiKey || loadingSummary ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
+            ${
+              !hasApiKey || loadingSummary
+                ? "opacity-60 cursor-not-allowed"
+                : "cursor-pointer"
+            }
             focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
           `}
           aria-busy={loadingSummary}
@@ -88,7 +81,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
 
         {/* 🧠 Ask AI */}
         <motion.button
-          onClick={handleAskAI}
+          onClick={handleOpenChat}
           disabled={!hasApiKey}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.985 }}

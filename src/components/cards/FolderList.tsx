@@ -10,13 +10,8 @@ import { RiFolderAddLine } from "react-icons/ri";
 import { toast } from "sonner";
 
 export const FolderList: React.FC = () => {
-  const {
-    folders,
-    loadingStates,
-    addCaptureToFolder,
-    openNewFolderForm,
-    setOpenNewFolderForm,
-  } = useFolderContext();
+  const { folders, loadingStates, addCaptureToFolder, setOpenNewFolderForm } =
+    useFolderContext();
   const { isFolderListOpen, setIsFolderListOpen } = useUI();
   const { selectedCapture } = useCaptureContext();
   const [appendToFolderId, setAppendToFolderId] = useState<string | null>(null);
@@ -24,18 +19,12 @@ export const FolderList: React.FC = () => {
   const setCaptureFolder = async (folderId: string) => {
     if (!selectedCapture) return;
 
-    // Show loading toast immediately
-    const toastId = toast.loading("Adding to collection...");
-
     try {
       setAppendToFolderId(folderId);
       await addCaptureToFolder(folderId, selectedCapture._id);
 
       // Success - update toast
-      toast.success("Capture added to collection successfully", {
-        id: toastId,
-        duration: 3000,
-      });
+      toast.success("Capture added to collection successfully");
 
       setIsFolderListOpen?.(false);
     } catch (error) {
@@ -43,7 +32,6 @@ export const FolderList: React.FC = () => {
       toast.error(
         error instanceof Error ? error.message : "Failed to add to collection",
         {
-          id: toastId,
           duration: 3000,
         }
       );

@@ -37,7 +37,7 @@ export const CaptureDetail = () => {
       .finally(() => setLoading(false));
   }, [captureId, setSelectedCapture]);
 
-  if (!loading) return <div className="w-[60%] mx-auto mt-6">
+  if (loading) return <div className="w-[60%] mx-auto mt-6">
     <NoteHeaderSkeleton/>
     <HeadingOutlineSkeleton/>
     <NoteSummarySkeleton/>

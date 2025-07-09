@@ -8,23 +8,23 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
     <Toaster
-        position="top-right"
-        theme="dark"
-        richColors
-        closeButton
-        visibleToasts={3}
-        toastOptions={{
-          duration: 3000,
-          unstyled: true,
-          classNames: {
-            toast: `
+      position="top-right"
+      theme="dark"
+      richColors
+      closeButton
+      visibleToasts={3}
+      toastOptions={{
+        duration: 3000,
+        unstyled: true,
+        classNames: {
+          toast: `
                 w-full 
                 backdrop-blur-lg
                 flex
                 items-center
                 p-2
                 gap-2
-                bg-[#161618]
+                bg-[#101011]
                 border border-[#2b2b2e]
                 shadow-lg
                 rounded-xl
@@ -36,16 +36,16 @@ createRoot(document.getElementById("root")!).render(
                 data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)]
                 data-[swipe=move]:transition-none
               `,
-                                title: `
+          title: `
                 text-sm
                 font-medium
                 text-gray-100
               `,
-                                description: `
+          description: `
                 text-xs
                 text-gray-400
               `,
-                                closeButton: `
+          closeButton: `
                 absolute
                 right-2
                 top-2
@@ -58,28 +58,28 @@ createRoot(document.getElementById("root")!).render(
                 focus-visible:ring-gray-400/30
                 transition-colors
               `,
-                                success: `
+          success: `
                 [--toast-icon-theme:theme(colors.emerald.500)]
                 border-emerald-800/50
                 [--toast-icon:theme(colors.emerald.500)]
               `,
-                                error: `
+          error: `
                 [--toast-icon-theme:theme(colors.rose.500)]
                 border-rose-800/50
                 [--toast-icon:theme(colors.rose.500)]
               `,
-                                warning: `
+          warning: `
                 [--toast-icon-theme:theme(colors.amber.500)]
                 border-amber-800/50
                 [--toast-icon:theme(colors.amber.500)]
               `,
-                                info: `
+          info: `
                 [--toast-icon-theme:theme(colors.blue.500)]
                 border-blue-800/50
                 [--toast-icon:theme(colors.blue.500)]
               `,
-          },
-        }}
-      />
+        },
+      }}
+    />
   </StrictMode>
 );

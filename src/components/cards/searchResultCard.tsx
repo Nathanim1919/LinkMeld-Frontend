@@ -48,10 +48,7 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
               whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
               className="px-5 py-3 transition-colors"
             >
-              <Link
-                to={`/in/captures/${item._id}`}
-                className="block"
-              >
+              <Link to={`/in/captures/${item._id}`} className="block">
                 <div className="flex justify-between items-start">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

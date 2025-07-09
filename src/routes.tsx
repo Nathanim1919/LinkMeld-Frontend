@@ -70,13 +70,6 @@ const heroRoute = createRoute({
   component: HeroPage,
 });
 
-// Pricing route (renders PricingPage)
-// const pricingRoute = createRoute({
-//   getParentRoute: () => publicRoute,
-//   path: "pricing",
-//   component: PricingPage,
-// });
-
 const ManifestoRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "manifesto",
@@ -95,11 +88,6 @@ const FeedbackRoute = createRoute({
   component: FeedbackHub,
 });
 
-// const FeaturesRoute = createRoute({
-//   getParentRoute: () => publicRoute,
-//   path: "/features",
-//   component: Features,
-// });
 
 const RegisterRoute = createRoute({
   getParentRoute: () => rootRoute,
