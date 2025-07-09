@@ -8,6 +8,7 @@ import { useCaptureContext } from "../context/CaptureContext";
 import { NoteHeaderSkeleton } from "./skeleton/NoteHeaderSkeleton";
 import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
 import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
+import HeadingOutlineSkeleton from "./skeleton/HeadingOutlineSkeleton";
 
 export const CaptureDetail = () => {
   const params = useParams({ strict: false });
@@ -36,8 +37,9 @@ export const CaptureDetail = () => {
       .finally(() => setLoading(false));
   }, [captureId, setSelectedCapture]);
 
-  if (loading) return <div className="w-[60%] mx-auto mt-6">
+  if (!loading) return <div className="w-[60%] mx-auto mt-6">
     <NoteHeaderSkeleton/>
+    <HeadingOutlineSkeleton/>
     <NoteSummarySkeleton/>
     <NoteMetaBoxSkeleton/>
   </div>;

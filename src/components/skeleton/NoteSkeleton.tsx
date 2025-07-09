@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import clsx from "clsx";
 
 const shimmer =
-  "bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-[length:400%_100%] animate-shimmer";
+  "bg-gradient-to-r from-[#211f1f] via-gray-700 to-gray-800 bg-[length:400%_100%] animate-pulse";
 
 export const NoteSkeleton: React.FC = () => {
   return (
@@ -11,7 +11,7 @@ export const NoteSkeleton: React.FC = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="rounded-lg p-3 bg-gray-800/30 border border-gray-700/30 shadow-sm"
+      className="rounded-lg p-3  border-gray-700/30 shadow-sm"
     >
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
