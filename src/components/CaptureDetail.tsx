@@ -38,8 +38,8 @@ export const CaptureDetail = () => {
 
   if (loading) return <div className="w-[60%] mx-auto mt-6">
     <NoteHeaderSkeleton/>
-    <NoteMetaBoxSkeleton/>
     <NoteSummarySkeleton/>
+    <NoteMetaBoxSkeleton/>
   </div>;
 
   return capture ? <NoteView capture={capture} /> : <EmptyNoteView />;

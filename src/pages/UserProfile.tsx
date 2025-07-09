@@ -17,7 +17,6 @@ import { ExportDataModal } from "../components/modals/exportData.modal";
 import { getUserProfileInfo, type IUserProfile } from "../api/account.api";
 import { authClient } from "../lib/auth-client";
 import type { User } from "better-auth/types";
-import { ApiKeyReminder } from "../components/ApiKeyReminder";
 
 export const UserProfile = () => {
   const [activeModal, setActiveModal] = useState<
@@ -41,13 +40,9 @@ export const UserProfile = () => {
     getUserProfile();
   }, []);
 
-  console.log(userProfileData);
 
   return (
     <div className="min-h-screen grid gap-2 place-items-start bg-[#000000] text-[#f5f5f7]">
-      {!hasApiKey && (
-        <ApiKeyReminder onAddKey={() => setActiveModal("apiKey")} />
-      )}
       <div className="max-w-3xl mx-auto mt-6">
         {/* Profile Header */}
         <motion.div
@@ -95,6 +90,7 @@ export const UserProfile = () => {
             onClick={() => setActiveModal("apiKey")}
             color="bg-[#2c2c2e]"
             borderColor="border-[#3a3a3c]"
+            hasApiKey={hasApiKey}
           />
 
           {/* <ActionButton
@@ -119,6 +115,7 @@ export const UserProfile = () => {
             onClick={() => setActiveModal("reset")}
             color="bg-[#2c2c2e]"
             borderColor="border-[#3a3a3c]"
+           
           />
 
           {/* <ActionButton

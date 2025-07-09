@@ -14,8 +14,8 @@ type SidebarContextType = {
   setIsFolderListOpen?: (isOpen: boolean) => void;
   openActionBar?: boolean;
   setOpenActionBar?: (open: boolean) => void;
-  openAiChat?: boolean;
-  setOpenAiChat?: (open: boolean) => void;
+  openAiChat: boolean;
+  setOpenAiChat: (open: boolean) => void;
 };
 
 const UIContext = createContext<SidebarContextType | undefined>(undefined);

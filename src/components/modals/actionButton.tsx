@@ -7,6 +7,7 @@ export const ActionButton: React.FC<{
   onClick: () => void;
   color?: string;
   borderColor?: string;
+  hasApiKey?: boolean;
 }> = ({
   icon,
   title,
@@ -14,6 +15,7 @@ export const ActionButton: React.FC<{
   onClick,
   color = "bg-[#2c2c2e]",
   borderColor = "border-[#3a3a3c]",
+  hasApiKey,
 }) => {
   return (
     <motion.button
@@ -24,7 +26,16 @@ export const ActionButton: React.FC<{
     >
       {/* Hover effect */}
       <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
+      <span>
+        {hasApiKey && hasApiKey && (
+          <span className="text-white w-6 h-6 rounded-full grid place-items-center bg-green-600 absolute top-1 right-2">
+            ✓
+          </span>
+        )}
+         {hasApiKey && !hasApiKey && <span className="text-white w-6 h-6 text-[13px] rounded-full grid place-items-center absolute top-1 right-2">
+            ⚠️
+          </span>}
+      </span>
       <div className="flex items-center gap-4 relative z-10">
         <div
           className={`p-3 rounded-xl ${

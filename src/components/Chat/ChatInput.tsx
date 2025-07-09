@@ -1,12 +1,14 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
 import { SendHorizonal } from "lucide-react";
 import { useCaptureContext } from "../../context/CaptureContext";
+import { doesUserHasApiKey } from "../../utils/profile.util";
 
 export const ChatInput = () => {
   const { selectedCapture } = useCaptureContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { addMessage, userMessage, setUserMessage } = useChat();
+  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
   const handleSend = () => {
     if (userMessage.trim()) {
@@ -15,6 +17,16 @@ export const ChatInput = () => {
     }
     setUserMessage(""); // Clear input after sending
   };
+
+
+
+  useEffect(() => {
+    const checkApiKey = async () => {
+      const result = await doesUserHasApiKey(); // Resolve the promise
+      setHasApiKey(result);
+    };
+    checkApiKey();
+  }, []);
 
   return (
     <div className="px-5 py-4 border-t border-gray-700/50 bg-[#161618] backdrop-blur-2xl">
@@ -37,6 +49,8 @@ export const ChatInput = () => {
       {/* Text Input */}
       <div className="relative">
         <textarea
+          autoFocus
+          disabled={!hasApiKey}
           ref={textareaRef}
           value={userMessage}
           onChange={(e) => setUserMessage(e.target.value)}
@@ -57,7 +71,7 @@ export const ChatInput = () => {
               : "bg-gray-700 text-gray-500"
           }`}
           onClick={handleSend}
-          disabled={!userMessage.trim()}
+          disabled={!userMessage.trim() || !hasApiKey}
         >
           <SendHorizonal className="h-5 w-5 text-white" />
         </button>

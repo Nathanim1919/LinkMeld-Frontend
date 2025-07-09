@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChatView } from "./ChatView";
 import { SourcesView } from "./SourcesView";
 import { useUI } from "../../context/UIContext";
@@ -6,24 +6,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BsStars } from "react-icons/bs";
 import { X, ChevronDown } from "lucide-react";
 import { useChat } from "../../context/ChatContext";
-import { doesUserHasApiKey } from "../../utils/profile.util";
-import { useNavigate } from "@tanstack/react-router";
 
 export const AIChatContainer = () => {
   const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
   const { openAiChat, setOpenAiChat } = useUI();
-  const navigate = useNavigate();
 
   const { clearMessages } = useChat();
-  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
-  useEffect(() => {
-    const checkApiKey = async () => {
-      const result = await doesUserHasApiKey(); // Resolve the promise
-      setHasApiKey(result);
-    };
-    checkApiKey();
-  }, []);
 
   return (
     <AnimatePresence>
@@ -112,17 +101,7 @@ export const AIChatContainer = () => {
                 transition={{ duration: 0.15 }}
                 className="h-full"
               >
-                {!hasApiKey ? (
-                  <div className="p-4 bg-gradient-to-r from-gray-900 to-gray-800 text-center text-sm text-gray-300">
-                    <p>Add your API key to unlock full AI functionality.</p>
-                    <button
-                      onClick={() => navigate({ to: "/profile" })}
-                      className="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-                    >
-                      Add API Key
-                    </button>
-                  </div>
-                ) : activeTab === "chat" ? (
+                {activeTab === "chat" ? (
                   <ChatView />
                 ) : (
                   <SourcesView />
