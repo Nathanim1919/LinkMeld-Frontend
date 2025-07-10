@@ -5,35 +5,35 @@ import { FiChevronDown } from "react-icons/fi";
 export const FAQ = () => {
   const faqs = [
     {
-      question: "How does Lnkd differ from traditional knowledge management tools?",
-      answer: "Lnkd reimagines knowledge work with neural connections between ideas rather than rigid folders. Our AI surfaces relevant connections as you work, and everything syncs instantly across all your devices with end-to-end encryption."
+      question: "How does Deepen differ from traditional knowledge management tools?",
+      answer: "Deepen reimagines knowledge work with neural connections between ideas rather than rigid folders. Our AI surfaces relevant connections as you work, and everything syncs instantly across all your devices with end-to-end encryption."
     },
     {
-      question: "What makes Lnkd's privacy approach different?",
-      answer: "We built Lnkd on zero-knowledge architecture. Your data is encrypted before it leaves your device, and we never store decryption keys on our servers. Even we can't access your content."
+      question: "What makes Deepen's privacy approach different?",
+      answer: "We built Deepen on zero-knowledge architecture. Your data is encrypted before it leaves your device, and we never store decryption keys on our servers. Even we can't access your content."
     },
     {
       question: "How does the AI assistant work without compromising privacy?",
       answer: "Our AI processes information locally on your device when possible. For cloud processing, we use homomorphic encryption that allows computation on encrypted data without decryption."
     },
     {
-      question: "Can I use Lnkd offline?",
-      answer: "Yes. Lnkd works fully offline, with all changes syncing automatically when you reconnect. We use conflict-free replicated data types (CRDTs) to ensure seamless merging of offline edits."
+      question: "Can I use Deepen offline?",
+      answer: "Yes. Deepen works fully offline, with all changes syncing automatically when you reconnect. We use conflict-free replicated data types (CRDTs) to ensure seamless merging of offline edits."
     },
     {
-      question: "What platforms does Lnkd support?",
-      answer: "Lnkd is available on macOS, Windows, iOS, and Android, with a web version for browsers. All platforms maintain feature parity and real-time sync through our custom protocol."
+      question: "What platforms does Deepen support?",
+      answer: "Deepen is available on macOS, Windows, iOS, and Android, with a web version for browsers. All platforms maintain feature parity and real-time sync through our custom protocol."
     },
     {
-      question: "How does Lnkd handle team collaboration?",
+      question: "How does Deepen handle team collaboration?",
       answer: "Teams get granular permission controls, live presence indicators, and version history with intelligent merge capabilities. All collaboration happens over encrypted channels with per-user access controls."
     },
     {
-      question: "What file types can I work with in Lnkd?",
-      answer: "Lnkd natively supports over 200 file types with rich previews, including documents, code, images, videos, and 3D models. You can connect any file to your knowledge graph."
+      question: "What file types can I work with in Deepen?",
+      answer: "Deepen natively supports over 200 file types with rich previews, including documents, code, images, videos, and 3D models. You can connect any file to your knowledge graph."
     },
     {
-      question: "How often is Lnkd updated?",
+      question: "How often is Deepen updated?",
       answer: "We ship meaningful updates every two weeks. Our architecture allows seamless updates without downtime or data migration headaches."
     }
   ];
@@ -58,7 +58,7 @@ export const FAQ = () => {
           className="text-center mb-20"
         >
           <h2 className="text-5xl font-light tracking-tight text-gray-50 mb-4">
-            Lnkd
+            Deepen
           </h2>
           <div className="w-12 h-px bg-gray-700 mx-auto mb-6" />
           <p className="text-xl text-gray-400 font-light max-w-xl mx-auto">
@@ -146,7 +146,7 @@ export const FAQ = () => {
           className="mt-20 pt-6 border-t border-gray-800/50 text-center"
         >
           <p className="text-gray-500 text-sm">
-            For additional questions, contact <span className="text-gray-400">support@lnkd.design</span>
+            For additional questions, contact <span className="text-gray-400">support@Deepen.design</span>
           </p>
         </motion.div>
       </div>

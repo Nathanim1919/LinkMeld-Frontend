@@ -8,7 +8,6 @@ export const ResetDataModal:React.FC<{closeModal: ()=> void}> = ({
 }) => {
       const handleResetData = async () => {
         try {
-          console.log("Resetting all data...");
           await resetData();
           closeModal();
         } catch (error) {

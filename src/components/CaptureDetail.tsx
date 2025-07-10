@@ -11,8 +11,6 @@ import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
 import HeadingOutlineSkeleton from "./skeleton/HeadingOutlineSkeleton";
 
 export const CaptureDetail = () => {
-  const params = useParams({ strict: false });
-  console.log("Params are: ", params);
   const { captureId } = useParams({ strict: false });
   const { setSelectedCapture } = useCaptureContext();
   const [capture, setCapture] = useState<Capture | null>(null);

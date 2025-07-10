@@ -107,7 +107,7 @@ const Sidebar: React.FC<{
             <Brain className="w-5 h-5 text-gray-300" />
           </div>
           {!collapsed && (
-            <span className="text-lg font-medium text-gray-200">Lnkd.</span>
+            <span className="text-lg font-medium text-gray-200">Deepen.</span>
           )}
         </div>
       </div>

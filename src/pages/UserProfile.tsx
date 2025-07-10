@@ -25,7 +25,6 @@ export const UserProfile = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const closeModal = () => setActiveModal(null);
   const [userProfileData, setUserProfileData] = useState<IUserProfile>();
-  console.log(userProfileData);
   const [authInfo, setAuthInfo] = useState<User>();
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
@@ -52,8 +51,13 @@ export const UserProfile = () => {
           className="flex flex-col md:flex-row items-center gap-6 mb-12"
         >
           <div className="relative">
-            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[#0071e3] to-[#2997ff] flex items-center justify-center">
-              <span className="text-4xl font-semibold text-white">U</span>
+            <div className="w-18 h-18 overflow-hidden rounded-full bg-gradient-to-br from-[#0071e3] to-[#2997ff] flex items-center justify-center">
+              {
+                authInfo?.image ? (
+                  <img src={authInfo.image} alt="profile image"/>
+                ):
+              <span className="text-4xl font-semibold text-white">{authInfo?.name.slice(0,1).toUpperCase()}</span>
+              }
             </div>
             <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-1.5 border-2 border-[#1c1c1e]">
               <FiCheck className="text-xs text-white" />
@@ -61,7 +65,7 @@ export const UserProfile = () => {
           </div>
           <div>
             <h1 className="text-3xl md:text-4xl font-semibold text-white">
-              {authInfo?.name || "User Name"}
+              {authInfo?.name}
             </h1>
             <p className="text-[#aeaeb2] mt-1">
               Joined{" "}
@@ -74,14 +78,14 @@ export const UserProfile = () => {
 
         {/* Action Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* <ActionButton
+          <ActionButton
             icon={<FiUpload className="text-xl text-blue-400" />}
             title="Export Data"
             description="Download all your data in JSON format"
             onClick={() => setActiveModal("export")}
             color="bg-[#2c2c2e]"
             borderColor="border-[#3a3a3c]"
-          /> */}
+          />
 
           <ActionButton
             icon={<RiShieldKeyholeLine className="text-xl text-blue-400" />}
@@ -93,7 +97,7 @@ export const UserProfile = () => {
             hasApiKey={hasApiKey}
           />
 
-          {/* <ActionButton
+          <ActionButton
             icon={<FiStar className="text-xl text-amber-400" />}
             title={isSubscribed ? "Premium Member" : "Upgrade Subscription"}
             description={
@@ -106,7 +110,7 @@ export const UserProfile = () => {
             borderColor={
               isSubscribed ? "border-amber-500/30" : "border-[#3a3a3c]"
             }
-          /> */}
+          />
 
           <ActionButton
             icon={<FiRefreshCw className="text-xl text-gray-400" />}

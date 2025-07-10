@@ -74,7 +74,6 @@ export const CaptureService = {
       );
       return response.data.data;
     } catch (error) {
-      console.log(error)
       throw this.handleError(error, "Failed to toggle bookmark");
     }
   },
@@ -91,7 +90,6 @@ export const CaptureService = {
         `/captures/search`,
         { params: { query: searchTerm } }
       );
-      console.log("Search response:", response.data);
       return response.data.data;
     } catch (error) {
       throw this.handleError(error, "Search failed");

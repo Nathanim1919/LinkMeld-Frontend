@@ -77,7 +77,7 @@ export const PricingPage = () => {
           className="text-center mb-2"
         >
           <h2 className="text-5xl font-light tracking-tight mb-6">
-            Lnkd Pricing
+            Deepen Pricing
           </h2>
           <div className="w-16 h-px bg-gray-800 mx-auto mb-8" />
           <p className="text-xl text-gray-400 font-light max-w-2xl mx-auto">

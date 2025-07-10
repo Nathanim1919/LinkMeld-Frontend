@@ -41,7 +41,7 @@ export const Header = () => {
             >
               <Link to="/" className="text-xl font-medium">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white font-light">
-                  lnkd
+                  Deepen
                 </span>
                 <span className="text-blue-400">.</span>
               </Link>

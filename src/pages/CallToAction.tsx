@@ -44,13 +44,13 @@ export const CallToAction = () => {
             textFillColor: "transparent",
           }}
           className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
-            Capture ideas.<br />Effortlessly.
+            Capture ideas.<br />like never before.
           </span>
         </motion.h2>
 
         {/* Subtext with perfect line height */}
         <motion.p 
-          className="text-xl text-white/60 mb-10 max-w-2xl mx-auto leading-[1.6]"
+          className="text-xl  text-white/60 mb-10 max-w-lg mx-auto leading-[1.6]"
           initial={{ y: 10, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ 
@@ -61,7 +61,8 @@ export const CallToAction = () => {
           }}
           viewport={{ once: true }}
         >
-          Instantly save web content with our thoughtfully designed extension.
+                    Our extension flows with your browsing, making content capture as natural as thought.
+
         </motion.p>
 
         {/* Buttons with tactile feel */}

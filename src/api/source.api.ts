@@ -14,7 +14,6 @@ export const getSources = async (): Promise<{
       }
     });
 
-    console.log("Full API response:", response); // Debug log
 
     // Validate response structure
     if (!response.data || typeof response.data !== 'object') {
@@ -28,7 +27,6 @@ export const getSources = async (): Promise<{
 
     // Extract data from the correct property (response.data.data or response.data)
     const data = response.data.data || response.data;
-    console.log("Source data:", data);
 
     // Validate required fields
     if (!Array.isArray(data.siteNames)) {

@@ -154,7 +154,7 @@ const LnkdFeedback = () => {
             }}
             className="text-5xl font-semibold tracking-tighter bg-clip-text text-transparent bg-[length:200%] bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 mb-1"
           >
-            Lnkd
+            Deepen.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}

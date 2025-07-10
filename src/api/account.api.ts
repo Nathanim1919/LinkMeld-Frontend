@@ -4,11 +4,11 @@ export const resetData = async (): Promise<void> => {
   const url = `http://localhost:3000/api/v1/account/reset`;
 
   try {
-    const response = await axios.post(url, null, {
+    await axios.post(url, null, {
       withCredentials: true, // Include credentials in the request
     });
 
-    console.log(`✅ Successfully reset data:`, response.data);
+    console.log(`✅ Successfully reset data:`);
     return; // Added return statement to indicate completion
   } catch (error) {
     console.error(`❌ Error resetting data:`, error);
@@ -28,22 +28,21 @@ export const setGeminiApiKey = async (geminiApiKey: string): Promise<void> => {
       }
     );
 
-    console.log(`✅ Successfully set Gemini API key:`, response.data);
+    console.log(`✅ Successfully set Gemini API key:`);
     return; // Added return statement to indicate completion
   } catch (error) {
-    console.error(`❌ Error setting Gemini API key:`, error);
+    console.error(`❌ Error setting Gemini API key:`);
     throw error;
   }
 };
 
-
 export interface IUserProfile {
-    userId: string,
-    externalServices: {
-        gemini: {
-            hasApiKey: boolean
-        }
-    },
+  userId: string;
+  externalServices: {
+    gemini: {
+      hasApiKey: boolean;
+    };
+  };
 }
 
 export const getUserProfileInfo = async (): Promise<IUserProfile> => {

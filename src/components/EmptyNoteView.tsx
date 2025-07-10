@@ -73,7 +73,7 @@ const EmptyNoteView = () => {
       <div className="w-full pt-10 pb-6">
         <h1 className="text-4xl font-light tracking-tighter text-center">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/80">
-            Lnkd
+            Deepen.
           </span>
           <span className="text-white/20">.</span>
         </h1>
@@ -150,9 +150,7 @@ const EmptyNoteView = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
       >
-        <span>Press ⌘K to search</span>
-        <span>•</span>
-        <span>{captures.length} knowledge items</span>
+        <span>{captures.length} knowledge items•</span>
       </motion.div>
     </div>
   );

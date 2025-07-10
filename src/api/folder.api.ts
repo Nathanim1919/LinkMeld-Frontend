@@ -55,7 +55,6 @@ export const FolderService = {
   async getById(id: string): Promise<IFolder> {
     try {
       const response = await apiClient.get<{ data: IFolder }>(`/${id}`);
-      console.log("Fetched folder:", response.data.data);
       return response.data.data;
     } catch (error) {
       throw this.handleError(error, "Failed to fetch folder");
