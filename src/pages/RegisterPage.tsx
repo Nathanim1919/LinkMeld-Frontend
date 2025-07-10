@@ -29,7 +29,7 @@ export const RegisterPage = () => {
     try {
       const result = await authClient.signUp.email({
         ...formData,
-        callbackURL: "/in",
+        callbackURL: "http://localhost:5173/in",
       });
       setFormData({ name: "", email: "", password: "" });
       if (result.error) {
@@ -43,22 +43,29 @@ export const RegisterPage = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setLoading(true);
-    try {
-      const data = await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/in",
-      });
-      if (data.error) {
-        console.error("Google sign-in failed", data.error);
-      }
-    } catch (error) {
-      console.error("Google sign-in error", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
+
+  const handleGoogleSignIn = 
+  async () => {
+		await authClient.signIn.social({
+			provider: "google",
+      callbackURL: "http://localhost:5173/in",
+			fetchOptions: {
+				onRequest: () => {
+          setLoading(true)
+					toast.success("your request is on a process ...");
+				},
+				onSuccess: () => {
+          toast.success("successfully loggedIn ...");
+          setLoading(false)
+				},
+				onError: (ctx) => {
+					alert(ctx.error.message);
+          setLoading(false)
+				},
+			},
+		});
+	};
 
   return (
     <div className="min-h-screen bg-[#000000] text-[#f5f5f7] flex items-center justify-center p-6 relative overflow-hidden">

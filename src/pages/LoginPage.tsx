@@ -4,8 +4,7 @@ import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { authClient } from "../lib/auth-client";
-import { toast } from 'sonner';
-
+import { toast } from "sonner";
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,14 +20,14 @@ export const LoginPage = () => {
     try {
       const result = await authClient.signIn.email({
         ...formData,
-        callbackURL: "/in",
+        callbackURL: "http://localhost:5173/in",
       });
-  
+
       if (result.error) {
         toast.error(result.error.message || "Invalid credentials");
         return;
       }
-  
+
       toast.success("Signed in successfully");
     } catch (error) {
       toast.error("Error occurred while signing in");
@@ -37,30 +36,33 @@ export const LoginPage = () => {
       setLoading(false);
     }
   };
-  
 
   const handleGoogleSignIn = async () => {
-    setLoading(true);
-    try {
-      const data = await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/in",
-      });
-      if (data.error) {
-        console.error("Google sign-in failed", data.error);
-      }
-    } catch (error) {
-      console.error("Google sign-in error", error);
-    } finally {
-      setLoading(false);
-    }
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "http://localhost:5173/in",
+      fetchOptions: {
+        onRequest: () => {
+          setLoading(true);
+          toast.success("your request is on a process ...");
+        },
+        onSuccess: () => {
+          toast.success("successfully loggedIn ...");
+          setLoading(false);
+        },
+        onError: (ctx) => {
+          alert(ctx.error.message);
+          setLoading(false);
+        },
+      },
+    });
   };
 
   return (
     <div className="min-h-screen bg-[#000000] text-[#f5f5f7] flex items-center justify-center p-6 relative overflow-hidden">
       {/* Subtle background texture */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjAuNSIgLz48L3N2Zz4=')] opacity-5" />
-      
+
       {/* Back button */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -86,7 +88,7 @@ export const LoginPage = () => {
       >
         <div className="bg-[#1c1c1e] rounded-2xl p-8 shadow-xl border border-[#2c2c2e] overflow-hidden">
           {/* Header with subtle animation */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -105,7 +107,9 @@ export const LoginPage = () => {
             whileHover={{ scale: loading ? 1 : 1.02 }}
             whileTap={{ scale: loading ? 1 : 0.98 }}
             className={`w-full flex items-center justify-center gap-3 py-3 px-6 rounded-xl ${
-              loading ? "bg-[#2c2c2e] cursor-not-allowed" : "bg-[#2c2c2e] hover:bg-[#3a3a3c] cursor-pointer"
+              loading
+                ? "bg-[#2c2c2e] cursor-not-allowed"
+                : "bg-[#2c2c2e] hover:bg-[#3a3a3c] cursor-pointer"
             } transition-all mb-6 relative overflow-hidden`}
           >
             <div className="absolute inset-0 bg-white/5 opacity-0 hover:opacity-100 transition-opacity" />
@@ -154,7 +158,9 @@ export const LoginPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <label className="block text-sm text-[#aeaeb2] mb-2">Password</label>
+              <label className="block text-sm text-[#aeaeb2] mb-2">
+                Password
+              </label>
               <div className="relative">
                 <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#636366]" />
                 <input
@@ -189,14 +195,20 @@ export const LoginPage = () => {
                 type="submit"
                 disabled={loading}
                 className={`w-full py-3.5 px-6 rounded-xl ${
-                  loading ? "bg-[#0071e3]/70 cursor-not-allowed" : "bg-[#0071e3] hover:bg-[#2997ff] cursor-pointer"
+                  loading
+                    ? "bg-[#0071e3]/70 cursor-not-allowed"
+                    : "bg-[#0071e3] hover:bg-[#2997ff] cursor-pointer"
                 } transition-all flex justify-center items-center gap-2 relative overflow-hidden`}
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity" />
                 {loading ? (
                   <motion.span
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                     className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                   />
                 ) : (
