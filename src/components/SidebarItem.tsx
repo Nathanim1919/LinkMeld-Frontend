@@ -1,6 +1,7 @@
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { useUI } from "../context/UIContext";
 import { motion } from "framer-motion";
+import type { JSX } from "react";
 
 
 interface SidebarItemProps {

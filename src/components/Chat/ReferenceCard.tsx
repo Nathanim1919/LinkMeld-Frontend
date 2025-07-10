@@ -1,6 +1,15 @@
 import { motion } from "framer-motion";
 
-export const ReferenceCard = ({ reference }) => {
+
+
+
+export const ReferenceCard = () => {
+  const reference = {
+    id: "1",
+    title: "Understanding React Components",
+    excerpt: "A deep dive into the world of React components, their lifecycle, and best practices.",
+    image: "https://example.com/image.jpg", // Example image URL
+  };
     return (
       <motion.div
         whileHover={{ scale: 1.03 }}

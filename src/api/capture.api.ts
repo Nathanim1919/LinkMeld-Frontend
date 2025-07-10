@@ -141,7 +141,7 @@ export const CaptureService = {
       return {
         success: false,
         error: {
-          message: axiosError.response?.data?.message || axiosError.message || "Summary generation failed",
+          message: (axiosError.response?.data as { message?: string })?.message || axiosError.message || "Summary generation failed",
           code: axiosError.code,
           details: axiosError.response?.data
         }
@@ -162,7 +162,7 @@ handleError(error: unknown, defaultMessage: string): ErrorResponse {
     });
 
     return {
-      message: axiosError.response?.data?.message || defaultMessage,
+      message: (axiosError.response?.data as { message?: string })?.message || defaultMessage,
       code: axiosError.code,
       details: axiosError.response?.data
     };

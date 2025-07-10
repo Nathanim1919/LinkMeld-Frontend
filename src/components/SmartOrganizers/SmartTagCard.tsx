@@ -1,5 +1,5 @@
 import React from "react";
-import { Tag, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 
 // --- Type ---

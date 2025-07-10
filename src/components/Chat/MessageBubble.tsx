@@ -65,7 +65,7 @@ export const MessageBubble = ({ role, content, references }: MessageBubbleProps)
               <p className="text-xs text-gray-400 mb-2">Based on:</p>
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {references.map(ref => (
-                  <ReferenceCard key={ref.id} reference={ref} />
+                  <ReferenceCard key={ref.id} />
                 ))}
               </div>
             </div>

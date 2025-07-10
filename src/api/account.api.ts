@@ -20,7 +20,7 @@ export const setGeminiApiKey = async (geminiApiKey: string): Promise<void> => {
   const url = `http://localhost:3000/api/v1/account/setGeminiApiKey`;
 
   try {
-    const response = await axios.post(
+    await axios.post(
       url,
       { geminiApiKey },
       {

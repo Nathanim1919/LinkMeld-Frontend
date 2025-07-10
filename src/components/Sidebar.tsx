@@ -4,7 +4,7 @@ import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, type JSX } from "react";
+import { useState} from "react";
 import { IoLogOutOutline } from "react-icons/io5";
 import { Brain } from "lucide-react";
 import { authClient } from "../lib/auth-client";

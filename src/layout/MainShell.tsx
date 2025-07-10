@@ -83,7 +83,7 @@ export const MainShell = () => {
           <FolderProvider>
             <SourceProvider>
               <div className="h-screen w-screen bg-black text-white grid grid-cols-[auto_1fr]">
-                <Sidebar user={session.user} />
+                <Sidebar user={{ ...session.user, token: "your-token-value" }} />
                 <main className="overflow-hidden h-full">
                   <Outlet />
                 </main>

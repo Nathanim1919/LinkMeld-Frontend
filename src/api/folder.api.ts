@@ -40,7 +40,7 @@ export const FolderService = {
   async getAll(): Promise<IFolder[]> {
     try {
       const response = await apiClient.get<{ data: { collections: IFolder[] } }>("/");
-      return response.data.data;
+      return response.data.data.collections;
     } catch (error) {
       throw this.handleError(error, "Failed to fetch folders");
     }

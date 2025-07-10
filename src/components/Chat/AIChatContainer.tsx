@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { ChatView } from "./ChatView";
-import { SourcesView } from "./SourcesView";
+// import { ChatView } from "./ChatView";
+// import { SourcesView } from "./SourcesView";
 import { useUI } from "../../context/UIContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { BsStars } from "react-icons/bs";
@@ -8,7 +7,7 @@ import { X, ChevronDown } from "lucide-react";
 import { useChat } from "../../context/ChatContext";
 
 export const AIChatContainer = () => {
-  const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
+  // const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
   const { openAiChat, setOpenAiChat } = useUI();
 
   const { clearMessages } = useChat();
@@ -55,9 +54,7 @@ export const AIChatContainer = () => {
                 whileHover={{ backgroundColor: "rgba(55, 65, 81, 0.8)" }}
               >
                 <button
-                  className={`px-3 cursor-pointer py-1.5 text-xs ${
-                    activeTab === "chat" ? "text-white " : "text-gray-400"
-                  } rounded-l-full`}
+                  className={`px-3 cursor-pointer py-1.5 text-xs text-gray-400rounded-l-full`}
                   onClick={clearMessages}
                 >
                   Clear
@@ -94,18 +91,18 @@ export const AIChatContainer = () => {
           >
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeTab}
+                // key={activeTab}
                 initial={{ y: 5, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -5, opacity: 0 }}
                 transition={{ duration: 0.15 }}
                 className="h-full"
               >
-                {activeTab === "chat" ? (
+                {/* {activeTab === "chat" ? (
                   <ChatView />
                 ) : (
                   <SourcesView />
-                )}
+                )} */}
               </motion.div>
             </AnimatePresence>
           </motion.main>

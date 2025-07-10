@@ -44,8 +44,17 @@ export const SourcesView = () => {
       </div>
     );
   };
-  
-  const SourceCard = ({ source }) => {
+
+  interface Source {
+    id: string;
+    title: string;
+    description: string;
+    type: string;
+    date: string;
+    icon?: boolean;
+  }
+
+  const SourceCard = ({ source }: { source: Source }) => {
     return (
       <div className="border border-gray-800 rounded-xl overflow-hidden bg-gray-900/50">
         <div className="p-4">
