@@ -12,7 +12,7 @@ const HeroPage = () => {
         after:absolute after:w-full after:h-[70%]  after:transform after:bottom-[0%]  after:content-[''] after:bg-gradient-to-t after:from-black
     "
     >
-      <div className="min-h-screen w-full backdrop-blur-[7rem]  text-white relative overflow-hidden isolate">
+      <div className="md:min-h-screen w-full backdrop-blur-[7rem]  text-white relative overflow-hidden isolate">
         {/* Ultra-minimal background with dynamic lighting */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/3 left-1/2 w-[800px] h-[800px] -translate-x-1/2 -translate-y-1/2 bg-violet-900/10 rounded-full blur-[100px]" />
@@ -20,7 +20,7 @@ const HeroPage = () => {
         </div>
 
         {/* Content with precise Apple-like spacing */}
-        <div className="container mx-auto px-6 flex flex-col items-center justify-center min-h-screen py-4">
+        <div className="container mx-auto px-6 flex flex-col md:items-center justify-center min-h-screen py-4">
           {/* Headline with refined typography */}
           <motion.div
             className="text-center mb-4"
@@ -29,7 +29,7 @@ const HeroPage = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.h1
-              className="text-5xl md:text-6xl font-light tracking-tight leading-[1.1] mb-6"
+              className="text-3xl md:text-6xl font-light tracking-tight leading-[1.1] mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -49,7 +49,7 @@ const HeroPage = () => {
             </motion.h1>
 
             <motion.p
-              className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
+              className="md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
