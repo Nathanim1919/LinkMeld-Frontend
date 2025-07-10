@@ -41,7 +41,6 @@ export const CallToAction = () => {
             backgroundClip: "text",
             WebkitBackgroundClip: "text",
             color: "transparent",
-            textFillColor: "transparent",
           }}
           className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
             Capture ideas.<br />like never before.

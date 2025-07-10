@@ -1,162 +1,127 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useMatchRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 
+const navItems = [
+  { path: "/", label: "Home" },
+  { path: "/manifesto", label: "Manifesto" },
+  { path: "/faqs", label: "FAQs" },
+  { path: "/feedback", label: "Feedback" },
+];
+
 export const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const matchRoute = useMatchRoute();
 
-  const navItems = [
-   {
-     path:'/',
-    label: "Home",
-   }, 
-   {
-    path:"/manifesto",
-    label: "Manifesto"
-  },
-  {
-    path:"/faqs",
-    label:"FAQs"
-  },
-  {
-    path:"/feedback",
-    label:"Feedback"
-  }
-   
-    ];
+  const isActive = (path: string) => matchRoute({ to: path, fuzzy: false });
 
   return (
-    <header className="relative bg-[#030409] w-full z-50">
-      {/* Main header with glass effect */}
-      <div className={`relative transition-all duration-300 `}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo with subtle gradient */}
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center"
-            >
-              <Link to="/" className="text-xl font-medium">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white font-light">
-                  Deepen
-                </span>
-                <span className="text-blue-400">.</span>
-              </Link>
-            </motion.div>
+    <header className="w-full bg-[#000000] relative z-1000">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        {/* Logo */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="text-xl font-light"
+        >
+          <Link to="/" className="text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-white">
+            Deepen<span className="text-blue-500">.</span>
+          </Link>
+        </motion.div>
 
-            {/* Desktop Navigation - Apple style */}
-            <nav className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <motion.div
-                  key={item.path}
-                  onHoverStart={() => setHoveredItem(item.path)}
-                  onHoverEnd={() => setHoveredItem(null)}
-                  className="relative py-1"
-                >
-                  <Link
-                    to={item.path}
-                    className={`text-md font-medium tracking-wider ${
-                      hoveredItem === item.path ? "text-white" : "text-gray-400"
-                    } transition-colors duration-200`}
-                  >
-                    {item.label}
-                  </Link>
-
-                  {/* Apple-style subtle indicator */}
-                  {hoveredItem === item.path && (
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-400 to-transparent"
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "100%" }}
-                      transition={{ type: "spring", stiffness: 500 }}
-                    />
-                  )}
-                </motion.div>
-              ))}
-            </nav>
-
-            {/* CTA - Apple-style minimal buttons */}
-            <div className="hidden md:flex items-center space-x-3">
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-              >
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center space-x-8 relative">
+          {navItems.map((item) => {
+            const active = isActive(item.path);
+            return (
+              <div key={item.path} className="relative">
                 <Link
-                  to="/login"
-                  className="px-4 py-1.5 text-md font-medium text-gray-300 hover:text-white transition-colors"
+                  to={item.path}
+                  className={`text-sm font-medium tracking-wide transition-colors ${
+                    active ? "text-white" : "text-gray-400 hover:text-gray-200"
+                  }`}
                 >
-                  Sign In
+                  {item.label}
                 </Link>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link
-                  to="/register"
-                  className="px-4 py-1.5 text-md font-medium text-white bg-gradient-to-r from-blue-500/90 to-blue-600/90 rounded-full transition-all hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)]"
-                >
-                  Get Started
-                </Link>
-              </motion.div>
-            </div>
+                {active && (
+                  <motion.div
+                    layoutId="active-nav-indicator"
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] bg-blue-500/70 rounded-full"
+                    transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </nav>
 
-            {/* Mobile Toggle - Minimal icon */}
-            <motion.button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-1 -mr-1 text-gray-400 hover:text-white"
-              whileTap={{ scale: 0.9 }}
-            >
-              {mobileOpen ? (
-                <FiX className="w-5 h-5" />
-              ) : (
-                <FiMenu className="w-5 h-5" />
-              )}
-            </motion.button>
-          </div>
+        {/* Desktop CTA */}
+        <div className="hidden md:flex items-center space-x-3">
+          <Link
+            to="/login"
+            className="text-sm text-gray-300 hover:text-white transition"
+          >
+            Sign In
+          </Link>
+          <Link
+            to="/register"
+            className="px-4 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-full hover:shadow-[0_0_15px_-3px_rgba(59,130,246,0.4)] transition"
+          >
+            Get Started
+          </Link>
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <motion.button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="md:hidden text-gray-400 hover:text-white"
+          whileTap={{ scale: 0.9 }}
+        >
+          {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+        </motion.button>
       </div>
 
-      {/* Mobile Menu - Dark glass panel */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="md:hidden bg-gray-900/95 backdrop-blur-lg border-b border-gray-800/30"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ type: "spring", stiffness: 260, damping: 24 }}
+            className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-[#050505] z-40 backdrop-blur-xl"
           >
-            <div className="px-6 py-3 space-y-5">
+            <div className="px-6 py-6 space-y-5">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className="block py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors border-b border-gray-800/30"
                   onClick={() => setMobileOpen(false)}
+                  className={`block text-base font-medium ${
+                    isActive(item.path)
+                      ? "text-white"
+                      : "text-gray-400 hover:text-gray-200"
+                  }`}
                 >
                   {item.label}
                 </Link>
               ))}
-              <div className="pt-3 space-y-3">
-                <motion.div
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-4 py-1.5 text-sm font-medium text-white rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              <div className="pt-6 space-y-4">
+                <Link
+                  to="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-sm text-gray-300 hover:text-white"
                 >
-                  <Link to="/login">Sign In</Link>
-                </motion.div>
-
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-full transition-all hover:bg-blue-600"
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMobileOpen(false)}
+                  className="block w-full text-center text-sm text-white bg-blue-600 py-2 rounded-full hover:bg-blue-700 transition"
                 >
-                  <Link to="/register">Get Started</Link>
-                </motion.div>
+                  Get Started
+                </Link>
               </div>
             </div>
           </motion.div>

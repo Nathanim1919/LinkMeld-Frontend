@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { FiSearch, FiUser } from "react-icons/fi";
 import type { User } from "better-auth/types";
@@ -104,7 +104,6 @@ const EmptyNoteView = () => {
             backgroundClip: "text",
             WebkitBackgroundClip: "text",
             color: "transparent",
-            textFillColor: "transparent",
           }}
         >
           What knowledge would you like to uncover today?

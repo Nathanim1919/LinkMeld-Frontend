@@ -3,7 +3,6 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
-  useParams,
 } from "@tanstack/react-router";
 import { MainShell } from "./layout/MainShell";
 import { ContentLayout } from "./layout/ContentLayout";
@@ -17,7 +16,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { LoginPage } from "./pages/LoginPage";
 import HeroPage from "./pages/hero";
 import { FAQ } from "./pages/FAQ";
-import { Manifesto } from "./pages/manifesto";
+// import { Manifesto } from "./pages/manifesto";
 import { FolderLayout } from "./layout/FolderLayout";
 import { SourceLayout } from "./layout/SourceLayout";
 import { HomeLayout } from "./layout/HomeLayout";
@@ -26,6 +25,7 @@ import { BookMarkLayout } from "./layout/BookmarkLayout";
 import FeedbackHub from "./pages/FeedbackHub";
 import { FolderNotes } from "./components/FolderNotes";
 import { SourceNotes } from "./components/SourceNotes";
+import { Manifesto } from "./pages/manifesto";
 
 const FolderPanel = () => <FoldersPanel />;
 

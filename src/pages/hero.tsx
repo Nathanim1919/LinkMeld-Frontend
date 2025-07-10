@@ -42,7 +42,6 @@ const HeroPage = () => {
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 color: "transparent",
-                textFillColor: "transparent",
               }}
                className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-white to-violet-200">
                 Understand Instantly.

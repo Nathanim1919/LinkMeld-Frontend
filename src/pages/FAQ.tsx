@@ -1,40 +1,43 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { ChevronDown, BrainCircuit, Lock, Cpu, Smartphone, Users, FileStack, RefreshCw } from "lucide-react";
 
 export const FAQ = () => {
   const faqs = [
     {
-      question: "How does Deepen differ from traditional knowledge management tools?",
-      answer: "Deepen reimagines knowledge work with neural connections between ideas rather than rigid folders. Our AI surfaces relevant connections as you work, and everything syncs instantly across all your devices with end-to-end encryption."
+      icon: <BrainCircuit className="w-5 h-5 text-blue-400" />,
+      question: "How does Deepen differ from traditional knowledge tools?",
+      answer: "Deepen creates neural connections between ideas rather than forcing rigid hierarchies. Our AI surfaces relevant insights contextually, with end-to-end encrypted sync across all devices."
     },
     {
-      question: "What makes Deepen's privacy approach different?",
-      answer: "We built Deepen on zero-knowledge architecture. Your data is encrypted before it leaves your device, and we never store decryption keys on our servers. Even we can't access your content."
+      icon: <Lock className="w-5 h-5 text-blue-400" />,
+      question: "What makes your privacy approach special?",
+      answer: "Zero-knowledge architecture means your data is encrypted before leaving your device. We never store decryption keys—not even we can access your content."
     },
     {
-      question: "How does the AI assistant work without compromising privacy?",
-      answer: "Our AI processes information locally on your device when possible. For cloud processing, we use homomorphic encryption that allows computation on encrypted data without decryption."
+      icon: <Cpu className="w-5 h-5 text-blue-400" />,
+      question: "How does the AI work privately?",
+      answer: "On-device processing when possible. For cloud tasks, we use homomorphic encryption to compute on encrypted data without decryption."
     },
     {
-      question: "Can I use Deepen offline?",
-      answer: "Yes. Deepen works fully offline, with all changes syncing automatically when you reconnect. We use conflict-free replicated data types (CRDTs) to ensure seamless merging of offline edits."
+      icon: <Smartphone className="w-5 h-5 text-blue-400" />,
+      question: "Is offline use supported?",
+      answer: "Fully functional offline. Changes sync automatically when reconnected using CRDTs for seamless merging."
     },
     {
-      question: "What platforms does Deepen support?",
-      answer: "Deepen is available on macOS, Windows, iOS, and Android, with a web version for browsers. All platforms maintain feature parity and real-time sync through our custom protocol."
+      icon: <Users className="w-5 h-5 text-blue-400" />,
+      question: "How does team collaboration work?",
+      answer: "Granular permissions, live presence, and version history with intelligent merging—all over encrypted channels."
     },
     {
-      question: "How does Deepen handle team collaboration?",
-      answer: "Teams get granular permission controls, live presence indicators, and version history with intelligent merge capabilities. All collaboration happens over encrypted channels with per-user access controls."
+      icon: <FileStack className="w-5 h-5 text-blue-400" />,
+      question: "What file types are supported?",
+      answer: "200+ formats with rich previews: documents, code, media, 3D models—all connectable to your knowledge graph."
     },
     {
-      question: "What file types can I work with in Deepen?",
-      answer: "Deepen natively supports over 200 file types with rich previews, including documents, code, images, videos, and 3D models. You can connect any file to your knowledge graph."
-    },
-    {
-      question: "How often is Deepen updated?",
-      answer: "We ship meaningful updates every two weeks. Our architecture allows seamless updates without downtime or data migration headaches."
+      icon: <RefreshCw className="w-5 h-5 text-blue-400" />,
+      question: "Update frequency?",
+      answer: "Meaningful updates every two weeks. Our architecture enables seamless upgrades without migrations."
     }
   ];
 
@@ -45,28 +48,39 @@ export const FAQ = () => {
   };
 
   return (
-    <div className="relative py-24 px-6 bg-black">
-      {/* Ultra-subtle background texture */}
-      <div className="absolute inset-0 -z-10 opacity-5 [background-image:radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
+    <div className="relative py-24 px-6 bg-[#050505] overflow-hidden">
+      {/* Dynamic background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-blue-900/10 blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 rounded-full bg-blue-900/5 blur-3xl" />
+      </div>
       
-      <div className="mx-auto max-w-3xl">
-        {/* Precise Apple-style typography */}
+      {/* Subtle grid texture */}
+      <div className="absolute inset-0 opacity-10 [background-image:radial-gradient(#ffffff_0.5px,transparent_0.5px)] [background-size:16px_16px]" />
+
+      <div className="relative z-10 max-w-3xl mx-auto">
+        {/* Header with precision typography */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, ease: [0.32, 0, 0.67, 0] }}
           className="text-center mb-20"
         >
-          <h2 className="text-5xl font-light tracking-tight text-gray-50 mb-4">
-            Deepen
+          <h2 className="text-5xl font-light tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-400 mb-4">
+            Understanding Deepen
           </h2>
-          <div className="w-12 h-px bg-gray-700 mx-auto mb-6" />
+          <motion.div 
+            className="w-16 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent mx-auto mb-6"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+          />
           <p className="text-xl text-gray-400 font-light max-w-xl mx-auto">
-            Answers to common questions about the future of knowledge work.
+            Clear answers about your cognitive workspace
           </p>
         </motion.div>
 
-        {/* Minimalist FAQ items with surgical precision */}
+        {/* Interactive FAQ with physics-based animations */}
         <motion.div 
           initial="hidden"
           animate="visible"
@@ -75,34 +89,47 @@ export const FAQ = () => {
             visible: {
               opacity: 1,
               transition: {
-                staggerChildren: 0.08
+                staggerChildren: 0.1
               }
             }
           }}
-          className="space-y-1"
+          className="space-y-2"
         >
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
               variants={{
-                hidden: { opacity: 0, y: 5 },
-                visible: { opacity: 1, y: 0 }
+                hidden: { opacity: 0, y: 10 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { 
+                    type: "spring", 
+                    stiffness: 300,
+                    damping: 15
+                  }
+                }
               }}
-              className="border-b border-gray-800/70"
+              className="overflow-hidden rounded-xl bg-[#0f0f0f] border border-gray-800 hover:border-gray-700 transition-colors"
             >
               <button
                 onClick={() => toggleQuestion(index)}
-                className="flex w-full items-start justify-between text-left py-6 focus:outline-none"
+                className="flex w-full items-center justify-between p-6 text-left focus:outline-none"
               >
-                <span className="text-lg text-gray-100 font-light tracking-wide">
-                  {faq.question}
-                </span>
+                <div className="flex items-start gap-4">
+                  <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                    {faq.icon}
+                  </div>
+                  <span className="text-lg font-medium text-gray-100 tracking-tight">
+                    {faq.question}
+                  </span>
+                </div>
                 <motion.div
                   animate={{ rotate: activeIndex === index ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.3, type: "spring" }}
                   className="ml-4 flex h-6 w-6 items-center justify-center"
                 >
-                  <FiChevronDown className="h-4 w-4 text-gray-500" />
+                  <ChevronDown className="h-4 w-4 text-gray-400" />
                 </motion.div>
               </button>
 
@@ -114,21 +141,25 @@ export const FAQ = () => {
                       opacity: 1, 
                       height: "auto",
                       transition: { 
-                        opacity: { duration: 0.15 },
-                        height: { duration: 0.25, ease: [0.33, 1, 0.68, 1] }
+                        opacity: { duration: 0.2 },
+                        height: { 
+                          type: "spring", 
+                          stiffness: 200,
+                          damping: 15
+                        }
                       }
                     }}
                     exit={{ 
                       opacity: 0, 
                       height: 0,
                       transition: { 
-                        opacity: { duration: 0.1 },
-                        height: { duration: 0.2, ease: [0.33, 1, 0.68, 1] }
+                        opacity: { duration: 0.15 },
+                        height: { duration: 0.2 }
                       }
                     }}
                     className="overflow-hidden"
                   >
-                    <div className="pb-6 text-gray-400 font-light leading-relaxed tracking-normal">
+                    <div className="px-6 pb-6 -mt-2 text-gray-400 font-light leading-relaxed">
                       {faq.answer}
                     </div>
                   </motion.div>
@@ -138,15 +169,15 @@ export const FAQ = () => {
           ))}
         </motion.div>
 
-        {/* Understated Apple-style footnote */}
+        {/* Minimalist footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-20 pt-6 border-t border-gray-800/50 text-center"
+          transition={{ delay: 1 }}
+          className="mt-20 pt-8 border-t border-gray-800/50 text-center"
         >
-          <p className="text-gray-500 text-sm">
-            For additional questions, contact <span className="text-gray-400">support@Deepen.design</span>
+          <p className="text-gray-500 text-sm tracking-wider">
+            Need more clarity? <span className="text-blue-400 hover:text-blue-300 transition-colors cursor-pointer">Contact our team</span>
           </p>
         </motion.div>
       </div>

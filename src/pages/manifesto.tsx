@@ -1,125 +1,123 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { BrainCircuit, Sparkles, Lock, Infinity as InfinityIcon } from "lucide-react";
 
-export const Manifesto: React.FC = () => {
-  const manifestoContent = [
+export const Manifesto = () => {
+  const principles = [
     {
-      heading: "The Future of Knowledge",
-      paragraphs: [
-        "We believe in tools that disappear—so the work can appear.",
-        "Technology should amplify human potential, not demand our attention."
-      ]
+      icon: <BrainCircuit className="w-5 h-5 text-blue-400" />,
+      title: "Cognitive Harmony",
+      description: "We design tools that adapt to your thinking, not the other way around. Technology should feel like an extension of your mind."
     },
     {
-      heading: "Our Principles",
-      paragraphs: [
-        "Simplicity is the ultimate sophistication. We remove everything that isn't essential.",
-        "Privacy isn't a feature—it's the foundation. Your data belongs to you, period.",
-        "Interoperability creates value. Closed systems become obsolete."
-      ]
+      icon: <Sparkles className="w-5 h-5 text-blue-400" />,
+      title: "Intentional Simplicity",
+      description: "Every pixel serves a purpose. We remove complexity so you can focus on what matters."
     },
     {
-      heading: "Our Promise",
-      paragraphs: [
-        "We will never compromise on craftsmanship.",
-        "We will always respect your attention.",
-        "We build for the long term—not quarterly growth."
-      ]
+      icon: <Lock className="w-5 h-5 text-blue-400" />,
+      title: "Radical Privacy",
+      description: "Your thoughts belong to you. End-to-end encryption by default, with zero data collection."
+    },
+    {
+      icon: <InfinityIcon className="w-5 h-5 text-blue-400" />,
+      title: "Timeless Design",
+      description: "We build for permanence in a world of obsolescence. No trends, just enduring utility."
     }
   ];
 
   return (
-    <div className="min-h-screen bg-black text-[#f5f5f7] relative overflow-hidden">
-      {/* Soft background texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(#1c1c1e_1px,transparent_1px)] bg-[size:20px_20px] opacity-[0.015] z-0" />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 py-32 space-y-28">
-        {/* Title */}
-        <motion.div
+    <div className="min-h-screen bg-[#050505] text-gray-100">
+      {/* Subtle texture */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iODAiIGhlaWdodD0iODAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMSkiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiIG9wYWNpdHk9IjAuMDMiLz48L3N2Zz4=')]" />
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto px-6 py-32">
+        {/* Header */}
+        <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.25, 1, 0.5, 1] }}
-          className="text-center space-y-6"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-24"
         >
-          <h1 className="text-[3.5rem] sm:text-[4.5rem] font-light leading-tight tracking-tight">
-            <span className="bg-gradient-to-r from-white to-[#d1d1d6] bg-clip-text text-transparent">
-              Knowledge.
-            </span>
-            <br />
-            <span className="text-[#8e8e93]">Reimagined.</span>
-          </h1>
-
-          <motion.div
-            className="h-[1px] w-24 bg-[#2c2c2e] mx-auto"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-          />
-
-          <p className="text-xl sm:text-2xl font-light text-[#a1a1a6] max-w-2xl mx-auto">
-            A manifesto for tools that think like you do.
-          </p>
+          <div className="mb-8">
+            <motion.div 
+              className="w-12 h-0.5 bg-blue-400 mx-auto mb-6"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            />
+            <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-4">
+              <span className="bg-gradient-to-r from-blue-300 to-blue-400 bg-clip-text text-transparent">
+                Deepen.live
+              </span>
+            </h1>
+            <p className="text-lg text-gray-400 max-w-xl mx-auto">
+              A philosophy for tools that deepen thought
+            </p>
+          </div>
         </motion.div>
 
-        {/* Manifesto Sections */}
-        <div className="space-y-32">
-          {manifestoContent.map((section, index) => (
-            <motion.section
+        {/* Principles */}
+        <div className="space-y-16">
+          {principles.map((principle, index) => (
+            <motion.div
               key={index}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              viewport={{ once: true }}
-              className="relative group"
+              transition={{ duration: 0.6, delay: index * 0.15 }}
+              viewport={{ once: true, margin: "-50px" }}
+              className="relative"
             >
-              {/* Dot Indicator */}
-              <motion.div
-                className="absolute -left-6 top-2 h-2 w-2 rounded-full bg-[#0a84ff] shadow-[0_0_12px_2px_rgba(10,132,255,0.4)]"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: index * 0.2 + 0.2 }}
-              />
-
-              <h2 className="text-3xl sm:text-4xl font-light mb-8 text-[#f5f5f7] tracking-tight">
-                {section.heading}
-              </h2>
-
-              <div className="space-y-6 sm:space-y-8 pl-3">
-                {section.paragraphs.map((p, i) => (
-                  <motion.p
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="text-lg sm:text-xl text-[#a1a1a6] font-light leading-relaxed"
-                  >
-                    {p}
-                  </motion.p>
-                ))}
-              </div>
-
-              {index < manifestoContent.length - 1 && (
+              <div className="flex items-start gap-6">
                 <motion.div
-                  className="mt-24 h-px w-full bg-[#2c2c2e]"
+                  className="p-2 rounded-lg bg-blue-400/10 border border-blue-400/20 mt-1"
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ delay: index * 0.15 + 0.2 }}
+                >
+                  {principle.icon}
+                </motion.div>
+                <div>
+                  <h3 className="text-xl font-medium text-white mb-3 tracking-tight">
+                    {principle.title}
+                  </h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    {principle.description}
+                  </p>
+                </div>
+              </div>
+              {index < principles.length - 1 && (
+                <motion.div
+                  className="absolute -bottom-8 left-12 right-0 h-px bg-gradient-to-r from-transparent via-blue-400/10 to-transparent"
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
-                  transition={{ delay: 0.3 + index * 0.2, duration: 0.7 }}
+                  transition={{ delay: 0.4 + index * 0.15 }}
                   viewport={{ once: true }}
                 />
               )}
-            </motion.section>
+            </motion.div>
           ))}
         </div>
 
         {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.3, duration: 0.8 }}
-          className="pt-16 border-t border-[#2c2c2e] text-center"
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          viewport={{ once: true }}
+          className="mt-32 pt-12 border-t border-gray-800 text-center"
         >
-          <p className="text-[#636366] text-sm tracking-wider uppercase">Established 2023</p>
+          <p className="text-sm text-gray-500 tracking-wider mb-6">
+            EST. 2025 • SAN FRANCISCO
+          </p>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium shadow-lg hover:shadow-blue-500/20 transition-all"
+          >
+            Read the Full Philosophy
+          </motion.button>
         </motion.div>
       </div>
     </div>

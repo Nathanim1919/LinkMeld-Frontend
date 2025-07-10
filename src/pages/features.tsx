@@ -1,156 +1,156 @@
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  FiZap,
-  FiFolder,
-  FiCloud,
-  FiSearch,
-  FiMessageCircle,
-  FiFilter,
-  FiArrowRight,
-} from "react-icons/fi";
+import React from "react";
+import { motion } from "framer-motion";
+import { BrainCircuit, Zap, Search, Lock } from "lucide-react";
 
-const features = [
-  {
-    title: "Instant Web Capture",
-    description:
-      "Clip articles, tweets, and PDFs in a click. Our Chrome extension makes saving effortless.",
-    icon: <FiZap size={20} />,
-    color: "from-blue-500 to-blue-600",
-    delay: 0.1,
-  },
-  {
-    title: "AI Summaries & Key Points",
-    description:
-      "Quickly grasp what matters most. Our AI distills pages into digestible summaries.",
-    icon: <FiSearch size={20} />,
-    color: "from-emerald-500 to-teal-500",
-    delay: 0.2,
-  },
-  {
-    title: "Chat With Your Content",
-    description:
-      "Ask questions or brainstorm with AI on any saved page. It remembers context for smarter replies.",
-    icon: <FiMessageCircle size={20} />,
-    color: "from-purple-500 to-indigo-500",
-    delay: 0.3,
-  },
-  {
-    title: "Smart Collections",
-    description:
-      "Group and organize content by topic, project, or goal. Stay effortlessly structured.",
-    icon: <FiFolder size={20} />,
-    color: "from-pink-500 to-fuchsia-600",
-    delay: 0.4,
-  },
-  {
-    title: "Universal Access",
-    description:
-      "Sync across devices in real-time. Your brain is always with you — anytime, anywhere.",
-    icon: <FiCloud size={20} />,
-    color: "from-yellow-400 to-amber-500",
-    delay: 0.5,
-  },
-  {
-    title: "Filter by Source",
-    description:
-      "Narrow down your captured content by domain or type — like having a smart librarian.",
-    icon: <FiFilter size={20} />,
-    color: "from-gray-500 to-gray-700",
-    delay: 0.6,
-  },
-];
+export const Features: React.FC = () => {
+  const manifestoContent = [
+    {
+      icon: <Zap className="w-5 h-5 text-blue-400" />,
+      heading: "Capture Without Friction",
+      paragraphs: [
+        "Save anything from the web—articles, videos, PDFs—instantly. No clutter, no distractions.",
+        "Deepen.live integrates seamlessly into your workflow, so you never lose an idea again."
+      ]
+    },
+    {
+      icon: <BrainCircuit className="w-5 h-5 text-blue-400" />,
+      heading: "AI That Understands You",
+      paragraphs: [
+        "Get smart summaries, extract key insights, and ask questions—like having a research assistant on call.",
+        "Our AI learns how you think, helping you connect ideas effortlessly."
+      ]
+    },
+    {
+      icon: <Search className="w-5 h-5 text-blue-400" />,
+      heading: "Organize & Retrieve Instantly",
+      paragraphs: [
+        "Tag, categorize, and structure knowledge your way—no rigid folders, just fluid thinking.",
+        "Find anything in seconds with semantic search that goes beyond keywords."
+      ]
+    },
+    {
+      icon: <Lock className="w-5 h-5 text-blue-400" />,
+      heading: "Privacy by Design",
+      paragraphs: [
+        "Your data stays yours. We don’t sell it, mine it, or exploit it.",
+        "End-to-end encryption ensures your thoughts remain private."
+      ]
+    }
+  ];
 
-export const Features = () => {
   return (
-    <motion.section
-      className="relative py-32 px-6 bg-black"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-    >
-     
-      {/* Gradient elements - more precise positioning */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-[15%] left-[10%] w-[500px] h-[500px] bg-gradient-to-br from-blue-900/3 to-transparent rounded-full blur-[150px]" />
-        <div className="absolute bottom-[15%] right-[10%] w-[400px] h-[400px] bg-gradient-to-br from-purple-900/3 to-transparent rounded-full blur-[120px]" />
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+      {/* Subtle neural network background */}
+      <div className="absolute inset-0 opacity-10">
+        <svg className="w-full h-full" viewBox="0 0 1000 1000" fill="none">
+          <path
+            d="M200,200 Q400,300 600,200 T800,300 M300,600 Q500,700 700,600 T900,700"
+            stroke="#3b82f6"
+            strokeWidth="1"
+          />
+        </svg>
       </div>
 
-      <div className="max-w-6xl mx-auto">
-        {/* Section Header - tighter tracking */}
+      <div className="relative z-10 max-w-3xl mx-auto px-6 py-20 space-y-16">
+        {/* Hero Section */}
         <motion.div
-          className="text-center mb-24"
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{
-            type: "spring",
-            stiffness: 120,
-            damping: 12,
-          }}
-          viewport={{ once: true }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center space-y-6"
         >
-          <h2 className="text-5xl md:text-6xl font-light tracking-tighter mb-6 leading-[1.08]">
-            <span className="text-white">Capture once,</span>{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r font-bold from-blue-400 to-blue-500">
-              recall forever
+          <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
+            <span className="bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent">
+              Deepen.live
             </span>
-          </h2>
-          <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed tracking-tight">
-            AI-enhanced memory for modern minds. Organize and interact with your
-            web knowledge like never before.
+          </h1>
+          <motion.div
+            className="h-px w-20 bg-blue-500/50 mx-auto"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          />
+          <p className="text-lg text-blue-100/80 max-w-md mx-auto">
+            The AI-powered second brain for focused thinkers
           </p>
         </motion.div>
 
-        {/* Feature Cards - Apple Card-inspired design */}
-        <div className="grid gap-6 md:grid-cols-2 w-[90%] mx-auto">
-          {features.map((feature, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ y: 40, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{
-                delay: feature.delay,
-                type: "spring",
-                stiffness: 120,
-                damping: 12,
-              }}
+        {/* Manifesto Sections */}
+        <div className="space-y-12">
+          {manifestoContent.map((section, index) => (
+            <motion.section
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true, margin: "-50px" }}
-              className="group"
+              className="relative group"
             >
-              <div className="h-full p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.05] hover:border-white/[0.1] transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_48px_rgba(0,0,0,0.2)]">
-                <div className="flex items-start gap-6">
-                  {/* Icon container - more refined gradient */}
-                  <div
-                    className={`flex items-center justify-center rounded-xl bg-gradient-to-br ${feature.color} w-12 h-12 flex-shrink-0 shadow-inner`}
-                  >
-                    <div className="text-white">{feature.icon}</div>
-                  </div>
+              <div className="flex items-start gap-4">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ delay: index * 0.2 + 0.1 }}
+                  className="p-1.5 rounded-md bg-blue-500/10 border border-blue-500/20 mt-0.5"
+                >
+                  {section.icon}
+                </motion.div>
 
-                  {/* Content - improved typography */}
-                  <div>
-                    <h3 className="text-xl font-medium text-white mb-3 tracking-tight leading-snug">
-                      {feature.title}
-                    </h3>
-                    <p className="text-white/50 mb-4 leading-relaxed tracking-tight">
-                      {feature.description}
-                    </p>
+                <div>
+                  <h2 className="text-xl font-medium text-white mb-4 tracking-tight">
+                    {section.heading}
+                  </h2>
+
+                  <div className="space-y-4 pl-1">
+                    {section.paragraphs.map((p, i) => (
+                      <motion.p
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 + index * 0.1 }}
+                        viewport={{ once: true }}
+                        className="text-base text-blue-100/80 leading-relaxed"
+                      >
+                        {p}
+                      </motion.p>
+                    ))}
                   </div>
                 </div>
               </div>
-            </motion.div>
+
+              {index < manifestoContent.length - 1 && (
+                <motion.div
+                  className="mt-12 h-px w-full bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  transition={{ delay: 0.3 + index * 0.2 }}
+                  viewport={{ once: true }}
+                />
+              )}
+            </motion.section>
           ))}
         </div>
 
-        {/* Footer microcopy - more refined */}
+        {/* CTA */}
         <motion.div
-          className="text-center mt-20 text-sm text-white/50 tracking-wide"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
+          transition={{ delay: 0.8 }}
           viewport={{ once: true }}
+          className="pt-8 text-center"
         >
-          Chrome Extension • AI-Powered • Privacy-First • Free to Start
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium transition-colors shadow-lg hover:shadow-blue-500/20"
+          >
+            Join Waitlist
+          </motion.button>
+          <p className="mt-4 text-xs text-blue-400/60 tracking-wider">
+            Deepen.live • Coming 2025
+          </p>
         </motion.div>
       </div>
-    </motion.section>
+    </div>
   );
 };
