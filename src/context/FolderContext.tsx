@@ -1,11 +1,15 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { IFolder } from "../types/Folder";
-import {FolderService} from "../api/folder.api";
+import { FolderService } from "../api/folder.api";
+import { toast } from "sonner";
+import { useCaptureContext } from "./CaptureContext";
+import type { Capture } from "../types/Capture";
+
 interface FolderContextType {
   folders: IFolder[];
   setFolders: React.Dispatch<React.SetStateAction<IFolder[]>>;
   openNewFolderForm: boolean;
-  setOpenNewFolderForm: (value: boolean)=> void;
+  setOpenNewFolderForm: (value: boolean) => void;
   selectedFolder: IFolder | null;
   setSelectedFolder: React.Dispatch<React.SetStateAction<IFolder | null>>;
   loadingStates: {
@@ -35,7 +39,8 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
     append: false,
   });
   const [error, setError] = useState<string | undefined>(undefined);
-  const [openNewFolderForm, setOpenNewFolderForm]= useState<boolean>(false);
+  const [openNewFolderForm, setOpenNewFolderForm] = useState<boolean>(false);
+  const { selectedCapture } = useCaptureContext();
 
   const addCaptureToFolder = async (folderId: string, captureId: string) => {
     setLoadingStates((prev) => ({ ...prev, append: true }));
@@ -47,13 +52,15 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
             folder._id === folderId
               ? {
                   ...folder,
-                  captures: [...folder.captures, { _id: captureId } as any],
+                  captures: [...folder.captures, selectedCapture as Capture],
                 }
               : folder
           )
         );
       }
+      toast.success(`Capture add to collection ${res.name}`);
     } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Unknown error");
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoadingStates((prev) => ({ ...prev, append: false }));
@@ -90,7 +97,7 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
         setError,
         addCaptureToFolder,
         openNewFolderForm,
-        setOpenNewFolderForm
+        setOpenNewFolderForm,
       }}
     >
       {children}

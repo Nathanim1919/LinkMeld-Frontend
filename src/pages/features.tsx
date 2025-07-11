@@ -39,7 +39,7 @@ export const Features: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+    <div className="min-h-screen pt-8 bg-[#000000] text-white relative overflow-hidden">
       {/* Subtle neural network background */}
       <div className="absolute inset-0 opacity-10">
         <svg className="w-full h-full" viewBox="0 0 1000 1000" fill="none">

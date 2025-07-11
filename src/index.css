@@ -15,6 +15,7 @@
 
 body {
   font-family: "Space Grotesk", sans-serif;
+  background-color: #000;
 }
 
 @keyframes slow-spin {

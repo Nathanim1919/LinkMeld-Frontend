@@ -7,7 +7,6 @@ import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useState } from "react";
 import { FiChevronRight } from "react-icons/fi";
 import { RiFolderAddLine } from "react-icons/ri";
-import { toast } from "sonner";
 
 export const FolderList: React.FC = () => {
   const { folders, loadingStates, addCaptureToFolder, setOpenNewFolderForm } =
@@ -18,27 +17,11 @@ export const FolderList: React.FC = () => {
 
   const setCaptureFolder = async (folderId: string) => {
     if (!selectedCapture) return;
-
-    try {
       setAppendToFolderId(folderId);
-      await addCaptureToFolder(folderId, selectedCapture._id);
-
-      // Success - update toast
-      toast.success("Capture added to collection successfully");
-
+      await addCaptureToFolder(folderId, selectedCapture._id)
       setIsFolderListOpen?.(false);
-    } catch (error) {
-      // Error - update toast
-      toast.error(
-        error instanceof Error ? error.message : "Failed to add to collection",
-        {
-          duration: 3000,
-        }
-      );
-      console.error("Error adding capture to folder:", error);
-    } finally {
+
       setAppendToFolderId(null);
-    }
   };
 
   return (
