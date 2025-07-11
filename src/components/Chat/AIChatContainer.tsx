@@ -8,13 +8,13 @@ import { X, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { ChatView } from "./ChatView";
 import { SourcesView } from "./SourcesView";
+import { useChat } from "../../context/ChatContext";
 
 export const AIChatContainer = () => {
   const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
   const { openAiChat, setOpenAiChat } = useUI();
 
-  // const { clearMessages } = useChat();
-
+  const { clearMessages } = useChat();
 
   return (
     <AnimatePresence>
@@ -52,9 +52,7 @@ export const AIChatContainer = () => {
             </div>
 
             <div className="flex items-center space-x-2">
-              <motion.div
-                className="flex rounded-full bg-[#1a1818]"
-              >
+              <motion.div className="flex rounded-full bg-[#1a1818]">
                 <button
                   className={`px-3 cursor-pointer py-1.5 text-xs ${
                     activeTab === "chat"
@@ -74,6 +72,13 @@ export const AIChatContainer = () => {
                   onClick={() => setActiveTab("sources")}
                 >
                   Sources
+                </button>
+                <button
+                  className={`px-3 cursor-pointer py-1.5 text-xs
+                     text-gray-400 rounded-r-full`}
+                  onClick={() => clearMessages()}
+                >
+                  Clear
                 </button>
               </motion.div>
 
@@ -104,11 +109,7 @@ export const AIChatContainer = () => {
                 transition={{ duration: 0.15 }}
                 className="h-full"
               >
-                {activeTab === "chat" ? (
-                  <ChatView />
-                ) : (
-                  <SourcesView />
-                )}
+                {activeTab === "chat" ? <ChatView /> : <SourcesView />}
               </motion.div>
             </AnimatePresence>
           </motion.main>

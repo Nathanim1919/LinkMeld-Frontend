@@ -37,7 +37,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
         {/* 🔮 Generate Summary */}
         <motion.button
           onClick={handleGenerateSummary}
-          disabled={!hasApiKey || loadingSummary}
+          disabled={loadingSummary}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.985 }}
           className={`
@@ -52,7 +52,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
                 : "bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white hover:from-violet-900 hover:to-zinc-800"
             }
             ${
-              !hasApiKey || loadingSummary
+              loadingSummary
                 ? "opacity-60 cursor-not-allowed"
                 : "cursor-pointer"
             }
@@ -82,7 +82,6 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
         {/* 🧠 Ask AI */}
         <motion.button
           onClick={handleOpenChat}
-          disabled={!hasApiKey}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.985 }}
           className={`
