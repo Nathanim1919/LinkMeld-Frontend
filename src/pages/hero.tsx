@@ -29,7 +29,7 @@ const HeroPage = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.h1
-              className="text-4xl md:text-6xl font-light tracking-tight leading-[1.1] mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
