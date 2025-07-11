@@ -4,7 +4,7 @@ import { useUI } from "../../context/UIContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { BsStars } from "react-icons/bs";
 import { X, ChevronDown } from "lucide-react";
-import { useChat } from "../../context/ChatContext";
+// import { useChat } from "../../context/ChatContext";
 import { useState } from "react";
 import { ChatView } from "./ChatView";
 import { SourcesView } from "./SourcesView";
@@ -13,7 +13,7 @@ export const AIChatContainer = () => {
   const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
   const { openAiChat, setOpenAiChat } = useUI();
 
-  const { clearMessages } = useChat();
+  // const { clearMessages } = useChat();
 
 
   return (
