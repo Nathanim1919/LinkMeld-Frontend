@@ -20,7 +20,7 @@ const HeroPage = () => {
         </div>
 
         {/* Content with precise Apple-like spacing */}
-        <div className="container mx-auto px-6 flex flex-col md:items-center justify-center min-h-screen py-4">
+        <div className="container mx-auto md:px-6 flex flex-col items-center justify-center min-h-screen md:py-4">
           {/* Headline with refined typography */}
           <motion.div
             className="text-center mb-4"
@@ -29,7 +29,7 @@ const HeroPage = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.h1
-              className="text-3xl md:text-6xl font-light tracking-tight leading-[1.1] mb-6"
+              className="text-4xl md:text-6xl font-light tracking-tight leading-[1.1] mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -76,29 +76,6 @@ const HeroPage = () => {
                 alt="App interface"
                 className="w-full h-auto rounded-2xl border border-white/10 shadow-2xl"
               />
-
-              {/* Ultra-subtle floating particles */}
-              {[...Array(8)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute rounded-full bg-white/5"
-                  style={{
-                    width: `${Math.random() * 4 + 2}px`,
-                    height: `${Math.random() * 4 + 2}px`,
-                    top: `${Math.random() * 100}%`,
-                    left: `${Math.random() * 100}%`,
-                  }}
-                  animate={{
-                    y: [0, Math.random() * 20 - 10],
-                    opacity: [0.4, 0.8, 0.4],
-                  }}
-                  transition={{
-                    duration: Math.random() * 6 + 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-              ))}
             </div>
           </motion.div>
         </div>
