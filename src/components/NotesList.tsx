@@ -95,7 +95,7 @@ const NotesList: React.FC<NotesListProps> = ({
   if (error) return <div className="text-red-400 p-4 text-sm">{error}</div>;
   if (!safeCaptures.length)
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center px-4">
+      <div className="flex relative flex-col items-center justify-center h-full text-center px-4">
         <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
           <IoDocumentsOutline className="text-[24px]" />
         </div>

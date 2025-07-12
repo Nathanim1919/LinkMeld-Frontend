@@ -28,7 +28,9 @@ export const FolderNotes = () => {
           {folder && folder.length > 15 ? folder.slice(0, 15) + "..." : folder}
         </span>
       </div>
+      <div className="p-4">
       <NotesList filter="folder" folderId={folderId} />
+      </div>
     </div>
   );
 };
