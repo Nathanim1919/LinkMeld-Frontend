@@ -8,8 +8,8 @@ const HeroPage = () => {
     <>
     <div
       className="w-full h-full bg-black relative overflow-hidden
-    before:absolute before:w-full before:h-[90%] before:transform before:top-[90%] before:rotate-90  before:content-[''] before:bg-violet-600
-        after:absolute after:w-full after:h-[70%]  after:transform after:bottom-[0%]  after:content-[''] after:bg-gradient-to-t after:from-black
+    before:absolute before:w-full before:h-[90%] before:transform before:top-[80%] before:rotate-90  before:content-[''] before:bg-violet-600
+        after:absolute after:w-full after:h-[100%]  after:transform after:bottom-[0%]  after:content-[''] after:bg-gradient-to-t after:from-black
     "
     >
       <div className="md:min-h-screen w-full backdrop-blur-[7rem]  text-white relative overflow-hidden isolate">
@@ -20,7 +20,7 @@ const HeroPage = () => {
         </div>
 
         {/* Content with precise Apple-like spacing */}
-        <div className="container mx-auto md:px-6 flex flex-col items-center justify-center min-h-screen md:py-4">
+        <div className="container mx-auto md:px-6 flex flex-col items-center mt-24 gap-6 md:gap-0 md:mt-0 md:justify-center min-h-screen md:py-4">
           {/* Headline with refined typography */}
           <motion.div
             className="text-center mb-4"
@@ -29,7 +29,7 @@ const HeroPage = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl mb-5 font-bold tracking-tight leading-[1.1]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -43,7 +43,7 @@ const HeroPage = () => {
                 WebkitBackgroundClip: "text",
                 color: "transparent",
               }}
-               className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-white to-violet-200">
+               className="text-transparent bg-clip-text bg-gradient-to-r from-white to-violet-200">
                 Understand Instantly.
               </span>
             </motion.h1>

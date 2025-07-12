@@ -6,7 +6,7 @@ import { FiDownload, FiArrowUpRight } from "react-icons/fi";
 export const CallToAction = () => {
   return (
     <motion.section 
-      className="relative overflow-hidden py-8 px-6 bg-[#000000]"
+      className="relative overflow-hidden -mt-12 md:mt-0 md:py-8 px-6 bg-[#000000]"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}

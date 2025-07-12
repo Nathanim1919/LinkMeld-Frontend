@@ -6,6 +6,7 @@ import { CiBookmark, CiStickyNote } from "react-icons/ci";
 import { motion, AnimatePresence } from "framer-motion";
 import { NoteListSkeleton } from "./skeleton/NoteSkeleton";
 import { IoDocumentsOutline } from "react-icons/io5";
+import { FileText } from "lucide-react";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -137,13 +138,18 @@ const NotesList: React.FC<NotesListProps> = ({
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
+                      {note.metadata.isPdf?
+                      <FileText 
+                        className={`flex-shrink-0 text-red-700`}
+                        size={16}
+                      />:
                       <CiStickyNote
                         className={`flex-shrink-0 ${
                           activeCaptureId === note._id
                             ? "text-blue-400"
                             : "text-gray-500"
                         }`}
-                      />
+                      />}
                       <h3 className="text-sm font-medium truncate text-gray-300">
                         {note.title}
                       </h3>
