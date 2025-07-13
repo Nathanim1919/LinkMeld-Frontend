@@ -3,8 +3,8 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useState} from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { IoLogOutOutline } from "react-icons/io5";
 import { Brain } from "lucide-react";
 import { authClient } from "../lib/auth-client";
@@ -15,7 +15,6 @@ import { SidebarItem } from "./SidebarItem";
 import { IoSearch } from "react-icons/io5";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
-
 
 const navItems = [
   {
@@ -33,6 +32,11 @@ const navItems = [
     label: "Search",
     path: "/in",
   },
+  // {
+  //   icon: <BsRobot />,
+  //   label: "Chat",
+  //   path: "/in/ai-chat",
+  // },
   {
     icon: <LuFolderOpen />,
     label: "Collections",
@@ -78,23 +82,23 @@ const Sidebar: React.FC<{
 
   return (
     <motion.div
-      className={`h-screen absolute md:relative bg-[#161618] border-r border-gray-800/40
-        ${collapsed ? "w-16" : "w-42"} text-gray-300 flex flex-col
-        relative justify-between pb-6 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]`}
+      className={`h-screen relative bg-[#161618] border-r border-gray-800/40
+        ${collapsed ? "w-12 md:w-16" : "w-42"} text-gray-300 flex flex-col
+        relative justify-around md:justify-between pb-6 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="absolute top-0 right-0 p-2 z-10 md:hidden">
+      {/* <div className="absolute top-0 right-0 p-2 z-10 md:hidden">
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="p-2 rounded-lg hover:bg-gray-800/40 transition-colors"
         >
           <IoClose className="w-5 h-5 text-gray-400" />
         </button>
-      </div>
+      </div> */}
       {/* Logo */}
-      <div className="pt-6 hidden md:block w-full px-4">
+      <div className="pt-6 w-full px-4">
         <div
           onClick={() => {
             setCollapsed(!collapsed);
@@ -113,7 +117,7 @@ const Sidebar: React.FC<{
       </div>
 
       {/* Navigation */}
-      <div className="mt-8 w-full px-2">
+      <div className=" w-full px-2">
         <nav className="flex flex-col gap-4">
           {navItems.map((item) => (
             <SidebarItem
@@ -128,44 +132,32 @@ const Sidebar: React.FC<{
       </div>
 
       {/* User & Logout */}
-      <div className="flex flex-col w-full px-2 gap-1 mt-auto">
-        <div className="pt-2 border-t border-gray-800/40">
-          <Link
-            onClick={() => setCollapsed(!collapsed)}
-            to="/profile"
-            className={`flex items-center space-x-3 p-2 rounded-lg transition-colors duration-200 hover:bg-gray-800/40 ${
-              collapsed ? "justify-center" : ""
-            }`}
-          >
+      <div className="flex flex-col w-full px-2 gap-1">
+        {/* Profile Link */}
+        <SidebarItem
+          icon={
             <div className="relative">
               <FaRegUserCircle size={20} className="text-gray-400" />
               <span className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-gray-900"></span>
             </div>
-            {!collapsed && (
-              <div className="overflow-hidden">
-                <p className="text-sm font-medium text-gray-300 truncate">
-                  {user.name}
-                </p>
-                <p className="text-xs text-gray-500 truncate">{user.email}</p>
-              </div>
-            )}
-          </Link>
-        </div>
-        <motion.button
+          }
+          label={user.name.length > 7 ? `${user.name.slice(0, 7)}...` : user.name}
+          path="/profile"
+          collapsed={collapsed}
+        />
+        {/* Profile Link */}
+        <SidebarItem
+          icon={
+            loading ? (
+              <VscLoading className="animate-spin w-5 h-5 text-gray-400" />
+            ) : (
+              <IoLogOutOutline className="w-5 h-5 text-gray-400" />
+            )
+          }
+          label="Logout"
           onClick={handleLogOut}
-          whileHover={{ backgroundColor: "rgba(255,255,255,0.05)" }}
-          whileTap={{ scale: 0.98 }}
-          className={`flex items-center cursor-pointer gap-3 p-2 rounded-lg transition-colors ${
-            collapsed ? "justify-center" : ""
-          }`}
-        >
-          {loading ? (
-            <VscLoading className="animate-spin w-5 h-5 text-gray-400" />
-          ) : (
-            <IoLogOutOutline className="w-5 h-5 text-gray-400" />
-          )}
-          {!collapsed && <span className="text-sm text-gray-400">Logout</span>}
-        </motion.button>
+          collapsed={collapsed}
+        />
       </div>
     </motion.div>
   );

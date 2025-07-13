@@ -17,7 +17,7 @@ export const ContentLayout = () => {
     ? "grid-cols-[1fr]"
     : middlePanelCollapsed
     ? "grid-cols-[0fr_1fr]"
-    : "grid-cols-[0.3fr_1fr]";
+    : "grid-cols-[1fr_.1fr] md:grid-cols-[0.3fr_1fr]";
 
   return (
     <div

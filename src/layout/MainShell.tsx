@@ -13,6 +13,7 @@ import { authClient } from "../lib/auth-client";
 import type { Session, User } from "better-auth/types";
 import { ChatProvider } from "../context/ChatContext";
 import { motion } from "framer-motion";
+import { IoClose } from "react-icons/io5";
 
 export const MainShell = () => {
   const [session, setSession] = useState<{
@@ -26,7 +27,6 @@ export const MainShell = () => {
     statusText: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,8 +82,10 @@ export const MainShell = () => {
         <ChatProvider>
           <FolderProvider>
             <SourceProvider>
-              <div className="h-screen w-screen bg-black text-white grid grid-cols-[auto_1fr]">
-                <Sidebar user={{ ...session.user, token: "your-token-value" }} />
+              <div className="h-screen w-screen bg-black text-white grid grid-cols-[0fr_1fr] md:grid-cols-[auto_1fr]">
+                <Sidebar
+                  user={{ ...session.user, token: "your-token-value" }}
+                />
                 <main className="overflow-hidden h-full">
                   <Outlet />
                 </main>
@@ -96,7 +98,11 @@ export const MainShell = () => {
   );
 };
 
-export const CenteredLoader = ({ message = "Loading..." }: { message?: string }) => (
+export const CenteredLoader = ({
+  message = "Loading...",
+}: {
+  message?: string;
+}) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -116,8 +122,8 @@ export const CenteredLoader = ({ message = "Loading..." }: { message?: string })
       >
         <VscLoading className="w-8 h-8" />
       </motion.div>
-      
-      <motion.p 
+
+      <motion.p
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
@@ -125,8 +131,8 @@ export const CenteredLoader = ({ message = "Loading..." }: { message?: string })
       >
         {message}
       </motion.p>
-      
-      <motion.div 
+
+      <motion.div
         initial={{ width: 0 }}
         animate={{ width: "60%" }}
         transition={{ delay: 0.2, duration: 0.8 }}
@@ -135,10 +141,10 @@ export const CenteredLoader = ({ message = "Loading..." }: { message?: string })
         <motion.div
           initial={{ x: "-100%" }}
           animate={{ x: "100%" }}
-          transition={{ 
-            repeat: Infinity, 
-            duration: 1.5, 
-            ease: "easeInOut" 
+          transition={{
+            repeat: Infinity,
+            duration: 1.5,
+            ease: "easeInOut",
           }}
           className="h-full w-1/2 bg-blue-500/90 rounded-full"
         />

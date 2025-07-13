@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { NoteListSkeleton } from "./skeleton/NoteSkeleton";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { FileText } from "lucide-react";
+import { useUI } from "../context/UIContext";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -32,6 +33,7 @@ const NotesList: React.FC<NotesListProps> = ({
   const { captures, fetchCaptures, bookmarkCapture } = useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const {setMiddlePanelCollapsed} = useUI()
 
   const location = useLocation();
   const activeCaptureId = location.pathname.split("/").pop();
@@ -128,6 +130,7 @@ const NotesList: React.FC<NotesListProps> = ({
               transition={{ duration: 0.2 }}
             >
               <Link
+                onClick={()=>setMiddlePanelCollapsed(true)}
                 to={buildLink(note._id)}
                 className={`block rounded-lg p-3 transition-all duration-200 ${
                   activeCaptureId === note._id

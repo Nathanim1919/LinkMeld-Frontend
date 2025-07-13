@@ -7,11 +7,12 @@ import type { JSX } from "react";
 interface SidebarItemProps {
     icon: JSX.Element;
     label: string;
-    path: string;
+    onClick?: () => void;
+    path?: string;
     collapsed: boolean;
   }
 
-export const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) => {
+export const SidebarItem = ({ icon, label, path, collapsed, onClick }: SidebarItemProps) => {
   const { setMiddlePanelCollapsed, setCollapsed } = useUI();
   const matchRoute = useMatchRoute();
   const isActive = !!matchRoute({ to: path });
@@ -32,22 +33,22 @@ export const SidebarItem = ({ icon, label, path, collapsed }: SidebarItemProps) 
       <Link
         to={path}
         activeOptions={{ exact: true }}
-        onClick={handleClick}
-        className={`relative flex items-center ${
-          collapsed ? "justify-center" : "px-3"
-        } py-2.5 rounded-lg transition-all duration-200
+        onClick= {onClick || handleClick}
+        className={`relative flex text-[19px] md:text-2xl items-center ${
+          collapsed ? "justify-center" : "px-2"
+        } py-2 rounded-lg transition-all duration-200
         ${isActive ? "bg-gray-800/50" : ""}`}
       >
         <span
           className={`relative z-10 ${
             isActive ? "text-blue-400" : "text-gray-500"
-          } ${collapsed ? "text-2xl" : "text-2xl"}`}
+          } ${collapsed ? "text-1xl" : "text-1xl"}`}
         >
           {icon}
         </span>
         {!collapsed && (
           <span
-            className={`ml-3 text-sm ${
+            className={`ml-3 text-sm md:text-md ${
               isActive ? "font-medium text-white" : "font-normal text-gray-300"
             }`}
           >

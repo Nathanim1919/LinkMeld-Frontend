@@ -33,7 +33,7 @@ export const AIChatContainer = () => {
             scale: 0.95,
             transition: { duration: 0.15 },
           }}
-          className="fixed flex flex-col overflow-hidden right-4 bottom-4 top-4 rounded-2xl w-[450px] shadow-2xl border border-gray-800/50 z-[1000] bg-[#161618] backdrop-blur-3xl text-gray-200"
+          className="fixed flex flex-col overflow-hidden right-2 md:right-4 bottom-4 top-4 rounded-2xl w-[90%] md:w-[450px] shadow-2xl border border-gray-800/50 z-[1000] bg-[#161618] backdrop-blur-3xl text-gray-200"
           style={{
             boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
             transformOrigin: "bottom right",

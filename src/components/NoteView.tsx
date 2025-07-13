@@ -72,10 +72,10 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
 
   const containerWidth =
     collapsed && middlePanelCollapsed
-      ? "w-[60%]"
+      ? "w-[90%] md:w-[60%]"
       : collapsed || middlePanelCollapsed
-      ? "w-[70%]"
-      : "w-[80%]";
+      ? "w-[90%] md:w-[70%]"
+      : "w-[90%] md:w-[80%]";
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a]">
@@ -119,7 +119,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           </div>
 
           {/* Primary Action Buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center md:gap-2">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -135,7 +135,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               title={capture.bookmarked ? "Remove bookmark" : "Add bookmark"}
             >
               <FiBookmark className="w-4 h-4" />
-              <span className="text-xs font-medium">Bookmark</span>
+              <span className="text-xs font-medium hidden md:block">Bookmark</span>
             </motion.button>
 
             <motion.button
@@ -146,7 +146,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               title="Add to folder"
             >
               <FiFolderPlus className="w-4 h-4" />
-              <span className="text-xs font-medium">Organize</span>
+              <span className="text-xs font-medium hidden md:block">Organize</span>
             </motion.button>
           </div>
         </div>
