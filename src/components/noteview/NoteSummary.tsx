@@ -167,39 +167,44 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             >
               Explore Further
             </motion.h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-3xl mx-auto">
-  {sections.questions.map((question, i) => (
-    <button
-      key={i}
-      onClick={() => handleQuestionClick?.(question)}
-      className={`
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2  mx-auto">
+              {sections.questions.map((question, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleQuestionClick?.(question)}
+                  className={`
         w-full text-left
         px-4 py-3.5 rounded-xl
         border border-neutral-700
         bg-neutral-950/90
         backdrop-blur-md
-        text-neutral-200
-        hover:bg-neutral-900/60
+        hover:bg-violet-900/10
         active:bg-neutral-800
         transition-colors duration-200
         focus:outline-none focus:ring-1 focus:ring-blue-500/70 cursor-pointer group
       `}
-    >
-      <div className="flex items-center justify-between">
-        <span className="font-medium text-[14px] tracking-tight text-gray-400 group-hover:text-white">{question}</span>
-        <svg 
-          className="w-5 h-5 text-neutral-500" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
-      </div>
-    </button>
-  ))}
-</div>
+                >
+                  <div className="flex  text-violet-700 items-center justify-between">
+                    <span className="font-medium text-[14px] tracking-tight group-hover:text-violet-400">
+                      {question}
+                    </span>
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
+                  </div>
+                </button>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

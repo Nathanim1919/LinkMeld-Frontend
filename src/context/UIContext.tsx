@@ -22,7 +22,7 @@ const UIContext = createContext<SidebarContextType | undefined>(undefined);
 
 export const UIProvider = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(true);
-  const [middlePanelCollapsed, setMiddlePanelCollapsed] = useState(false);
+  const [middlePanelCollapsed, setMiddlePanelCollapsed] = useState(true);
   const [mainContentCollapsed, setMainContentCollapsed] = useState(true);
   const [openGlobalSearch, setOpenGlobalSearch] = useState(false);
   const [isFolderListOpen, setIsFolderListOpen] = useState(false);

@@ -1,24 +1,29 @@
-import { useParams } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
 import { FaHashtag } from "react-icons/fa";
 import NotesList from "./NotesList";
+import { FiChevronRight } from "react-icons/fi";
 
 export const SourceNotes = () => {
   const { sourceId } = useParams({ strict: false });
 
   return (
     <div>
-      <div className="flex items-center gap-2 px-4 py-3 rounded-t-lg border-b border-gray-700">
-        <h3 className="text-sm font-medium text-gray-300 flex items-center gap-1">
+      <div className="flex items-center px-4 py-3 rounded-t-lg border-b border-gray-900">
+        <div className="text-green-400 rounded-full flex items-center gap-1 py-1 px-2">
+        <Link
+         to={'/in/sources'}
+         className="text-sm hover:underline font-medium hover:opacity-64 text-gray-300 flex items-center">
           <FaHashtag className="text-purple-400" />
-          Source Notes
-        </h3>
-        <span className="ml-2 text-xs font-medium text-green-400 bg-green-900/20 px-2 py-1 rounded-full flex items-center gap-1">
+          Source
+        </Link>
+         <FiChevronRight className="text-gray-400 dark:text-gray-500/70 flex-shrink-0" />
+        <span className="text-sm font-medium flex items-center">
           <FaHashtag className="text-xs" />
           {sourceId && sourceId.length > 15
             ? sourceId.slice(0, 15) + "..."
             : sourceId}{" "}
-          {/* Updated to use sourceId */}
         </span>
+        </div>
       </div>
       <NotesList filter="source" sourceId={sourceId} />
     </div>

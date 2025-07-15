@@ -33,7 +33,7 @@ const NotesList: React.FC<NotesListProps> = ({
   const { captures, fetchCaptures, bookmarkCapture } = useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const {setMiddlePanelCollapsed} = useUI()
+  const { setMiddlePanelCollapsed } = useUI();
 
   const location = useLocation();
   const activeCaptureId = location.pathname.split("/").pop();
@@ -107,9 +107,9 @@ const NotesList: React.FC<NotesListProps> = ({
     );
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-hidden">
       {shouldShowHeader && (
-        <div className="px-3 py-3 border-b border-gray-800/50">
+        <div className="px-3 py-3  border-b border-gray-800/50">
           <div className="flex items-center gap-2">
             {filterIcons[filter]}
             <h3 className="text-sm font-medium text-gray-300">
@@ -130,7 +130,7 @@ const NotesList: React.FC<NotesListProps> = ({
               transition={{ duration: 0.2 }}
             >
               <Link
-                onClick={()=>setMiddlePanelCollapsed(true)}
+                onClick={() => setMiddlePanelCollapsed(true)}
                 to={buildLink(note._id)}
                 className={`block rounded-lg p-3 transition-all duration-200 ${
                   activeCaptureId === note._id
@@ -141,18 +141,20 @@ const NotesList: React.FC<NotesListProps> = ({
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      {note.metadata.isPdf?
-                      <FileText 
-                        className={`flex-shrink-0 text-red-700`}
-                        size={16}
-                      />:
-                      <CiStickyNote
-                        className={`flex-shrink-0 ${
-                          activeCaptureId === note._id
-                            ? "text-blue-400"
-                            : "text-gray-500"
-                        }`}
-                      />}
+                      {note.metadata.isPdf ? (
+                        <FileText
+                          className={`flex-shrink-0 text-red-700`}
+                          size={16}
+                        />
+                      ) : (
+                        <CiStickyNote
+                          className={`flex-shrink-0 ${
+                            activeCaptureId === note._id
+                              ? "text-blue-400"
+                              : "text-gray-500"
+                          }`}
+                        />
+                      )}
                       <h3 className="text-sm font-medium truncate text-gray-300">
                         {note.title}
                       </h3>
@@ -172,7 +174,7 @@ const NotesList: React.FC<NotesListProps> = ({
                     )}
 
                     <p className="text-xs text-gray-400 line-clamp-2 mb-2">
-                      {note.description}
+                      {note.description || note.ai?.summary?.slice(0,100)+"..."}
                     </p>
 
                     <span className="text-xs text-gray-500">
@@ -186,7 +188,7 @@ const NotesList: React.FC<NotesListProps> = ({
                       e.stopPropagation();
                       bookmarkCapture?.(note._id);
                     }}
-                    className={`ml-2 p-1 rounded-md transition-colors ${
+                    className={`ml-2 cursor-pointer hover:text-amber-400 p-1 rounded-md transition-colors ${
                       note.bookmarked
                         ? "text-amber-400 hover:bg-amber-900/20"
                         : "text-gray-500 hover:bg-gray-700/50 hover:text-gray-300"

@@ -1,3 +1,11 @@
+
+export const PROCESSING_STATUS =  {
+  PENDING: "pending",
+  PROCESSING: "processing",
+  COMPLETE: "complete",
+  ERROR: "error",
+}
+
 export interface Capture {
   _id: string;
   id: string; // Duplicate of _id in response
@@ -8,6 +16,8 @@ export interface Capture {
     level: number;
     text: string;
   }[];
+  processingStatus: keyof typeof PROCESSING_STATUS;
+  processingStatusMessage: string;
   contentHash: string;
   bookmarked: boolean;
   canonicalUrl: string;

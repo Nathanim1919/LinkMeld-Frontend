@@ -2,7 +2,8 @@ import { FaFolder, FaFolderOpen } from "react-icons/fa";
 import NotesList from "./NotesList";
 import { FolderService } from "../api/folder.api";
 import { useEffect, useState } from "react";
-import { useParams } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
+import { FiChevronRight } from "react-icons/fi";
 
 export const FolderNotes = () => {
   const { folderId } = useParams({ strict: false });
@@ -18,17 +19,22 @@ export const FolderNotes = () => {
 
   return (
     <div>
-      <div className="flex items-center gap-2 px-4 py-3 rounded-t-lg border-b border-gray-700">
-        <h3 className="text-sm font-medium text-gray-300 flex items-center gap-1">
+      <div className="flex items-center gap-2 px-4 py-3 rounded-t-lg border-b border-gray-900">
+      <div className="text-green-400 rounded-full flex items-center gap-1 py-1 px-2">
+        <Link
+         to={"/in/collections"}
+         className="text-sm hover:underline font-medium hover:opacity-64 text-gray-300 flex items-center gap-1">
+          <FaFolder className="text-green-400" />
+          Collections
+        </Link>
+        <FiChevronRight className="text-gray-400 dark:text-gray-500/70 flex-shrink-0" />
+        <span className="text-sm font-medium text-green-400 rounded-full flex items-center gap-1">
           <FaFolderOpen className="text-green-400" />
-          Folder Notes
-        </h3>
-        <span className="ml-2 text-xs font-medium text-green-400 bg-green-900/20 px-2 py-1 rounded-full flex items-center gap-1">
-          <FaFolder className="text-xs" />
           {folder && folder.length > 15 ? folder.slice(0, 15) + "..." : folder}
         </span>
       </div>
-      <div className="p-4">
+      </div>
+      <div className="">
       <NotesList filter="folder" folderId={folderId} />
       </div>
     </div>

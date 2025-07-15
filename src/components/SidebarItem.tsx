@@ -34,22 +34,19 @@ export const SidebarItem = ({ icon, label, path, collapsed, onClick }: SidebarIt
         to={path}
         activeOptions={{ exact: true }}
         onClick= {onClick || handleClick}
-        className={`relative flex text-[19px] md:text-2xl items-center ${
+        className={`relative flex text-[19px] md:text-[19px] items-center ${
           collapsed ? "justify-center" : "px-2"
         } py-2 rounded-lg transition-all duration-200
         ${isActive ? "bg-gray-800/50" : ""}`}
       >
         <span
-          className={`relative z-10 ${
-            isActive ? "text-blue-400" : "text-gray-500"
-          } ${collapsed ? "text-1xl" : "text-1xl"}`}
-        >
+          className={`relative z-10 ${isActive ? "text-blue-400" : "text-gray-500"}`}>
           {icon}
         </span>
         {!collapsed && (
           <span
             className={`ml-3 text-sm md:text-md ${
-              isActive ? "font-medium text-white" : "font-normal text-gray-300"
+              isActive ? "font-medium text-white" : "font-normal text-gray-500"
             }`}
           >
             {label}

@@ -76,7 +76,7 @@ export const NewFolderFormCard = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 20 }}
           transition={{ type: "spring", damping: 28, stiffness: 400 }}
-          className="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-2xl"
+          className="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-[#131313] backdrop-blur-xl p-6 shadow-2xl"
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-2">
@@ -86,7 +86,7 @@ export const NewFolderFormCard = ({
             <button
               onClick={onClose}
               aria-label="Close"
-              className="text-gray-400 hover:text-white p-1 rounded-full transition-colors hover:bg-white/10"
+              className="text-gray-400 cursor-pointer hover:text-white p-1 rounded-full transition-colors hover:bg-white/10"
             >
               <X size={20} />
             </button>
@@ -123,14 +123,14 @@ export const NewFolderFormCard = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-gray-300 hover:text-white rounded-lg transition hover:bg-white/10"
+                className="px-4 cursor-pointer py-2 text-sm text-gray-300 hover:text-white rounded-lg transition hover:bg-white/10"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting || !folderName.trim()}
-                className={`px-5 py-2 text-sm font-medium rounded-lg transition shadow ${
+                className={`px-5 cursor-pointer py-2 text-sm font-medium rounded-lg transition shadow ${
                   isSubmitting || !folderName.trim()
                     ? "bg-blue-600/40 text-gray-400 cursor-not-allowed"
                     : "bg-blue-600 text-white hover:bg-blue-500"

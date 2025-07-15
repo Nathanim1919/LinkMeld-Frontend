@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft, Github } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
@@ -14,69 +14,79 @@ export const LoginPage = () => {
     password: "",
   });
 
+  // Disable all interactive elements when loading
+  const disableAll = loading;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
     try {
-      const result = await authClient.signIn.email({
-        ...formData,
-        callbackURL: "http://localhost:5173/in",
-      });
-
-      if (result.error) {
-        toast.error(result.error.message || "Invalid credentials");
-        return;
-      }
-
-      toast.success("Signed in successfully");
+      await authClient.signIn.email(
+        {
+          ...formData,
+          callbackURL: "http://localhost:5173/in",
+        },
+        {
+          onRequest: () => {
+            toast.loading("Signing in...");
+          },
+          onSuccess: () => {
+            toast.dismiss();
+            toast.success("Successfully logged in");
+            setLoading(false); // Keep loading until navigation completes
+          },
+          onError: (ctx) => {
+            toast.dismiss();
+            toast.error(ctx.error.message || "Invalid credentials");
+            setLoading(false);
+          },
+        }
+      );
     } catch (error) {
       toast.error("Error occurred while signing in");
       console.error("Login failed", error);
     } finally {
+      if (!disableAll) {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleSocialSignIn = async (provider: "google" | "github") => {
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      await authClient.signIn.social({
+        provider,
+        callbackURL: "http://localhost:5173/in",
+        fetchOptions: {
+          onRequest: () => {
+            toast.loading(`Signing in with ${provider}...`);
+          },
+          onSuccess: () => {
+            toast.dismiss();
+            toast.success("Successfully logged in");
+            setLoading(false); // Keep loading until navigation completes
+          },
+          onError: (ctx) => {
+            toast.dismiss();
+            toast.error(ctx.error.message || "Login failed");
+            setLoading(false);
+          },
+        },
+      });
+    } catch (error) {
+      toast.error("Error occurred during social login");
+      console.error(`${provider} login failed`, error);
       setLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "http://localhost:5173/in",
-      fetchOptions: {
-        onRequest: () => {
-          setLoading(true);
-        },
-        onSuccess: () => {
-          toast.success("successfully loggedIn ...");
-          setLoading(false);
-        },
-        onError: (ctx) => {
-          alert(ctx.error.message);
-          setLoading(false);
-        },
-      },
-    });
-  };
-
-  const handleGithubSignIn = async () => {
-    await authClient.signIn.social({
-      provider: "github",
-      callbackURL: "http://localhost:5173/in",
-      fetchOptions: {
-        onRequest: () => {
-          setLoading(true);
-          toast.success("your request is on a process ...");
-        },
-        onSuccess: () => {
-          toast.success("successfully loggedIn ...");
-          setLoading(false);
-        },
-        onError: (ctx) => {
-          alert(ctx.error.message);
-          setLoading(false);
-        },
-      },
-    });
-  };
+  const handleGoogleSignIn = () => handleSocialSignIn("google");
+  const handleGithubSignIn = () => handleSocialSignIn("github");
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-[#f5f5f7] flex items-center justify-center p-4 relative overflow-hidden">
@@ -93,7 +103,9 @@ export const LoginPage = () => {
       >
         <Link
           to="/"
-          className="text-[#2997ff] hover:text-[#64b5ff] transition-colors flex items-center gap-1.5 group"
+          className={`text-[#2997ff] hover:text-[#64b5ff] transition-colors flex items-center gap-1.5 group ${
+            disableAll ? "pointer-events-none opacity-70" : ""
+          }`}
         >
           <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
           <span className="text-sm font-medium">Back</span>
@@ -107,7 +119,22 @@ export const LoginPage = () => {
         transition={{ delay: 0.1, type: "spring" }}
         className="w-full max-w-md"
       >
-        <div className="bg-[#161618]/80 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-[#2c2c2e]/50 overflow-hidden">
+        <div className="bg-[#161618]/80 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-[#2c2c2e]/50 overflow-hidden relative">
+          {/* Loading overlay */}
+          {disableAll && (
+            <div className="absolute inset-0 bg-black/30 z-10 flex items-center justify-center">
+              <motion.span
+                animate={{ rotate: 360 }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                className="w-8 h-8 border-2 border-white border-t-transparent rounded-full"
+              />
+            </div>
+          )}
+
           {/* Sophisticated header with subtle gradient */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -122,7 +149,7 @@ export const LoginPage = () => {
           </motion.div>
 
           {/* Social login buttons - side by side */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -130,11 +157,11 @@ export const LoginPage = () => {
           >
             <motion.button
               onClick={handleGoogleSignIn}
-              disabled={loading}
-              whileHover={{ scale: loading ? 1 : 1.02 }}
-              whileTap={{ scale: loading ? 1 : 0.98 }}
+              disabled={disableAll}
+              whileHover={{ scale: disableAll ? 1 : 1.02 }}
+              whileTap={{ scale: disableAll ? 1 : 0.98 }}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl ${
-                loading
+                disableAll
                   ? "bg-[#2c2c2e] cursor-not-allowed"
                   : "bg-[#2c2c2e] hover:bg-[#3a3a3c] cursor-pointer"
               } transition-all relative overflow-hidden border border-[#3a3a3c]/50`}
@@ -146,11 +173,11 @@ export const LoginPage = () => {
 
             <motion.button
               onClick={handleGithubSignIn}
-              disabled={loading}
-              whileHover={{ scale: loading ? 1 : 1.02 }}
-              whileTap={{ scale: loading ? 1 : 0.98 }}
+              disabled={disableAll}
+              whileHover={{ scale: disableAll ? 1 : 1.02 }}
+              whileTap={{ scale: disableAll ? 1 : 0.98 }}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl ${
-                loading
+                disableAll
                   ? "bg-[#2c2c2e] cursor-not-allowed"
                   : "bg-[#2c2c2e] hover:bg-[#3a3a3c] cursor-pointer"
               } transition-all relative overflow-hidden border border-[#3a3a3c]/50`}
@@ -169,7 +196,9 @@ export const LoginPage = () => {
             className="flex items-center my-6"
           >
             <div className="flex-1 border-t border-[#2c2c2e]/50"></div>
-            <span className="px-3 text-[#636366]/70 text-xs font-medium">OR CONTINUE WITH</span>
+            <span className="px-3 text-[#636366]/70 text-xs font-medium">
+              OR CONTINUE WITH
+            </span>
             <div className="flex-1 border-t border-[#2c2c2e]/50"></div>
           </motion.div>
 
@@ -194,7 +223,7 @@ export const LoginPage = () => {
                   className="w-full pl-9 pr-4 py-2.5 bg-[#2c2c2e]/70 rounded-lg focus:ring-2 focus:ring-[#0071e3]/50 focus:outline-none border border-[#3a3a3c]/50 hover:border-[#3a3a3c] transition-all text-sm placeholder-[#636366]/50"
                   placeholder="your@email.com"
                   required
-                  disabled={loading}
+                  disabled={disableAll}
                 />
               </div>
             </motion.div>
@@ -218,13 +247,13 @@ export const LoginPage = () => {
                   className="w-full pl-9 pr-10 py-2.5 bg-[#2c2c2e]/70 rounded-lg focus:ring-2 focus:ring-[#0071e3]/50 focus:outline-none border border-[#3a3a3c]/50 hover:border-[#3a3a3c] transition-all text-sm placeholder-[#636366]/50"
                   placeholder="••••••••"
                   required
-                  disabled={loading}
+                  disabled={disableAll}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#636366]/80 hover:text-[#aeaeb2] transition-colors"
-                  disabled={loading}
+                  disabled={disableAll}
                 >
                   {showPassword ? (
                     <EyeOff className="w-4 h-4" />
@@ -243,15 +272,15 @@ export const LoginPage = () => {
             >
               <button
                 type="submit"
-                disabled={loading}
+                disabled={disableAll}
                 className={`w-full py-3 px-6 rounded-lg ${
-                  loading
+                  disableAll
                     ? "bg-[#0071e3]/70 cursor-not-allowed"
                     : "bg-[#0071e3] hover:bg-[#2997ff] cursor-pointer"
                 } transition-all flex justify-center items-center gap-2 relative overflow-hidden group`}
               >
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                {loading ? (
+                {disableAll ? (
                   <motion.span
                     animate={{ rotate: 360 }}
                     transition={{
@@ -262,7 +291,9 @@ export const LoginPage = () => {
                     className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                   />
                 ) : (
-                  <span className="font-medium text-sm tracking-wide">Sign In</span>
+                  <span className="font-medium text-sm tracking-wide">
+                    Sign In
+                  </span>
                 )}
               </button>
             </motion.div>
@@ -279,7 +310,9 @@ export const LoginPage = () => {
               <Link
                 to="/forgot-password"
                 className={`hover:text-[#2997ff] ${
-                  loading ? "cursor-not-allowed" : "cursor-pointer"
+                  disableAll
+                    ? "pointer-events-none opacity-70"
+                    : "cursor-pointer"
                 } transition-colors`}
               >
                 Forgot password?
@@ -287,7 +320,9 @@ export const LoginPage = () => {
               <Link
                 to="/register"
                 className={`hover:text-[#2997ff] ${
-                  loading ? "cursor-not-allowed" : "cursor-pointer"
+                  disableAll
+                    ? "pointer-events-none opacity-70"
+                    : "cursor-pointer"
                 } transition-colors`}
               >
                 Create account

@@ -1,4 +1,4 @@
-import type { Capture } from "../types/Capture";
+import { PROCESSING_STATUS, type Capture } from "../types/Capture";
 import { NoteHeader } from "./noteview/NoteHeader";
 import { NoteMetaBox } from "./noteview/NoteMetaAccordion";
 import { useUI } from "../context/UIContext";
@@ -83,7 +83,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       <FolderList />
 
       {/* Header with refined design */}
-      <div className="sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800/30 bg-white/80 dark:bg-[#1A1A1C]/80 backdrop-blur-2xl px-6 py-3">
+      <div className="sticky top-0 z-10 bg-white/80 dark:bg-[#0a0a0a] backdrop-blur-2xl px-6 py-3">
         <div className="flex items-center justify-between">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center overflow-hidden">
@@ -112,7 +112,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             )}
             <div className="flex items-center gap-1.5">
               <FiFileText className="text-amber-500 flex-shrink-0" />
-              <span className="text-sm font-medium text-gray-900 dark:text-gray-200 truncate max-w-[180px]">
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-500 truncate max-w-[180px]">
                 {capture.title}
               </span>
             </div>
@@ -154,9 +154,71 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
 
       {/* Main Content */}
       <div
-        className={`mx-auto ${containerWidth} flex-1 overflow-y-auto py-8 px-6`}
+        className={`mx-auto ${containerWidth} flex-1 overflow-y-auto py-2 px-6`}
       >
-        <NoteHeader
+        {capture.processingStatus === PROCESSING_STATUS.PROCESSING ? (
+          <div className="flex flex-col items-center justify-center z-40 h-full space-y-6 px-4 fixed w-full top-0 left-0 bg-white/80 dark:bg-[#1A1A1C]/80 backdrop-blur-xl">
+            {/* Animated gradient orb (subtle floating animation) */}
+            <div className="relative">
+              {/* <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 animate-[pulse_2.5s_ease-in-out_infinite] shadow-sm shadow-indigo-100/50">
+                <div className="absolute inset-4 rounded-full bg-white/30 backdrop-blur-sm border border-white/20"></div>
+              </div> */}
+              
+              {/* Micro-interaction dots (Apple-style) */}
+              <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-1.5">
+                {[0, 1, 2].map((i) => (
+                  <div 
+                    key={i}
+                    className="w-1.5 h-1.5 rounded-full bg-indigo-300/70 animate-bounce"
+                    style={{
+                      animationDelay: `${i * 0.15}s`,
+                      animationDuration: '1.2s'
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+        
+            {/* Dynamic status text with smooth transitions */}
+            <div className="text-center space-y-1 max-w-md">
+              <h3 className="text-lg font-medium text-gray-800 tracking-tight">
+                Analyzing your document
+              </h3>
+              <p className="text-sm text-gray-500 font-light tracking-wide transition-all duration-300">
+                {['Extracting key concepts', 'Identifying main arguments', 'Structuring insights'][Math.floor(Date.now() / 1000) % 3]}
+                <span className="dot-flashing ml-1.5 inline-block relative h-2 w-2">
+                  <span className="absolute top-0 w-1 h-1 rounded-full bg-gray-400"></span>
+                </span>
+              </p>
+            </div>
+        
+            {/* Progress indication (subtle) */}
+            <div className="w-full max-w-xs">
+              <div className="h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-blue-300 to-indigo-400 rounded-full animate-[indeterminate_2.5s_ease-in-out_infinite]"
+                  style={{
+                    width: '65%',
+                    backgroundSize: '200% 100%',
+                    backgroundPositionX: Math.sin(Date.now() / 800) * 50 + 50 + '%'
+                  }}
+                />
+              </div>
+            </div>
+        
+            {/* Subtle system status (like Apple's processing) */}
+            <div className="absolute bottom-6 left-0 right-0 flex justify-center">
+              <div className="text-xs text-gray-400 flex items-center">
+                <svg className="w-3 h-3 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                </svg>
+                <span>Preparing intelligent summary</span>
+              </div>
+            </div>
+          </div>
+        )
+          : (
+          <NoteHeader
           collection={
             capture.collection
               ? {
@@ -165,8 +227,10 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                 }
               : { name: "Uncategorized", id: "uncategorized" }
           }
+
+          isPdf={capture.metadata.isPdf || false}
           title={capture.title}
-          description={capture.metadata.description || ""}
+          description={capture.metadata.description || capture.ai.summary.match(/# Context\n([\s\S]+?)(?=\n# Overview)/i)?.[1].trim() || ""}
           tags={
             capture.metadata.keywords
               ? capture.metadata.keywords.map((tag) => tag.trim())
@@ -174,6 +238,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           }
           capturedAt={capture.metadata.capturedAt}
         />
+        )}
 
         {capture.headings.length > 0 && (
           <HeadingOutline headings={capture.headings} />

@@ -7,8 +7,8 @@ export const BookMarkLayout: React.FC = () => {
 
   return (
     <div
-      className={`bg-[#1A1A1C] ${
-        middlePanelCollapsed ? "p-0" : "p-2"
+      className={`bg-[#141416] ${
+        middlePanelCollapsed ? "p-0" : ""
       } relative border-r border-zinc-800 overflow-y-auto`}
     >
       <div

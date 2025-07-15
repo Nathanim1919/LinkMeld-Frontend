@@ -4,7 +4,6 @@ import {
   FiRefreshCw,
   FiUpload,
   FiStar,
-  FiCheck,
 } from "react-icons/fi";
 import { RiShieldKeyholeLine } from "react-icons/ri";
 import { SetApiKeyModal } from "../components/modals/setApiKey.modal";
@@ -16,6 +15,9 @@ import { ExportDataModal } from "../components/modals/exportData.modal";
 import { getUserProfileInfo, type IUserProfile } from "../api/account.api";
 import { authClient } from "../lib/auth-client";
 import type { User } from "better-auth/types";
+import { useNavigate } from "@tanstack/react-router";
+import { VscLoading } from "react-icons/vsc";
+import { toast } from "sonner";
 
 export const UserProfile = () => {
   const [activeModal, setActiveModal] = useState<
@@ -26,7 +28,9 @@ export const UserProfile = () => {
   const [userProfileData, setUserProfileData] = useState<IUserProfile>();
   const [authInfo, setAuthInfo] = useState<User>();
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
-
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  
   useEffect(() => {
     async function getUserProfile() {
       const auth = await authClient.getSession();
@@ -39,40 +43,67 @@ export const UserProfile = () => {
   }, []);
 
 
+    const handleLogOut = async () => {
+    setLoading(true);
+    await authClient
+      .signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            navigate({ to: "/login" });
+          },
+        },
+      })
+      .then(() => {
+        toast.success("Logged out successfully");
+      })
+      .catch(() => {
+        toast.error("Error occured when logging out");
+      });
+    setLoading(false);
+  };
+
+
   return (
     <div className="min-h-screen grid gap-2 place-items-start bg-[#000000] text-[#f5f5f7]">
-      <div className="max-w-3xl mx-auto mt-6">
+      <div className="max-w-3xl mx-auto mt-6 grid gap-4 w-full px-4">
         {/* Profile Header */}
-        <motion.div
+    <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, type: "spring" }}
-          className="flex flex-col md:flex-row items-center gap-6 mb-12"
+          transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
+          className="w-full rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6"
         >
-          <div className="relative">
-            <div className="w-18 h-18 overflow-hidden rounded-full bg-gradient-to-br from-[#0071e3] to-[#2997ff] flex items-center justify-center">
+          <div className="flex items-center gap-4">
+            <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-300 flex items-center justify-center text-white text-2xl font-bold">
+              {authInfo?.image ? (
+                <img
+                  src={authInfo.image}
+                  alt="Profile"
+                  className="w-full h-full object-cover rounded-full"
+                />
+              ) : (
+                authInfo?.name?.[0].toUpperCase()
+              )}
+              <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-2 border-black"></div>
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold text-white">{authInfo?.name}</h2>
+              <p className="text-sm text-gray-400">
+                Joined {authInfo?.createdAt ? new Date(authInfo.createdAt).toLocaleDateString() : "Unknown"}
+              </p>
+            </div>
+          </div>
+          <button onClick={handleLogOut} className="text-sm cursor-pointer text-blue-400 hover:underline transition">
               {
-                authInfo?.image ? (
-                  <img src={authInfo.image} alt="profile image"/>
-                ):
-              <span className="text-4xl font-semibold text-white">{authInfo?.name.slice(0,1).toUpperCase()}</span>
+                loading?
+                <span className="flex items-center gap-2">
+                  <VscLoading className="animate-spin duration-150"/>
+                  Logging out...
+                </span>:
+                "LogOut"
+
               }
-            </div>
-            <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-1.5 border-2 border-[#1c1c1e]">
-              <FiCheck className="text-xs text-white" />
-            </div>
-          </div>
-          <div>
-            <h1 className="text-3xl md:text-4xl font-semibold text-white">
-              {authInfo?.name}
-            </h1>
-            <p className="text-[#aeaeb2] mt-1">
-              Joined{" "}
-              {authInfo?.createdAt
-                ? authInfo.createdAt.toLocaleDateString()
-                : "Unknown"}
-            </p>
-          </div>
+          </button>
         </motion.div>
 
         {/* Action Grid */}
