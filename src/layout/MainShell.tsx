@@ -13,7 +13,6 @@ import { authClient } from "../lib/auth-client";
 import type { Session, User } from "better-auth/types";
 import { ChatProvider } from "../context/ChatContext";
 import { motion } from "framer-motion";
-import { IoClose } from "react-icons/io5";
 
 export const MainShell = () => {
   const [session, setSession] = useState<{

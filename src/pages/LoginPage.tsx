@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft, Github } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
