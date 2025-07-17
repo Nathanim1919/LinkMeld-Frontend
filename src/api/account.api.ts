@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const resetData = async (): Promise<void> => {
-  const url = `http://52.156.88.58:3000/api/v1/account/reset`;
+  const url = `http://localhost:3000/api/v1/account/reset`;
 
   try {
     await axios.post(url, null, {
@@ -17,7 +17,7 @@ export const resetData = async (): Promise<void> => {
 };
 
 export const setGeminiApiKey = async (geminiApiKey: string): Promise<void> => {
-  const url = `http://52.156.88.58:3000/api/v1/account/setGeminiApiKey`;
+  const url = `http://localhost:3000/api/v1/account/setGeminiApiKey`;
 
   try {
     await axios.post(
@@ -46,7 +46,7 @@ export interface IUserProfile {
 }
 
 export const getUserProfileInfo = async (): Promise<IUserProfile> => {
-  const url = `http://52.156.88.58:3000/api/v1/account/profile`;
+  const url = `http://localhost:3000/api/v1/account/profile`;
 
   try {
     const response = await axios.get(url, {
