@@ -15,7 +15,7 @@ export const sendMessage = async (
   captureId: string
 ): Promise<IChat> => {
   try {
-    const res = await api.post<IChat>("ai/converse",
+    const res = await api.post<IChat>("/ai/converse",
       { messages, captureId },
     );
     return res.data;
