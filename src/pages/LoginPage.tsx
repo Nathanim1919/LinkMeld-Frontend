@@ -26,7 +26,7 @@ export const LoginPage = () => {
       await authClient.signIn.email(
         {
           ...formData,
-          callbackURL: "http://deepen.live/in",
+          callbackURL: "/in",
         },
         {
           onRequest: () => {
@@ -61,7 +61,7 @@ export const LoginPage = () => {
     try {
       await authClient.signIn.social({
         provider,
-        callbackURL: "http://deepen.live/in",
+        callbackURL: "/in",
         fetchOptions: {
           onRequest: () => {
             toast.loading(`Signing in with ${provider}...`);

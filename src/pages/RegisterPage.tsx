@@ -24,7 +24,7 @@ export const RegisterPage = () => {
     try {
       const result = await authClient.signUp.email({
         ...formData,
-        callbackURL: "http://deepen.live/in",
+        callbackURL: "/in",
       });
       setFormData({ name: "", email: "", password: "" });
       if (result.error) {
@@ -41,7 +41,7 @@ export const RegisterPage = () => {
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "http://deepen.live/in",
+      callbackURL: "/in",
       fetchOptions: {
         onRequest: () => {
           setLoading(true);
@@ -62,7 +62,7 @@ export const RegisterPage = () => {
   const handleGithubSignIn = async () => {
     await authClient.signIn.social({
       provider: "github",
-      callbackURL: "http://deepen.live/in",
+      callbackURL: "/in",
       fetchOptions: {
         onRequest: () => {
           setLoading(true);
