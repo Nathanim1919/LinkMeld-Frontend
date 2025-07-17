@@ -8,8 +8,10 @@ import { authClient } from "../lib/auth-client";
 import { toast } from "sonner";
 
 export const RegisterPage = () => {
+  
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,7 +24,7 @@ export const RegisterPage = () => {
     try {
       const result = await authClient.signUp.email({
         ...formData,
-        callbackURL: "http://localhost:5173/in",
+        callbackURL: "http://deepen.live/in",
       });
       setFormData({ name: "", email: "", password: "" });
       if (result.error) {
@@ -39,7 +41,7 @@ export const RegisterPage = () => {
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "http://localhost:5173/in",
+      callbackURL: "http://deepen.live/in",
       fetchOptions: {
         onRequest: () => {
           setLoading(true);
@@ -60,7 +62,7 @@ export const RegisterPage = () => {
   const handleGithubSignIn = async () => {
     await authClient.signIn.social({
       provider: "github",
-      callbackURL: "http://localhost:5173/in",
+      callbackURL: "http://deepen.live/in",
       fetchOptions: {
         onRequest: () => {
           setLoading(true);

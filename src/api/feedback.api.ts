@@ -1,15 +1,5 @@
 import axios from "axios";
-
-const API_BASE_URL = "http://localhost:3000/api/v1/feedback";
-
-// Configure axios instance
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import { api } from ".";
 
 /**
  * Feedback API Service
@@ -28,7 +18,7 @@ export const FeedbackService = {
     profession?: string;
   }): Promise<void> {
     try {
-      const response = await apiClient.post("/", { feedbackData });
+      const response = await api.post("/feedback", { feedbackData });
       return response.data;
     } catch (error) {
       throw this.handleError(error, "Failed to submit feedback");
@@ -43,7 +33,7 @@ export const FeedbackService = {
 
   async getFeedbacks(): Promise<string> {
     try {
-      const response = await apiClient.get<{ data: string }>("/getFeedbacks");
+      const response = await api.get<{ data: string }>("/getFeedbacks");
       return response.data.data;
     } catch (error) {
       throw this.handleError(error, "Failed to fetch feedbacks");

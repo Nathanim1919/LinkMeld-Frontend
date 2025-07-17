@@ -1,6 +1,5 @@
-import axios from "axios";
 import type { IMessage } from "../context/ChatContext";
-// import { IChat } from "../types/chat.type";
+import { api } from ".";
 
 interface IChat {
   id: string;
@@ -16,10 +15,8 @@ export const sendMessage = async (
   captureId: string
 ): Promise<IChat> => {
   try {
-    const res = await axios.post<IChat>(
-      "http://localhost:3000/api/v1/ai/converse",
+    const res = await api.post<IChat>("ai/converse",
       { messages, captureId },
-      { withCredentials: true }
     );
     return res.data;
   } catch (error) {

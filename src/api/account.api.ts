@@ -1,13 +1,8 @@
-import axios from "axios";
+import { api } from ".";
 
 export const resetData = async (): Promise<void> => {
-  const url = `http://localhost:3000/api/v1/account/reset`;
-
   try {
-    await axios.post(url, null, {
-      withCredentials: true, // Include credentials in the request
-    });
-
+    await api.post("account/reset");
     console.log(`✅ Successfully reset data:`);
     return; // Added return statement to indicate completion
   } catch (error) {
@@ -17,17 +12,10 @@ export const resetData = async (): Promise<void> => {
 };
 
 export const setGeminiApiKey = async (geminiApiKey: string): Promise<void> => {
-  const url = `http://localhost:3000/api/v1/account/setGeminiApiKey`;
-
   try {
-    await axios.post(
-      url,
-      { geminiApiKey },
-      {
-        withCredentials: true,
-      }
-    );
-
+    await api.post("account/setGeminiApiKey", {
+      geminiApiKey,
+    });
     console.log(`✅ Successfully set Gemini API key:`);
     return; // Added return statement to indicate completion
   } catch (error) {
@@ -46,12 +34,8 @@ export interface IUserProfile {
 }
 
 export const getUserProfileInfo = async (): Promise<IUserProfile> => {
-  const url = `http://localhost:3000/api/v1/account/profile`;
-
   try {
-    const response = await axios.get(url, {
-      withCredentials: true,
-    });
+    const response = await api.get("account/profile");
     return response.data.data; // Added return statement to indicate completion
   } catch (error) {
     console.error(`❌ Error retrieving user profile info:`, error);

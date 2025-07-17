@@ -1,18 +1,7 @@
-import axios, { AxiosError } from "axios";
+import type { AxiosError } from "axios";
+import { api } from ".";
 import type { Capture } from "../types/Capture";
 
-const API_BASE_URL = "http://localhost:3000/api/v1";
-
-// Configure axios instance
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
-  timeout: 10000, // 10 second timeout
-});
 
 // Strongly typed filter
 export type CaptureFilter = "all" | "bookmarks" | "folder" | "source";
@@ -54,7 +43,7 @@ export const CaptureService = {
           break;
       }
 
-      const response = await apiClient.get<ApiResponse<Capture[]>>(endpoint);
+      const response = await api.get<ApiResponse<Capture[]>>(endpoint);
       return response.data.data;
     } catch (error) {
       throw this.handleError(error, "Failed to fetch captures");
@@ -69,7 +58,7 @@ export const CaptureService = {
    */
   async toggleBookmark(captureId: string): Promise<Capture> {
     try {
-      const response = await apiClient.patch<ApiResponse<Capture>>(
+      const response = await api.patch<ApiResponse<Capture>>(
         `/captures/${captureId}/bookmark`
       );
       return response.data.data;
@@ -86,7 +75,7 @@ export const CaptureService = {
    */
   async search(searchTerm: string): Promise<Capture[]> {
     try {
-      const response = await apiClient.get<ApiResponse<Capture[]>>(
+      const response = await api.get<ApiResponse<Capture[]>>(
         `/captures/search`,
         { params: { query: searchTerm } }
       );
@@ -103,14 +92,11 @@ export const CaptureService = {
    */
   async getById(captureId: string): Promise<Capture | null> {
     try {
-      const response = await apiClient.get<ApiResponse<Capture>>(
+      const response = await api.get<ApiResponse<Capture>>(
         `/captures/${captureId}`
       );
       return response.data.data;
     } catch (error) {
-      if ((error as AxiosError).response?.status === 404) {
-        return null;
-      }
       throw this.handleError(error, "Failed to fetch capture");
     }
   },
@@ -126,7 +112,7 @@ export const CaptureService = {
     error?: ErrorResponse;
   }> {
     try {
-      const response = await apiClient.post<{
+      const response = await api.post<{
         success: boolean;
         message: string;
         data: { summary: string; captureId: string };

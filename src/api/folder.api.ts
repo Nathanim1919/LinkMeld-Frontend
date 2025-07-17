@@ -1,16 +1,6 @@
 import axios from "axios";
 import type { IFolder } from "../types/Folder";
-
-const API_BASE_URL = "http://localhost:3000/api/v1/folders";
-
-// Configure axios instance
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import { api } from ".";
 
 /**
  * Folder API Service
@@ -25,7 +15,7 @@ export const FolderService = {
    */
   async create(name: string): Promise<IFolder> {
     try {
-      const response = await apiClient.post<{ data: IFolder }>("/", { name });
+      const response = await api.post<{ data: IFolder }>("/folders", { name });
       return response.data.data;
     } catch (error) {
       throw this.handleError(error, "Failed to create folder");
@@ -39,7 +29,7 @@ export const FolderService = {
    */
   async getAll(): Promise<IFolder[]> {
     try {
-      const response = await apiClient.get<{ data: IFolder[] }>("/");
+      const response = await api.get<{ data: IFolder[] }>("/folders");
       return response.data.data;
     } catch (error) {
       throw this.handleError(error, "Failed to fetch folders");
@@ -54,7 +44,7 @@ export const FolderService = {
    */
   async getById(id: string): Promise<IFolder> {
     try {
-      const response = await apiClient.get<{ data: IFolder }>(`/${id}`);
+      const response = await api.get<{ data: IFolder }>(`/folders/${id}`);
       return response.data.data;
     } catch (error) {
       throw this.handleError(error, "Failed to fetch folder");
@@ -70,8 +60,8 @@ export const FolderService = {
    */
   async addCapture(folderId: string, captureId: string): Promise<IFolder> {
     try {
-      const response = await apiClient.post<{ data: IFolder }>(
-        `/${folderId}/captures`,
+      const response = await api.post<{ data: IFolder }>(
+        `/folders/${folderId}/captures`,
         { captureId }
       );
       return response.data.data;
@@ -89,8 +79,8 @@ export const FolderService = {
    */
   async removeCapture(folderId: string, captureId: string): Promise<IFolder> {
     try {
-      const response = await apiClient.delete<{ data: IFolder }>(
-        `/${folderId}/captures/${captureId}`
+      const response = await api.delete<{ data: IFolder }>(
+        `/folders/${folderId}/captures/${captureId}`
       );
       return response.data.data;
     } catch (error) {
