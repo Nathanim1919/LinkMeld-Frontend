@@ -2,13 +2,14 @@ import { motion } from "framer-motion";
 import Image from "../assets/img1.png";
 import { CallToAction } from "./CallToAction";
 import { Features } from "./features";
+import { TestimonialsPage } from "./TestimonialsPage";
 
 const HeroPage = () => {
   return (
     <>
     <div
       className="w-full h-full bg-black relative overflow-hidden
-    before:absolute before:w-full before:h-[90%] before:transform before:top-[80%] before:rotate-90  before:content-[''] before:bg-violet-600
+    before:absolute before:w-full before:h-[90%] before:transform before:top-[95%] before:rotate-90  before:content-[''] before:bg-violet-600
         after:absolute after:w-full after:h-[100%]  after:transform after:bottom-[0%]  after:content-[''] after:bg-gradient-to-t after:from-black
     "
     >
@@ -29,7 +30,7 @@ const HeroPage = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl mb-5 font-bold tracking-tight leading-[1.1]"
+              className="text-4xl md:text-5xl mb-5 font-bold tracking-tight leading-[1.1]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -49,7 +50,7 @@ const HeroPage = () => {
             </motion.h1>
 
             <motion.p
-              className="md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
+              className="md:text-xl text-gray-400 max-w-[95%] md:max-w-[70%] mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
@@ -83,6 +84,7 @@ const HeroPage = () => {
     </div>
     <CallToAction/>
     <Features/>
+    <TestimonialsPage/>
     </>
   );
 };
