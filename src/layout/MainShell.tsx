@@ -13,6 +13,7 @@ import { authClient } from "../lib/auth-client";
 import type { Session, User } from "better-auth/types";
 import { ChatProvider } from "../context/ChatContext";
 import { motion } from "framer-motion";
+import { ChevronsRight } from "lucide-react";
 
 export const MainShell = () => {
   const [session, setSession] = useState<{
@@ -26,6 +27,7 @@ export const MainShell = () => {
     statusText: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hideSidebar, setHideSidebar] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -81,8 +83,16 @@ export const MainShell = () => {
         <ChatProvider>
           <FolderProvider>
             <SourceProvider>
+            {hideSidebar && <div className="w-full px-2 relative md:hidden bg-[#0a0a0a]">
+               <ChevronsRight
+                className="relative z-50 cursor-pointer hover:text-white text-gray-600 md:hidden"
+                onClick={() => setHideSidebar(!hideSidebar)}
+               />
+            </div>}
               <div className="h-screen w-screen bg-black text-white grid grid-cols-[0fr_1fr] md:grid-cols-[auto_1fr]">
                 <Sidebar
+                  hideSidebar={hideSidebar}
+                  setHideSidebar={setHideSidebar}
                   user={{ ...session.user, token: "your-token-value" }}
                 />
                 <main className="overflow-hidden h-full">

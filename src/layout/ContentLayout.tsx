@@ -17,12 +17,12 @@ export const ContentLayout = () => {
     ? "grid-cols-[1fr]"
     : middlePanelCollapsed
     ? "grid-cols-[0fr_1fr]"
-    : "grid-cols-[1fr_.1fr] md:grid-cols-[0.3fr_1fr]";
+    : "grid-cols-[5fr_0fr] md:grid-cols-[0.3fr_1fr]";
 
   return (
     <div
       className={clsx(
-        "h-full grid transition-all duration-300 ease-in-out",
+        "h-full w-full grid transition-all duration-300 ease-in-out",
         gridCols
       )}
     >

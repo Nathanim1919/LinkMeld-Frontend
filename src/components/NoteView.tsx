@@ -83,7 +83,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       <FolderList />
 
       {/* Header with refined design */}
-      <div className="sticky top-0 z-10 bg-white/80 dark:bg-[#0a0a0a] backdrop-blur-2xl px-6 py-3">
+      <div className="sticky top-0 z-10 bg-white/80 dark:bg-[#0a0a0a] backdrop-blur-2xl px-6 md:py-2">
         <div className="flex items-center justify-between">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center overflow-hidden">
@@ -154,7 +154,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
 
       {/* Main Content */}
       <div
-        className={`mx-auto ${containerWidth} flex-1 overflow-y-auto py-2 px-6`}
+        className={`mx-auto ${containerWidth} flex-1 overflow-y-auto py-2 md:px-6`}
       >
         {capture.processingStatus === PROCESSING_STATUS.PROCESSING ? (
           <div className="flex flex-col items-center justify-center z-40 h-full space-y-6 px-4 fixed w-full top-0 left-0 bg-white/80 dark:bg-[#1A1A1C]/80 backdrop-blur-xl">
@@ -182,7 +182,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             {/* Dynamic status text with smooth transitions */}
             <div className="text-center space-y-1 max-w-md">
               <h3 className="text-lg font-medium text-gray-800 tracking-tight">
-                Analyzing your document
+                Processing your capture...
               </h3>
               <p className="text-sm text-gray-500 font-light tracking-wide transition-all duration-300">
                 {['Extracting key concepts', 'Identifying main arguments', 'Structuring insights'][Math.floor(Date.now() / 1000) % 3]}
@@ -191,30 +191,9 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                 </span>
               </p>
             </div>
-        
-            {/* Progress indication (subtle) */}
-            <div className="w-full max-w-xs">
-              <div className="h-0.5 bg-gray-100 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-blue-300 to-indigo-400 rounded-full animate-[indeterminate_2.5s_ease-in-out_infinite]"
-                  style={{
-                    width: '65%',
-                    backgroundSize: '200% 100%',
-                    backgroundPositionX: Math.sin(Date.now() / 800) * 50 + 50 + '%'
-                  }}
-                />
-              </div>
-            </div>
-        
-            {/* Subtle system status (like Apple's processing) */}
-            <div className="absolute bottom-6 left-0 right-0 flex justify-center">
-              <div className="text-xs text-gray-400 flex items-center">
-                <svg className="w-3 h-3 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-                </svg>
-                <span>Preparing intelligent summary</span>
-              </div>
-            </div>
+
+
+                <span>Please refresh the page...</span>
           </div>
         )
           : (
@@ -230,6 +209,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
 
           isPdf={capture.metadata.isPdf || false}
           title={capture.title}
+          url={capture.url || ""}
           description={capture.metadata.description || capture.ai.summary.match(/# Context\n([\s\S]+?)(?=\n# Overview)/i)?.[1].trim() || ""}
           tags={
             capture.metadata.keywords

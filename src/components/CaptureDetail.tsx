@@ -9,12 +9,15 @@ import { NoteHeaderSkeleton } from "./skeleton/NoteHeaderSkeleton";
 import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
 import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
 import HeadingOutlineSkeleton from "./skeleton/HeadingOutlineSkeleton";
+import { useUI } from "../context/UIContext";
 
 export const CaptureDetail = () => {
   const { captureId } = useParams({ strict: false });
   const { setSelectedCapture } = useCaptureContext();
   const [capture, setCapture] = useState<Capture | null>(null);
+  const {middlePanelCollapsed} = useUI();
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     if (!captureId) {
@@ -35,12 +38,16 @@ export const CaptureDetail = () => {
       .finally(() => setLoading(false));
   }, [captureId, setSelectedCapture]);
 
-  if (loading) return <div className="w-[60%] mx-auto mt-6">
+  if (loading) return <div className="md:w-[60%] w-[90%] mx-auto mt-6">
     <NoteHeaderSkeleton/>
     <HeadingOutlineSkeleton/>
     <NoteSummarySkeleton/>
     <NoteMetaBoxSkeleton/>
   </div>;
 
-  return capture ? <NoteView capture={capture} /> : <EmptyNoteView />;
+  return (
+    <div className={`${middlePanelCollapsed ? "w-full" : "w-0 md:w-[60%]"} h-full overflow-y-auto`}>
+      {capture ? <NoteView capture={capture} /> : <EmptyNoteView />}
+    </div>
+  );
 };

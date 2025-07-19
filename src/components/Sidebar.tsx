@@ -39,24 +39,28 @@ const navItems = [
 ];
 
 const Sidebar: React.FC<{
+  hideSidebar?: boolean;
+  setHideSidebar?: (hide: boolean) => void;
   user: {
     id: string;
     email: string;
     name: string;
     token: string;
   };
-}> = ({ user }) => {
+}> = ({ user, hideSidebar, setHideSidebar }) => {
   const { collapsed, setCollapsed } = useUI();
 
   return (
-    <motion.div
-      className={`h-screen relative z-50 bg-[#1A1A1C]  border-r border-gray-800/40
-        ${collapsed ? "w-12 md:w-14" : "w-42"} text-gray-300 flex flex-col
-        relative justify-around md:justify-between py-6 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
+<motion.div
+  className={`h-screen relative z-1000 bg-[#1A1A1C] border-r border-gray-800/40
+    text-gray-300 flex flex-col justify-start gap-10 md:gap-0 md:justify-between py-6 
+    transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+    /* Mobile behavior (controlled by hideSidebar) */
+    ${hideSidebar ? "max-md:w-0 max-md:overflow-hidden max-md:translate-x-[-100%]" : ""}
+    /* Desktop behavior (controlled by collapsed) */
+    ${collapsed ? "w-12 md:w-14" : "w-36"}
+  `}
+>
       {/* Logo */}
         <div
           className={`flex items-center ${collapsed?"justify-center":"justify-between px-2"}`}
@@ -73,6 +77,7 @@ const Sidebar: React.FC<{
           {!collapsed && (
             <div
             onClick={() => {
+              setHideSidebar?.(true);
               setCollapsed(true);
             }}
              className="p-2 hover:cursor-e-resize group hover:bg-white/5 rounded-lg backdrop-blur-sm">
