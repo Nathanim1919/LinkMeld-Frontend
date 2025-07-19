@@ -24,6 +24,7 @@ export const SidebarItem = ({ icon, label, path, collapsed, onClick }: SidebarIt
     if (path === "/search" || path === "/in") {
       // If the path is "/in", we want to reset the middle panel
       setCollapsed(true);
+      setMiddlePanelCollapsed(true);
 
     }
   };

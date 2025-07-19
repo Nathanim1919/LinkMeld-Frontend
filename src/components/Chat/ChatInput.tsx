@@ -49,7 +49,6 @@ export const ChatInput = () => {
       {/* Text Input */}
       <div className="relative">
         <textarea
-          autoFocus
           disabled={!hasApiKey}
           ref={textareaRef}
           value={userMessage}
