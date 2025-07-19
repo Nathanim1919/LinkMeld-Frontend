@@ -46,7 +46,7 @@ export const CaptureDetail = () => {
   </div>;
 
   return (
-    <div className={`${middlePanelCollapsed ? "w-full" : "w-0 md:w-[60%]"} h-full overflow-y-auto`}>
+    <div className={`${middlePanelCollapsed ? "w-full" : "w-0 md:w-full"} h-full overflow-hidden`}>
       {capture ? <NoteView capture={capture} /> : <EmptyNoteView />}
     </div>
   );
