@@ -140,6 +140,7 @@ export const Features: React.FC = () => {
           className="pt-8 text-center"
         >
           <motion.button
+            onClick={() => window.location.href = "/waitlist"}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium transition-colors shadow-lg hover:shadow-blue-500/20"

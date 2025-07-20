@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FiTwitter, FiGithub, FiLinkedin, FiDribbble } from "react-icons/fi";
+// import { FiTwitter, FiGithub, FiLinkedin, FiDribbble } from "react-icons/fi";
 
 export const Footer = () => {
   return (
@@ -50,7 +50,7 @@ export const Footer = () => {
           </motion.div>
 
           {/* Navigation Links */}
-          {[
+          {/* {[
             {
               title: "Product",
               links: ["Features", "Pricing", "Demo", "Extensions"]
@@ -95,7 +95,7 @@ export const Footer = () => {
                 ))}
               </ul>
             </motion.div>
-          ))}
+          ))} */}
         </div>
 
         {/* Divider */}
@@ -143,7 +143,7 @@ export const Footer = () => {
             © {new Date().getFullYear()} deepen. All rights reserved.
           </div>
           
-          <div className="flex items-center gap-6">
+          {/* <div className="flex items-center gap-6">
             <a href="#" className="text-zinc-500 hover:text-white transition-colors">
               Privacy Policy
             </a>
@@ -153,7 +153,7 @@ export const Footer = () => {
             <a href="#" className="text-zinc-500 hover:text-white transition-colors">
               Cookies
             </a>
-          </div>
+          </div> */}
         </motion.div>
       </div>
     </motion.footer>

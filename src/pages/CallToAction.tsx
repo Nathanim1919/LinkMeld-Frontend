@@ -1,7 +1,7 @@
-import { Link } from "@tanstack/react-router";
+// import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { FaChrome } from "react-icons/fa";
-import { FiDownload, FiArrowUpRight } from "react-icons/fi";
+// import { FaChrome } from "react-icons/fa";
+// import { FiDownload, FiArrowUpRight } from "react-icons/fi";
 
 export const CallToAction = () => {
   return (
@@ -65,7 +65,7 @@ export const CallToAction = () => {
         </motion.p>
 
         {/* Buttons with tactile feel */}
-        <motion.div 
+        {/* <motion.div 
           className="flex flex-col sm:flex-row justify-center gap-3"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -100,7 +100,15 @@ export const CallToAction = () => {
               <span>Watch Demo</span>
             </Link>
           </motion.div>
-        </motion.div>
+        </motion.div> */}
+         <motion.button
+          onClick={() => window.location.href = "/waitlist"}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium transition-colors shadow-lg hover:shadow-blue-500/20"
+                        >
+                          Join Waitlist
+                        </motion.button>
 
         {/* Microcopy with perfect tracking */}
         <motion.p 

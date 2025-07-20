@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import Image from "../assets/img1.png";
 import { CallToAction } from "./CallToAction";
 import { Features } from "./features";
-import { TestimonialsPage } from "./TestimonialsPage";
+// import { TestimonialsPage } from "./TestimonialsPage";
 
 const HeroPage = () => {
   return (
@@ -84,7 +84,7 @@ const HeroPage = () => {
     </div>
     <CallToAction/>
     <Features/>
-    <TestimonialsPage/>
+    {/* <TestimonialsPage/> */}
     </>
   );
 };

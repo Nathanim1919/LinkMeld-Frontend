@@ -26,6 +26,7 @@ import FeedbackHub from "./pages/FeedbackHub";
 import { FolderNotes } from "./components/FolderNotes";
 import { SourceNotes } from "./components/SourceNotes";
 import { Manifesto } from "./pages/manifesto";
+import Waitlist from "./pages/Waitlist";
 
 const FolderPanel = () => <FoldersPanel />;
 
@@ -64,6 +65,13 @@ const heroRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "/",
   component: HeroPage,
+});
+
+
+const waitlistRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "waitlist",
+  component: Waitlist, // Assuming this is the same as HeroPage for now
 });
 
 const ManifestoRoute = createRoute({
@@ -202,6 +210,7 @@ const profileRoute = createRoute({
 
 // --- Final Tree --- //
 export const routeTree = rootRoute.addChildren([
+  waitlistRoute,
   publicRoute.addChildren([
     heroRoute,
     // pricingRoute,
