@@ -77,7 +77,9 @@ export const Footer = () => {
                 whileTap={{ scale: 0.95 }}
                 className="bg-violet-600 hover:bg-violet-500 text-white px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors"
               >
-                Subscribe
+               {
+                isLoading ? "Joining..." : submitted ? "Joined!" : "Join Waitlist"
+               }
               </motion.button>
             </div>
           </motion.div>
