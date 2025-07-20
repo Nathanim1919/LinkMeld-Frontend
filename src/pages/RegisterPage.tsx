@@ -24,14 +24,19 @@ export const RegisterPage = () => {
     try {
       const result = await authClient.signUp.email({
         ...formData,
-        callbackURL: "/in",
+        callbackURL: "https://deepen.live/in",
       });
       setFormData({ name: "", email: "", password: "" });
       if (result.error) {
         toast.error(result.error.message);
         return;
       }
+
+      toast.success("Registration successful! Redirecting...");
     } catch (error) {
+      toast.error("Registration failed. Please try again.");
+      setFormData({ name: "", email: "", password: "" });
+      // Optionally log the error for debugging
       console.error("Registration failed", error);
     } finally {
       setLoading(false);
@@ -41,7 +46,7 @@ export const RegisterPage = () => {
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/in",
+      callbackURL: "https://deepen.live/in",
       fetchOptions: {
         onRequest: () => {
           setLoading(true);
@@ -52,7 +57,7 @@ export const RegisterPage = () => {
           setLoading(false);
         },
         onError: (ctx) => {
-          alert(ctx.error.message);
+          toast.error(ctx.error.message);
           setLoading(false);
         },
       },
@@ -68,11 +73,11 @@ export const RegisterPage = () => {
           setLoading(true);
         },
         onSuccess: () => {
-          toast.success("successfully loggedIn ...");
+          toast.success("Registration successful! Redirecting...");
           setLoading(false);
         },
         onError: (ctx) => {
-          alert(ctx.error.message);
+          toast.error(ctx.error.message);
           setLoading(false);
         },
       },
