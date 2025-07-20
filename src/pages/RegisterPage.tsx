@@ -67,7 +67,7 @@ export const RegisterPage = () => {
   const handleGithubSignIn = async () => {
     await authClient.signIn.social({
       provider: "github",
-      callbackURL: "/in",
+      callbackURL: "https://deepen.live/in",
       fetchOptions: {
         onRequest: () => {
           setLoading(true);
