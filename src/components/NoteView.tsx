@@ -72,7 +72,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
 
   const containerWidth =
     collapsed && middlePanelCollapsed
-      ? "w-[90%] md:w-[60%]"
+      ? "w-[90%] md:w-[90%] lg:w-[60%]"
       : collapsed || middlePanelCollapsed
       ? "w-[90%] md:w-[70%]"
       : "w-[90%] md:w-[80%]";

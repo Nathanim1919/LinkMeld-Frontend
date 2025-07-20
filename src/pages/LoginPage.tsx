@@ -27,6 +27,7 @@ export const LoginPage = () => {
         {
           ...formData,
           callbackURL: "https://deepen.live/in",
+          // callbackURL: "http://localhost:5173/in",
         },
         {
           onRequest: () => {

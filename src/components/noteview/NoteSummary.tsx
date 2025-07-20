@@ -79,7 +79,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
       };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Context */}
       <AnimatePresence>
         {sections.context && (
@@ -110,7 +110,8 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
               Overview
             </motion.h2>
             <motion.div
-              className="text-gray-300 leading-relaxed"
+              className="text-gray-300 text-[16px]
+                leading-5.5 whitespace-pre-wrap"
               variants={fadeInVariants}
             >
               <ReactMarkdown>{sections.overview}</ReactMarkdown>
@@ -139,7 +140,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
                 <motion.li
                   key={i}
                   variants={listItemVariants}
-                  className="flex items-start gap-2 text-gray-300"
+                  className="flex  leading-5.5 whitespace-pre-wrap items-start gap-2 text-gray-300"
                 >
                   <span className="text-gray-500 mt-1.5">•</span>
                   <ReactMarkdown>
@@ -173,19 +174,19 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
                   key={i}
                   onClick={() => handleQuestionClick?.(question)}
                   className={`
-        w-full text-left
-        px-4 py-3.5 rounded-xl
-        border border-neutral-700
-        bg-neutral-950/90
-        backdrop-blur-md
-        hover:bg-violet-900/10
-        active:bg-neutral-800
-        transition-colors duration-200
-        focus:outline-none focus:ring-1 focus:ring-blue-500/70 cursor-pointer group
-      `}
-                >
-                  <div className="flex  text-violet-700 items-center justify-between">
-                    <span className="font-medium text-[14px] tracking-tight group-hover:text-violet-400">
+                          w-full text-left
+                          px-4 py-2 rounded-xl
+                         
+                          bg-neutral-950/90
+                          backdrop-blur-md
+                          hover:bg-violet-900/10
+                          active:bg-neutral-800
+                          transition-colors duration-200
+                          focus:outline-none focus:ring-1 focus:ring-blue-500/70 cursor-pointer group
+                        `}  
+                   >
+                  <div className="flex  text-gray-500 items-center justify-between">
+                    <span className="font-medium text-[14px] tracking-tight group-hover:text-gray-100">
                       {question}
                     </span>
                     <svg

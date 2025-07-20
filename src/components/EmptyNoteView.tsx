@@ -137,6 +137,7 @@ const EmptyNoteView = () => {
           <SearchResultCard
             captures={captures}
             searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
             loading={loading}
           />
         )}

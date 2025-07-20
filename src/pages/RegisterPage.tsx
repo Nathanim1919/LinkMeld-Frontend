@@ -25,6 +25,8 @@ export const RegisterPage = () => {
       const result = await authClient.signUp.email({
         ...formData,
         callbackURL: "https://deepen.live/in",
+        // callbackURL: "http://localhost:5173/in",
+        
       });
       setFormData({ name: "", email: "", password: "" });
       if (result.error) {

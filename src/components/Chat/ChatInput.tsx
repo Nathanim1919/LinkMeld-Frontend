@@ -1,19 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
-import { SendHorizonal } from "lucide-react";
+import { SendHorizonal, Square } from "lucide-react";
 import { useCaptureContext } from "../../context/CaptureContext";
 import { doesUserHasApiKey } from "../../utils/profile.util";
 
 export const ChatInput = () => {
   const { selectedCapture } = useCaptureContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { addMessage, userMessage, setUserMessage } = useChat();
+  const { addMessage, userMessage, setUserMessage, isStreaming, cancelStream } = useChat();
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
   const handleSend = () => {
     if (userMessage.trim()) {
       addMessage(selectedCapture?._id || "");
-      textareaRef.current?.focus();
     }
     setUserMessage(""); // Clear input after sending
   };
@@ -49,7 +48,7 @@ export const ChatInput = () => {
       {/* Text Input */}
       <div className="relative">
         <textarea
-          disabled={!hasApiKey}
+          disabled={!hasApiKey || isStreaming}
           ref={textareaRef}
           value={userMessage}
           onChange={(e) => setUserMessage(e.target.value)}
@@ -63,16 +62,18 @@ export const ChatInput = () => {
             }
           }}
         />
-        <button
+       <button
           className={`absolute right-2 bottom-3 p-2 rounded-full transition-all ${
             userMessage.trim()
               ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700"
               : "bg-gray-700 text-gray-500"
           }`}
           onClick={handleSend}
-          disabled={!userMessage.trim() || !hasApiKey}
         >
-          <SendHorizonal className="h-5 w-5 text-white" />
+          {isStreaming?<Square
+           onClick={cancelStream}
+           className="w-5 fill-white h-5"/>:<SendHorizonal className="h-5 w-5 text-white" />
+          }
         </button>
       </div>
     </div>

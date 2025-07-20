@@ -20,12 +20,14 @@ type ChatContextType = {
   addMessage: (captureId: string) => void;
   updateMessage: (index: number, message: IMessage) => void;
   removeMessage: (index: number) => void;
+  cancelStream: () => void;
 };
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [userMessage, setUserMessage] = useState("");
@@ -42,6 +44,10 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
     setIsStreaming(true);
 
+
+    const controller = new AbortController();
+    setAbortController(controller);
+
     sendMessage(updatedMessages, captureId)
       .then((response) => {
         const newMessage: IMessage = {
@@ -52,12 +58,17 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         setMessages((prev) => [...prev, newMessage]);
       })
       .catch((error) => {
-        console.error("Error sending message:", error);
+        if (error.name === "AbortError") {
+          console.log("Request aborted by user");
+        } else {
+          console.error("Error sending message:", error);
+        }
       })
       .finally(() => {
         setIsLoading(false);
         setIsStreaming(false);
         setUserMessage(""); // Clear input after sending
+        setAbortController(null);
       });
   };
 
@@ -75,6 +86,16 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     setMessages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const cancelStream = () => {
+    if (abortController) {
+      abortController.abort();
+      setAbortController(null);
+      setIsStreaming(false);
+      setIsLoading(false);
+    }
+  };
+  
+
   return (
     <ChatContext.Provider
       value={{
@@ -90,6 +111,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         removeMessage,
         userMessage,
         setUserMessage,
+        cancelStream
       }}
     >
       {children}
