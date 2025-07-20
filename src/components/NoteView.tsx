@@ -64,7 +64,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       navigate({ to: "/profile" });
       return;
     } else {
-      setOpenAiChat(true);
+      setOpenAiChat(!openAiChat);
       setMiddlePanelCollapsed(true);
       setCollapsed(true);
     }
@@ -78,12 +78,12 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       : "w-[90%] md:w-[80%]";
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a]">
+    <div className="flex flex-col h-full overflow-hidden bg-[#0a0a0a]">
       <AnimatePresence>{openAiChat && <AIChatContainer />}</AnimatePresence>
       <FolderList />
 
       {/* Header with refined design */}
-      <div className="sticky top-0 z-10 bg-white/80 dark:bg-[#0a0a0a] backdrop-blur-2xl px-6 md:py-2">
+      <div className="sticky top-0 py-2 z-10 bg-[#0a0a0a] backdrop-blur-2xl px-6 md:py-2">
         <div className="flex items-center justify-between">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center overflow-hidden">
@@ -103,7 +103,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                   className="flex items-center gap-1.5 group"
                 >
                   <FiFolder className="text-blue-500 flex-shrink-0" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-blue-500 truncate max-w-[120px] transition-colors duration-200">
+                  <span className="text-sm font-medium text-gray-300 group-hover:text-blue-500 truncate max-w-[120px] transition-colors duration-200">
                     {capture.collection.name}
                   </span>
                 </Link>
@@ -191,9 +191,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                 </span>
               </p>
             </div>
-
-
-                <span>Please refresh the page...</span>
+              <span>Please refresh the page...</span>
           </div>
         )
           : (
@@ -229,6 +227,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           hasApiKey={hasApiKey}
           loadingSummary={loadingSummary}
           handleOpenChat={handleOpenChat}
+
         />
 
         {loadingSummary ? (

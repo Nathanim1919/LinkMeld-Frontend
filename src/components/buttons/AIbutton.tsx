@@ -32,7 +32,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
   };
 
   return (
-    <div className="my-8">
+    <div className="my-4">
       <div className="flex flex-wrap items-center gap-4">
         {/* 🔮 Generate Summary */}
         <motion.button
@@ -41,30 +41,33 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.985 }}
           className={`
-            relative z-0 group inline-flex items-center justify-center gap-2
-            px-5 py-2.5 rounded-xl text-sm font-medium tracking-tight
-            transition-all duration-300 ease-out
-            shadow-md overflow-hidden select-none
-            backdrop-blur-md border border-violet-500/20
-            ${
-              loadingSummary
-                ? "bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-400 cursor-wait"
-                : "bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white hover:from-violet-900 hover:to-zinc-800"
-            }
-            ${
-              loadingSummary
-                ? "opacity-60 cursor-not-allowed"
-                : "cursor-pointer"
-            }
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
-          `}
+    relative z-0 group inline-flex cursor-pointer items-center justify-center gap-2
+    px-5 py-2.5 rounded-xl text-sm font-medium tracking-tight
+    transition-all duration-300 ease-out
+    shadow-md overflow-hidden select-none
+    backdrop-blur-md
+    ${
+      loadingSummary
+        ? "bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-400 cursor-wait"
+        : "bg-[linear-gradient(to_right,#161964,#2a30de,#80beff,#1e3a8a)] text-white"
+    }
+    ${loadingSummary ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
+    group-hover:shadow-[0_0_10px_#80beff80]
+  `}
           aria-busy={loadingSummary}
           aria-label="Generate AI Summary"
         >
-          {/* Soft shimmer effect */}
-          <span className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition duration-700 animate-shimmer rounded-xl" />
+          {/* Shimmer streak */}
+          <span className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition duration-700 animate-shimmer rounded-xl pointer-events-none z-0" />
 
-          {/* Loading pulse aura */}
+          {/* Animated border light streak */}
+          <span className="absolute inset-0 rounded-xl border border-transparent group-hover:border-white/10 transition-all duration-500 pointer-events-none z-0" />
+
+          {/* Subtle inner glow */}
+          <span className="absolute inset-0 bg-[radial-gradient(circle_at_center,#ffffff11,transparent)] rounded-xl pointer-events-none z-0" />
+
+          {/* Optional pulse aura on loading */}
           {loadingSummary && (
             <span className="absolute w-24 h-24 bg-violet-400/10 blur-2xl rounded-full animate-burst z-0" />
           )}
@@ -72,7 +75,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
           <Sparkles className="w-4 h-4 z-10" />
           <span className="z-10">
             {loadingSummary
-              ? "Generating…"
+              ? "Synthesizing Summary…"
               : selectedCapture?.ai.summary
               ? "Regenerate Summary"
               : "Generate Summary"}
@@ -85,20 +88,24 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.985 }}
           className={`
-            relative z-0 hover:bg-violet-400 cursor-pointer group inline-flex items-center justify-center gap-2
-            px-5 py-2.5 rounded-xl text-sm font-medium tracking-tight
-            transition-all duration-300 ease-out
-            bg-gradient-to-tr from-purple-700 to-violet-800 text-white
-            hover:from-purple-600 hover:to-violet-700
-            border border-violet-400/20 shadow-md overflow-hidden select-none
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
-          `}
-          aria-label="Ask AI"
+    relative z-0 group inline-flex cursor-pointer items-center justify-center gap-2
+    px-5 py-2.5 rounded-xl text-sm font-medium tracking-tight
+    transition-all duration-300 ease-out select-none overflow-hidden
+    text-white backdrop-blur-md
+    bg-[linear-gradient(to_right,#4b1ea1,#8b5cf6,#4b1ea1)]
+    border border-violet-400/20
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
+  `}
+          aria-label="Ask AI Assistant"
         >
-          {/* Glow shimmer on hover */}
-          <span className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-shimmer rounded-xl" />
+          {/* Soft shimmer sweep */}
+          <span className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-shimmer rounded-xl pointer-events-none z-0" />
+
+          {/* Optional pulse aura */}
+          <span className="absolute inset-0 bg-[radial-gradient(circle_at_center,#ffffff0a,transparent)] rounded-xl pointer-events-none z-0" />
+
           <RiGeminiFill className="w-4 h-4 z-10" />
-          <span className="z-10">Ask AI</span>
+          <span className="z-10">Ask</span>
         </motion.button>
       </div>
     </div>

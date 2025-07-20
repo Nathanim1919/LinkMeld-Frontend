@@ -27,7 +27,7 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
     <motion.div
       initial={{ opacity: 0, }}
       animate={{ opacity: 1 }}
-      className="py-2 border-b grid gap-2  border-gray-800"
+      className="border-b grid gap-2  border-gray-800"
     >
       <div className="flex flex-col">
       <h1 className="md:text-2xl flex gap-2 font-semibold text-gray-900 dark:text-gray-100">

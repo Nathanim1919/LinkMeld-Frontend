@@ -16,8 +16,8 @@ export const NoteMetaBox: React.FC<NoteMetaBoxProps> = ({
   const readingTime = Math.ceil(wordCount / 200);
 
   return (
-    <div className="rounded-2xl mt-6 p-5 bg-white/70 dark:bg-white/[0.02] border border-zinc-200 dark:border-white/10 shadow-sm transition-all">
-      <div className="flex flex-wrap gap-6 text-sm">
+    <div className="rounded-2xl my-6 p-5 bg-white/70 dark:bg-white/[0.02] border border-zinc-200 dark:border-white/10 shadow-sm transition-all">
+      <div className="flex flex-wrap gap-3 md:gap-6 text-sm">
         <MetaItem
           icon={<Globe className="w-4 h-4 text-blue-500" />}
           label="Source"
@@ -50,7 +50,7 @@ type MetaItemProps = {
 };
 
 const MetaItem: React.FC<MetaItemProps> = ({ icon, label, value }) => (
-  <div className="flex items-center gap-3">
+  <div className="flex items-center gap-1 md:gap-3">
     <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800/50">
       {icon}
     </div>

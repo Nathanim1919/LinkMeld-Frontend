@@ -84,7 +84,7 @@ export const MainShell = () => {
           <FolderProvider>
             <SourceProvider>
             <div className="h-screen w-screen overflow-hidden">
-            {hideSidebar && <div className="w-full px-2 relative md:hidden bg-[#0a0a0a]">
+            {hideSidebar && <div className="w-full pt-1 px-4 relative md:hidden bg-[#0a0a0a]">
                <ChevronsRight
                 className="relative z-50 cursor-pointer hover:text-white text-gray-600 md:hidden"
                 onClick={() => setHideSidebar(!hideSidebar)}
