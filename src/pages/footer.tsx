@@ -1,7 +1,35 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { api } from "../api";
+import { toast } from "sonner";
 // import { FiTwitter, FiGithub, FiLinkedin, FiDribbble } from "react-icons/fi";
 
 export const Footer = () => {
+    const [email, setEmail] = useState("");
+    const [submitted, setSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!email || isLoading) return;
+      
+      setIsLoading(true);
+  
+      await api
+        .post("/waitlist/join", { email })
+        .then((res) => {
+          setSubmitted(true);
+          toast.success(res.data.message || "You're on the list");
+        })
+        .catch((error) => {
+          console.error("Error joining waitlist:", error);
+          toast.error("Please check your email and try again");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
   return (
     <motion.footer 
       initial={{ opacity: 0 }}
@@ -35,11 +63,16 @@ export const Footer = () => {
             {/* Subscription */}
             <div className="flex items-center gap-2">
               <input 
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                disabled={submitted || isLoading}
                 type="email" 
                 placeholder="Get updates"
                 className="bg-white/5 border border-white/10 text-sm rounded-lg px-4 py-2.5 w-full focus:outline-none focus:ring-2 focus:ring-violet-500/50"
               />
               <motion.button
+                onClick={handleSubmit}
+                disabled={submitted || isLoading}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-violet-600 hover:bg-violet-500 text-white px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors"
