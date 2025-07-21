@@ -3,12 +3,17 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Brain, PanelRightClose, PanelRightOpen } from "lucide-react";
+import {
+  Brain,
+  Moon,
+  Sun,
+  PanelRightClose,
+  PanelRightOpen,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { SidebarItem } from "./SidebarItem";
 import { IoSearch } from "react-icons/io5";
 import { IoDocumentsOutline } from "react-icons/io5";
-
 
 const navItems = [
   {
@@ -48,43 +53,58 @@ const Sidebar: React.FC<{
     token: string;
   };
 }> = ({ user, hideSidebar, setHideSidebar }) => {
-  const { collapsed, setCollapsed } = useUI();
+  const { collapsed, setCollapsed, setTheme, theme } = useUI();
 
   return (
-<motion.div
-  className={`h-screen relative z-900 bg-[#1A1A1C] border-r border-gray-800/40
+    <motion.div
+      className={`h-screen relative z-900 bg-[#1A1A1C] border-r border-gray-800/40
     text-gray-300 flex flex-col justify-start gap-10 md:gap-0 md:justify-between py-6 
     transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
     /* Mobile behavior (controlled by hideSidebar) */
-    ${hideSidebar ? "max-md:w-0 max-md:overflow-hidden max-md:translate-x-[-100%]" : ""}
+    ${
+      hideSidebar
+        ? "max-md:w-0 max-md:overflow-hidden max-md:translate-x-[-100%]"
+        : ""
+    }
     /* Desktop behavior (controlled by collapsed) */
     ${collapsed ? "w-12 md:w-14" : "w-36"}
   `}
->
+    >
       {/* Logo */}
+      <div
+        className={`flex items-center ${
+          collapsed ? "justify-center" : "justify-between px-2"
+        }`}
+      >
         <div
-          className={`flex items-center ${collapsed?"justify-center":"justify-between px-2"}`}
-        >
-          <div 
           onClick={() => {
             setCollapsed(false);
           }}
-          className={`p-2 ${collapsed?"hover:cursor-e-resize":""} group ${collapsed?"hover:bg-white/5":""} rounded-lg backdrop-blur-sm`}>
-            <Brain className={`${collapsed?"group-hover:hidden":""} w-5 h-5 text-gray-300`} />
-           {collapsed && <PanelRightClose
-            className="hidden w-5 h-5 group-hover:grid text-gray-600" />}
-          </div>
-          {!collapsed && (
-            <div
+          className={`p-2 ${collapsed ? "hover:cursor-e-resize" : ""} group ${
+            collapsed ? "hover:bg-white/5" : ""
+          } rounded-lg backdrop-blur-sm`}
+        >
+          <Brain
+            className={`${
+              collapsed ? "group-hover:hidden" : ""
+            } w-5 h-5 text-gray-300`}
+          />
+          {collapsed && (
+            <PanelRightClose className="hidden w-5 h-5 group-hover:grid text-gray-600" />
+          )}
+        </div>
+        {!collapsed && (
+          <div
             onClick={() => {
               setHideSidebar?.(true);
               setCollapsed(true);
             }}
-             className="p-2 hover:cursor-e-resize group hover:bg-white/5 rounded-lg backdrop-blur-sm">
-              <PanelRightOpen className="w-5 h-5 text-gray-600" />
-            </div>
-          )}
-        </div>
+            className="p-2 hover:cursor-e-resize group hover:bg-white/5 rounded-lg backdrop-blur-sm"
+          >
+            <PanelRightOpen className="w-5 h-5 text-gray-600" />
+          </div>
+        )}
+      </div>
 
       {/* Navigation */}
       <div className=" w-full px-2">
@@ -103,6 +123,14 @@ const Sidebar: React.FC<{
 
       {/* User & Logout */}
       <div className="flex flex-col w-full px-2 gap-1">
+        {/* Theme Toggle */}
+        <SidebarItem
+          icon={theme === "dark" ? <Moon size={20} /> : <Sun size={20} />}
+          label={theme === "dark" ? "Dark" : "Light"}
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          collapsed={collapsed}
+        />
+
         {/* Profile Link */}
         <SidebarItem
           icon={

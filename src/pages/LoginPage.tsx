@@ -26,8 +26,8 @@ export const LoginPage = () => {
       await authClient.signIn.email(
         {
           ...formData,
-          callbackURL: "https://deepen.live/in",
-          // callbackURL: "http://localhost:5173/in",
+          // callbackURL: "https://deepen.live/in",
+          callbackURL: "http://localhost:5173/in",
         },
         {
           onRequest: () => {

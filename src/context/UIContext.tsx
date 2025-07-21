@@ -4,6 +4,8 @@ import { createContext, useState, useContext } from "react";
 type SidebarContextType = {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
+  theme: "light" | "dark";
+  setTheme: (theme: "light" | "dark") => void;
   middlePanelCollapsed: boolean;
   setMiddlePanelCollapsed: (collapsed: boolean) => void;
   mainContentCollapsed: boolean;
@@ -28,6 +30,7 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
   const [isFolderListOpen, setIsFolderListOpen] = useState(false);
   const [openActionBar, setOpenActionBar] = useState(false);
   const [openAiChat, setOpenAiChat] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   return (
     <UIContext.Provider
@@ -46,6 +49,8 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
         setOpenActionBar,
         openAiChat,
         setOpenAiChat,
+        theme,
+        setTheme,
       }}
     >
       {children}

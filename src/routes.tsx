@@ -12,8 +12,8 @@ import BookmarkPanel from "./components/panels/BookmarkPanel";
 import SourcePanel from "./components/panels/SourcePanel";
 import FoldersPanel from "./components/panels/FoldersPanel";
 import { PublicLayout } from "./layout/PublicLayout";
-// import { RegisterPage } from "./pages/RegisterPage";
-// import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { LoginPage } from "./pages/LoginPage";
 import HeroPage from "./pages/hero";
 import { FAQ } from "./pages/FAQ";
 // import { Manifesto } from "./pages/manifesto";
@@ -93,17 +93,17 @@ const FeedbackRoute = createRoute({
 });
 
 
-// const RegisterRoute = createRoute({
-//   getParentRoute: () => rootRoute,
-//   path: "register",
-//   component: RegisterPage,
-// });
+const RegisterRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "register",
+  component: RegisterPage,
+});
 
-// const LoginRoute = createRoute({
-//   getParentRoute: () => rootRoute,
-//   path: "login",
-//   component: LoginPage,
-// });
+const LoginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "login",
+  component: LoginPage,
+});
 
 // Authenticated routes (wrapped in MainShell)
 const mainShellRoute = createRoute({
@@ -219,8 +219,8 @@ export const routeTree = rootRoute.addChildren([
     FAQRoute,
     FeedbackRoute,
   ]), // Correctly nest children of PublicLayout
-  // RegisterRoute,
-  // LoginRoute,
+  RegisterRoute,
+  LoginRoute,
   mainShellRoute.addChildren([
     contentRoute.addChildren([
       homeRoute,
