@@ -63,7 +63,9 @@ export const LoginPage = () => {
     try {
       await authClient.signIn.social({
         provider,
-        callbackURL: "https://deepen.live/in",
+        // callbackURL: "https://deepen.live/in",
+        callbackURL: "http://localhost:5173/in",
+
         fetchOptions: {
           onRequest: () => {
             toast.loading(`Signing in with ${provider}...`);

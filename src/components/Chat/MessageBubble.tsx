@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { ReferenceCard } from "./ReferenceCard";
 import { Clipboard, MoreHorizontal } from "lucide-react"; // Added Lucide icon imports
 import { RiGeminiFill } from "react-icons/ri";
+import { LLMRenderer } from "../LLMRenderer";
 
 
 interface MessageBubbleProps {
@@ -24,7 +25,7 @@ export const MessageBubble = ({ role, content, references }: MessageBubbleProps)
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
       >
-        <div className={`relative text-md max-w-[85%] rounded-2xl text-[14px] p-2 ${
+        <div className={`relative text-md max-w-[95%] rounded-2xl text-[14px] p-2 ${
           role === 'user' 
             ? 'bg-blue-600/0 rounded-br-none text-gray-600 dark:text-gray-400 ' 
             : 'bg-gray-200 dark:bg-[#161618] rounded-bl-none border text-black/80 dark:text-[#ffffff] border-gray-300 dark:border-gray-800/50'
@@ -37,10 +38,8 @@ export const MessageBubble = ({ role, content, references }: MessageBubbleProps)
           </span>
           }
          
-          {/* Message Content */}
-          <ReactMarkdown>
-            {content}
-          </ReactMarkdown>
+    
+           <LLMRenderer markdown={content}/>
           
   
           {/* Message Actions (Appear on hover) */}
