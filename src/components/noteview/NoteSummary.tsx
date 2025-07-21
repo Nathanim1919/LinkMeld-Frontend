@@ -87,7 +87,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             initial="hidden"
             animate="visible"
             variants={fadeInVariants}
-            className="text-gray-400 text-sm italic px-1"
+            className="text-gray-700 dark:text-gray-400 text-sm italic px-1"
           >
             <ReactMarkdown>{sections.context}</ReactMarkdown>
           </motion.div>
@@ -104,13 +104,13 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             className="space-y-3"
           >
             <motion.h2
-              className="text-white font-semibold text-lg tracking-tight"
+              className="text-black dark:text-white font-semibold text-lg tracking-tight"
               variants={fadeInVariants}
             >
               Overview
             </motion.h2>
             <motion.div
-              className="text-gray-300 text-[16px]
+              className="text-gray-700 dark:text-gray-300 text-[16px]
                 leading-5.5 whitespace-pre-wrap"
               variants={fadeInVariants}
             >
@@ -130,7 +130,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             className="space-y-3"
           >
             <motion.h2
-              className="text-white font-semibold text-lg tracking-tight"
+              className="text-black dark:text-white font-semibold text-lg tracking-tight"
               variants={fadeInVariants}
             >
               Key Insights
@@ -140,9 +140,9 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
                 <motion.li
                   key={i}
                   variants={listItemVariants}
-                  className="flex  leading-5.5 whitespace-pre-wrap items-start gap-2 text-gray-300"
+                  className="flex  leading-5.5 whitespace-pre-wrap items-start gap-2 text-black/70 dark:text-gray-300"
                 >
-                  <span className="text-gray-500 mt-1.5">•</span>
+                  <span className="text-gray-700 dark:text-gray-500 mt-1.5">•</span>
                   <ReactMarkdown>
                     {takeaway.replace(/^[-*•]\s*/, "")}
                   </ReactMarkdown>
@@ -163,7 +163,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
             className="border-t border-gray-800 pt-5 space-y-3"
           >
             <motion.h2
-              className="text-white font-semibold text-lg tracking-tight"
+              className="text-black dark:text-white font-semibold text-lg tracking-tight"
               variants={fadeInVariants}
             >
               Explore Further
@@ -176,17 +176,16 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
                   className={`
                           w-full text-left
                           px-4 py-2 rounded-xl
-                         
-                          bg-neutral-950/90
+                          bg-gray-200/ dark:bg-neutral-950/90
                           backdrop-blur-md
-                          hover:bg-violet-900/10
+                          hover:dark:bg-violet-900/10  hover:bg-gray-100
                           active:bg-neutral-800
                           transition-colors duration-200
                           focus:outline-none focus:ring-1 focus:ring-blue-500/70 cursor-pointer group
                         `}  
                    >
-                  <div className="flex  text-gray-500 items-center justify-between">
-                    <span className="font-medium text-[14px] tracking-tight group-hover:text-gray-100">
+                  <div className="flex text-black/50 dark:text-gray-500 items-center justify-between">
+                    <span className="font-medium text-[14px] tracking-tight  group-hover:text-black/70 group-hover:dark:text-gray-100">
                       {question}
                     </span>
                     <svg

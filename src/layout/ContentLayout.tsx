@@ -22,7 +22,7 @@ export const ContentLayout = () => {
   return (
     <div
       className={clsx(
-        "h-full w-full grid transition-all duration-300 ease-in-out",
+        "h-full w-full grid transition-all bg-white dark:bg-black duration-300 ease-in-out",
         gridCols
       )}
     >

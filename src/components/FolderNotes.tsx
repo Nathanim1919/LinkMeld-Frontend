@@ -19,11 +19,11 @@ export const FolderNotes = () => {
 
   return (
     <div>
-      <div className="flex items-center gap-2 px-4 py-3 rounded-t-lg border-b border-gray-900">
+      <div className="flex items-center gap-2 px-4 py-3 rounded-t-lg border-b border-gray-200 dark:border-gray-900">
       <div className="text-green-400 rounded-full flex items-center gap-1 py-1 px-2">
         <Link
          to={"/in/collections"}
-         className="text-sm hover:underline font-medium hover:opacity-64 text-gray-300 flex items-center gap-1">
+         className="text-sm hover:underline font-medium hover:opacity-64 text-black/70 dark:text-gray-300 flex items-center gap-2">
           <FaFolder className="text-green-400" />
           Collections
         </Link>

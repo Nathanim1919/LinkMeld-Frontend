@@ -109,10 +109,10 @@ const NotesList: React.FC<NotesListProps> = ({
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {shouldShowHeader && (
-        <div className="px-3 py-3  border-b border-gray-800/50">
+        <div className="px-3 py-3  border-b border-gray-100 dark:border-gray-800/50">
           <div className="flex items-center gap-2">
             {filterIcons[filter]}
-            <h3 className="text-sm font-medium text-gray-300">
+            <h3 className="text-sm font-medium text-[#000] dark:text-gray-300">
               {filterLabels[filter]}
             </h3>
           </div>
@@ -135,7 +135,7 @@ const NotesList: React.FC<NotesListProps> = ({
                 className={`block rounded-lg p-3 transition-all duration-200 ${
                   activeCaptureId === note._id
                     ? "bg-gray-800/50 border-l-2 border-blue-400"
-                    : "hover:bg-gray-800/30"
+                    : "hover:dark:bg-gray-800/30 hover:bg-gray-200/50"
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -155,7 +155,7 @@ const NotesList: React.FC<NotesListProps> = ({
                           }`}
                         />
                       )}
-                      <h3 className="text-sm font-medium truncate text-gray-300">
+                      <h3 className="text-sm font-medium truncate text-[#000] dark:text-gray-300">
                         {note.title}
                       </h3>
                     </div>
@@ -173,7 +173,7 @@ const NotesList: React.FC<NotesListProps> = ({
                       </div>
                     )}
 
-                    <p className="text-xs text-gray-400 line-clamp-2 mb-2">
+                    <p className="text-xs text-gray-500 line-clamp-2 mb-2">
                       {note.description || note.ai?.summary?.slice(0,100)+"..."}
                     </p>
 

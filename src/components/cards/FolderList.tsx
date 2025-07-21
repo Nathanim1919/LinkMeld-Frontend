@@ -35,7 +35,7 @@ export const FolderList: React.FC = () => {
           onClick={() => setIsFolderListOpen?.(false)}
         >
           <motion.div
-            className="flex flex-col w-72 bg-[#1e1e1e] rounded-xl border border-[#2e2e2e] shadow-2xl overflow-hidden"
+            className="flex flex-col w-72 bg-white dark:bg-[#1e1e1e] rounded-xl border dark:border-[#2e2e2e] shadow-2xl overflow-hidden"
             initial={{ scale: 0.95, opacity: 0, y: -20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: -20 }}
@@ -47,8 +47,8 @@ export const FolderList: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header with subtle gradient */}
-            <div className="p-4 border-b border-[#2e2e2e] bg-gradient-to-b from-[#1e1e1e] to-[#1a1a1a]">
-              <h3 className="font-medium text-[15px] text-gray-200 flex items-center gap-2">
+            <div className="p-4 border-b dark:border-[#2e2e2e] bg-gradient-to-b dark:from-[#1e1e1e] dark:to-[#1a1a1a]">
+              <h3 className="font-medium text-[15px] text-black dark:text-gray-200 flex items-center gap-2">
                 <RiFolderAddLine className="text-blue-500" />
                 <span>Add to Collection</span>
               </h3>
@@ -131,14 +131,14 @@ export const FolderList: React.FC = () => {
                         ) : (
                           <FaFolder className="text-blue-500/90 flex-shrink-0" />
                         )}
-                        <span className="text-sm text-gray-200 truncate">
+                        <span className="text-sm text-black/60 dark:text-gray-200 truncate">
                           {folder.name.length > 20
                             ? `${folder.name.slice(0, 20)}...`
                             : folder.name}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-400 bg-[#2e2e2e] px-2 py-1 rounded-full">
+                        <span className="text-xs text-gray-400 dark:bg-[#2e2e2e] px-2 py-1 rounded-full">
                           {folder.captures.length}
                         </span>
                         <FiChevronRight className="text-gray-500 w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -151,7 +151,7 @@ export const FolderList: React.FC = () => {
 
             {/* Footer */}
             <motion.div
-              className="p-3 flex justify-between items-center border-t border-[#2e2e2e] bg-[#1a1a1a]"
+              className="p-3 flex justify-between items-center border-t dark:border-[#2e2e2e] dark:bg-[#1a1a1a]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -165,7 +165,7 @@ export const FolderList: React.FC = () => {
                   setOpenNewFolderForm(true);
                   setIsFolderListOpen?.(false);
                 }}
-                className="cursor-pointer hover:text-violet-500"
+                className="cursor-pointer text-black dark:text-gray-500 hover:text-violet-500"
               >
                 <FaFolderPlus />
               </button>

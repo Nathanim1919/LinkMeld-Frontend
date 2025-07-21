@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BsStars } from "react-icons/bs";
 import { X, ChevronDown } from "lucide-react";
 // import { useChat } from "../../context/ChatContext";
-import { useState } from "react";
+// import { useState } from "react";
 import { ChatView } from "./ChatView";
 import { SourcesView } from "./SourcesView";
 import { useChat } from "../../context/ChatContext";
 
 export const AIChatContainer = () => {
-  const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
+  // const [activeTab, setActiveTab] = useState<"chat" | "sources">("chat");
   const { openAiChat, setOpenAiChat } = useUI();
 
   const { clearMessages } = useChat();
@@ -33,9 +33,8 @@ export const AIChatContainer = () => {
             scale: 0.95,
             transition: { duration: 0.15 },
           }}
-          className="fixed flex flex-col overflow-hidden right-2 md:right-4 bottom-4 top-4 rounded-2xl w-[90%] md:w-[450px] shadow-2xl border border-gray-800/50 z-[1000] bg-[#161618] backdrop-blur-3xl text-gray-200"
+          className="fixed shadow-2xl flex flex-col overflow-hidden right-2 md:right-4 bottom-4 top-4 rounded-2xl w-[90%] md:w-[450px] border border-gray-300 dark:border-gray-800/50 z-[1000] bg-white dark:bg-[#161618] backdrop-blur-3xl text-black dark:text-gray-200"
           style={{
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
             transformOrigin: "bottom right",
           }}
         >
@@ -45,25 +44,21 @@ export const AIChatContainer = () => {
             whileTap={{ scale: 0.98 }}
           >
             <div className="flex items-center space-x-2">
-              <BsStars className="text-blue-400/90" size={18} />
-              <h1 className="text-sm font-medium tracking-tight text-gray-200">
+              <BsStars className="text-violet-500 dark:text-blue-400/90" size={18} />
+              <h1 className="text-sm font-medium tracking-tight dark:text-gray-200">
                 AI Assistant
               </h1>
             </div>
 
             <div className="flex items-center space-x-2">
-              <motion.div className="flex rounded-full bg-[#1a1818]">
+              <motion.div className="flex rounded-full bg-gray-200 dark:bg-[#1a1818]">
                 <button
-                  className={`px-3 cursor-pointer py-1.5 text-xs ${
-                    activeTab === "chat"
-                      ? "text-white bg-gray-700/50"
-                      : "text-gray-400"
-                  } rounded-l-full`}
-                  onClick={() => setActiveTab("chat")}
+                  className={`px-3 cursor-pointer py-1.5 text-xs dark:text-white dark:bg-gray-700/50 rounded-l-full`}
+                  // onClick={() => setActiveTab("chat")}
                 >
                   Chat
                 </button>
-                <button
+                {/* <button
                   className={`px-3 cursor-pointer py-1.5 text-xs ${
                     activeTab === "sources"
                       ? "text-white bg-gray-700/50"
@@ -72,7 +67,7 @@ export const AIChatContainer = () => {
                   onClick={() => setActiveTab("sources")}
                 >
                   Sources
-                </button>
+                </button> */}
                 <button
                   className={`px-3 cursor-pointer py-1.5 text-xs
                      text-gray-400 rounded-r-full`}
@@ -84,7 +79,7 @@ export const AIChatContainer = () => {
 
               <motion.button
                 onClick={() => setOpenAiChat?.(false)}
-                className="p-1.5 rounded-full text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+                className="p-1.5 rounded-full text-gray-400 cursor-pointer hover:text-gray-200"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -109,7 +104,8 @@ export const AIChatContainer = () => {
                 transition={{ duration: 0.15 }}
                 className="h-full"
               >
-                {activeTab === "chat" ? <ChatView /> : <SourcesView />}
+                <ChatView />
+                {/* {activeTab === "chat" ? <ChatView /> : <SourcesView />} */}
               </motion.div>
             </AnimatePresence>
           </motion.main>

@@ -15,7 +15,7 @@ export const ChatView = () => {
   }, [messages]);
 
   return (
-    <div className="h-full bg-[#1A1A1C] flex flex-col">
+    <div className="h-full bg-gray-100 dark:bg-[#1A1A1C] flex flex-col">
       {/* Message History */}
       {
         messages.length === 0 && !isLoading && (

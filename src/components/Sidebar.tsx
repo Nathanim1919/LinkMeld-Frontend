@@ -57,8 +57,8 @@ const Sidebar: React.FC<{
 
   return (
     <motion.div
-      className={`h-screen relative z-900 bg-[#1A1A1C] border-r border-gray-800/40
-    text-gray-300 flex flex-col justify-start gap-10 md:gap-0 md:justify-between py-6 
+      className={`h-screen relative z-900 bg-white dark:bg-[#1A1A1C] border-r border-gray-200 dark:border-gray-800/40
+    text-gray-600 dark:text-gray-300 flex flex-col justify-start gap-10 md:gap-0 md:justify-between py-6 
     transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
     /* Mobile behavior (controlled by hideSidebar) */
     ${
@@ -87,7 +87,7 @@ const Sidebar: React.FC<{
           <Brain
             className={`${
               collapsed ? "group-hover:hidden" : ""
-            } w-5 h-5 text-gray-300`}
+            } w-5 h-5 dark:text-gray-300`}
           />
           {collapsed && (
             <PanelRightClose className="hidden w-5 h-5 group-hover:grid text-gray-600" />
@@ -101,7 +101,7 @@ const Sidebar: React.FC<{
             }}
             className="p-2 hover:cursor-e-resize group hover:bg-white/5 rounded-lg backdrop-blur-sm"
           >
-            <PanelRightOpen className="w-5 h-5 text-gray-600" />
+            <PanelRightOpen className="w-5 h-5 text-gray-400 dark:text-gray-600" />
           </div>
         )}
       </div>

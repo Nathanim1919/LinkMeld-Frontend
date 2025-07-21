@@ -78,12 +78,12 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       : "w-[90%] md:w-[80%]";
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-[#0a0a0a]">
+    <div className="flex flex-col h-full overflow-hidden bg-[#f7f0f0] dark:bg-[#0a0a0a]">
       <AnimatePresence>{openAiChat && <AIChatContainer />}</AnimatePresence>
       <FolderList />
 
       {/* Header with refined design */}
-      <div className="sticky top-0 py-2 z-10 bg-[#0a0a0a] backdrop-blur-2xl px-6 md:py-2">
+      <div className="sticky top-0 py-2 z-10 dark:bg-[#0a0a0a] backdrop-blur-2xl px-6 md:py-2">
         <div className="flex items-center justify-between">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center overflow-hidden">
@@ -103,7 +103,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                   className="flex items-center gap-1.5 group"
                 >
                   <FiFolder className="text-blue-500 flex-shrink-0" />
-                  <span className="text-sm font-medium text-gray-300 group-hover:text-blue-500 truncate max-w-[120px] transition-colors duration-200">
+                  <span className="text-sm font-medium text-black dark:text-gray-300 group-hover:text-blue-500 truncate max-w-[120px] transition-colors duration-200">
                     {capture.collection.name}
                   </span>
                 </Link>
@@ -112,7 +112,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             )}
             <div className="flex items-center gap-1.5">
               <FiFileText className="text-amber-500 flex-shrink-0" />
-              <span className="text-sm font-medium text-gray-900 dark:text-gray-500 truncate max-w-[180px]">
+              <span className="text-sm font-medium text-black/60 dark:text-gray-500 truncate max-w-[180px]">
                 {capture.title}
               </span>
             </div>
@@ -135,7 +135,9 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               title={capture.bookmarked ? "Remove bookmark" : "Add bookmark"}
             >
               <FiBookmark className="w-4 h-4" />
-              <span className="text-xs font-medium hidden md:block">Bookmark</span>
+              <span className="text-xs font-medium hidden md:block">
+                Bookmark
+              </span>
             </motion.button>
 
             <motion.button
@@ -146,7 +148,9 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               title="Add to folder"
             >
               <FiFolderPlus className="w-4 h-4" />
-              <span className="text-xs font-medium hidden md:block">Organize</span>
+              <span className="text-xs font-medium hidden md:block">
+                Organize
+              </span>
             </motion.button>
           </div>
         </div>
@@ -163,59 +167,69 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               {/* <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 animate-[pulse_2.5s_ease-in-out_infinite] shadow-sm shadow-indigo-100/50">
                 <div className="absolute inset-4 rounded-full bg-white/30 backdrop-blur-sm border border-white/20"></div>
               </div> */}
-              
+
               {/* Micro-interaction dots (Apple-style) */}
               <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-1.5">
                 {[0, 1, 2].map((i) => (
-                  <div 
+                  <div
                     key={i}
                     className="w-1.5 h-1.5 rounded-full bg-indigo-300/70 animate-bounce"
                     style={{
                       animationDelay: `${i * 0.15}s`,
-                      animationDuration: '1.2s'
+                      animationDuration: "1.2s",
                     }}
                   />
                 ))}
               </div>
             </div>
-        
+
             {/* Dynamic status text with smooth transitions */}
             <div className="text-center space-y-1 max-w-md">
               <h3 className="text-lg font-medium text-gray-800 tracking-tight">
                 Processing your capture...
               </h3>
               <p className="text-sm text-gray-500 font-light tracking-wide transition-all duration-300">
-                {['Extracting key concepts', 'Identifying main arguments', 'Structuring insights'][Math.floor(Date.now() / 1000) % 3]}
+                {
+                  [
+                    "Extracting key concepts",
+                    "Identifying main arguments",
+                    "Structuring insights",
+                  ][Math.floor(Date.now() / 1000) % 3]
+                }
                 <span className="dot-flashing ml-1.5 inline-block relative h-2 w-2">
                   <span className="absolute top-0 w-1 h-1 rounded-full bg-gray-400"></span>
                 </span>
               </p>
             </div>
-              <span>Please refresh the page...</span>
+            <span>Please refresh the page...</span>
           </div>
-        )
-          : (
+        ) : (
           <NoteHeader
-          collection={
-            capture.collection
-              ? {
-                  name: capture.collection.name,
-                  id: capture.collection._id,
-                }
-              : { name: "Uncategorized", id: "uncategorized" }
-          }
-
-          isPdf={capture.metadata.isPdf || false}
-          title={capture.title}
-          url={capture.url || ""}
-          description={capture.metadata.description || capture.ai.summary.match(/# Context\n([\s\S]+?)(?=\n# Overview)/i)?.[1].trim() || ""}
-          tags={
-            capture.metadata.keywords
-              ? capture.metadata.keywords.map((tag) => tag.trim())
-              : []
-          }
-          capturedAt={capture.metadata.capturedAt}
-        />
+            collection={
+              capture.collection
+                ? {
+                    name: capture.collection.name,
+                    id: capture.collection._id,
+                  }
+                : { name: "Uncategorized", id: "uncategorized" }
+            }
+            isPdf={capture.metadata.isPdf || false}
+            title={capture.title}
+            url={capture.url || ""}
+            description={
+              capture.metadata.description ||
+              capture.ai.summary
+                .match(/# Context\n([\s\S]+?)(?=\n# Overview)/i)?.[1]
+                .trim() ||
+              ""
+            }
+            tags={
+              capture.metadata.keywords
+                ? capture.metadata.keywords.map((tag) => tag.trim())
+                : []
+            }
+            capturedAt={capture.metadata.capturedAt}
+          />
         )}
 
         {capture.headings.length > 0 && (
@@ -227,7 +241,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           hasApiKey={hasApiKey}
           loadingSummary={loadingSummary}
           handleOpenChat={handleOpenChat}
-
         />
 
         {loadingSummary ? (
