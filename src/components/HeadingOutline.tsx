@@ -12,7 +12,7 @@ type HeadingOutlineProps = {
 }
 
 const HeadingOutline: React.FC<HeadingOutlineProps> = ({ headings }) => {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   const getHeadingStyle = (level: number) => {
     const styles: Record<number, string> = {

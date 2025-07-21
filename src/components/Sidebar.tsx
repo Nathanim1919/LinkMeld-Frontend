@@ -59,7 +59,7 @@ const Sidebar: React.FC<{
     <motion.div
       className={`h-screen relative z-900 bg-white dark:bg-[#1A1A1C] border-r border-gray-200 dark:border-gray-800/40
     text-gray-600 dark:text-gray-300 flex flex-col justify-start gap-10 md:gap-0 md:justify-between py-6 
-    transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+    transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
     /* Mobile behavior (controlled by hideSidebar) */
     ${
       hideSidebar

@@ -99,7 +99,7 @@ const NotesList: React.FC<NotesListProps> = ({
   if (!safeCaptures.length)
     return (
       <div className="flex relative flex-col items-center justify-center h-full text-center px-4">
-        <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
+        <div className="p-4 mb-4 rounded-full bg-gray-200 dark:bg-gray-800/50 text-gray-500">
           <IoDocumentsOutline className="text-[24px]" />
         </div>
         <p className="text-[13px] text-gray-500">No captures found</p>

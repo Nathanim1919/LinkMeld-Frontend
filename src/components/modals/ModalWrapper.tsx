@@ -5,7 +5,7 @@ export const ModalWrapper: React.FC<{ children: React.ReactNode, closeModal:()=>
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/70 backdrop-blur-xl z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-white/7 dark:bg-black/70 backdrop-blur-xl z-1000 flex items-center justify-center p-4"
       onClick={closeModal}
     >
       <motion.div 
@@ -17,7 +17,7 @@ export const ModalWrapper: React.FC<{ children: React.ReactNode, closeModal:()=>
           damping: 25,
           stiffness: 300
         }}
-        className="bg-[#1c1c1e] rounded-2xl border border-[#2c2c2e] shadow-2xl shadow-black/50 max-w-md w-full overflow-hidden"
+        className="bg-white dark:bg-[#1c1c1e] rounded-2xl border border-gray-300 dark:border-[#2c2c2e] shadow-2xl shadow-black/10 dark:shadow-black/50 max-w-md w-full overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

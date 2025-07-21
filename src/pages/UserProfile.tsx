@@ -2,8 +2,8 @@ import  { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiRefreshCw,
-  FiUpload,
-  FiStar,
+  // FiUpload,
+  // FiStar,
 } from "react-icons/fi";
 import { RiShieldKeyholeLine } from "react-icons/ri";
 import { SetApiKeyModal } from "../components/modals/setApiKey.modal";
@@ -64,14 +64,14 @@ export const UserProfile = () => {
 
 
   return (
-    <div className="min-h-screen grid gap-2 place-items-start bg-[#000000] text-[#f5f5f7]">
+    <div className="min-h-screen grid gap-2 place-items-start bg-[#f5f2f2] dark:bg-[#000000] text-black dark:text-[#f5f5f7]">
       <div className="max-w-3xl mx-auto mt-6 grid gap-4 w-full px-4">
         {/* Profile Header */}
     <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
-          className="w-full rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6"
+          className="w-full rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6  flex flex-col md:flex-row items-center justify-between gap-6"
         >
           <div className="flex items-center gap-4">
             <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-300 flex items-center justify-center text-white text-2xl font-bold">
@@ -87,7 +87,7 @@ export const UserProfile = () => {
               <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-2 border-black"></div>
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-white">{authInfo?.name}</h2>
+              <h2 className="text-2xl font-semibold ">{authInfo?.name}</h2>
               <p className="text-sm text-gray-400">
                 Joined {authInfo?.createdAt ? new Date(authInfo.createdAt).toLocaleDateString() : "Unknown"}
               </p>
@@ -108,14 +108,14 @@ export const UserProfile = () => {
 
         {/* Action Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <ActionButton
+          {/* <ActionButton
             icon={<FiUpload className="text-xl text-blue-400" />}
             title="Export Data"
             description="Download all your data in JSON format"
             onClick={() => setActiveModal("export")}
             color="bg-[#2c2c2e]"
             borderColor="border-[#3a3a3c]"
-          />
+          /> */}
 
           <ActionButton
             icon={<RiShieldKeyholeLine className="text-xl text-blue-400" />}
@@ -127,7 +127,7 @@ export const UserProfile = () => {
             hasApiKey={hasApiKey}
           />
 
-          <ActionButton
+          {/* <ActionButton
             icon={<FiStar className="text-xl text-amber-400" />}
             title={isSubscribed ? "Premium Member" : "Upgrade Subscription"}
             description={
@@ -140,7 +140,7 @@ export const UserProfile = () => {
             borderColor={
               isSubscribed ? "border-amber-500/30" : "border-[#3a3a3c]"
             }
-          />
+          /> */}
 
           <ActionButton
             icon={<FiRefreshCw className="text-xl text-gray-400" />}

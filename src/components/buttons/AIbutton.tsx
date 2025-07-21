@@ -33,7 +33,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
 
   return (
     <div className="my-4">
-      <div className="flex flex-wrap items-center gap-4">
+      <div className="flex flex-wrap items-center gap-2">
         {/* 🔮 Generate Summary */}
         <motion.button
           onClick={handleGenerateSummary}
@@ -41,15 +41,15 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.985 }}
           className={`
-    relative z-0 group inline-flex cursor-pointer items-center justify-center gap-2
-    px-5 py-2.5 rounded-xl text-sm font-medium tracking-tight
+    relative z-0 group inline-flex cursor-pointer items-center justify-center gap-1
+    px-5 py-2.5 rounded-md text-sm font-medium tracking-tight
     transition-all duration-300 ease-out
-    shadow-md overflow-hidden select-none
+     overflow-hidden select-none
     backdrop-blur-md
     ${
       loadingSummary
         ? "bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-400 cursor-wait"
-        : "bg-[linear-gradient(to_right,#161964,#2a30de,#80beff,#1e3a8a)] text-white"
+        : "bg-[linear-gradient(to_right,#43a7ff,#31baff,#95c6fb,#328eff)] dark:bg-[linear-gradient(to_right,#161964,#2a30de,#80beff,#1e3a8a)] text-white"
     }
     ${loadingSummary ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
     focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
@@ -88,11 +88,12 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.985 }}
           className={`
-    relative z-0 group inline-flex cursor-pointer items-center justify-center gap-2
-    px-5 py-2.5 rounded-xl text-sm font-medium tracking-tight
+    relative z-0 group inline-flex cursor-pointer items-center justify-center gap-1
+    px-5 py-2.5 rounded-md text-sm font-medium tracking-tight
     transition-all duration-300 ease-out select-none overflow-hidden
     text-white backdrop-blur-md
-    bg-[linear-gradient(to_right,#4b1ea1,#8b5cf6,#4b1ea1)]
+    bg-[linear-gradient(to_right,#72bdff,#8b5cf6,#69aaff)]
+    dark:bg-[linear-gradient(to_right,#4b1ea1,#8b5cf6,#4b1ea1)]
     border border-violet-400/20
     focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
   `}

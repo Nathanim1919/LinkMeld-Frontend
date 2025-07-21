@@ -13,7 +13,7 @@ export const ActionButton: React.FC<{
   title,
   description,
   onClick,
-  color = "bg-[#2c2c2e]",
+  color = "bg-[#1313ce]",
   borderColor = "border-[#3a3a3c]",
   hasApiKey,
 }) => {
@@ -22,10 +22,10 @@ export const ActionButton: React.FC<{
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.97 }}
       onClick={onClick}
-      className={`w-full p-5 rounded-xl ${color} border ${borderColor} transition-all text-left group overflow-hidden relative`}
+      className={`w-full p-5 rounded-xl bg-white dark:bg-[#171717] border border-gray-300 dark:border-gray-800/50  transition-all text-left group overflow-hidden relative`}
     >
       {/* Hover effect */}
-      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <span>
         {hasApiKey && hasApiKey && (
           <span className="text-white w-6 h-6 rounded-full grid place-items-center bg-green-600 absolute top-1 right-2">
@@ -46,13 +46,13 @@ export const ActionButton: React.FC<{
               : color.includes("red")
               ? "bg-red-500/10"
               : "bg-white/5"
-          } border ${borderColor}`}
+          } border dark:border-gray-800/50 border-gray-300`}
         >
           {icon}
         </div>
         <div>
-          <h3 className="font-medium text-white">{title}</h3>
-          <p className="text-sm text-[#aeaeb2] mt-1">{description}</p>
+          <h3 className="font-medium dark:text-white">{title}</h3>
+          <p className="text-sm text-gray-600 dark:text-[#aeaeb2] mt-1">{description}</p>
         </div>
       </div>
     </motion.button>
