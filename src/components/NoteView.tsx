@@ -6,8 +6,7 @@ import { useFolderContext } from "../context/FolderContext";
 import { useCaptureContext } from "../context/CaptureContext";
 import { NoteSummary } from "./noteview/NoteSummary";
 import { FolderList } from "./cards/FolderList";
-import { AIChatContainer } from "./Chat/AIChatContainer";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   FiBookmark,
   FiFolderPlus,
@@ -37,6 +36,8 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     isFolderListOpen,
     openAiChat,
     setOpenAiChat,
+    setMiddlePanelCollapsed,
+    setCollapsed
   } = useUI();
 
   const {
@@ -47,7 +48,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
   } = useCaptureContext();
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
   const { setSelectedFolder } = useFolderContext();
-  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,17 +70,19 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     }
   };
 
-  const containerWidth =
+  const containerWidth = 
+  openAiChat?"w-full md:w-[90%]" :
     collapsed && middlePanelCollapsed
-      ? "w-[90%] md:w-[90%] lg:w-[60%]"
+      ? "w-[90%] lg:w-[60%]"
       : collapsed || middlePanelCollapsed
       ? "w-[90%] md:w-[70%]"
       : "w-[90%] md:w-[80%]";
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-[#f7f0f0] dark:bg-[#0a0a0a]">
-      <AnimatePresence>{openAiChat && <AIChatContainer />}</AnimatePresence>
+    <div className="flex relative flex-col h-full overflow-hidden bg-[#f7f0f0] dark:bg-[#0a0a0a]">
+      <div className="relative">
       <FolderList />
+      </div>
 
       {/* Header with refined design */}
       <div className="sticky top-0 py-2 z-10 dark:bg-[#0a0a0a] backdrop-blur-2xl px-6 md:py-2">
@@ -151,6 +153,12 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               <span className="text-xs font-medium hidden md:block">
                 Organize
               </span>
+            </motion.button>
+            <motion.button>
+            <RiGeminiFill
+                onClick={()=> setOpenAiChat(!openAiChat)}
+                className={`w-5 h-5 text-violet-500 cursor-pointer hover:text-violet-300`}
+              />
             </motion.button>
           </div>
         </div>
@@ -257,42 +265,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
           wordCount={capture.content.clean?.length || 0}
         />
       </div>
-
-      {/* Floating AI Button - Refined design */}
-      <motion.button
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={handleOpenChat}
-        className={`fixed z-30 bottom-6 cursor-pointer right-6 p-3.5 rounded-full shadow-lg ${
-          openAiChat
-            ? "bg-gray-200/90 dark:bg-gray-800/90 border border-gray-300 dark:border-gray-700/50 backdrop-blur-md"
-            : "bg-gradient-to-br from-blue-500 to-blue-600 backdrop-blur-md"
-        } transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]`}
-        title="AI Assistant"
-      >
-        <RiGeminiFill
-          className={`w-5 h-5 ${
-            openAiChat ? "text-gray-700 dark:text-gray-300" : "text-white"
-          }`}
-        />
-        {!openAiChat && (
-          <motion.div
-            className="absolute inset-0 rounded-full border border-white/30 pointer-events-none"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.6, 0, 0.6],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        )}
-      </motion.button>
     </div>
   );
 };

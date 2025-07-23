@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { ReferenceCard } from "./ReferenceCard";
 import { Clipboard, MoreHorizontal } from "lucide-react"; // Added Lucide icon imports
 import { RiGeminiFill } from "react-icons/ri";
@@ -25,15 +24,15 @@ export const MessageBubble = ({ role, content, references }: MessageBubbleProps)
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
       >
-        <div className={`relative text-md max-w-[95%] rounded-2xl text-[14px] p-2 ${
-          role === 'user' 
-            ? 'bg-blue-600/0 rounded-br-none text-gray-600 dark:text-gray-400 ' 
-            : 'bg-gray-200 dark:bg-[#161618] rounded-bl-none border text-black/80 dark:text-[#ffffff] border-gray-300 dark:border-gray-800/50'
+        <div className={`relative text-md  rounded-2xl text-[14px] p-2 ${
+          role === 'assistant' 
+            ? 'bg-blue-600/0 rounded-br-none max-w-[95%] text-gray-600 dark:text-gray-400 ' 
+            : 'bg-gray-200 dark:bg-[#1e212c] max-w-[80%]  rounded-bl-none border text-black/80 dark:text-[#ffffff] border-gray-300 dark:border-gray-800/50'
         }`}>
           {/* Added Gemini icon */}
           {
           role === 'assistant' && 
-          <span className="absolute -top-2 left-2 text-gray-500">
+          <span className="absolute -top-2 w-6 h-6 rounded-full border border-violet-400/30 grid place-items-center -left-4 text-gray-500">
              <RiGeminiFill className="h-4 w-4 text-violet-500" /> 
           </span>
           }

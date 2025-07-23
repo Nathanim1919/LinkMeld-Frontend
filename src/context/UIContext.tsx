@@ -18,6 +18,8 @@ type UIContextType = {
   setOpenActionBar: (open: boolean) => void;
   openAiChat: boolean;
   setOpenAiChat: (open: boolean) => void;
+  expandAiChat: boolean;
+  setExpandAiChat: (open: boolean) => void;
 };
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -31,6 +33,7 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
   const [openActionBar, setOpenActionBar] = useState(false);
   const [openAiChat, setOpenAiChat] = useState(false);
   const [theme, setThemeState] = useState<"light" | "dark">("dark");
+  const [expandAiChat, setExpandAiChat] = useState(false);
 
   // Set theme class and state
   const setTheme = (newTheme: "light" | "dark") => {
@@ -73,6 +76,8 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
         setOpenAiChat,
         theme,
         setTheme,
+        expandAiChat,
+        setExpandAiChat,
       }}
     >
       {children}

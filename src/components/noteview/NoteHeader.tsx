@@ -29,7 +29,7 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
       animate={{ opacity: 1 }}
       className="border-b grid gap-2  border-gray-800"
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-hidden">
       <h1 className="md:text-2xl flex gap-2 font-semibold text-gray-900 dark:text-gray-100">
         {!isPdf ? (
           <CiStickyNote
