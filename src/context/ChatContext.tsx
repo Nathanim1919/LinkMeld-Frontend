@@ -21,6 +21,7 @@ type ChatContextType = {
   updateMessage: (index: number, message: IMessage) => void;
   removeMessage: (index: number) => void;
   cancelStream: () => void;
+  chatFailed: boolean;
 };
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -31,6 +32,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [userMessage, setUserMessage] = useState("");
+  const [chatFailed, setChatFailed] = useState(false);
 
   const clearMessages = () => setMessages([]);
 
@@ -40,7 +42,12 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     const userMessageObj: IMessage = { role: "user", content: userMessage.trim() };
     const updatedMessages = [...messages, userMessageObj]; // include the new message
 
-    setMessages(updatedMessages); // update state
+    if (chatFailed){
+      setMessages(updatedMessages.slice(0, -1)); // remove the last failed message
+      // setChatFailed(false);
+    } else {
+      setMessages(updatedMessages); // add the new user message
+    }
     setIsLoading(true);
     setIsStreaming(true);
 
@@ -62,6 +69,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
           console.log("Request aborted by user");
         } else {
           console.error("Error sending message:", error);
+          setChatFailed(true);
         }
       })
       .finally(() => {
@@ -111,7 +119,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         removeMessage,
         userMessage,
         setUserMessage,
-        cancelStream
+        cancelStream,
+        chatFailed,
       }}
     >
       {children}

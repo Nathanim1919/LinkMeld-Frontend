@@ -52,7 +52,7 @@ export const AIChatContainer = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 aria-label="Expand AI Chat"
-                className="p-1.5 rounded-full text-gray-400 cursor-pointer hover:text-gray-200"
+                className="p-1.5 hidden md:grid place-items-center rounded-full text-gray-400 cursor-pointer hover:text-gray-200"
               >
                 {expandAiChat ? (
                   <ChevronsRightLeft size={16} className="h-4 w-4" />

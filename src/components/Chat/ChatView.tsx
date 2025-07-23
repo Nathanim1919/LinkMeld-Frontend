@@ -6,10 +6,12 @@ import { motion } from "framer-motion";
 import { RiGeminiFill } from "react-icons/ri";
 import EmptyChat from "./EmptyChat";
 import { useUI } from "../../context/UIContext";
+import { useCaptureContext } from "../../context/CaptureContext";
 
 export const ChatView = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { messages, isLoading } = useChat();
+  const {selectedCapture} = useCaptureContext();
+  const { messages, isLoading, chatFailed, addMessage } = useChat();
   const { expandAiChat } = useUI();
 
   useEffect(() => {
@@ -66,6 +68,22 @@ export const ChatView = () => {
                 />
               ))}
             </div>
+
+            {chatFailed && (
+                <motion.div
+                  className="flex items-center justify-center py-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <button
+                    onClick={() => addMessage(selectedCapture?._id || "")}
+                    className="px-4 py-2 text-sm font-medium bg-red-500 hover:bg-red-600 text-white rounded-lg shadow transition"
+                  >
+                    Retry last message
+                  </button>
+                </motion.div>
+              )}
+
             
             {/* Animated Gemini icon */}
             <motion.div
