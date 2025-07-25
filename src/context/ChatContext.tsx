@@ -69,7 +69,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
           console.log("Request aborted by user");
         } else {
           console.error("Error sending message:", error);
-          setChatFailed(true);
+          // setChatFailed(true);
         }
       })
       .finally(() => {

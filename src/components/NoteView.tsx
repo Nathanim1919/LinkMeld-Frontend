@@ -168,49 +168,21 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       <div
         className={`mx-auto ${containerWidth} flex-1 overflow-y-auto py-2 md:px-6`}
       >
-        {capture.processingStatus === PROCESSING_STATUS.PROCESSING ? (
-          <div className="flex flex-col items-center justify-center z-40 h-full space-y-6 px-4 fixed w-full top-0 left-0 bg-white/80 dark:bg-[#1A1A1C]/80 backdrop-blur-xl">
-            {/* Animated gradient orb (subtle floating animation) */}
-            <div className="relative">
-              {/* <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 animate-[pulse_2.5s_ease-in-out_infinite] shadow-sm shadow-indigo-100/50">
-                <div className="absolute inset-4 rounded-full bg-white/30 backdrop-blur-sm border border-white/20"></div>
-              </div> */}
-
-              {/* Micro-interaction dots (Apple-style) */}
-              <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-1.5">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="w-1.5 h-1.5 rounded-full bg-indigo-300/70 animate-bounce"
-                    style={{
-                      animationDelay: `${i * 0.15}s`,
-                      animationDuration: "1.2s",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Dynamic status text with smooth transitions */}
-            <div className="text-center space-y-1 max-w-md">
-              <h3 className="text-lg font-medium text-gray-800 tracking-tight">
-                Processing your capture...
-              </h3>
-              <p className="text-sm text-gray-500 font-light tracking-wide transition-all duration-300">
-                {
-                  [
-                    "Extracting key concepts",
-                    "Identifying main arguments",
-                    "Structuring insights",
-                  ][Math.floor(Date.now() / 1000) % 3]
-                }
-                <span className="dot-flashing ml-1.5 inline-block relative h-2 w-2">
-                  <span className="absolute top-0 w-1 h-1 rounded-full bg-gray-400"></span>
-                </span>
-              </p>
-            </div>
-            <span>Please refresh the page...</span>
-          </div>
+        {((capture.processingStatus).toUpperCase() === PROCESSING_STATUS.PROCESSING || capture.processingStatus.toUpperCase() === PROCESSING_STATUS.ERROR) ? (
+           <div>
+             <p className="text-sm text-gray-500 font-light tracking-wide transition-all duration-300">
+               {
+                 [
+                   "Extracting key concepts",
+                   "Identifying main arguments",
+                   "Structuring insights",
+                 ][Math.floor(Date.now() / 1000) % 3]
+               }
+               <span className="dot-flashing ml-1.5 inline-block relative h-2 w-2">
+                 <span className="absolute top-0 w-1 h-1 rounded-full bg-gray-400"></span>
+               </span>
+             </p>
+           </div>
         ) : (
           <NoteHeader
             collection={
