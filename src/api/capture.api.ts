@@ -2,7 +2,6 @@ import type { AxiosError } from "axios";
 import { api } from ".";
 import type { Capture } from "../types/Capture";
 
-
 // Strongly typed filter
 export type CaptureFilter = "all" | "bookmarks" | "folder" | "source";
 
@@ -25,10 +24,13 @@ export const CaptureService = {
    * @returns {Promise<Capture[]>} Array of captures
    * @throws {ErrorResponse} If request fails
    */
-  async getCapturesBasedOnFilter(filter: CaptureFilter, id: string | null = null): Promise<Capture[]> {
+  async getCapturesBasedOnFilter(
+    filter: CaptureFilter,
+    id: string | null = null
+  ): Promise<Capture[]> {
     try {
       let endpoint = "/captures";
-      
+
       switch (filter) {
         case "bookmarks":
           endpoint = "/captures/bookmarked";
@@ -47,6 +49,31 @@ export const CaptureService = {
       return response.data.data;
     } catch (error) {
       throw this.handleError(error, "Failed to fetch captures");
+    }
+  },
+
+  /**
+   * Reprocess a capture
+   * @param {string} captureId - Capture ID
+   * @returns {Promise<Capture>} Reprocessed capture
+   * @throws {ErrorResponse} If request fails
+   */
+  async reProcessCapture(captureId: string) {
+    try {
+      const response = await api.post<ApiResponse<Capture>>(
+        `/captures/${captureId}/reprocess`
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error, "Failed to reprocess capture");
+    }
+  },
+
+  async deleteCapture(captureId: string): Promise<void> {
+    try {
+      await api.delete<ApiResponse<null>>(`/captures/${captureId}`);
+    } catch (error) {
+      throw this.handleError(error, "Failed to delete capture");
     }
   },
 
@@ -117,20 +144,23 @@ export const CaptureService = {
         message: string;
         data: { summary: string; captureId: string };
       }>("/ai/summary", { captureId });
-      
-      return { 
-        success: true, 
-        summary: response.data.data.summary 
+
+      return {
+        success: true,
+        summary: response.data.data.summary,
       };
     } catch (error) {
       const axiosError = error as AxiosError;
       return {
         success: false,
         error: {
-          message: (axiosError.response?.data as { message?: string })?.message || axiosError.message || "Summary generation failed",
+          message:
+            (axiosError.response?.data as { message?: string })?.message ||
+            axiosError.message ||
+            "Summary generation failed",
           code: axiosError.code,
-          details: axiosError.response?.data
-        }
+          details: axiosError.response?.data,
+        },
       };
     }
   },
@@ -139,7 +169,7 @@ export const CaptureService = {
    * Handle API errors consistently
    * @private
    */
-handleError(error: unknown, defaultMessage: string): ErrorResponse {
+  handleError(error: unknown, defaultMessage: string): ErrorResponse {
     const axiosError = error as AxiosError;
     console.error("API Error:", {
       message: axiosError.message,
@@ -148,9 +178,11 @@ handleError(error: unknown, defaultMessage: string): ErrorResponse {
     });
 
     return {
-      message: (axiosError.response?.data as { message?: string })?.message || defaultMessage,
+      message:
+        (axiosError.response?.data as { message?: string })?.message ||
+        defaultMessage,
       code: axiosError.code,
-      details: axiosError.response?.data
+      details: axiosError.response?.data,
     };
-  }
+  },
 };

@@ -1,8 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { CiStickyNote } from "react-icons/ci";
-import { FileText } from "lucide-react";
-
 
 type NoteHeaderProps = {
   title: string;
@@ -21,45 +18,36 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
   title,
   description = "",
   url = "",
-  isPdf = false,
 }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, }}
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="border-b grid gap-2  border-gray-800"
     >
       <div className="flex flex-col overflow-hidden">
-      <h1 className="md:text-2xl flex gap-2 font-semibold text-gray-900 dark:text-gray-100">
-        {!isPdf ? (
-          <CiStickyNote
-           className="text-gray-500 text-2xl md:text-3xl"
-         
-          />
+        <h1 className="md:text-2xl flex gap-2 text-left font-bold text-gray-900 dark:text-gray-100">
+          {title}
+        </h1>
+
+        {url ? (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
+          >
+            Visit Original Source
+          </a>
         ) : (
-          <FileText 
-          className="text-red-700 text-2xl md:text-3xl"
-          />
+          "No URL provided"
         )}
-        {title}
-      </h1>
-      
-          {url? (
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              Visit Original Source
-            </a>
-          ): "No URL provided"}
-          </div>
-       {description && ( <p className="text-gray-700 dark:text-gray-400 mt-1 text-sm">
+      </div>
+      {description && (
+        <p className="text-gray-700 dark:text-gray-400 mt-1 text-sm">
           {description}
         </p>
-        )}
-     
+      )}
     </motion.div>
   );
 };

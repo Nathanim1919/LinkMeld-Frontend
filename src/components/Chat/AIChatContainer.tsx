@@ -77,7 +77,7 @@ export const AIChatContainer = () => {
           {/* Dynamic Content Area with subtle parallax effect */}
           <motion.main
             className={`flex-1 ${
-              expandAiChat && "w-[50%] h-full mx-auto"
+              expandAiChat && "w-full md:w-[50%] h-full mx-auto"
             } overflow-hidden`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

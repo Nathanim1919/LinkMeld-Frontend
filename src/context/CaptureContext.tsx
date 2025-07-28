@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { CaptureService } from "../api/capture.api";
-import type { Capture } from "../types/Capture";
+import {type Capture } from "../types/Capture";
 import { toast } from "sonner";
 
 type FilterType = "all" | "bookmarks" | "folder" | "source";
@@ -11,7 +11,9 @@ interface CaptureContextType {
   setSelectedCapture: (capture: Capture | null) => void;
   fetchCaptures: (filter: FilterType, id?: string | null) => Promise<void>;
   bookmarkCapture: (captureId: string) => Promise<void>;
+  reProcessCapture: (captureId: string) => Promise<void>;
   getCapture: (captureId: string) => Promise<void>;
+  deleteCapture: (captureId: string) => Promise<void>;
   generateCaptureSummary: (captureId: string) => Promise<string>;
   loadingSummary: boolean;
   setLoadingSummary: (loading: boolean) => void;
@@ -45,6 +47,44 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
       setLoading(false);
     }
   }, []);
+
+  const reProcessCapture = useCallback(
+    async (captureId: string): Promise<void> => {
+      try {
+        setLoading(true);
+        const reprocessedCapture = await CaptureService.reProcessCapture(captureId);
+        toast.success(reprocessedCapture.message || "Capture re-processing initiated.");
+        // set selectedCapture to the reprocessed capture
+        setSelectedCapture(reprocessedCapture);
+      } catch (error) {
+        setError(error as Error);
+        toast.error("Failed to re-process capture");
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+
+  const deleteCapture = useCallback(
+    async (captureId: string): Promise<void> => {
+      try {
+        setLoading(true);
+        await CaptureService.deleteCapture(captureId);
+        setCaptures((prev) => prev.filter((capture) => capture._id !== captureId));
+        if (selectedCapture?._id === captureId) {
+          setSelectedCapture(null);
+        }
+        toast.success("Capture deleted successfully");
+      } catch (error) {
+        setError(error as Error);
+        toast.error("Failed to delete capture");
+      } finally {
+        setLoading(false);
+      }
+    },[selectedCapture?._id]
+  );
 
   const fetchCaptures = useCallback(
     async (filter: FilterType, id: string | null = null): Promise<void> => {
@@ -176,7 +216,9 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     loadingSummary,
     fetchCaptures,
     bookmarkCapture,
+    deleteCapture,
     getCapture,
+    reProcessCapture,
     generateCaptureSummary,
     loading,
     error,
