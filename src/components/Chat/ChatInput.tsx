@@ -28,13 +28,13 @@ export const ChatInput = () => {
   }, []);
 
   return (
-    <div className="px-5 py-4 border-t border-gray-700/50 bg-[#161618] backdrop-blur-2xl">
+    <div className="px-5 py-4 border-t border-gray-700/50 bg-white dark:bg-[#161618] backdrop-blur-2xl">
       {/* Suggested Prompts */}
       <div className="flex gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
         {["Explain like I'm 5", "Give me examples"].map((prompt) => (
           <button
             key={prompt}
-            className="text-xs bg-[#232326] text-gray-300 px-3.5 py-2 rounded-full whitespace-nowrap flex-shrink-0 hover:bg-gray-700 active:bg-gray-600 transition-colors duration-150"
+            className="text-xs bg-gray-200 dark:bg-[#232326] text-black/70 dark:text-gray-300 px-3.5 py-2 rounded-full whitespace-nowrap flex-shrink-0 hover:bg-gray-200 cursor-pointer hover:dark:bg-gray-700 active:dark:bg-gray-600 active:bg-gray-300  transition-colors duration-150"
             onClick={() => {
               setUserMessage(prompt);
               textareaRef.current?.focus();
@@ -52,7 +52,7 @@ export const ChatInput = () => {
           ref={textareaRef}
           value={userMessage}
           onChange={(e) => setUserMessage(e.target.value)}
-          className="w-full bg-[#1e1e21] backdrop-blur-md rounded-2xl border border-gray-700/30 text-white py-3 px-5 pr-14 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-gray-500 text-sm leading-5 transition-all duration-200 scrollbar-hide"
+          className="w-full bg-gray-100 dark:bg-[#1e1e21] backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700/30 dark:text-white py-3 px-5 pr-14 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent placeholder-gray-500 text-sm leading-5 transition-all duration-200 scrollbar-hide"
           placeholder="Ask about the current concept..."
           rows={1}
           onKeyDown={(e) => {
@@ -66,7 +66,7 @@ export const ChatInput = () => {
           className={`absolute right-2 bottom-3 p-2 rounded-full transition-all ${
             userMessage.trim()
               ? "bg-blue-500 hover:bg-blue-600 active:bg-blue-700"
-              : "bg-gray-700 text-gray-500"
+              : "dark:bg-gray-700 bg-gray-300 text-gray-500"
           }`}
           onClick={handleSend}
         >

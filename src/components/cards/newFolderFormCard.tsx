@@ -60,13 +60,13 @@ export const NewFolderFormCard = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm p-4">
+      <div className="fixed inset-0 z-1000 flex items-center justify-center backdrop-blur-sm p-4">
         {/* Overlay */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/40"
+          className="fixed inset-0 bg-white/10 dark:bg-black/20"
           onClick={onClose}
         />
 
@@ -76,22 +76,22 @@ export const NewFolderFormCard = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 20 }}
           transition={{ type: "spring", damping: 28, stiffness: 400 }}
-          className="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-[#131313] backdrop-blur-xl p-6 shadow-2xl"
+          className="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-white dark:bg-[#131313] backdrop-blur-xl p-6 shadow-2xl"
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-semibold text-white tracking-tight">
+            <h2 className="text-lg font-semibold text-black dark:text-white tracking-tight">
               New Collection
             </h2>
             <button
               onClick={onClose}
               aria-label="Close"
-              className="text-gray-400 cursor-pointer hover:text-white p-1 rounded-full transition-colors hover:bg-white/10"
+              className="dark:text-gray-400 text-gray-600 cursor-pointer hover:text-white p-1 rounded-full transition-colors hover:bg-white/10"
             >
               <X size={20} />
             </button>
           </div>
-          <p className="text-sm text-gray-400 mb-6">
+          <p className="text-sm text-gray-500 mb-6">
             Organize your ideas with a new collection.
           </p>
 
@@ -100,7 +100,7 @@ export const NewFolderFormCard = ({
             <div>
               <label
                 htmlFor="folderName"
-                className="block text-sm text-gray-300 mb-2"
+                className="block text-sm text-gray-700 dark:text-gray-300 mb-2"
               >
                 Collection Name
               </label>
@@ -109,7 +109,7 @@ export const NewFolderFormCard = ({
                 type="text"
                 value={folderName}
                 onChange={(e) => setFolderName(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-black/10 dark:bg-white/10 border border-white/10 text-black  dark:text-white placeholder-gray-400  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="e.g. Programming"
                 required
                 maxLength={50}
@@ -123,7 +123,7 @@ export const NewFolderFormCard = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 cursor-pointer py-2 text-sm text-gray-300 hover:text-white rounded-lg transition hover:bg-white/10"
+                className="px-4 cursor-pointer py-2 text-sm text-gray-400 hover:text-white rounded-lg transition hover:bg-white/10"
               >
                 Cancel
               </button>

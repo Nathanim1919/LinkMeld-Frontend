@@ -29,8 +29,8 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
   };
 
   const className = expanded
-  ? "bg-white/5 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] m-auto w-[95%] md:w-[50%] h-[90%] backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/10 shadow-lg"
-  : "bg-white/5 relative -mt-8 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/10 shadow-lg";
+  ? "bg-white/5 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] m-auto w-[65%]  h-[90%] backdrop-blur-2xl rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-lg"
+  : "bg-white/5 relative -mt-8 backdrop-blur-2xl rounded-2xl overflow-hidden border border-black/10 w-full dark:border-white/10 shadow-lg";
 
 return (
   <motion.div
@@ -49,32 +49,32 @@ return (
   >
    
       {/* Header */}
-      <div className="flex px-4 items-center justify-between border-b border-white/5">
+      <div className="flex px-4 items-center justify-between border-b border-black/5 dark:border-white/5">
       <div className="px-5 py-3 border-b border-white/5">
-        <h3 className="text-sm font-medium text-white/80">
+        <h3 className="text-sm font-medium dark:text-white/80 text-black/90">
           {loading ? "Searching..." : `Results for "${searchTerm}"`}
         </h3>
-        <p className="text-xs text-white/30 mt-0.5">
+        <p className="text-xs dark:text-white/30 text-black/40 mt-0.5">
           {captures.length} knowledge items
         </p>
       </div>
       <div className="flex items-center gap-2 px-4 py-2">
      {expanded?<Shrink 
-        className="text-white/30 hover:text-white cursor-pointer"
+        className="dark:text-white/30 text-black/30 hover:text-white cursor-pointer"
         size={16}
         onClick={() => {
           handleExpandToggle();
           document.body.style.overflow = ""; // Enable scroll
         }}
      />: <Maximize 
-        className="text-white/30 hover:text-white cursor-pointer"
+        className="dark:text-white/30 text-black/30 hover:text-white cursor-pointer"
         size={16}
         onClick={() => {
           handleExpandToggle();
         }}
       />}
       <X 
-        className="text-white/30 hover:text-white cursor-pointer"
+        className="dark:text-white/30 text-black/30 hover:text-white cursor-pointer"
         size={16}
         onClick={() => {
           setSearchTerm("");
@@ -84,19 +84,18 @@ return (
       </div>
 
       {/* Content */}
-      <div className={`divide-y divide-white/5 ${expanded?"":"max-h-[65vh]"} overflow-y-auto`}>
+      <div className={`divide-y dark:divide-white/5 divide-black/5 ${expanded?"":"max-h-[65vh]"} overflow-y-auto`}>
         {loading ? (
           <div className="p-6 flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-white/10 border-t-white/30 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-black/10 dark:border-white/10 border-t-black/30 dark:border-t-white/30 rounded-full animate-spin" />
           </div>
         ) : captures.length > 0 ? (
           captures.map((item) => (
             <motion.div
               key={item._id}
-              whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
-              className="px-5 py-3 transition-colors"
+              className="px-5 py-3 transition-colors group hover:bg-white/5"
             >
-              <Link to={`/in/captures/${item._id}`} className="block">
+              <Link to={`/in/captures/${item._id}`} className="block rounded-lg  transition-colors duration-200">
                 <div className="flex justify-between items-start">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -111,11 +110,11 @@ return (
                           }}
                         />
                       )}
-                      <span className="text-xs text-white/50 truncate">
+                      <span className="text-xs dark:text-white/50 text-black/50 truncate">
                         {item.metadata.siteName || "Unknown Source"}
                       </span>
                     </div>
-                    <h4 className="text-white/90 text-sm font-medium leading-snug line-clamp-2">
+                    <h4 className="dark:text-white/90 text-black text-sm font-medium leading-snug line-clamp-2">
                       {item.title}
                     </h4>
                   </div>
@@ -125,7 +124,7 @@ return (
                       e.stopPropagation();
                       // toggleBookmark(item._id);
                     }}
-                    className="ml-2 p-1 text-white/30 hover:text-amber-400 transition-colors"
+                    className="ml-2 p-1 dark:text-white/30 text-black/30 hover:text-amber-400 transition-colors"
                     aria-label="Bookmark"
                   >
                     {item.bookmarked ? (
@@ -137,7 +136,7 @@ return (
                 </div>
 
                 <div className="flex justify-between items-center mt-2">
-                  <span className="text-xs text-white/30 flex items-center gap-1">
+                  <span className="text-xs dark:text-white/30 text-black/30 flex items-center gap-1">
                     <CiCalendarDate size={12} />
                     {new Date(item.createdAt).toLocaleDateString("en-US", {
                       month: "short",
@@ -145,15 +144,15 @@ return (
                       year: "numeric",
                     })}
                   </span>
-                  <FiExternalLink size={12} className="text-white/30" />
+                  <FiExternalLink size={12} className="dark:text-white/30 text-black/30" />
                 </div>
               </Link>
             </motion.div>
           ))
         ) : (
           <div className="p-6 text-center">
-            <p className="text-white/50">No results found</p>
-            <p className="text-xs text-white/30 mt-1">
+            <p className="dark:text-white/50 text-black/50">No results found</p>
+            <p className="text-xs dark:text-white/30 text-black/30 mt-1">
               Try different keywords or check your spelling
             </p>
           </div>

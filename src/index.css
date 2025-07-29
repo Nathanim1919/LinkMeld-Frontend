@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --stellar-purple-100: #e0d7ff;
@@ -13,9 +14,22 @@
   --space-black: #0a0a12;
 }
 
+/* styles.css */
+.light {
+  --background: #ffffff;
+  --text: #000000;
+}
+
+.dark {
+  --background: #1a1a1a;
+  --text: #ffffff;
+}
+
+
 body {
   font-family: "Space Grotesk", sans-serif;
-  background-color: #000;
+  background: var(--background);
+  color: var(--text);
 }
 
 @keyframes slow-spin {

@@ -46,22 +46,22 @@ export const SetApiKeyModal: React.FC<{
     <ModalWrapper closeModal={closeModal}>
       <div className="p-6 max-w-md w-full">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-white">Gemini Integration</h2>
+          <h2 className="text-xl font-semibold text-black dark:text-white">Gemini Integration</h2>
           <button 
             onClick={closeModal} 
-            className="text-[#aeaeb2] hover:bg-gray-700 rounded-full p-1 transition-colors"
+            className="text-[#aeaeb2] hover:opacity-65 cursor-pointer rounded-full p-1 transition-colors"
           >
             <FiX className="text-lg" />
           </button>
         </div>
         
         {existingApiKey ? (
-          <div className="mb-6 bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+          <div className="mb-6 bg-gray-100 dark:bg-gray-800/50 rounded-xl p-4 border dark:border-gray-700 border-gray-100">
             <div className="flex items-start gap-3">
               <FiCheckCircle className="text-green-500 mt-0.5 flex-shrink-0" />
               <div>
-                <h3 className="text-white font-medium">API Key Configured</h3>
-                <p className="text-gray-400 text-sm mt-1">
+                <h3 className="dark:text-white text-black font-medium">API Key Configured</h3>
+                <p className="text-gray-500 text-sm mt-1">
                   Your Gemini API key is securely stored. You can update it below if needed.
                 </p>
               </div>
@@ -78,7 +78,7 @@ export const SetApiKeyModal: React.FC<{
               type={showApiKey ? "text" : "password"}
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all pr-12 placeholder-gray-500"
+              className="w-full dark:bg-gray-800 bg-gray-100 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all pr-12 placeholder-gray-500"
               placeholder={existingApiKey ? "Enter new key..." : "sk-...your-api-key"}
             />
             {apiKey && (
@@ -93,8 +93,8 @@ export const SetApiKeyModal: React.FC<{
         </div>
         
         {!existingApiKey && (
-          <div className="mb-6 bg-gray-800/30 rounded-lg p-3 border border-gray-700">
-            <h3 className="text-white font-medium text-sm flex items-center gap-2">
+          <div className="mb-6 bg-gray-100 dark:bg-gray-800/30 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+            <h3 className="dark:text-white text-black font-medium text-sm flex items-center gap-2">
               <span className="text-blue-500">i</span>
               Need an API key?
             </h3>
@@ -118,7 +118,7 @@ export const SetApiKeyModal: React.FC<{
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
             disabled={isSaving}
-            className={`px-4 py-2.5 rounded-lg font-medium flex-1 text-center transition-colors ${
+            className={`px-4 py-2.5 cursor-pointer text-white rounded-lg font-medium flex-1 text-center transition-colors ${
               isSaving 
                 ? "bg-blue-600/80 cursor-not-allowed" 
                 : "bg-blue-500 hover:bg-blue-600"
@@ -136,7 +136,7 @@ export const SetApiKeyModal: React.FC<{
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
             onClick={closeModal}
-            className="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium flex-1 text-center transition-colors"
+            className="px-4 py-2.5 bg-gray-200 cursor-pointer dark:bg-gray-700 hover:dark:bg-gray-600 hover:bg-gray-100 rounded-lg font-medium flex-1 text-center transition-colors"
           >
             Cancel
           </motion.button>

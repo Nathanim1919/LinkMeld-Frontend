@@ -38,7 +38,7 @@ export const SidebarItem = ({ icon, label, path, collapsed, onClick }: SidebarIt
         className={`relative flex text-[19px] md:text-[19px] items-center ${
           collapsed ? "justify-center" : "px-2"
         } py-2 rounded-lg transition-all duration-200
-        ${isActive ? "bg-gray-800/50" : ""}`}
+        ${isActive ? "bg-gray-200 dark:bg-gray-800/50" : ""}`}
       >
         <span
           className={`relative z-10 ${isActive ? "text-blue-400" : "text-gray-500"}`}>
@@ -47,7 +47,7 @@ export const SidebarItem = ({ icon, label, path, collapsed, onClick }: SidebarIt
         {!collapsed && (
           <span
             className={`ml-3 text-sm md:text-md ${
-              isActive ? "font-medium text-white" : "font-normal text-gray-500"
+              isActive ? "font-bold dark:text-white" : "font-medium text-gray-500"
             }`}
           >
             {label}

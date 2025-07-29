@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from "react";
-import { sendMessage } from "../api/chat.api";
+import { sendMessageStream } from "../api/chat.api";
 
 export type IMessage = {
   role: "user" | "assistant";
@@ -21,58 +21,68 @@ type ChatContextType = {
   updateMessage: (index: number, message: IMessage) => void;
   removeMessage: (index: number) => void;
   cancelStream: () => void;
+  chatFailed: boolean;
 };
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [abortController, setAbortController] = useState<AbortController | null>(null);
+  const [abortController, setAbortController] =
+    useState<AbortController | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [userMessage, setUserMessage] = useState("");
+  const [chatFailed, setChatFailed] = useState(false);
 
   const clearMessages = () => setMessages([]);
 
   const addMessage = (captureId: string) => {
     if (!userMessage.trim()) return;
 
-    const userMessageObj: IMessage = { role: "user", content: userMessage.trim() };
-    const updatedMessages = [...messages, userMessageObj]; // include the new message
-
-    setMessages(updatedMessages); // update state
-    setIsLoading(true);
+    const userMessageObj: IMessage = {
+      role: "user",
+      content: userMessage.trim(),
+    };
+    const updatedMessages = [...messages, userMessageObj];
+    setMessages(updatedMessages);
+    setUserMessage("");
     setIsStreaming(true);
-
+    setIsLoading(true);
 
     const controller = new AbortController();
     setAbortController(controller);
 
-    sendMessage(updatedMessages, captureId)
-      .then((response) => {
-        const newMessage: IMessage = {
+    let streamedText = "";
+    const assistantMessageIndex = updatedMessages.length;
+
+    // Optimistically add an empty assistant message
+    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+    sendMessageStream(
+      updatedMessages,
+      captureId,
+      (chunk) => {
+        streamedText += chunk;
+        updateMessage(assistantMessageIndex, {
           role: "assistant",
-          content: response.data.response, // not `response.data.response`, since you're already returning `res.data` directly
-          references: response.references,
-        };
-        setMessages((prev) => [...prev, newMessage]);
-      })
-      .catch((error) => {
-        if (error.name === "AbortError") {
-          console.log("Request aborted by user");
-        } else {
-          console.error("Error sending message:", error);
-        }
-      })
-      .finally(() => {
+          content: streamedText,
+        });
+      },
+      () => {
         setIsLoading(false);
         setIsStreaming(false);
-        setUserMessage(""); // Clear input after sending
         setAbortController(null);
-      });
+      },
+      (errorMsg) => {
+        console.error("Streaming Error:", errorMsg);
+        setChatFailed(true);
+        setIsLoading(false);
+        setIsStreaming(false);
+      },
+      controller.signal
+    );
   };
-
-  // setMessages((prev) => [...prev, message]);
 
   const updateMessage = (index: number, message: IMessage) => {
     setMessages((prev) => {
@@ -88,13 +98,35 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const cancelStream = () => {
     if (abortController) {
+      console.log("Aborting stream...");
       abortController.abort();
       setAbortController(null);
       setIsStreaming(false);
       setIsLoading(false);
+      // Optional: Add a message to the chat indicating the stream was cancelled
+      setMessages((prev) => {
+        const lastMessageIndex = prev.length - 1;
+        if (
+          lastMessageIndex >= 0 &&
+          prev[lastMessageIndex].role === "assistant" &&
+          prev[lastMessageIndex].content === ""
+        ) {
+          // If the assistant message is empty, update it with cancellation message
+          const updatedLastMessage = {
+            ...prev[lastMessageIndex],
+            content: "Stream cancelled by user.",
+          };
+          const newMessages = [...prev];
+          newMessages[lastMessageIndex] = updatedLastMessage;
+          return newMessages;
+        }
+        return [
+          ...prev,
+          { role: "assistant", content: "Stream cancelled by user." },
+        ];
+      });
     }
   };
-  
 
   return (
     <ChatContext.Provider
@@ -111,7 +143,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         removeMessage,
         userMessage,
         setUserMessage,
-        cancelStream
+        cancelStream,
+        chatFailed,
       }}
     >
       {children}

@@ -6,7 +6,7 @@ import { CiBookmark, CiStickyNote } from "react-icons/ci";
 import { motion, AnimatePresence } from "framer-motion";
 import { NoteListSkeleton } from "./skeleton/NoteSkeleton";
 import { IoDocumentsOutline } from "react-icons/io5";
-import { FileText } from "lucide-react";
+import { FileText, Trash } from "lucide-react";
 import { useUI } from "../context/UIContext";
 
 interface NotesListProps {
@@ -25,19 +25,40 @@ const filterIcons = {
   bookmarks: <CiBookmark className="text-amber-400" />,
 } as const;
 
+function useIsSmallScreen(breakpoint = 640) {
+  const [isSmall, setIsSmall] = useState(() => window.innerWidth < breakpoint);
+
+  useEffect(() => {
+    const handleResize = () => setIsSmall(window.innerWidth < breakpoint);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [breakpoint]);
+
+  return isSmall;
+}
+
 const NotesList: React.FC<NotesListProps> = ({
   filter = "all",
   folderId,
   sourceId,
 }) => {
-  const { captures, fetchCaptures, bookmarkCapture } = useCaptureContext();
+  const { captures, fetchCaptures, bookmarkCapture, deleteCapture } =
+    useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { setMiddlePanelCollapsed } = useUI();
+  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
 
   const location = useLocation();
   const activeCaptureId = location.pathname.split("/").pop();
   const targetId = folderId || sourceId || null;
+  const isSmallScreen = useIsSmallScreen();
+
+  const handleCaptureClick = () => {
+    if (isSmallScreen) {
+      setMiddlePanelCollapsed(true);
+      setCollapsed(true);
+    }
+  };
 
   useEffect(() => {
     const loadCaptures = async () => {
@@ -99,7 +120,7 @@ const NotesList: React.FC<NotesListProps> = ({
   if (!safeCaptures.length)
     return (
       <div className="flex relative flex-col items-center justify-center h-full text-center px-4">
-        <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
+        <div className="p-4 mb-4 rounded-full bg-gray-200 dark:bg-gray-800/50 text-gray-500">
           <IoDocumentsOutline className="text-[24px]" />
         </div>
         <p className="text-[13px] text-gray-500">No captures found</p>
@@ -109,10 +130,10 @@ const NotesList: React.FC<NotesListProps> = ({
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {shouldShowHeader && (
-        <div className="px-3 py-3  border-b border-gray-800/50">
+        <div className="px-3 py-3  border-b border-gray-100 dark:border-gray-800/50">
           <div className="flex items-center gap-2">
             {filterIcons[filter]}
-            <h3 className="text-sm font-medium text-gray-300">
+            <h3 className="text-sm font-medium text-[#000] dark:text-gray-300">
               {filterLabels[filter]}
             </h3>
           </div>
@@ -130,12 +151,12 @@ const NotesList: React.FC<NotesListProps> = ({
               transition={{ duration: 0.2 }}
             >
               <Link
-                onClick={() => setMiddlePanelCollapsed(true)}
+                onClick={handleCaptureClick}
                 to={buildLink(note._id)}
                 className={`block rounded-lg p-3 transition-all duration-200 ${
                   activeCaptureId === note._id
                     ? "bg-gray-800/50 border-l-2 border-blue-400"
-                    : "hover:bg-gray-800/30"
+                    : "hover:dark:bg-gray-800/30 hover:bg-gray-200/50"
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -155,7 +176,7 @@ const NotesList: React.FC<NotesListProps> = ({
                           }`}
                         />
                       )}
-                      <h3 className="text-sm font-medium truncate text-gray-300">
+                      <h3 className="text-sm font-medium truncate text-[#000] dark:text-gray-300">
                         {note.title}
                       </h3>
                     </div>
@@ -173,13 +194,10 @@ const NotesList: React.FC<NotesListProps> = ({
                       </div>
                     )}
 
-                    <p className="text-xs text-gray-400 line-clamp-2 mb-2">
-                      {note.description || note.ai?.summary?.slice(0,100)+"..."}
+                    <p className="text-xs text-gray-500 line-clamp-2 mb-2">
+                      {note.description ||
+                        note.ai?.summary?.slice(0, 100) + "..."}
                     </p>
-
-                    <span className="text-xs text-gray-500">
-                      {note.timeAgo}
-                    </span>
                   </div>
 
                   <button
@@ -200,6 +218,14 @@ const NotesList: React.FC<NotesListProps> = ({
                       }`}
                     />
                   </button>
+                </div>
+                <div className="flex w-full items-center justify-between p-1 gap-1 text-xs text-gray-500">
+                  <span className="text-xs text-gray-500">{note.timeAgo}</span>
+                  <Trash
+                    size={16}
+                    className="text-gray-800 hover:text-gray-500 cursor-pointer"
+                    onClick={() => deleteCapture(note._id)}
+                  />
                 </div>
               </Link>
             </motion.div>

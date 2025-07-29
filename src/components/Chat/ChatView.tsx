@@ -5,24 +5,26 @@ import { useChat } from "../../context/ChatContext";
 import { motion } from "framer-motion";
 import { RiGeminiFill } from "react-icons/ri";
 import EmptyChat from "./EmptyChat";
+import { useUI } from "../../context/UIContext";
 
 export const ChatView = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { messages, isLoading } = useChat();
+  const { messages, isLoading} = useChat();
+  const { expandAiChat } = useUI();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <div className="h-full bg-[#1A1A1C] flex flex-col">
+    <div className={`h-full overflow-hidden ${expandAiChat?"bg-transparent":"bg-gray-100 dark:bg-[#1A1A1C]"} flex flex-col`}>
       {/* Message History */}
       {
         messages.length === 0 && !isLoading && (
          <EmptyChat />
         )
       }
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2 max-h-full">
         {messages.map((msg, index) => (
           <MessageBubble
             key={index}
@@ -64,6 +66,7 @@ export const ChatView = () => {
                 />
               ))}
             </div>
+
             
             {/* Animated Gemini icon */}
             <motion.div
@@ -89,7 +92,7 @@ export const ChatView = () => {
                 ease: "easeInOut"
               }}
             >
-              wait a sec...
+              Thinking...
             </motion.span>
           </motion.div>
         )}

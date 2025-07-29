@@ -12,9 +12,9 @@ const FoldersPanel: React.FC = () => {
   return (
     <div className="h-full flex flex-col">
       {/* Header - Apple-style with subtle gradient */}
-      <div className="sticky top-0 z-10 px-5 py-3 border-b border-gray-800/30">
+      <div className="sticky top-0 z-10 px-5 py-3 border-b border-gray-200 dark:border-zinc-800">
         <div className="flex items-center justify-between">
-          <h2 className="text-[13px] font-medium text-gray-400 tracking-wider uppercase">
+          <h2 className="text-[13px] font-medium text-black dark:text-gray-400 tracking-wider uppercase">
             COLLECTIONS
           </h2>
           <motion.button
@@ -45,7 +45,7 @@ const FoldersPanel: React.FC = () => {
           </div>
         ) : folders.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
-            <div className="p-4 mb-4 rounded-full bg-gray-800/50 text-gray-500">
+            <div className="p-4 mb-4 rounded-full bg-gray-200 dark:bg-gray-800/50 text-gray-500">
               <FaFolder className="text-[24px]" />
             </div>
             <p className="text-[13px] text-gray-500 mb-4 max-w-[180px]">
@@ -79,11 +79,11 @@ const FoldersPanel: React.FC = () => {
                       to={`/in/collections/${folder._id}`}
                       onClick={() => setSelectedFolder(folder)}
                       className={`relative flex  items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${
-                        isActive ? "bg-blue-500/10" : "hover:bg-gray-700/30"
+                        isActive ? "bg-blue-500/10" : "hover:bg-gray-200 hover:dark:bg-gray-700/30"
                       }`}
                       activeOptions={{ exact: true }}
                     >
-                      <div className="flex items-center gap-3 overflow-hidden">
+                      <div className="flex items-center gap-2 overflow-hidden">
                         <FaFolder
                           className={`flex-shrink-0 text-[16px] ${
                             isActive ? "text-blue-500" : "text-[#4eff8f]"
@@ -91,7 +91,7 @@ const FoldersPanel: React.FC = () => {
                         />
                         <span
                           className={`truncate text-[13px] ${
-                            isActive ? "text-white" : "text-gray-300"
+                            isActive ? "text-black dark:text-white" : "text-black/60 dark:text-gray-300"
                           }`}
                         >
                           {folder.name}
@@ -102,8 +102,8 @@ const FoldersPanel: React.FC = () => {
                         <span
                           className={`text-[11px] px-[6px] py-[2px] rounded-full ${
                             isActive
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "bg-gray-700/50 text-gray-400"
+                              ? "dark:bg-blue-500/20 text-blue-400"
+                              : "dark:bg-gray-700/50 text-gray-400"
                           }`}
                         >
                           {folder.captures.length > 0
