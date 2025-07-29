@@ -3,11 +3,7 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import {
-  Brain,
-  PanelRightClose,
-  PanelRightOpen,
-} from "lucide-react";
+import { Brain, PanelRightClose, PanelRightOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { SidebarItem } from "./SidebarItem";
 import { IoSearch } from "react-icons/io5";
@@ -51,7 +47,7 @@ const Sidebar: React.FC<{
     token: string;
   };
 }> = ({ user, hideSidebar, setHideSidebar }) => {
-  const { collapsed, setCollapsed} = useUI();
+  const { collapsed, setCollapsed } = useUI();
 
   return (
     <motion.div
@@ -68,7 +64,6 @@ const Sidebar: React.FC<{
     ${collapsed ? "w-12 md:w-14" : "w-36"}
   `}
     >
-      {/* Logo */}
       <div
         className={`flex items-center ${
           collapsed ? "justify-center" : "justify-between px-2"
@@ -137,7 +132,7 @@ const Sidebar: React.FC<{
           path="/profile"
           collapsed={collapsed}
         />
-          {/* <SidebarItem
+        {/* <SidebarItem
             icon={theme === "dark" ? <Moon size={20} /> : <Sun size={20} />}
             label={theme === "dark" ? "Dark" : "Light"}
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
