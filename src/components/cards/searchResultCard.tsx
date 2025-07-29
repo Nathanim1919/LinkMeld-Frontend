@@ -29,8 +29,8 @@ export const SearchResultCard: React.FC<SearchResultCardProps> = ({
   };
 
   const className = expanded
-  ? "bg-white/5 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] m-auto w-[95%] md:w-[50%] h-[90%] backdrop-blur-2xl rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-lg"
-  : "bg-white/5 relative -mt-8 backdrop-blur-2xl rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-lg";
+  ? "bg-white/5 relative top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] m-auto w-[95%]  h-[90%] backdrop-blur-2xl rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-lg"
+  : "bg-white/5 relative -mt-8 backdrop-blur-2xl rounded-2xl overflow-hidden border border-black/10 w-full dark:border-white/10 shadow-lg";
 
 return (
   <motion.div
@@ -93,9 +93,9 @@ return (
           captures.map((item) => (
             <motion.div
               key={item._id}
-              className="px-5 py-3 transition-colors group"
+              className="px-5 py-3 transition-colors group hover:bg-white/5"
             >
-              <Link to={`/in/captures/${item._id}`} className="block group-hover:bg-white/10 group-hover:opacity-50 rounded-lg p-3 transition-colors duration-200">
+              <Link to={`/in/captures/${item._id}`} className="block rounded-lg  transition-colors duration-200">
                 <div className="flex justify-between items-start">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

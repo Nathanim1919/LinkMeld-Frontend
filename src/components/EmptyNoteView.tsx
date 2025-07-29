@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import { FiSearch, FiUser } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 import type { User } from "better-auth/types";
 import type { Capture } from "../types/Capture";
 import { authClient } from "../lib/auth-client";
@@ -88,23 +88,18 @@ const EmptyNoteView = () => {
       </div>
 
       {/* Content area */}
-      <div className="w-full max-w-xl mt-4 z-10">
+      <div className="w-full max-w-xl mt-4 z-10 flex flex-col px-6 py-8 rounded-lg relative">
         {/* Greeting */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full bg-black/10 dark:bg-white/5 border border-white/10 flex items-center justify-center">
-            <FiUser className="text-white/60" />
-          </div>
-          <div>
-            <p className="text-black/60 dark:text-white/60 text-sm">
-              {greeting}
+        <div className="flex items-center gap-3 text-2xl">
+            <p className="text-black/60 dark:text-white/60">
+              {greeting},
             </p>
-            <p className="font-medium capitalize">{authInfo?.name}</p>
-          </div>
+            <p className="font-medium capitalize">{authInfo?.name?.split(" ")?.[0]}</p>
         </div>
 
         {/* Prompt */}
         <motion.h2
-          className="text-3xl font-bold mb-8 leading-tight max-w-md"
+          className="text-2xl md:text-3xl font-bold mb-8 leading-tight max-w-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
@@ -120,7 +115,7 @@ const EmptyNoteView = () => {
 
         {/* Input */}
         <motion.div
-          className="relative mb-12 group"
+          className="relative w-full mb-12 group"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}

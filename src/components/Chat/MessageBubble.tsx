@@ -31,8 +31,8 @@ export const MessageBubble = ({ role, content, references }: MessageBubbleProps)
         }`}>
           {/* Added Gemini icon */}
           {
-          role === 'assistant' && 
-          <span className="absolute -top-2 w-6 h-6 rounded-full border border-violet-400/30 grid place-items-center -left-4 text-gray-500">
+          role === 'assistant' && content !== "" &&
+          <span className="absolute -top-4 w-6 h-6 rounded-full border border-violet-400/30 grid place-items-center -left-4 text-gray-500">
              <RiGeminiFill className="h-4 w-4 text-violet-500" /> 
           </span>
           }

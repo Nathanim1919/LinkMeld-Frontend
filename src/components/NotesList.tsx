@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { NoteListSkeleton } from "./skeleton/NoteSkeleton";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { FileText, Trash } from "lucide-react";
+import { useUI } from "../context/UIContext";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -24,6 +25,19 @@ const filterIcons = {
   bookmarks: <CiBookmark className="text-amber-400" />,
 } as const;
 
+
+function useIsSmallScreen(breakpoint = 640) {
+  const [isSmall, setIsSmall] = useState(() => window.innerWidth < breakpoint);
+
+  useEffect(() => {
+    const handleResize = () => setIsSmall(window.innerWidth < breakpoint);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [breakpoint]);
+
+  return isSmall;
+}
+
 const NotesList: React.FC<NotesListProps> = ({
   filter = "all",
   folderId,
@@ -33,10 +47,20 @@ const NotesList: React.FC<NotesListProps> = ({
     useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
 
   const location = useLocation();
   const activeCaptureId = location.pathname.split("/").pop();
   const targetId = folderId || sourceId || null;
+  const isSmallScreen = useIsSmallScreen();
+
+
+  const handleCaptureClick = () => {
+    if (isSmallScreen) {
+     setMiddlePanelCollapsed(true);
+     setCollapsed(true);
+    }
+  }
 
   useEffect(() => {
     const loadCaptures = async () => {
@@ -53,6 +77,7 @@ const NotesList: React.FC<NotesListProps> = ({
     };
     loadCaptures();
   }, [filter, targetId, fetchCaptures]);
+
 
   const safeCaptures = useMemo(() => {
     if (!Array.isArray(captures)) return [];
@@ -129,7 +154,7 @@ const NotesList: React.FC<NotesListProps> = ({
               transition={{ duration: 0.2 }}
             >
               <Link
-                // onClick={() => setMiddlePanelCollapsed(true)}
+                onClick={handleCaptureClick}
                 to={buildLink(note._id)}
                 className={`block rounded-lg p-3 transition-all duration-200 ${
                   activeCaptureId === note._id

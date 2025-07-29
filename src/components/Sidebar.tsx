@@ -124,12 +124,6 @@ const Sidebar: React.FC<{
       {/* User & Logout */}
       <div className="flex flex-col w-full px-2 gap-1">
         {/* Theme Toggle */}
-        <SidebarItem
-          icon={theme === "dark" ? <Moon size={20} /> : <Sun size={20} />}
-          label={theme === "dark" ? "Dark" : "Light"}
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          collapsed={collapsed}
-        />
 
         {/* Profile Link */}
         <SidebarItem
@@ -145,6 +139,12 @@ const Sidebar: React.FC<{
           path="/profile"
           collapsed={collapsed}
         />
+          <SidebarItem
+            icon={theme === "dark" ? <Moon size={20} /> : <Sun size={20} />}
+            label={theme === "dark" ? "Dark" : "Light"}
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            collapsed={collapsed}
+          />
       </div>
     </motion.div>
   );

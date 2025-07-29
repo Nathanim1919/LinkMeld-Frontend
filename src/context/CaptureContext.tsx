@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { CaptureService } from "../api/capture.api";
-import {type Capture } from "../types/Capture";
+import { type Capture } from "../types/Capture";
 import { toast } from "sonner";
 
 type FilterType = "all" | "bookmarks" | "folder" | "source";
@@ -52,10 +52,16 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     async (captureId: string): Promise<void> => {
       try {
         setLoading(true);
-        const reprocessedCapture = await CaptureService.reProcessCapture(captureId);
-        toast.success(reprocessedCapture.message || "Capture re-processing initiated.");
+        const reprocessedResponse = await CaptureService.reProcessCapture(
+          captureId
+        );
+        toast.success(
+          reprocessedResponse.message || "Capture re-processing initiated."
+        );
         // set selectedCapture to the reprocessed capture
-        setSelectedCapture(reprocessedCapture);
+        if (reprocessedResponse.data) {
+          setSelectedCapture(reprocessedResponse.data);
+        }
       } catch (error) {
         setError(error as Error);
         toast.error("Failed to re-process capture");
@@ -66,13 +72,14 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
     []
   );
 
-
   const deleteCapture = useCallback(
     async (captureId: string): Promise<void> => {
       try {
         setLoading(true);
         await CaptureService.deleteCapture(captureId);
-        setCaptures((prev) => prev.filter((capture) => capture._id !== captureId));
+        setCaptures((prev) =>
+          prev.filter((capture) => capture._id !== captureId)
+        );
         if (selectedCapture?._id === captureId) {
           setSelectedCapture(null);
         }
@@ -83,7 +90,8 @@ export const CaptureProvider: React.FC<{ children: React.ReactNode }> = ({
       } finally {
         setLoading(false);
       }
-    },[selectedCapture?._id]
+    },
+    [selectedCapture?._id]
   );
 
   const fetchCaptures = useCallback(
