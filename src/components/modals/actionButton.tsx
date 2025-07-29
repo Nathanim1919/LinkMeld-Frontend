@@ -14,7 +14,6 @@ export const ActionButton: React.FC<{
   description,
   onClick,
   color = "bg-[#1313ce]",
-  borderColor = "border-[#3a3a3c]",
   hasApiKey,
 }) => {
   return (
