@@ -1,70 +1,221 @@
-import axios from "axios";
-import { api } from ".";
+import { api, apiCall, handleApiError, type ApiResponse } from ".";
 
+// Enhanced source types
+export interface Source {
+  id: string;
+  name: string;
+  url: string;
+  domain: string;
+  favicon?: string;
+  description?: string;
+  captureCount: number;
+  lastCaptured?: Date;
+  createdAt: Date;
+}
+
+export interface SourceStats {
+  totalSources: number;
+  totalCaptures: number;
+  topSources: Array<{
+    name: string;
+    count: number;
+    percentage: number;
+  }>;
+  recentSources: Source[];
+}
+
+export interface SourceFilters {
+  search?: string;
+  domain?: string;
+  minCaptures?: number;
+  maxCaptures?: number;
+  dateRange?: {
+    start: Date;
+    end: Date;
+  };
+  limit?: number;
+  offset?: number;
+}
+
+// Enhanced Source Service
+export const SourceService = {
+  /**
+   * Get all sources with optional filtering
+   * @param filters - Optional filters
+   * @returns Promise<Source[]> Array of sources
+   */
+  async getSources(filters?: SourceFilters): Promise<Source[]> {
+    return apiCall(
+      () => {
+        const params = this.buildQueryParams(filters);
+        return api.get<ApiResponse<Source[]>>("/sources", { params });
+      },
+      "Failed to fetch sources"
+    ).then(response => response.data);
+  },
+
+  /**
+   * Get source by ID
+   * @param id - Source ID
+   * @returns Promise<Source> Source object
+   */
+  async getSourceById(id: string): Promise<Source> {
+    return apiCall(
+      () => api.get<ApiResponse<Source>>(`/sources/${id}`),
+      "Failed to fetch source"
+    ).then(response => response.data);
+  },
+
+  /**
+   * Get source statistics
+   * @returns Promise<SourceStats> Source statistics
+   */
+  async getSourceStats(): Promise<SourceStats> {
+    return apiCall(
+      () => api.get<ApiResponse<SourceStats>>("/sources/stats"),
+      "Failed to fetch source statistics"
+    ).then(response => response.data);
+  },
+
+  /**
+   * Get sources by domain
+   * @param domain - Domain name
+   * @param limit - Number of sources to return
+   * @param offset - Number of sources to skip
+   * @returns Promise<Source[]> Array of sources
+   */
+  async getSourcesByDomain(
+    domain: string,
+    limit?: number,
+    offset?: number
+  ): Promise<Source[]> {
+    return apiCall(
+      () => {
+        const params = { limit, offset };
+        return api.get<ApiResponse<Source[]>>(`/sources/domain/${domain}`, { params });
+      },
+      "Failed to fetch sources by domain"
+    ).then(response => response.data);
+  },
+
+  /**
+   * Search sources
+   * @param query - Search query
+   * @param filters - Additional filters
+   * @returns Promise<Source[]> Array of matching sources
+   */
+  async searchSources(query: string, filters?: Omit<SourceFilters, 'search'>): Promise<Source[]> {
+    return apiCall(
+      () => {
+        const params = { query, ...this.buildQueryParams(filters) };
+        return api.get<ApiResponse<Source[]>>("/sources/search", { params });
+      },
+      "Failed to search sources"
+    ).then(response => response.data);
+  },
+
+  /**
+   * Get top sources by capture count
+   * @param limit - Number of top sources to return
+   * @returns Promise<Source[]> Array of top sources
+   */
+  async getTopSources(limit: number = 10): Promise<Source[]> {
+    return apiCall(
+      () => {
+        const params = { limit };
+        return api.get<ApiResponse<Source[]>>("/sources/top", { params });
+      },
+      "Failed to fetch top sources"
+    ).then(response => response.data);
+  },
+
+  /**
+   * Get recent sources
+   * @param limit - Number of recent sources to return
+   * @returns Promise<Source[]> Array of recent sources
+   */
+  async getRecentSources(limit: number = 10): Promise<Source[]> {
+    return apiCall(
+      () => {
+        const params = { limit };
+        return api.get<ApiResponse<Source[]>>("/sources/recent", { params });
+      },
+      "Failed to fetch recent sources"
+    ).then(response => response.data);
+  },
+
+  /**
+   * Delete a source and all its captures
+   * @param id - Source ID
+   * @returns Promise<void>
+   */
+  async deleteSource(id: string): Promise<void> {
+    await apiCall(
+      () => api.delete<ApiResponse<null>>(`/sources/${id}`),
+      "Failed to delete source"
+    );
+  },
+
+  /**
+   * Update source information
+   * @param id - Source ID
+   * @param updates - Source updates
+   * @returns Promise<Source> Updated source
+   */
+  async updateSource(id: string, updates: Partial<Source>): Promise<Source> {
+    return apiCall(
+      () => api.put<ApiResponse<Source>>(`/sources/${id}`, updates),
+      "Failed to update source"
+    ).then(response => response.data);
+  },
+
+  // Private helper methods
+  buildQueryParams(filters?: SourceFilters): Record<string, any> {
+    const params: Record<string, any> = {};
+    
+    if (filters?.search) params.search = filters.search;
+    if (filters?.domain) params.domain = filters.domain;
+    if (filters?.minCaptures !== undefined) params.minCaptures = filters.minCaptures;
+    if (filters?.maxCaptures !== undefined) params.maxCaptures = filters.maxCaptures;
+    if (filters?.dateRange) {
+      params.startDate = filters.dateRange.start.toISOString();
+      params.endDate = filters.dateRange.end.toISOString();
+    }
+    if (filters?.limit !== undefined) params.limit = filters.limit;
+    if (filters?.offset !== undefined) params.offset = filters.offset;
+    
+    return params;
+  },
+};
+
+// Legacy functions for backward compatibility
 export const getSources = async (): Promise<{
   siteNames: string[];
   siteNameCounts?: Record<string, number>;
 }> => {
   try {
-    const response = await api.get("/sources");
-    // Validate response structure
-    if (!response.data || typeof response.data !== "object") {
-      throw new Error("Invalid API response structure");
-    }
+    const sources = await SourceService.getSources();
+    
+    // Transform to legacy format
+    const siteNames = sources.map(source => source.name);
+    const siteNameCounts = sources.reduce((acc, source) => {
+      acc[source.name] = source.captureCount;
+      return acc;
+    }, {} as Record<string, number>);
 
-    // Check for success flag if your API uses it
-    if (response.data.success === false) {
-      throw new Error(response.data.message || "API request failed");
-    }
-
-    // Extract data from the correct property (response.data.data or response.data)
-    const data = response.data.data || response.data;
-
-    // Validate required fields
-    if (!Array.isArray(data.siteNames)) {
-      throw new Error("Invalid siteNames data format");
-    }
-
-    // Return the properly formatted data
-    return {
-      siteNames: data.siteNames,
-      siteNameCounts: data.counts || data.siteNameCounts,
-    };
+    return { siteNames, siteNameCounts };
   } catch (error) {
-    console.error("Detailed error fetching sources:", error);
-
-    // Handle specific error cases
-    let errorMessage = "Failed to fetch sources";
-    if (axios.isAxiosError(error)) {
-      if (error.response) {
-        // Server responded with a status code outside 2xx
-        errorMessage = `API Error: ${error.response.status} - ${
-          error.response.data?.message || "No message"
-        }`;
-      } else if (error.request) {
-        // Request was made but no response received
-        errorMessage = "No response from server";
-      } else {
-        // Something happened in setting up the request
-        errorMessage = `Request error: ${error.message}`;
-      }
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
-    }
-
-    throw new Error(errorMessage);
+    const apiError = handleApiError(error, "Failed to fetch sources");
+    throw new Error(apiError.message);
   }
 };
 
 export const getSourceById = async (id: string): Promise<string> => {
   try {
-    const response = await api.get(`/sources/${id}`);
-    if (!response.data || typeof response.data.source !== "string") {
-      throw new Error("Failed to fetch source by ID");
-    }
-    return response.data.source;
+    const source = await SourceService.getSourceById(id);
+    return source.name;
   } catch (error) {
-    console.error(`Error fetching source by ID ${id}:`, error);
-    throw error;
+    const apiError = handleApiError(error, "Failed to fetch source by ID");
+    throw new Error(apiError.message);
   }
 };
