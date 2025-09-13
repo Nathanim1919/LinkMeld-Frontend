@@ -9,7 +9,10 @@ export const queryClient = new QueryClient({
             gcTime: 1000 * 60 * 10, // 10 minutes
             retry: (failerCount, error) => {
                 // Don't retry on 4xx errors (client errors)
-                if (error.status >= 400 && error.status < 500) return false;
+                if (error && typeof error === 'object' && 'status' in error) {
+                    const status = (error as any).status;
+                    if (status >= 400 && status < 500) return false;
+                }
                 return failerCount < 3;
             },
             retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff (up to 30 seconds). e.g. 1s, 2s, 4s, 8s, 16s, 30s
@@ -18,4 +21,4 @@ export const queryClient = new QueryClient({
             refetchOnMount: true, // Refetch when component mounts
         },
     },
-})
+});
