@@ -8,7 +8,8 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import { useUI } from "../../context/UIContext";
+import { useStore } from "../../context/StoreContext";
+import type { UIStore } from "../../stores/types";
 
 
 type Action = {
@@ -20,7 +21,7 @@ type Action = {
 
 export const NoteActionBar = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const {openActionBar, setOpenActionBar} = useUI();
+  const {openActionBar, setOpenActionBar} = useStore().ui as UIStore;
 
   const actions: Action[] = [
     {

@@ -1,12 +1,13 @@
 import { Outlet, useLocation } from "@tanstack/react-router";
 import { CaptureDetail } from "../components/CaptureDetail";
-import { useUI } from "../context/UIContext";
+import { useStore } from "../context/StoreContext";
 import clsx from "clsx";
 import { NewFolderFormCard } from "../components/cards/newFolderFormCard";
 import { useFolderContext } from "../context/FolderContext";
+import type { UIStore } from "../stores/types";
 
 export const ContentLayout = () => {
-  const { middlePanelCollapsed } = useUI();
+  const { middlePanelCollapsed } = useStore().ui as UIStore;
     const {setOpenNewFolderForm, openNewFolderForm } = useFolderContext();
   
   const location = useLocation();

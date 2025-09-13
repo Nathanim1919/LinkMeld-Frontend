@@ -7,7 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { NoteListSkeleton } from "./skeleton/NoteSkeleton";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { FileText, Trash } from "lucide-react";
-import { useUI } from "../context/UIContext";
+import { useStore } from "../context/StoreContext";
+import type { UIStore } from "../stores/types";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -46,7 +47,7 @@ const NotesList: React.FC<NotesListProps> = ({
     useCaptureContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
+  const { setMiddlePanelCollapsed, setCollapsed } = useStore().ui as UIStore;
 
   const location = useLocation();
   const activeCaptureId = location.pathname.split("/").pop();

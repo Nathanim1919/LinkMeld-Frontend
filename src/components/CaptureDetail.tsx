@@ -9,17 +9,18 @@ import { NoteHeaderSkeleton } from "./skeleton/NoteHeaderSkeleton";
 import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
 import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
 import HeadingOutlineSkeleton from "./skeleton/HeadingOutlineSkeleton";
-import { useUI } from "../context/UIContext";
+import { useStore } from "../context/StoreContext";
 import { AIChatContainer } from "./Chat/AIChatContainer";
 import { AnimatePresence, motion } from "framer-motion";
 import { useChat } from "../context/ChatContext";
+import type { UIStore } from "../stores/types";
 
 export const CaptureDetail = () => {
   const { captureId } = useParams({ strict: false });
   const { setSelectedCapture } = useCaptureContext();
   const { setMessages } = useChat();
   const [capture, setCapture] = useState<Capture | null>(null);
-  const { middlePanelCollapsed, openAiChat, expandAiChat, setExpandAiChat, setOpenAiChat } = useUI();
+  const { middlePanelCollapsed, openAiChat, expandAiChat, setExpandAiChat, setOpenAiChat } = useStore().ui as UIStore;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -56,22 +57,20 @@ export const CaptureDetail = () => {
 
   return (
     <motion.div
-      className={`${
-        middlePanelCollapsed ? "w-full" : "w-0 md:w-full"
-      } h-full overflow-hidden`}
+      className={`${middlePanelCollapsed ? "w-full" : "w-0 md:w-full"
+        } h-full overflow-hidden`}
       initial={false}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       {capture ? (
         <motion.div
-          className={`grid overflow-hidden h-screen ${
-            expandAiChat
-              ? "grid-cols-[0fr_1fr]":
-               openAiChat
-              ? "grid-cols-[0fr_1fr] md:grid-cols-[0.65fr_0.35fr]"
-              : "grid-cols-[1fr]"
-          }`}
+          className={`grid overflow-hidden h-screen ${expandAiChat
+              ? "grid-cols-[0fr_1fr]" :
+              openAiChat
+                ? "grid-cols-[0fr_1fr] md:grid-cols-[0.65fr_0.35fr]"
+                : "grid-cols-[1fr]"
+            }`}
           initial={false}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >

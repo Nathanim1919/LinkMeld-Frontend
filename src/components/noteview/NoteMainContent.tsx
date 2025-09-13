@@ -1,15 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
 import Linkify from "react-linkify";
-import { useUI } from "../../context/UIContext";
+import { useStore } from "../../context/StoreContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { CiStickyNote } from "react-icons/ci";
+import type { UIStore } from "../../stores/types";
 
 type NoteMainTextProps = {
   text: string;
 };
 
 export const NoteMainText: React.FC<NoteMainTextProps> = ({ text }) => {
-  const { mainContentCollapsed, setMainContentCollapsed } = useUI();
+  const { mainContentCollapsed, setMainContentCollapsed } = useStore().ui as UIStore;
   const contentRef = useRef<HTMLDivElement>(null);
   const [showToggle, setShowToggle] = useState(false);
 

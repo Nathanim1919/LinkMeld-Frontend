@@ -1,12 +1,13 @@
-import { useUI } from "../../context/UIContext";
+import { useStore } from "../../context/StoreContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { BsStars } from "react-icons/bs";
 import { X, Maximize, ChevronsRightLeft } from "lucide-react";
 import { ChatView } from "./ChatView";
 import { useChat } from "../../context/ChatContext";
+import type { UIStore } from "../../stores/types";
 
 export const AIChatContainer = () => {
-  const { openAiChat, setOpenAiChat, expandAiChat, setExpandAiChat } = useUI();
+  const { openAiChat, setOpenAiChat, expandAiChat, setExpandAiChat } = useStore().ui as UIStore;
 
   const { clearMessages } = useChat();
 
@@ -76,9 +77,8 @@ export const AIChatContainer = () => {
 
           {/* Dynamic Content Area with subtle parallax effect */}
           <motion.main
-            className={`flex-1 ${
-              expandAiChat && "w-full md:w-[50%] h-full mx-auto"
-            } overflow-hidden`}
+            className={`flex-1 ${expandAiChat && "w-full md:w-[50%] h-full mx-auto"
+              } overflow-hidden`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}

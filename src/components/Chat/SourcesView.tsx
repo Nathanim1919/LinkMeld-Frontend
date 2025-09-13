@@ -1,7 +1,8 @@
 import { CiStickyNote } from "react-icons/ci";
 import { useCaptureContext } from "../../context/CaptureContext";
 import type { Capture } from "../../types/Capture";
-import { useUI } from "../../context/UIContext";
+import { useStore } from "../../context/StoreContext";
+import type { UIStore } from "../../stores/types";
 
 export const SourcesView = () => {
   const { selectedCapture } = useCaptureContext();
@@ -16,7 +17,7 @@ export const SourcesView = () => {
 };
 
 const SourceCard = ({ source }: { source: Capture }) => {
-  const {setOpenAiChat} = useUI();
+  const {setOpenAiChat} = useStore().ui as UIStore;
   return (
     <div
      onClick={()=>setOpenAiChat(false)}

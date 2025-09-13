@@ -1,9 +1,10 @@
-import { useUI } from "../context/UIContext";
+import { useStore } from "../context/StoreContext";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import NotesList from "../components/NotesList";
+import type { UIStore } from "../stores/types";
 
 export const HomeLayout: React.FC = () => {
-  const { middlePanelCollapsed, setMiddlePanelCollapsed } = useUI();
+  const { middlePanelCollapsed, setMiddlePanelCollapsed } = useStore().ui as UIStore;
 
   return (
 

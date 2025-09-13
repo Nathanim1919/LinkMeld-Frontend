@@ -5,23 +5,24 @@ import { useChat } from "../../context/ChatContext";
 import { motion } from "framer-motion";
 import { RiGeminiFill } from "react-icons/ri";
 import EmptyChat from "./EmptyChat";
-import { useUI } from "../../context/UIContext";
+import { useStore } from "../../context/StoreContext";
+import type { UIStore } from "../../stores/types";
 
 export const ChatView = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { messages, isLoading} = useChat();
-  const { expandAiChat } = useUI();
+  const { messages, isLoading } = useChat();
+  const { expandAiChat } = useStore().ui as UIStore;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <div className={`h-full overflow-hidden ${expandAiChat?"bg-transparent":"bg-gray-100 dark:bg-[#1A1A1C]"} flex flex-col`}>
+    <div className={`h-full overflow-hidden ${expandAiChat ? "bg-transparent" : "bg-gray-100 dark:bg-[#1A1A1C]"} flex flex-col`}>
       {/* Message History */}
       {
         messages.length === 0 && !isLoading && (
-         <EmptyChat />
+          <EmptyChat />
         )
       }
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2 max-h-full">
@@ -34,9 +35,9 @@ export const ChatView = () => {
           />
         ))}
         <div ref={messagesEndRef} />
-        
+
         {isLoading && (
-          <motion.div 
+          <motion.div
             className="flex items-center justify-center gap-2 py-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,7 +68,7 @@ export const ChatView = () => {
               ))}
             </div>
 
-            
+
             {/* Animated Gemini icon */}
             <motion.div
               animate={{
@@ -82,12 +83,12 @@ export const ChatView = () => {
             >
               <RiGeminiFill className="h-5 w-5 text-violet-500" />
             </motion.div>
-            
-            <motion.span 
+
+            <motion.span
               className="text-sm text-[#AEAEB2]"
               animate={{ opacity: [0.8, 1, 0.8] }}
-              transition={{ 
-                duration: 2, 
+              transition={{
+                duration: 2,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}

@@ -1,19 +1,20 @@
 import { Link, useMatchRoute } from "@tanstack/react-router";
-import { useUI } from "../context/UIContext";
+import { useStore } from "../context/StoreContext";
 import { motion } from "framer-motion";
 import type { JSX } from "react";
+import type { UIStore } from "../stores/types";
 
 
 interface SidebarItemProps {
-    icon: JSX.Element;
-    label: string;
-    onClick?: () => void;
-    path?: string;
-    collapsed: boolean;
-  }
+  icon: JSX.Element;
+  label: string;
+  onClick?: () => void;
+  path?: string;
+  collapsed: boolean;
+}
 
 export const SidebarItem = ({ icon, label, path, collapsed, onClick }: SidebarItemProps) => {
-  const { setMiddlePanelCollapsed, setCollapsed } = useUI();
+  const { setMiddlePanelCollapsed, setCollapsed } = useStore().ui as UIStore;
   const matchRoute = useMatchRoute();
   const isActive = !!matchRoute({ to: path });
 
@@ -34,10 +35,9 @@ export const SidebarItem = ({ icon, label, path, collapsed, onClick }: SidebarIt
       <Link
         to={path}
         activeOptions={{ exact: true }}
-        onClick= {onClick || handleClick}
-        className={`relative flex text-[19px] md:text-[19px] items-center ${
-          collapsed ? "justify-center" : "px-2"
-        } py-2 rounded-lg transition-all duration-200
+        onClick={onClick || handleClick}
+        className={`relative flex text-[19px] md:text-[19px] items-center ${collapsed ? "justify-center" : "px-2"
+          } py-2 rounded-lg transition-all duration-200
         ${isActive ? "bg-gray-200 dark:bg-gray-800/50" : ""}`}
       >
         <span
@@ -46,9 +46,8 @@ export const SidebarItem = ({ icon, label, path, collapsed, onClick }: SidebarIt
         </span>
         {!collapsed && (
           <span
-            className={`ml-3 text-sm md:text-md ${
-              isActive ? "font-bold dark:text-white" : "font-medium text-gray-500"
-            }`}
+            className={`ml-3 text-sm md:text-md ${isActive ? "font-bold dark:text-white" : "font-medium text-gray-500"
+              }`}
           >
             {label}
           </span>

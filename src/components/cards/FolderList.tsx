@@ -1,17 +1,18 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useFolderContext } from "../../context/FolderContext";
 import { FaFolder, FaFolderPlus } from "react-icons/fa";
-import { useUI } from "../../context/UIContext";
+import { useStore } from "../../context/StoreContext";
 import { useCaptureContext } from "../../context/CaptureContext";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
 import { useState } from "react";
 import { FiChevronRight } from "react-icons/fi";
 import { RiFolderAddLine } from "react-icons/ri";
+import type { UIStore } from "../../stores/types";
 
 export const FolderList: React.FC = () => {
   const { folders, loadingStates, addCaptureToFolder, setOpenNewFolderForm } =
     useFolderContext();
-  const { isFolderListOpen, setIsFolderListOpen } = useUI();
+  const { isFolderListOpen, setIsFolderListOpen } = useStore().ui as UIStore;
   const { selectedCapture } = useCaptureContext();
   const [appendToFolderId, setAppendToFolderId] = useState<string | null>(null);
 

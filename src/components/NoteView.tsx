@@ -2,7 +2,7 @@
 import { PROCESSING_STATUS, type Capture } from "../types/Capture";
 import { NoteHeader } from "./noteview/NoteHeader";
 import { NoteMetaBox } from "./noteview/NoteMetaAccordion";
-import { useUI } from "../context/UIContext";
+import { useStore } from "../context/StoreContext";
 import { useFolderContext } from "../context/FolderContext";
 import { useCaptureContext } from "../context/CaptureContext";
 import { NoteSummary } from "./noteview/NoteSummary";
@@ -24,6 +24,7 @@ import React from "react";
 import HeadingOutline from "./HeadingOutline";
 import { AIbuttons } from "./buttons/AIbutton";
 import { toast } from "sonner";
+import type { UIStore } from "../stores/types";
 
 interface NoteViewProps {
   capture: Capture;
@@ -39,7 +40,8 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setOpenAiChat,
     setMiddlePanelCollapsed,
     setCollapsed,
-  } = useUI();
+  } = useStore().ui as UIStore;
+
 
   const {
     bookmarkCapture,
@@ -99,10 +101,10 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
   const containerWidth = openAiChat
     ? "w-full md:w-[90%]"
     : collapsed && middlePanelCollapsed
-    ? "w-[90%] lg:w-[60%]"
-    : collapsed || middlePanelCollapsed
-    ? "w-[90%] md:w-[70%]"
-    : "w-[90%] md:w-[80%]";
+      ? "w-[90%] lg:w-[60%]"
+      : collapsed || middlePanelCollapsed
+        ? "w-[90%] md:w-[70%]"
+        : "w-[90%] md:w-[80%]";
 
   return (
     <div className="flex relative flex-col h-full overflow-hidden bg-gray-100 dark:bg-[#111111]">
@@ -153,11 +155,10 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               whileTap={{ scale: 0.95 }}
               onClick={handleBookmark}
               disabled={isBookmarking}
-              className={`py-1 px-2 border border-gray-800 rounded-full flex items-center gap-1 transition-all duration-200 ${
-                bookmarked
+              className={`py-1 px-2 border border-gray-800 rounded-full flex items-center gap-1 transition-all duration-200 ${bookmarked
                   ? "bg-amber-100/80 dark:bg-amber-900/30 text-amber-500"
                   : "bg-gray-100/80 dark:bg-gray-800/50 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-gray-700/50 cursor-pointer"
-              } ${isBookmarking ? "opacity-50 cursor-not-allowed" : ""}`}
+                } ${isBookmarking ? "opacity-50 cursor-not-allowed" : ""}`}
               title={bookmarked ? "Remove bookmark" : "Add bookmark"}
             >
               <FiBookmark className="w-5 h-5" />
@@ -225,9 +226,9 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               collection={
                 capture.collection
                   ? {
-                      name: capture.collection.name,
-                      id: capture.collection._id,
-                    }
+                    name: capture.collection.name,
+                    id: capture.collection._id,
+                  }
                   : { name: "Uncategorized", id: "uncategorized" }
               }
               isPdf={capture.metadata.isPdf || false}

@@ -1,9 +1,10 @@
 import { Outlet } from "@tanstack/react-router";
-import { useUI } from "../context/UIContext";
+import { useStore } from "../context/StoreContext";
 import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import type { UIStore } from "../stores/types";
 
 export const SourceLayout: React.FC = () => {
-  const { middlePanelCollapsed, setMiddlePanelCollapsed } = useUI();
+  const { middlePanelCollapsed, setMiddlePanelCollapsed } = useStore().ui as UIStore;
 
   return (
     <div
