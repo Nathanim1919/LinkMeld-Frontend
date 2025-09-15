@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import type { IFolder } from "../types/Folder";
 import { FolderService } from "../api/folder.api";
 import { toast } from "sonner";
-import { useCaptureContext } from "./CaptureContext";
 import type { Capture } from "../types/Capture";
 
 interface FolderContextType {
@@ -40,25 +39,17 @@ export const FolderProvider: React.FC<{ children: React.ReactNode }> = ({
   });
   const [error, setError] = useState<string | undefined>(undefined);
   const [openNewFolderForm, setOpenNewFolderForm] = useState<boolean>(false);
-  const { selectedCapture } = useCaptureContext();
 
   const addCaptureToFolder = async (folderId: string, captureId: string) => {
     setLoadingStates((prev) => ({ ...prev, append: true }));
     try {
       const res = await FolderService.addCapture(folderId, captureId);
       if (res) {
-        setFolders((prev) =>
-          prev.map((folder) =>
-            folder._id === folderId
-              ? {
-                  ...folder,
-                  captures: [...folder.captures, selectedCapture as Capture],
-                }
-              : folder
-          )
-        );
+        // Refresh folders to get updated data instead of manually updating
+        const updatedFolders = await FolderService.getAll();
+        setFolders(updatedFolders);
       }
-      toast.success(`Capture add to collection ${res.name}`);
+      toast.success(`Capture added to collection ${res.name}`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Unknown error");
       setError(err instanceof Error ? err.message : "Unknown error");

@@ -4,7 +4,6 @@ import { Outlet, useNavigate } from "@tanstack/react-router";
 import { VscLoading } from "react-icons/vsc";
 import Sidebar from "../components/Sidebar";
 
-import { CaptureProvider } from "../context/CaptureContext";
 import { UIProvider } from "../context/UIContext";
 import { FolderProvider } from "../context/FolderContext";
 import { SourceProvider } from "../context/sourceContext";
@@ -78,11 +77,10 @@ export const MainShell = () => {
   if (!session) return null; // wait for redirect
 
   return (
-    <CaptureProvider>
-      <UIProvider>
-        <ChatProvider>
-          <FolderProvider>
-            <SourceProvider>
+    <UIProvider>
+      <ChatProvider>
+        <FolderProvider>
+          <SourceProvider>
               <div className="h-screen w-screen overflow-hidden">
                 <div className="w-8 h-8 m-1 rounded-full grid md:hidden place-items-center fixed z-1000 bottom-0 bg-[#000000]">
                   {hideSidebar ? (
@@ -112,7 +110,6 @@ export const MainShell = () => {
           </FolderProvider>
         </ChatProvider>
       </UIProvider>
-    </CaptureProvider>
   );
 };
 
