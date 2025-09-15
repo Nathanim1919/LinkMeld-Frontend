@@ -137,8 +137,8 @@ const NotesList: React.FC<NotesListProps> = ({
                 onClick={handleCaptureClick}
                 to={buildLink(note._id)}
                 className={`block rounded-lg p-3 transition-all duration-200 ${activeCaptureId === note._id
-                    ? "bg-gray-800/50 border-l-2 border-blue-400"
-                    : "hover:dark:bg-gray-800/30 hover:bg-gray-200/50"
+                  ? "bg-gray-800/50 border-l-2 border-blue-400"
+                  : "hover:dark:bg-gray-800/30 hover:bg-gray-200/50"
                   }`}
               >
                 <div className="flex items-start justify-between">
@@ -152,8 +152,8 @@ const NotesList: React.FC<NotesListProps> = ({
                       ) : (
                         <CiStickyNote
                           className={`flex-shrink-0 ${activeCaptureId === note._id
-                              ? "text-blue-400"
-                              : "text-gray-500"
+                            ? "text-blue-400"
+                            : "text-gray-500"
                             }`}
                         />
                       )}
@@ -188,8 +188,8 @@ const NotesList: React.FC<NotesListProps> = ({
                       toggleBookmark?.(note._id);
                     }}
                     className={`ml-2 cursor-pointer hover:text-amber-400 p-1 rounded-md transition-colors ${note.bookmarked
-                        ? "text-amber-400 hover:bg-amber-900/20"
-                        : "text-gray-500 hover:bg-gray-700/50 hover:text-gray-300"
+                      ? "text-amber-400 hover:bg-amber-900/20"
+                      : "text-gray-500 hover:bg-gray-700/50 hover:text-gray-300"
                       }`}
                   >
                     <CiBookmark

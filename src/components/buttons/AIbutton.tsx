@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { RiGeminiFill } from "react-icons/ri";
-import { useCaptureContext } from "../../context/CaptureContext";
 import { toast } from "sonner";
 import { useNavigate } from "@tanstack/react-router";
+import { useCaptureManager } from "../../hooks/useCaptureManager";
 
 interface AIbuttonProps {
   generateCaptureSummary: (captureId: string) => void;
@@ -18,7 +18,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
   loadingSummary,
   handleOpenChat,
 }) => {
-  const { selectedCapture } = useCaptureContext();
+  const { selectedCapture } = useCaptureManager("all");
   const navigate = useNavigate();
 
   const handleGenerateSummary = () => {
@@ -46,11 +46,10 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
     transition-all duration-300 ease-out
      overflow-hidden select-none
     backdrop-blur-md
-    ${
-      loadingSummary
-        ? "bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-400 cursor-wait"
-        : "bg-[linear-gradient(to_right,#43a7ff,#31baff,#95c6fb,#328eff)] dark:bg-[linear-gradient(to_right,#161964,#2a30de,#80beff,#1e3a8a)] text-white"
-    }
+    ${loadingSummary
+              ? "bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-400 cursor-wait"
+              : "bg-[linear-gradient(to_right,#43a7ff,#31baff,#95c6fb,#328eff)] dark:bg-[linear-gradient(to_right,#161964,#2a30de,#80beff,#1e3a8a)] text-white"
+            }
     ${loadingSummary ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
     focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
     group-hover:shadow-[0_0_10px_#80beff80]
@@ -77,8 +76,8 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
             {loadingSummary
               ? "Synthesizing Summary…"
               : selectedCapture?.ai.summary
-              ? "Regenerate Summary"
-              : "Generate Summary"}
+                ? "Regenerate Summary"
+                : "Generate Summary"}
           </span>
         </motion.button>
 
