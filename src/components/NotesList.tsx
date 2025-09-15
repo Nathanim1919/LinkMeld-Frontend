@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { useCaptureContext } from "../context/CaptureContext";
 import { TbCaptureFilled } from "react-icons/tb";
 import { CiBookmark, CiStickyNote } from "react-icons/ci";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,6 +8,7 @@ import { IoDocumentsOutline } from "react-icons/io5";
 import { FileText, Trash } from "lucide-react";
 import { useStore } from "../context/StoreContext";
 import type { UIStore } from "../stores/types";
+import { useCaptureManager } from "../hooks/useCaptureManager";
 
 interface NotesListProps {
   filter?: "all" | "bookmarks" | "folder" | "source";
@@ -43,15 +43,14 @@ const NotesList: React.FC<NotesListProps> = ({
   folderId,
   sourceId,
 }) => {
-  const { captures, fetchCaptures, bookmarkCapture, deleteCapture } =
-    useCaptureContext();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  const targetId = folderId || sourceId;
+  const { captures, loading, deleteCapture, toggleBookmark } = useCaptureManager(filter, targetId);
+
   const { setMiddlePanelCollapsed, setCollapsed } = useStore().ui as UIStore;
 
   const location = useLocation();
   const activeCaptureId = location.pathname.split("/").pop();
-  const targetId = folderId || sourceId || null;
   const isSmallScreen = useIsSmallScreen();
 
   const handleCaptureClick = () => {
@@ -60,22 +59,6 @@ const NotesList: React.FC<NotesListProps> = ({
       setCollapsed(true);
     }
   };
-
-  useEffect(() => {
-    const loadCaptures = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        await fetchCaptures(filter, targetId);
-      } catch (err) {
-        console.error("Error loading notes:", err);
-        setError("Could not load notes.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadCaptures();
-  }, [filter, targetId, fetchCaptures]);
 
   const safeCaptures = useMemo(() => {
     if (!Array.isArray(captures)) return [];
@@ -97,10 +80,10 @@ const NotesList: React.FC<NotesListProps> = ({
           days > 0
             ? `${days}d`
             : hours > 0
-            ? `${hours}h`
-            : minutes > 0
-            ? `${minutes}m`
-            : `${seconds}s`,
+              ? `${hours}h`
+              : minutes > 0
+                ? `${minutes}m`
+                : `${seconds}s`,
       };
     });
   }, [captures]);
@@ -117,7 +100,6 @@ const NotesList: React.FC<NotesListProps> = ({
   const shouldShowHeader = filter === "all" || filter === "bookmarks";
 
   if (loading) return <NoteListSkeleton />;
-  if (error) return <div className="text-red-400 p-4 text-sm">{error}</div>;
   if (!safeCaptures.length)
     return (
       <div className="flex relative flex-col items-center justify-center h-full text-center px-4">
@@ -154,11 +136,10 @@ const NotesList: React.FC<NotesListProps> = ({
               <Link
                 onClick={handleCaptureClick}
                 to={buildLink(note._id)}
-                className={`block rounded-lg p-3 transition-all duration-200 ${
-                  activeCaptureId === note._id
+                className={`block rounded-lg p-3 transition-all duration-200 ${activeCaptureId === note._id
                     ? "bg-gray-800/50 border-l-2 border-blue-400"
                     : "hover:dark:bg-gray-800/30 hover:bg-gray-200/50"
-                }`}
+                  }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
@@ -170,11 +151,10 @@ const NotesList: React.FC<NotesListProps> = ({
                         />
                       ) : (
                         <CiStickyNote
-                          className={`flex-shrink-0 ${
-                            activeCaptureId === note._id
+                          className={`flex-shrink-0 ${activeCaptureId === note._id
                               ? "text-blue-400"
                               : "text-gray-500"
-                          }`}
+                            }`}
                         />
                       )}
                       <h3 className="text-sm font-medium truncate text-[#000] dark:text-gray-300">
@@ -205,18 +185,16 @@ const NotesList: React.FC<NotesListProps> = ({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      bookmarkCapture?.(note._id);
+                      toggleBookmark?.(note._id);
                     }}
-                    className={`ml-2 cursor-pointer hover:text-amber-400 p-1 rounded-md transition-colors ${
-                      note.bookmarked
+                    className={`ml-2 cursor-pointer hover:text-amber-400 p-1 rounded-md transition-colors ${note.bookmarked
                         ? "text-amber-400 hover:bg-amber-900/20"
                         : "text-gray-500 hover:bg-gray-700/50 hover:text-gray-300"
-                    }`}
+                      }`}
                   >
                     <CiBookmark
-                      className={`w-4 h-4 transition-transform ${
-                        note.bookmarked ? "scale-110" : ""
-                      }`}
+                      className={`w-4 h-4 transition-transform ${note.bookmarked ? "scale-110" : ""
+                        }`}
                     />
                   </button>
                 </div>

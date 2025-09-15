@@ -1,10 +1,8 @@
 import { useParams } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import NoteView from "../components/NoteView";
 import EmptyNoteView from "../components/EmptyNoteView";
-import { CaptureService } from "../api/capture.api";
-import type { Capture } from "../types/Capture";
-import { useCaptureContext } from "../context/CaptureContext";
+import { useCaptureDetail } from "../hooks/useCaptureManager";
 import { NoteHeaderSkeleton } from "./skeleton/NoteHeaderSkeleton";
 import { NoteSummarySkeleton } from "./skeleton/NoteSummarySkeleton";
 import { NoteMetaBoxSkeleton } from "./skeleton/NoteMetaBoxSkeleton";
@@ -17,33 +15,24 @@ import type { UIStore } from "../stores/types";
 
 export const CaptureDetail = () => {
   const { captureId } = useParams({ strict: false });
-  const { setSelectedCapture } = useCaptureContext();
   const { setMessages } = useChat();
-  const [capture, setCapture] = useState<Capture | null>(null);
   const { middlePanelCollapsed, openAiChat, expandAiChat, setExpandAiChat, setOpenAiChat } = useStore().ui as UIStore;
-  const [loading, setLoading] = useState(true);
+
+  // Use the new capture detail hook
+  const {
+    capture,
+    isLoading: loading,
+    setAsSelected,
+  } = useCaptureDetail(captureId || '');
 
   useEffect(() => {
-    if (!captureId) {
-      setCapture(null);
-      setLoading(false);
-      return;
+    if (captureId && capture) {
+      setAsSelected();
+      setExpandAiChat(false); // Reset AI chat expansion when loading a new capture
+      setOpenAiChat(false); // Reset action bar state
+      setMessages([]); // Clear chat messages when loading a new capture
     }
-
-    setLoading(true);
-    CaptureService.getById(captureId)
-      .then((data) => {
-        setCapture(data);
-        setSelectedCapture(data);
-        setExpandAiChat(false); // Reset AI chat expansion when loading a new capture
-        setOpenAiChat(false); // Reset action bar state
-        setMessages([]); // Clear chat messages when loading a new capture
-      })
-      .catch(() => {
-        setCapture(null);
-      })
-      .finally(() => setLoading(false));
-  }, [captureId, setExpandAiChat, setMessages, setOpenAiChat, setSelectedCapture]);
+  }, [captureId, capture, setAsSelected, setExpandAiChat, setMessages, setOpenAiChat]);
 
   if (loading)
     return (
@@ -66,10 +55,10 @@ export const CaptureDetail = () => {
       {capture ? (
         <motion.div
           className={`grid overflow-hidden h-screen ${expandAiChat
-              ? "grid-cols-[0fr_1fr]" :
-              openAiChat
-                ? "grid-cols-[0fr_1fr] md:grid-cols-[0.65fr_0.35fr]"
-                : "grid-cols-[1fr]"
+            ? "grid-cols-[0fr_1fr]" :
+            openAiChat
+              ? "grid-cols-[0fr_1fr] md:grid-cols-[0.65fr_0.35fr]"
+              : "grid-cols-[1fr]"
             }`}
           initial={false}
           transition={{ duration: 0.3, ease: "easeInOut" }}

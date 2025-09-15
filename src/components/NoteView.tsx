@@ -4,7 +4,6 @@ import { NoteHeader } from "./noteview/NoteHeader";
 import { NoteMetaBox } from "./noteview/NoteMetaAccordion";
 import { useStore } from "../context/StoreContext";
 import { useFolderContext } from "../context/FolderContext";
-import { useCaptureContext } from "../context/CaptureContext";
 import { NoteSummary } from "./noteview/NoteSummary";
 import { FolderList } from "./cards/FolderList";
 import { motion } from "framer-motion";
@@ -25,6 +24,7 @@ import HeadingOutline from "./HeadingOutline";
 import { AIbuttons } from "./buttons/AIbutton";
 import { toast } from "sonner";
 import type { UIStore } from "../stores/types";
+import { useCaptureDetail } from "../hooks/useCaptureManager";
 
 interface NoteViewProps {
   capture: Capture;
@@ -44,23 +44,19 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
 
 
   const {
-    bookmarkCapture,
-    selectedCapture,
-    generateCaptureSummary,
-    loadingSummary,
-    reProcessCapture,
-    loading,
-  } = useCaptureContext();
+    toggleBookmark,
+    generateSummary,
+    isBookmarking,
+    isLoading: loading,           // For reprocess button
+    isGeneratingSummary: loadingSummary,  // For AI buttons
+    capture: selectedCapture     // For summary display
+  } = useCaptureDetail(capture._id);
+
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
-  const [bookmarked, setBookmarked] = useState(capture.bookmarked);
-  const [isBookmarking, setIsBookmarking] = useState(false); // New loading state
 
   const { setSelectedFolder } = useFolderContext();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setBookmarked(capture.bookmarked);
-  }, [capture]);
 
   useEffect(() => {
     const checkApiKey = async () => {
@@ -69,22 +65,6 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     };
     checkApiKey();
   }, []);
-
-  const handleBookmark = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (isBookmarking) return; // Prevent multiple clicks
-    setIsBookmarking(true);
-    const newBookmarkState = !bookmarked;
-    setBookmarked(newBookmarkState); // Optimistic update
-    try {
-      await bookmarkCapture?.(capture._id);
-    } catch {
-      setBookmarked(!newBookmarkState); // Revert on error
-      toast.error("Failed to update bookmark. Please try again.");
-    } finally {
-      setIsBookmarking(false);
-    }
-  };
 
   const handleOpenChat = () => {
     if (!hasApiKey) {
@@ -153,17 +133,17 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleBookmark}
+              onClick={toggleBookmark}
               disabled={isBookmarking}
-              className={`py-1 px-2 border border-gray-800 rounded-full flex items-center gap-1 transition-all duration-200 ${bookmarked
-                  ? "bg-amber-100/80 dark:bg-amber-900/30 text-amber-500"
-                  : "bg-gray-100/80 dark:bg-gray-800/50 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-gray-700/50 cursor-pointer"
+              className={`py-1 px-2 border border-gray-800 rounded-full flex items-center gap-1 transition-all duration-200 ${capture.bookmarked
+                ? "bg-amber-100/80 dark:bg-amber-900/30 text-amber-500"
+                : "bg-gray-100/80 dark:bg-gray-800/50 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-gray-700/50 cursor-pointer"
                 } ${isBookmarking ? "opacity-50 cursor-not-allowed" : ""}`}
-              title={bookmarked ? "Remove bookmark" : "Add bookmark"}
+              title={capture.bookmarked ? "Remove bookmark" : "Add bookmark"}
             >
               <FiBookmark className="w-5 h-5" />
               <span className="text-sm font-medium hidden md:block">
-                {bookmarked ? "Bookmarked" : "Bookmark"}
+                {capture.bookmarked ? "Bookmarked" : "Bookmark"}
               </span>
             </motion.button>
 
@@ -203,7 +183,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             </p>
             <button
               className={`px-4 py-2 font-semibold bg-red-500/80 text-white rounded-xl hover:bg-red-600 transition-all duration-200`}
-              onClick={() => reProcessCapture(capture._id)}
+              onClick={() => generateSummary()}
               disabled={loading}
             >
               {loading ? "Reprocessing..." : "Reprocess"}
@@ -254,7 +234,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
             )}
 
             <AIbuttons
-              generateCaptureSummary={generateCaptureSummary}
+              generateCaptureSummary={generateSummary}
               hasApiKey={hasApiKey}
               loadingSummary={loadingSummary}
               handleOpenChat={handleOpenChat}
