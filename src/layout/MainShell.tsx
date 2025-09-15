@@ -4,7 +4,6 @@ import { Outlet, useNavigate } from "@tanstack/react-router";
 import { VscLoading } from "react-icons/vsc";
 import Sidebar from "../components/Sidebar";
 
-import { UIProvider } from "../context/UIContext";
 import { FolderProvider } from "../context/FolderContext";
 import { SourceProvider } from "../context/sourceContext";
 
@@ -77,7 +76,7 @@ export const MainShell = () => {
   if (!session) return null; // wait for redirect
 
   return (
-    <UIProvider>
+   
       <ChatProvider>
         <FolderProvider>
           <SourceProvider>
@@ -109,7 +108,6 @@ export const MainShell = () => {
             </SourceProvider>
           </FolderProvider>
         </ChatProvider>
-      </UIProvider>
   );
 };
 
