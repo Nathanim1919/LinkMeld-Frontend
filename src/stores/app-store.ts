@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 
 export const useAppStore = create<AppStore>()(
     persist(
-        (set, get) => ({
+        (set, _) => ({
             user: null,
             isAuthenticated: false,
             loading: false,

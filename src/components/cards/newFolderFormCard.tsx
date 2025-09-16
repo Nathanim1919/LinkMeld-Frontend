@@ -2,9 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
-import { FolderService } from "../../api/folder.api";
-import { useFolderContext } from "../../context/FolderContext";
 import { toast } from "sonner";
+import { useFolderManager } from "../../hooks/useFolderManager";
 
 interface NewFolderFormCardProps {
   open: boolean;
@@ -16,8 +15,7 @@ export const NewFolderFormCard = ({
   onClose,
 }: NewFolderFormCardProps) => {
   const [folderName, setFolderName] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setFolders } = useFolderContext();
+  const { createFolder, isCreatingFolder } = useFolderManager();
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -35,24 +33,15 @@ export const NewFolderFormCard = ({
       return;
     }
 
-    setIsSubmitting(true);
-
     try {
-      const res = await FolderService.create(folderName);
+      await createFolder({ name: folderName });
 
       // Update to success state
       toast.success("Collection created successfully");
-
-      setFolders((prev) => [...prev, res]);
       setFolderName("");
       onClose();
     } catch (error) {
       console.error("Folder creation failed:", error);
-
-      // Update to error state
-      toast.error("Failed to create collection");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -129,14 +118,13 @@ export const NewFolderFormCard = ({
               </button>
               <button
                 type="submit"
-                disabled={isSubmitting || !folderName.trim()}
-                className={`px-5 cursor-pointer py-2 text-sm font-medium rounded-lg transition shadow ${
-                  isSubmitting || !folderName.trim()
+                disabled={isCreatingFolder || !folderName.trim()}
+                className={`px-5 cursor-pointer py-2 text-sm font-medium rounded-lg transition shadow ${isCreatingFolder || !folderName.trim()
                     ? "bg-blue-600/40 text-gray-400 cursor-not-allowed"
                     : "bg-blue-600 text-white hover:bg-blue-500"
-                }`}
+                  }`}
               >
-                {isSubmitting ? (
+                {isCreatingFolder ? (
                   <>
                     <VscLoading className="inline mr-2 animate-spin" />
                     Creating...

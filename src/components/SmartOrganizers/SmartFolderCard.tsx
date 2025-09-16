@@ -4,10 +4,10 @@ import { IoFolderOpen } from "react-icons/io5";
 import { FaFolderPlus } from "react-icons/fa";
 import { FaRegFolderOpen } from "react-icons/fa6";
 import { NewFolderFormCard } from "../cards/newFolderFormCard";
-import { useFolderContext } from "../../context/FolderContext";
 import type { IFolder } from "../../types/Folder";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
+import { useFolderManager } from "../../hooks/useFolderManager";
 
 // --- Component ---
 type SmartFolderCardProps = {
@@ -79,7 +79,7 @@ export const SmartFolderPreviewGrid = () => {
   const renameFolder = (id: string) => alert(`Rename folder ${id}`);
   const deleteFolder = (id: string) => alert(`Delete folder ${id}`);
 
-  const { folders, loadingStates } = useFolderContext();
+  const { folders, loading } = useFolderManager();
 
   return (
     <div className="flex relative flex-col w-full gap-2 p-3 self-start overflow-auto">
@@ -102,13 +102,13 @@ export const SmartFolderPreviewGrid = () => {
         onClose={() => setOpenNewFolderForm(false)}
       />
 
-      {loadingStates.fetch && (
+      {loading&& (
         <div className="flex items-center justify-center w-full h-20">
           <span className="text-sm text-zinc-500">Loading folders...</span>
         </div>
       )}
 
-      {!loadingStates.fetch && folders.length === 0 && (
+      {!loading&& folders.length === 0 && (
         <div className="flex items-center justify-center w-full h-20">
           <span className="text-sm text-zinc-500">No folders available</span>
         </div>

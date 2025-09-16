@@ -3,7 +3,6 @@ import { PROCESSING_STATUS, type Capture } from "../types/Capture";
 import { NoteHeader } from "./noteview/NoteHeader";
 import { NoteMetaBox } from "./noteview/NoteMetaAccordion";
 import { useStore } from "../context/StoreContext";
-import { useFolderContext } from "../context/FolderContext";
 import { NoteSummary } from "./noteview/NoteSummary";
 import { FolderList } from "./cards/FolderList";
 import { motion } from "framer-motion";
@@ -25,6 +24,7 @@ import { AIbuttons } from "./buttons/AIbutton";
 import { toast } from "sonner";
 import type { UIStore } from "../stores/types";
 import { useCaptureDetail } from "../hooks/useCaptureManager";
+import { useFolderManager } from "../hooks/useFolderManager";
 
 interface NoteViewProps {
   capture: Capture;
@@ -54,7 +54,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
 
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
-  const { setSelectedFolder } = useFolderContext();
+  const { setSelectedFolder } = useFolderManager();
   const navigate = useNavigate();
 
 

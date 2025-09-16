@@ -1,5 +1,4 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useFolderContext } from "../../context/FolderContext";
 import { FaFolder, FaFolderPlus } from "react-icons/fa";
 import { useStore } from "../../context/StoreContext";
 import { CgSpinnerTwoAlt } from "react-icons/cg";
@@ -8,21 +7,22 @@ import { FiChevronRight } from "react-icons/fi";
 import { RiFolderAddLine } from "react-icons/ri";
 import type { UIStore } from "../../stores/types";
 import { useCaptureManager } from "../../hooks/useCaptureManager";
+import { useFolderManager } from "../../hooks/useFolderManager";
 
 export const FolderList: React.FC = () => {
-  const { folders, loadingStates, addCaptureToFolder, setOpenNewFolderForm } =
-    useFolderContext();
+  const { folders, isAddingCapture, loading, addCaptureToFolder, setOpenNewFolderForm } =
+    useFolderManager();
   const { isFolderListOpen, setIsFolderListOpen } = useStore().ui as UIStore;
   const { selectedCapture } = useCaptureManager('all');
   const [appendToFolderId, setAppendToFolderId] = useState<string | null>(null);
 
   const setCaptureFolder = async (folderId: string) => {
     if (!selectedCapture) return;
-      setAppendToFolderId(folderId);
-      await addCaptureToFolder(folderId, selectedCapture._id)
-      setIsFolderListOpen?.(false);
+    setAppendToFolderId(folderId);
+    await addCaptureToFolder(folderId, selectedCapture._id)
+    setIsFolderListOpen?.(false);
 
-      setAppendToFolderId(null);
+    setAppendToFolderId(null);
   };
 
   return (
@@ -61,7 +61,7 @@ export const FolderList: React.FC = () => {
             </div>
 
             {/* Loading state */}
-            {loadingStates.fetch ? (
+            {loading ? (
               <motion.div
                 className="flex items-center justify-center p-6"
                 initial={{ opacity: 0 }}
@@ -115,8 +115,8 @@ export const FolderList: React.FC = () => {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        {loadingStates.append &&
-                        appendToFolderId === folder._id ? (
+                        {isAddingCapture &&
+                          appendToFolderId === folder._id ? (
                           <motion.div
                             animate={{ rotate: 360 }}
                             transition={{

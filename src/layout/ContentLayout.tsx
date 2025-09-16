@@ -3,12 +3,12 @@ import { CaptureDetail } from "../components/CaptureDetail";
 import { useStore } from "../context/StoreContext";
 import clsx from "clsx";
 import { NewFolderFormCard } from "../components/cards/newFolderFormCard";
-import { useFolderContext } from "../context/FolderContext";
 import type { UIStore } from "../stores/types";
+import { useFolderManager } from "../hooks/useFolderManager";
 
 export const ContentLayout = () => {
   const { middlePanelCollapsed } = useStore().ui as UIStore;
-    const {setOpenNewFolderForm, openNewFolderForm } = useFolderContext();
+    const {setOpenNewFolderForm, openNewFolderForm } = useFolderManager();
   
   const location = useLocation();
 

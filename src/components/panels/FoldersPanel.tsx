@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, useRouter } from "@tanstack/react-router";
-import { useFolderContext } from "../../context/FolderContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaFolder, FaFolderPlus } from "react-icons/fa6";
+import { useFolderManager } from "../../hooks/useFolderManager";
 
 const FoldersPanel: React.FC = () => {
-  const { folders, loadingStates, setSelectedFolder, setOpenNewFolderForm } = useFolderContext();
+  const { folders, loading, setSelectedFolder, setOpenNewFolderForm } = useFolderManager();
   const router = useRouter();
 
 
@@ -32,7 +32,7 @@ const FoldersPanel: React.FC = () => {
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-2 py-3">
-        {loadingStates.fetch ? (
+        {loading ? (
           <div className="flex flex-col items-center justify-center h-full">
             <motion.div
               animate={{ rotate: 360 }}
@@ -78,21 +78,18 @@ const FoldersPanel: React.FC = () => {
                     <Link
                       to={`/in/collections/${folder._id}`}
                       onClick={() => setSelectedFolder(folder)}
-                      className={`relative flex  items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${
-                        isActive ? "bg-blue-500/10" : "hover:bg-gray-200 hover:dark:bg-gray-700/30"
-                      }`}
+                      className={`relative flex  items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${isActive ? "bg-blue-500/10" : "hover:bg-gray-200 hover:dark:bg-gray-700/30"
+                        }`}
                       activeOptions={{ exact: true }}
                     >
                       <div className="flex items-center gap-2 overflow-hidden">
                         <FaFolder
-                          className={`flex-shrink-0 text-[16px] ${
-                            isActive ? "text-blue-500" : "text-[#4eff8f]"
-                          }`}
+                          className={`flex-shrink-0 text-[16px] ${isActive ? "text-blue-500" : "text-[#4eff8f]"
+                            }`}
                         />
                         <span
-                          className={`truncate text-[13px] ${
-                            isActive ? "text-black dark:text-white" : "text-black/60 dark:text-gray-300"
-                          }`}
+                          className={`truncate text-[13px] ${isActive ? "text-black dark:text-white" : "text-black/60 dark:text-gray-300"
+                            }`}
                         >
                           {folder.name}
                         </span>
@@ -100,11 +97,10 @@ const FoldersPanel: React.FC = () => {
 
                       <div className="flex items-center gap-2">
                         <span
-                          className={`text-[11px] px-[6px] py-[2px] rounded-full ${
-                            isActive
+                          className={`text-[11px] px-[6px] py-[2px] rounded-full ${isActive
                               ? "dark:bg-blue-500/20 text-blue-400"
                               : "dark:bg-gray-700/50 text-gray-400"
-                          }`}
+                            }`}
                         >
                           {folder.captures.length > 0
                             ? folder.captures.length
