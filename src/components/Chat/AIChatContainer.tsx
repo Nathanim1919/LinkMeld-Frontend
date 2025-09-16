@@ -3,13 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BsStars } from "react-icons/bs";
 import { X, Maximize, ChevronsRightLeft } from "lucide-react";
 import { ChatView } from "./ChatView";
-import { useChat } from "../../context/ChatContext";
 import type { UIStore } from "../../stores/types";
+import { useChatManager } from "../../hooks/useChatManager";
 
 export const AIChatContainer = () => {
   const { openAiChat, setOpenAiChat, expandAiChat, setExpandAiChat } = useStore().ui as UIStore;
 
-  const { clearMessages } = useChat();
+  const { clearMessages } = useChatManager();
 
   return (
     <AnimatePresence>

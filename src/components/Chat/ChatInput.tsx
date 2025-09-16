@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { useChat } from "../../context/ChatContext";
 import { SendHorizonal, Square } from "lucide-react";
 import { doesUserHasApiKey } from "../../utils/profile.util";
 import { useCaptureManager } from "../../hooks/useCaptureManager";
+import { useChatManager } from "../../hooks/useChatManager";
 
 export const ChatInput = () => {
   const { selectedCapture } = useCaptureManager('all');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { addMessage, userMessage, setUserMessage, isStreaming, cancelStream } = useChat();
+  const { addMessage, userMessage, setUserMessage, isStreaming, cancelStream } = useChatManager();
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
   const handleSend = () => {

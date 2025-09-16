@@ -1,9 +1,9 @@
 import React from "react";
-import { useChat } from "../../context/ChatContext";
 import { useStore } from "../../context/StoreContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { LLMRenderer } from "../LLMRenderer";
 import type { UIStore } from "../../stores/types";
+import { useChatManager } from "../../hooks/useChatManager";
 
 type NoteSummaryProps = {
   summary: string | null;
@@ -19,7 +19,7 @@ export const NoteSummary: React.FC<NoteSummaryProps> = ({
   summary,
   captureId,
 }) => {
-  const { addMessage, setUserMessage } = useChat();
+  const { addMessage, setUserMessage } = useChatManager();
   const { setOpenAiChat } = useStore().ui as UIStore;
 
   const handleQuestionClick = (question: string) => {

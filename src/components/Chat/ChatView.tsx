@@ -1,16 +1,16 @@
 import { useEffect, useRef } from "react";
 import { MessageBubble } from "./MessageBubble";
 import { ChatInput } from "./ChatInput";
-import { useChat } from "../../context/ChatContext";
 import { motion } from "framer-motion";
 import { RiGeminiFill } from "react-icons/ri";
 import EmptyChat from "./EmptyChat";
 import { useStore } from "../../context/StoreContext";
 import type { UIStore } from "../../stores/types";
+import { useChatManager } from "../../hooks/useChatManager";
 
 export const ChatView = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { messages, isLoading } = useChat();
+  const { messages, isLoading } = useChatManager();
   const { expandAiChat } = useStore().ui as UIStore;
 
   useEffect(() => {

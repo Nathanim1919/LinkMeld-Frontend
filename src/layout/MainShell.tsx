@@ -7,7 +7,6 @@ import Sidebar from "../components/Sidebar";
 
 import { authClient } from "../lib/auth-client";
 import type { Session, User } from "better-auth/types";
-import { ChatProvider } from "../context/ChatContext";
 import { motion } from "framer-motion";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
@@ -74,7 +73,6 @@ export const MainShell = () => {
   if (!session) return null; // wait for redirect
 
   return (
-    <ChatProvider>
       <div className="h-screen w-screen overflow-hidden">
         <div className="w-8 h-8 m-1 rounded-full grid md:hidden place-items-center fixed z-1000 bottom-0 bg-[#000000]">
           {hideSidebar ? (
@@ -100,7 +98,6 @@ export const MainShell = () => {
           </main>
         </div>
       </div>
-    </ChatProvider>
   );
 };
 

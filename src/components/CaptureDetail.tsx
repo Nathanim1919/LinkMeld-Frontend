@@ -10,12 +10,12 @@ import HeadingOutlineSkeleton from "./skeleton/HeadingOutlineSkeleton";
 import { useStore } from "../context/StoreContext";
 import { AIChatContainer } from "./Chat/AIChatContainer";
 import { AnimatePresence, motion } from "framer-motion";
-import { useChat } from "../context/ChatContext";
 import type { UIStore } from "../stores/types";
+import { useChatManager } from "../hooks/useChatManager";
 
 export const CaptureDetail = () => {
   const { captureId } = useParams({ strict: false });
-  const { setMessages } = useChat();
+  const { setMessages } = useChatManager();
   const { middlePanelCollapsed, openAiChat, expandAiChat, setExpandAiChat, setOpenAiChat } = useStore().ui as UIStore;
 
   // Use the new capture detail hook
