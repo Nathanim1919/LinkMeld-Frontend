@@ -1,11 +1,11 @@
 import React from "react";
-import { useSourceContext } from "../../context/sourceContext";
 import { Link } from "@tanstack/react-router";
 import { MdOutlineLanguage } from "react-icons/md";
 import { motion } from "framer-motion";
+import { useSourceManager } from "../../hooks/useSourceManager";
 
 const SourcePanel: React.FC = () => {
-  const { sources, siteNameCounts } = useSourceContext();
+  const { sources, siteNameCounts } = useSourceManager();
 
   return (
     <div className="h-full flex flex-col">
