@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useCaptureStore } from "../stores/capture-store";
 import {
     useCaptures,
@@ -154,7 +155,9 @@ export const useCaptureDetail = (captureId: string) => {
 
         // Client state
         isSelected: captureStore.isCaptureSelected(captureId),
-        setAsSelected: () => captureStore.setSelectedCapture(captureQuery.data || null),
+        setAsSelected: useCallback(() => {
+            captureStore.setSelectedCapture(captureQuery.data || null);
+        }, [captureQuery.data, captureStore]),
 
         // Actions
         deleteCapture,

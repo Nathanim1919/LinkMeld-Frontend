@@ -32,7 +32,7 @@ export const CaptureDetail = () => {
       setOpenAiChat(false); // Reset action bar state
       setMessages([]); // Clear chat messages when loading a new capture
     }
-  }, [captureId, capture, setAsSelected, setExpandAiChat, setMessages, setOpenAiChat]);
+  }, [captureId, capture]); // Remove function dependencies to prevent infinite loops
 
   if (loading)
     return (

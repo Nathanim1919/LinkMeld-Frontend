@@ -137,7 +137,7 @@ const NotesList: React.FC<NotesListProps> = ({
                 onClick={handleCaptureClick}
                 to={buildLink(note._id)}
                 className={`block rounded-lg p-3 transition-all duration-200 ${activeCaptureId === note._id
-                  ? "bg-gray-800/50 border-l-2 border-blue-400"
+                  ? "bg-gray-800/7 border-l-2 border-blue-400"
                   : "hover:dark:bg-gray-800/30 hover:bg-gray-200/50"
                   }`}
               >

@@ -47,13 +47,6 @@ export const useUIStore = create<UIStore>()(
             partialize: (state) => ({
                 theme: state.theme,
                 collapsed: state.collapsed,
-                middlePanelCollapsed: state.middlePanelCollapsed,
-                mainContentCollapsed: state.mainContentCollapsed,
-                openGlobalSearch: state.openGlobalSearch,
-                isFolderListOpen: state.isFolderListOpen,
-                openActionBar: state.openActionBar,
-                openAiChat: state.openAiChat,
-                expandAiChat: state.expandAiChat,
             })
         }
     )
