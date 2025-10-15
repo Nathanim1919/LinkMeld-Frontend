@@ -3,7 +3,7 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Brain, PanelRightClose, PanelRightOpen } from "lucide-react";
+import { Brain, PanelRightClose, PanelRightOpen, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 import { SidebarItem } from "./SidebarItem";
 import { IoSearch } from "react-icons/io5";
@@ -50,7 +50,9 @@ const Sidebar: React.FC<{
 }> = ({ user, hideSidebar, setHideSidebar }) => {
   const {
     collapsed,
-    setCollapsed
+    setCollapsed,
+    theme,
+    toggleTheme
   } = useStore().ui as UIStore;
 
   return (
@@ -117,6 +119,24 @@ const Sidebar: React.FC<{
       {/* User & Logout */}
       <div className="flex flex-col w-full px-2 gap-1">
         {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 ${
+            collapsed ? "justify-center" : ""
+          }`}
+          title={collapsed ? (theme === "dark" ? "Switch to light mode" : "Switch to dark mode") : ""}
+        >
+          {theme === "dark" ? (
+            <Sun className="w-5 h-5 text-yellow-500" />
+          ) : (
+            <Moon className="w-5 h-5 text-blue-500" />
+          )}
+          {!collapsed && (
+            <span className="text-sm font-medium">
+              {theme === "dark" ? "Light Mode" : "Dark Mode"}
+            </span>
+          )}
+        </button>
 
         {/* Profile Link */}
         <SidebarItem

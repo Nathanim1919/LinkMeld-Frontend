@@ -32,15 +32,18 @@ const SourceCard = ({ source }: { source: Capture }) => {
         </span>
       </h3>
       <p className="text-sm px-3 text-gray-400 mt-1">
-        {source?.metadata.description}
+        {source?.metadata?.description}
       </p>
       <div className="flex justify-between bg-[#111010]  border-t border-[#242323] px-2 py-4 items-center mt-3 text-xs text-gray-500 space-x-3">
         <div className="flex flex-col">
-          <span className="m-0 hover:text-violet-500 hover:underline flex items-center gap-1"><img className="w-4 h-4" src={source.metadata.favicon} alt="" /><a href={source.url}>{source.metadata.siteName}</a></span>
+          <span className="m-0 hover:text-violet-500 hover:underline flex items-center gap-1">
+            {source?.metadata?.favicon && <img className="w-4 h-4" src={source.metadata.favicon} alt="" />}
+            <a href={source.url}>{source?.metadata?.siteName || "Unknown Source"}</a>
+          </span>
           {/* <span className="m-0">{source?.metadata.type}</span> */}
         </div>
         <span>
-          {new Date(source?.metadata.capturedAt).toLocaleDateString("en-US", {
+          {new Date(source?.metadata?.capturedAt || source?.createdAt).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",

@@ -64,7 +64,7 @@ const NotesList: React.FC<NotesListProps> = ({
     if (!Array.isArray(captures)) return [];
 
     return captures.map((note) => {
-      const timestamp = new Date(note.metadata.capturedAt);
+      const timestamp = new Date(note.metadata?.capturedAt || note.createdAt);
       const now = new Date();
       const seconds = Math.floor((now.getTime() - timestamp.getTime()) / 1000);
       const minutes = Math.floor(seconds / 60);
@@ -144,7 +144,7 @@ const NotesList: React.FC<NotesListProps> = ({
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      {note.metadata.isPdf ? (
+                      {note.metadata?.isPdf ? (
                         <FileText
                           className={`flex-shrink-0 text-red-700`}
                           size={16}
@@ -162,7 +162,7 @@ const NotesList: React.FC<NotesListProps> = ({
                       </h3>
                     </div>
 
-                    {note.metadata.favicon && (
+                    {note.metadata?.favicon && (
                       <div className="flex items-center gap-1.5 mb-2">
                         <img
                           src={note.metadata.favicon}
@@ -170,14 +170,14 @@ const NotesList: React.FC<NotesListProps> = ({
                           alt=""
                         />
                         <span className="text-xs text-gray-500 truncate">
-                          {note.metadata.siteName || "Unknown Source"}
+                          {note.metadata?.siteName || "Unknown Source"}
                         </span>
                       </div>
                     )}
 
                     <p className="text-xs text-gray-500 line-clamp-2 mb-2">
                       {note.description ||
-                        note.ai?.summary?.slice(0, 100) + "..."}
+                        (note.ai?.summary ? note.ai.summary.slice(0, 100) + "..." : "")}
                     </p>
                   </div>
 

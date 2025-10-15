@@ -4,7 +4,7 @@ import type { UIStore } from "./types";
 
 export const useUIStore = create<UIStore>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             collapsed: false,
             middlePanelCollapsed: false,
             mainContentCollapsed: false,
@@ -40,6 +40,15 @@ export const useUIStore = create<UIStore>()(
             toggleMainContent: () => set((state) => ({ mainContentCollapsed: !state.mainContentCollapsed })),
             toggleGlobalSearch: () => set((state) => ({ openGlobalSearch: !state.openGlobalSearch })),
             toggleAiChat: () => set((state) => ({ openAiChat: !state.openAiChat })),
+            toggleTheme: () => set((state) => {
+                const newTheme = state.theme === "dark" ? "light" : "dark";
+                // Apply theme to DOM
+                if (typeof document !== "undefined") {
+                    document.documentElement.classList.remove("light", "dark");
+                    document.documentElement.classList.add(newTheme);
+                }
+                return { theme: newTheme };
+            }),
             closeAllModals: () => set({ openGlobalSearch: false, isFolderListOpen: false, openActionBar: false, openAiChat: false, expandAiChat: false }),
         }),
         {
@@ -47,7 +56,14 @@ export const useUIStore = create<UIStore>()(
             partialize: (state) => ({
                 theme: state.theme,
                 collapsed: state.collapsed,
-            })
+            }),
+            onRehydrateStorage: () => (state) => {
+                // Apply theme to DOM when store is rehydrated
+                if (state && typeof document !== "undefined") {
+                    document.documentElement.classList.remove("light", "dark");
+                    document.documentElement.classList.add(state.theme);
+                }
+            }
         }
     )
 );

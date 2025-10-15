@@ -211,22 +211,22 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
                   }
                   : { name: "Uncategorized", id: "uncategorized" }
               }
-              isPdf={capture.metadata.isPdf || false}
+              isPdf={capture.metadata?.isPdf || false}
               title={capture.title}
               url={capture.url || ""}
               description={
-                capture.metadata.description ||
-                capture.ai.summary
-                  .match(/# Context\n([\s\S]+?)(?=\n# Overview)/i)?.[1]
-                  .trim() ||
+                capture.metadata?.description ||
+                capture.ai?.summary
+                  ?.match(/# Context\n([\s\S]+?)(?=\n# Overview)/i)?.[1]
+                  ?.trim() ||
                 ""
               }
               tags={
-                capture.metadata.keywords
+                capture.metadata?.keywords
                   ? capture.metadata.keywords.map((tag) => tag.trim())
                   : []
               }
-              capturedAt={capture.metadata.capturedAt}
+              capturedAt={capture.metadata?.capturedAt || capture.createdAt}
             />
 
             {capture.headings.length > 0 && (
@@ -249,8 +249,8 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               />
             )}
             <NoteMetaBox
-              domain={capture.metadata.siteName || "Unknown"}
-              savedAt={capture.metadata.capturedAt}
+              domain={capture.metadata?.siteName || "Unknown"}
+              savedAt={capture.metadata?.capturedAt || capture.createdAt}
               wordCount={capture.content.clean?.length || 0}
             />
           </>

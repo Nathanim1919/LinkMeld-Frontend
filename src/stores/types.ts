@@ -52,6 +52,7 @@ export interface UIActions {
   toggleMainContent: () => void;
   toggleGlobalSearch: () => void;
   toggleAiChat: () => void;
+  toggleTheme: () => void;
   closeAllModals: () => void;
 }
 
