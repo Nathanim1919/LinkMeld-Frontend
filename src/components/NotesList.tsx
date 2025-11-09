@@ -43,9 +43,9 @@ const NotesList: React.FC<NotesListProps> = ({
   folderId,
   sourceId,
 }) => {
-
   const targetId = folderId || sourceId;
-  const { captures, loading, deleteCapture, toggleBookmark } = useCaptureManager(filter, targetId);
+  const { captures, loading, deleteCapture, toggleBookmark } =
+    useCaptureManager(filter, targetId);
 
   const { setMiddlePanelCollapsed, setCollapsed } = useStore().ui as UIStore;
 
@@ -136,10 +136,11 @@ const NotesList: React.FC<NotesListProps> = ({
               <Link
                 onClick={handleCaptureClick}
                 to={buildLink(note._id)}
-                className={`block rounded-lg p-3 transition-all duration-200 ${activeCaptureId === note._id
-                  ? "bg-gray-800/7 border-l-2 border-blue-400"
-                  : "hover:dark:bg-gray-800/30 hover:bg-gray-200/50"
-                  }`}
+                className={`block rounded-lg p-3 transition-all duration-200 ${
+                  activeCaptureId === note._id
+                    ? "bg-gray-800/7 border-l-2 border-blue-400"
+                    : "hover:dark:bg-gray-800/30 hover:bg-gray-200/50"
+                }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
@@ -151,10 +152,11 @@ const NotesList: React.FC<NotesListProps> = ({
                         />
                       ) : (
                         <CiStickyNote
-                          className={`flex-shrink-0 ${activeCaptureId === note._id
-                            ? "text-blue-400"
-                            : "text-gray-500"
-                            }`}
+                          className={`flex-shrink-0 ${
+                            activeCaptureId === note._id
+                              ? "text-blue-400"
+                              : "text-gray-500"
+                          }`}
                         />
                       )}
                       <h3 className="text-sm font-medium truncate text-[#000] dark:text-gray-300">
@@ -177,7 +179,9 @@ const NotesList: React.FC<NotesListProps> = ({
 
                     <p className="text-xs text-gray-500 line-clamp-2 mb-2">
                       {note.description ||
-                        (note.ai?.summary ? note.ai.summary.slice(0, 100) + "..." : "")}
+                        (note.ai?.summary
+                          ? note.ai.summary.slice(0, 100) + "..."
+                          : "")}
                     </p>
                   </div>
 
@@ -187,14 +191,16 @@ const NotesList: React.FC<NotesListProps> = ({
                       e.stopPropagation();
                       toggleBookmark?.(note._id);
                     }}
-                    className={`ml-2 cursor-pointer hover:text-amber-400 p-1 rounded-md transition-colors ${note.bookmarked
-                      ? "text-amber-400 hover:bg-amber-900/20"
-                      : "text-gray-500 hover:bg-gray-700/50 hover:text-gray-300"
-                      }`}
+                    className={`ml-2 cursor-pointer hover:text-amber-400 p-1 rounded-md transition-colors ${
+                      note.bookmarked
+                        ? "text-amber-400 hover:bg-amber-900/20"
+                        : "text-gray-500 hover:bg-gray-700/50 hover:text-gray-300"
+                    }`}
                   >
                     <CiBookmark
-                      className={`w-4 h-4 transition-transform ${note.bookmarked ? "scale-110" : ""
-                        }`}
+                      className={`w-4 h-4 transition-transform ${
+                        note.bookmarked ? "scale-110" : ""
+                      }`}
                     />
                   </button>
                 </div>

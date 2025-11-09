@@ -42,14 +42,15 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
           whileTap={{ scale: 0.985 }}
           className={`
     relative z-0 group inline-flex cursor-pointer items-center justify-center gap-1
-    px-5 py-2.5 rounded-md text-sm font-medium tracking-tight
+    px-2 py-1.5 rounded-md text-sm font-medium tracking-tight
     transition-all duration-300 ease-out
      overflow-hidden select-none
     backdrop-blur-md
-    ${loadingSummary
-              ? "bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-400 cursor-wait"
-              : "bg-[linear-gradient(to_right,#43a7ff,#31baff,#95c6fb,#328eff)] dark:bg-[linear-gradient(to_right,#161964,#2a30de,#80beff,#1e3a8a)] text-white"
-            }
+    ${
+      loadingSummary
+        ? "bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-400 cursor-wait"
+        : "bg-[linear-gradient(to_right,#43a7ff,#31baff,#95c6fb,#328eff)] dark:bg-[linear-gradient(to_right,#161964,#2a30de,#80beff,#1e3a8a)] text-white"
+    }
     ${loadingSummary ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
     focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50
     group-hover:shadow-[0_0_10px_#80beff80]
@@ -88,7 +89,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
           whileTap={{ scale: 0.985 }}
           className={`
     relative z-0 group inline-flex cursor-pointer items-center justify-center gap-1
-    px-5 py-2.5 rounded-md text-sm font-medium tracking-tight
+    px-2 py-1.5 rounded-md text-sm font-medium tracking-tight
     transition-all duration-300 ease-out select-none overflow-hidden
     text-white backdrop-blur-md
     bg-[linear-gradient(to_right,#72bdff,#8b5cf6,#69aaff)]
@@ -105,7 +106,7 @@ export const AIbuttons: React.FC<AIbuttonProps> = ({
           <span className="absolute inset-0 bg-[radial-gradient(circle_at_center,#ffffff0a,transparent)] rounded-xl pointer-events-none z-0" />
 
           <RiGeminiFill className="w-4 h-4 z-10" />
-          <span className="z-10">Ask</span>
+          <span className="z-10">Chat with AI</span>
         </motion.button>
       </div>
     </div>

@@ -7,7 +7,8 @@ import type { UIStore } from "../../stores/types";
 import { useChatManager } from "../../hooks/useChatManager";
 
 export const AIChatContainer = () => {
-  const { openAiChat, setOpenAiChat, expandAiChat, setExpandAiChat } = useStore().ui as UIStore;
+  const { openAiChat, setOpenAiChat, expandAiChat, setExpandAiChat } =
+    useStore().ui as UIStore;
 
   const { clearMessages } = useChatManager();
 
@@ -19,7 +20,7 @@ export const AIChatContainer = () => {
 
           <motion.header
             className="px-5 py-3 border-b border-gray-800/50 flex justify-between items-center"
-            whileTap={{ scale: 0.98 }}
+            whileTap={{ scale: 0.97 }}
           >
             <div className="flex items-center space-x-2">
               <BsStars
@@ -77,8 +78,9 @@ export const AIChatContainer = () => {
 
           {/* Dynamic Content Area with subtle parallax effect */}
           <motion.main
-            className={`flex-1 ${expandAiChat && "w-full md:w-[50%] h-full mx-auto"
-              } overflow-hidden`}
+            className={`flex-1 ${
+              expandAiChat && "w-full md:w-[50%] h-full mx-auto"
+            } overflow-hidden`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}

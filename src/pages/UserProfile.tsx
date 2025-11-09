@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiRefreshCw,
@@ -30,7 +30,7 @@ export const UserProfile = () => {
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     async function getUserProfile() {
       const auth = await authClient.getSession();
@@ -42,8 +42,7 @@ export const UserProfile = () => {
     getUserProfile();
   }, []);
 
-
-    const handleLogOut = async () => {
+  const handleLogOut = async () => {
     setLoading(true);
     await authClient
       .signOut({
@@ -62,12 +61,11 @@ export const UserProfile = () => {
     setLoading(false);
   };
 
-
   return (
     <div className="min-h-screen grid gap-2 place-items-start bg-[#f5f2f2] dark:bg-[#000000] text-black dark:text-[#f5f5f7]">
       <div className="max-w-3xl mx-auto mt-6 grid gap-4 w-full px-4">
         {/* Profile Header */}
-    <motion.div
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
@@ -89,20 +87,25 @@ export const UserProfile = () => {
             <div>
               <h2 className="text-2xl font-semibold ">{authInfo?.name}</h2>
               <p className="text-sm text-gray-400">
-                Joined {authInfo?.createdAt ? new Date(authInfo.createdAt).toLocaleDateString() : "Unknown"}
+                Joined{" "}
+                {authInfo?.createdAt
+                  ? new Date(authInfo.createdAt).toLocaleDateString()
+                  : "Unknown"}
               </p>
             </div>
           </div>
-          <button onClick={handleLogOut} className="text-sm cursor-pointer text-blue-400 hover:underline transition">
-              {
-                loading?
-                <span className="flex items-center gap-2">
-                  <VscLoading className="animate-spin duration-150"/>
-                  Logging out...
-                </span>:
-                "LogOut"
-
-              }
+          <button
+            onClick={handleLogOut}
+            className="text-sm cursor-pointer text-blue-400 hover:underline transition"
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <VscLoading className="animate-spin duration-150" />
+                Logging out...
+              </span>
+            ) : (
+              "LogOut"
+            )}
           </button>
         </motion.div>
 
@@ -149,7 +152,6 @@ export const UserProfile = () => {
             onClick={() => setActiveModal("reset")}
             color="bg-[#2c2c2e]"
             borderColor="border-[#3a3a3c]"
-           
           />
 
           {/* <ActionButton

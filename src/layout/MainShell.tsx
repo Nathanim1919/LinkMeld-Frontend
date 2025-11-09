@@ -4,7 +4,6 @@ import { Outlet, useNavigate } from "@tanstack/react-router";
 import { VscLoading } from "react-icons/vsc";
 import Sidebar from "../components/Sidebar";
 
-
 import { authClient } from "../lib/auth-client";
 import type { Session, User } from "better-auth/types";
 import { motion } from "framer-motion";
@@ -42,7 +41,7 @@ export const MainShell = () => {
             message?: string;
             status: number;
             statusText: string;
-          }
+          },
         );
       } finally {
         setIsLoading(false);
@@ -73,31 +72,31 @@ export const MainShell = () => {
   if (!session) return null; // wait for redirect
 
   return (
-      <div className="h-screen w-screen overflow-hidden">
-        <div className="w-8 h-8 m-1 rounded-full grid md:hidden place-items-center fixed z-1000 bottom-0 bg-[#000000]">
-          {hideSidebar ? (
-            <ChevronsRight
-              className="relative z-50 cursor-pointer hover:text-white text-gray-600 md:hidden"
-              onClick={() => setHideSidebar(!hideSidebar)}
-            />
-          ) : (
-            <ChevronsLeft
-              className="relative z-50 cursor-pointer hover:text-white text-gray-600 md:hidden"
-              onClick={() => setHideSidebar(!hideSidebar)}
-            />
-          )}
-        </div>
-        <div className="h-screen w-screen bg-black text-white grid grid-cols-[0fr_1fr] md:grid-cols-[auto_1fr]">
-          <Sidebar
-            hideSidebar={hideSidebar}
-            setHideSidebar={setHideSidebar}
-            user={{ ...session.user, token: "your-token-value" }}
+    <div className="h-screen w-screen overflow-hidden">
+      <div className="w-8 h-8 m-1 rounded-full grid md:hidden place-items-center fixed z-1000 bottom-0 bg-[#000000]">
+        {hideSidebar ? (
+          <ChevronsRight
+            className="relative z-50 cursor-pointer hover:text-white text-gray-600 md:hidden"
+            onClick={() => setHideSidebar(!hideSidebar)}
           />
-          <main className="overflow-hidden h-full">
-            <Outlet />
-          </main>
-        </div>
+        ) : (
+          <ChevronsLeft
+            className="relative z-50 cursor-pointer hover:text-white text-gray-600 md:hidden"
+            onClick={() => setHideSidebar(!hideSidebar)}
+          />
+        )}
       </div>
+      <div className="h-screen w-screen bg-black text-white grid grid-cols-[0fr_1fr] md:grid-cols-[auto_1fr]">
+        <Sidebar
+          hideSidebar={hideSidebar}
+          setHideSidebar={setHideSidebar}
+          user={{ ...session.user, token: "your-token-value" }}
+        />
+        <main className="overflow-hidden h-full">
+          <Outlet />
+        </main>
+      </div>
+    </div>
   );
 };
 

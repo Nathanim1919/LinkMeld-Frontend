@@ -23,7 +23,7 @@ export const NoteHeader: React.FC<NoteHeaderProps> = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="border-b grid gap-2  border-gray-800"
+      className="border-b grid gap-2 border-gray-200  dark:border-gray-800"
     >
       <div className="flex flex-col overflow-hidden">
         <h1 className="md:text-2xl flex gap-2 text-left font-bold text-gray-900 dark:text-gray-100">

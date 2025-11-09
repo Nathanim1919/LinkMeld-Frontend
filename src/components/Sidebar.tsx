@@ -3,7 +3,13 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { MdOutlineLanguage } from "react-icons/md";
 import { LuFolderOpen } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Brain, PanelRightClose, PanelRightOpen, Sun, Moon } from "lucide-react";
+import {
+  Brain,
+  PanelRightClose,
+  PanelRightOpen,
+  Sun,
+  Moon,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { SidebarItem } from "./SidebarItem";
 import { IoSearch } from "react-icons/io5";
@@ -48,41 +54,41 @@ const Sidebar: React.FC<{
     token: string;
   };
 }> = ({ user, hideSidebar, setHideSidebar }) => {
-  const {
-    collapsed,
-    setCollapsed,
-    theme,
-    toggleTheme
-  } = useStore().ui as UIStore;
+  const { collapsed, setCollapsed, theme, toggleTheme } = useStore()
+    .ui as UIStore;
 
   return (
     <motion.div
       className={`h-screen relative z-900 bg-white dark:bg-[#1A1A1C] border-r border-gray-200 dark:border-gray-800/40
-    text-gray-600 dark:text-gray-300 flex flex-col justify-start gap-10 md:gap-0 md:justify-between py-6 
+    text-gray-600 dark:text-gray-300 flex flex-col justify-start md:justify-between gap-10 md:gap-0 py-6
     transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
     /* Mobile behavior (controlled by hideSidebar) */
-    ${hideSidebar
-          ? "max-md:w-0 max-md:overflow-hidden max-md:translate-x-[-100%]"
-          : ""
-        }
+    ${
+      hideSidebar
+        ? "max-md:w-0 max-md:overflow-hidden max-md:translate-x-[-100%]"
+        : ""
+    }
     /* Desktop behavior (controlled by collapsed) */
     ${collapsed ? "w-12 md:w-14" : "w-36"}
   `}
     >
       <div
-        className={`flex items-center ${collapsed ? "justify-center" : "justify-between px-2"
-          }`}
+        className={`flex  border-b border-gray-200 dark:border-gray-800 items-center ${
+          collapsed ? "justify-center" : "justify-between px-2"
+        }`}
       >
         <div
           onClick={() => {
             setCollapsed(false);
           }}
-          className={`p-2 ${collapsed ? "hover:cursor-e-resize" : ""} group ${collapsed ? "hover:bg-white/5" : ""
-            } rounded-lg backdrop-blur-sm`}
+          className={`p-2 ${collapsed ? "hover:cursor-e-resize" : ""} group ${
+            collapsed ? "hover:bg-white/5" : ""
+          } rounded-lg backdrop-blur-sm`}
         >
           <Brain
-            className={`${collapsed ? "group-hover:hidden" : ""
-              } w-5 h-5 dark:text-gray-300`}
+            className={`${
+              collapsed ? "group-hover:hidden" : ""
+            } w-5 h-5 dark:text-gray-300`}
           />
           {collapsed && (
             <PanelRightClose className="hidden w-5 h-5 group-hover:grid text-gray-600" />
@@ -102,8 +108,8 @@ const Sidebar: React.FC<{
       </div>
 
       {/* Navigation */}
-      <div className=" w-full px-2">
-        <nav className="flex flex-col gap-4">
+      <div className=" w-full flex-1 py-4 px-2">
+        <nav className="flex flex-col gap-2">
           {navItems.map((item) => (
             <SidebarItem
               key={item.path}
@@ -117,14 +123,20 @@ const Sidebar: React.FC<{
       </div>
 
       {/* User & Logout */}
-      <div className="flex flex-col w-full px-2 gap-1">
+      <div className="flex flex-col border-t border-gray-200 dark:border-gray-800 w-full justify-self-end px-2 gap-1">
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 ${
+          className={`flex cursor-pointer items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800/50 ${
             collapsed ? "justify-center" : ""
           }`}
-          title={collapsed ? (theme === "dark" ? "Switch to light mode" : "Switch to dark mode") : ""}
+          title={
+            collapsed
+              ? theme === "dark"
+                ? "Switch to light mode"
+                : "Switch to dark mode"
+              : ""
+          }
         >
           {theme === "dark" ? (
             <Sun className="w-5 h-5 text-yellow-500" />
@@ -133,7 +145,7 @@ const Sidebar: React.FC<{
           )}
           {!collapsed && (
             <span className="text-sm font-medium">
-              {theme === "dark" ? "Light Mode" : "Dark Mode"}
+              {theme === "dark" ? "Light" : "Dark"}
             </span>
           )}
         </button>

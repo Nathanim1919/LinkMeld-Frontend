@@ -1,4 +1,3 @@
-
 import { PROCESSING_STATUS, type Capture } from "../types/Capture";
 import { NoteHeader } from "./noteview/NoteHeader";
 import { NoteMetaBox } from "./noteview/NoteMetaAccordion";
@@ -42,21 +41,19 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
     setCollapsed,
   } = useStore().ui as UIStore;
 
-
   const {
     toggleBookmark,
     generateSummary,
     isBookmarking,
-    isLoading: loading,           // For reprocess button
-    isGeneratingSummary: loadingSummary,  // For AI buttons
-    capture: selectedCapture     // For summary display
+    isLoading: loading, // For reprocess button
+    isGeneratingSummary: loadingSummary, // For AI buttons
+    capture: selectedCapture, // For summary display
   } = useCaptureDetail(capture._id);
 
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
   const { setSelectedFolder } = useFolderManager();
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const checkApiKey = async () => {
@@ -93,7 +90,7 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
       </div>
 
       {/* Header with Apple-inspired design */}
-      <div className="sticky top-0 z-10 bg-white/80 dark:bg-[#1b1a1a] backdrop-blur-xl px-4 py-2 shadow-sm">
+      <div className="sticky top-0 z-10 bg-white/80 dark:bg-[#1b1a1a] backdrop-blur-xl px-4 py-2 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center overflow-hidden">
@@ -135,37 +132,32 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               whileTap={{ scale: 0.95 }}
               onClick={toggleBookmark}
               disabled={isBookmarking}
-              className={`py-1 px-2 border border-gray-800 rounded-full flex items-center gap-1 transition-all duration-200 ${capture.bookmarked
-                ? "bg-amber-100/80 dark:bg-amber-900/30 text-amber-500"
-                : "bg-gray-100/80 dark:bg-gray-800/50 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-gray-700/50 cursor-pointer"
-                } ${isBookmarking ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`py-1 px-2 rounded-md flex items-center gap-1 transition-all duration-200 ${
+                capture.bookmarked
+                  ? "bg-amber-100/80 dark:bg-amber-900/30 text-amber-500"
+                  : "bg-gray-100/80 dark:bg-gray-800/50 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-gray-700/50 cursor-pointer"
+              } ${isBookmarking ? "opacity-50 cursor-not-allowed" : ""}`}
               title={capture.bookmarked ? "Remove bookmark" : "Add bookmark"}
             >
-              <FiBookmark className="w-5 h-5" />
-              <span className="text-sm font-medium hidden md:block">
-                {capture.bookmarked ? "Bookmarked" : "Bookmark"}
-              </span>
+              <FiBookmark className="w-4 h-4" />
             </motion.button>
 
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsFolderListOpen?.(!isFolderListOpen)}
-              className="py-1 px-2 rounded-full bg-gray-100/80 dark:bg-gray-800/50 border border-gray-800 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200 flex items-center gap-1"
+              className="py-1 px-2 rounded-md bg-gray-100/80 dark:bg-gray-800/50 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-200 flex items-center gap-1"
               title="Add to folder"
             >
-              <FiFolderPlus className="w-5 h-5" />
-              <span className="text-sm font-medium hidden md:block">
-                Organize
-              </span>
+              <FiFolderPlus className="w-4 h-4" />
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleOpenChat}
-              className="p-1 rounded-full cursor-pointer text-violet-500 hover:bg-violet-800/20 transition-all duration-200"
+              className="p-1 rounded-md flex items-center gap-1 cursor-pointer text-violet-500 hover:bg-violet-800/20 transition-all duration-200"
             >
-              <RiGeminiFill className="w-5 h-5" />
+              <RiGeminiFill className="w-4 h-4" />
             </motion.button>
           </div>
         </div>
@@ -206,9 +198,9 @@ const NoteView: React.FC<NoteViewProps> = ({ capture }) => {
               collection={
                 capture.collection
                   ? {
-                    name: capture.collection.name,
-                    id: capture.collection._id,
-                  }
+                      name: capture.collection.name,
+                      id: capture.collection._id,
+                    }
                   : { name: "Uncategorized", id: "uncategorized" }
               }
               isPdf={capture.metadata?.isPdf || false}

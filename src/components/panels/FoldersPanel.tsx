@@ -5,9 +5,9 @@ import { FaFolder, FaFolderPlus } from "react-icons/fa6";
 import { useFolderManager } from "../../hooks/useFolderManager";
 
 const FoldersPanel: React.FC = () => {
-  const { folders, loading, setSelectedFolder, setOpenNewFolderForm } = useFolderManager();
+  const { folders, loading, setSelectedFolder, setOpenNewFolderForm } =
+    useFolderManager();
   const router = useRouter();
-
 
   return (
     <div className="h-full flex flex-col">
@@ -23,12 +23,9 @@ const FoldersPanel: React.FC = () => {
             onClick={() => setOpenNewFolderForm(true)}
             className="p-1.5 rounded-full text-gray-400 hover:text-blue-500 transition-colors"
             aria-label="Create new collection"
-          >
-            <FaFolderPlus className="text-[16px]" />
-          </motion.button>
+          ></motion.button>
         </div>
       </div>
-
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-2 py-3">
@@ -62,10 +59,16 @@ const FoldersPanel: React.FC = () => {
           </div>
         ) : (
           <motion.ul className="space-y-[2px]">
+            <button
+              onClick={() => setOpenNewFolderForm(true)}
+              className="flex text-[#333] dark:text-gray-200 cursor-pointer ml-auto hover:opacity-45 items-center w-full justify-end px-3 py-1"
+            >
+              <FaFolderPlus className="text-[16px]" />
+            </button>
             <AnimatePresence>
               {folders.map((folder) => {
                 const isActive = router.state.location.pathname.includes(
-                  folder._id
+                  folder._id,
                 );
                 return (
                   <motion.li
@@ -78,18 +81,25 @@ const FoldersPanel: React.FC = () => {
                     <Link
                       to={`/in/collections/${folder._id}`}
                       onClick={() => setSelectedFolder(folder)}
-                      className={`relative flex  items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${isActive ? "bg-blue-500/10" : "hover:bg-gray-200 hover:dark:bg-gray-700/30"
-                        }`}
+                      className={`relative flex  items-center justify-between px-3 py-2 rounded-[6px] transition-colors ${
+                        isActive
+                          ? "bg-blue-500/10"
+                          : "hover:bg-gray-200 hover:dark:bg-gray-700/30"
+                      }`}
                       activeOptions={{ exact: true }}
                     >
                       <div className="flex items-center gap-2 overflow-hidden">
                         <FaFolder
-                          className={`flex-shrink-0 text-[16px] ${isActive ? "text-blue-500" : "text-[#4eff8f]"
-                            }`}
+                          className={`flex-shrink-0 text-[16px] ${
+                            isActive ? "text-blue-500" : "text-[#4eff8f]"
+                          }`}
                         />
                         <span
-                          className={`truncate text-[13px] ${isActive ? "text-black dark:text-white" : "text-black/60 dark:text-gray-300"
-                            }`}
+                          className={`truncate text-[13px] ${
+                            isActive
+                              ? "text-black dark:text-white"
+                              : "text-black/60 dark:text-gray-300"
+                          }`}
                         >
                           {folder.name}
                         </span>
@@ -97,10 +107,11 @@ const FoldersPanel: React.FC = () => {
 
                       <div className="flex items-center gap-2">
                         <span
-                          className={`text-[11px] px-[6px] py-[2px] rounded-full ${isActive
+                          className={`text-[11px] px-[6px] py-[2px] rounded-full ${
+                            isActive
                               ? "dark:bg-blue-500/20 text-blue-400"
                               : "dark:bg-gray-700/50 text-gray-400"
-                            }`}
+                          }`}
                         >
                           {folder.captures.length > 0
                             ? folder.captures.length

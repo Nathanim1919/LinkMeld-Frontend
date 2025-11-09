@@ -10,16 +10,21 @@ import { useCaptureManager } from "../../hooks/useCaptureManager";
 import { useFolderManager } from "../../hooks/useFolderManager";
 
 export const FolderList: React.FC = () => {
-  const { folders, isAddingCapture, loading, addCaptureToFolder, setOpenNewFolderForm } =
-    useFolderManager();
+  const {
+    folders,
+    isAddingCapture,
+    loading,
+    addCaptureToFolder,
+    setOpenNewFolderForm,
+  } = useFolderManager();
   const { isFolderListOpen, setIsFolderListOpen } = useStore().ui as UIStore;
-  const { selectedCapture } = useCaptureManager('all');
+  const { selectedCapture } = useCaptureManager("all");
   const [appendToFolderId, setAppendToFolderId] = useState<string | null>(null);
 
   const setCaptureFolder = async (folderId: string) => {
     if (!selectedCapture) return;
     setAppendToFolderId(folderId);
-    await addCaptureToFolder(folderId, selectedCapture._id)
+    await addCaptureToFolder(folderId, selectedCapture._id);
     setIsFolderListOpen?.(false);
 
     setAppendToFolderId(null);
@@ -115,8 +120,7 @@ export const FolderList: React.FC = () => {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        {isAddingCapture &&
-                          appendToFolderId === folder._id ? (
+                        {isAddingCapture && appendToFolderId === folder._id ? (
                           <motion.div
                             animate={{ rotate: 360 }}
                             transition={{
