@@ -40,10 +40,10 @@ export const SidebarItem = ({
         to={path}
         activeOptions={{ exact: true }}
         onClick={onClick || handleClick}
-        className={`relative flex text-[18px] md:text-[18px] items-center ${
+        className={`relative border hover:opacity-100 flex text-[18px] md:text-[18px] items-center ${
           collapsed ? "justify-center" : "px-2"
-        } py-2 rounded-lg transition-all duration-200
-        ${isActive ? "bg-gray-200 dark:bg-gray-800/50" : ""}`}
+        } py-1.5 rounded-lg transition-all duration-200
+        ${isActive ? "bg-gray-100 dark:bg-gray-800/50 border-gray-200" : "border-transparent opacity-65"}`}
       >
         <span
           className={`relative z-10 ${isActive ? "text-blue-400" : "text-gray-500"}`}
@@ -60,9 +60,6 @@ export const SidebarItem = ({
           >
             {label}
           </span>
-        )}
-        {isActive && !collapsed && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-blue-400"></div>
         )}
       </Link>
     </motion.div>

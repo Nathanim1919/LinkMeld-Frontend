@@ -60,7 +60,7 @@ const Sidebar: React.FC<{
   return (
     <motion.div
       className={`h-screen relative z-900 bg-white dark:bg-[#1A1A1C] border-r border-gray-200 dark:border-gray-800/40
-    text-gray-600 dark:text-gray-300 flex flex-col justify-start md:justify-between gap-10 md:gap-0 py-6
+    text-gray-600 dark:text-gray-300 flex flex-col justify-start md:justify-between gap-10 md:gap-0 pb-6
     transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
     /* Mobile behavior (controlled by hideSidebar) */
     ${
@@ -73,7 +73,7 @@ const Sidebar: React.FC<{
   `}
     >
       <div
-        className={`flex  border-b border-gray-200 dark:border-gray-800 items-center ${
+        className={`flex border-b border-gray-200 dark:border-gray-800 items-center ${
           collapsed ? "justify-center" : "justify-between px-2"
         }`}
       >
@@ -100,7 +100,7 @@ const Sidebar: React.FC<{
               setHideSidebar?.(true);
               setCollapsed(true);
             }}
-            className="p-2 hover:cursor-e-resize group hover:bg-white/5 rounded-lg backdrop-blur-sm"
+            className="hover:cursor-e-resize group hover:bg-white/5 rounded-lg backdrop-blur-sm"
           >
             <PanelRightOpen className="w-5 h-5 text-gray-400 dark:text-gray-600" />
           </div>
@@ -108,8 +108,8 @@ const Sidebar: React.FC<{
       </div>
 
       {/* Navigation */}
-      <div className=" w-full flex-1 py-4 px-2">
-        <nav className="flex flex-col gap-2">
+      <div className=" w-full flex-1 py-6 px-2">
+        <nav className="flex flex-col gap-2 ">
           {navItems.map((item) => (
             <SidebarItem
               key={item.path}
