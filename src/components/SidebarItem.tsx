@@ -43,7 +43,7 @@ export const SidebarItem = ({
         className={`relative border hover:opacity-100 flex text-[18px] md:text-[18px] items-center ${
           collapsed ? "justify-center" : "px-2"
         } py-1.5 rounded-lg transition-all duration-200
-        ${isActive ? "bg-gray-100 dark:bg-gray-800/50 border-gray-200" : "border-transparent opacity-65"}`}
+        ${isActive ? "bg-gray-100 dark:bg-gray-800/50 border-gray-200 dark:border-gray-800" : "border-transparent opacity-65"}`}
       >
         <span
           className={`relative z-10 ${isActive ? "text-blue-400" : "text-gray-500"}`}

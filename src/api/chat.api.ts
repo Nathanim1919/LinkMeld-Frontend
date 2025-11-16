@@ -1,4 +1,4 @@
-import { API_CONFIG, handleApiError, type ApiError } from ".";
+import { API_CONFIG, handleApiError } from ".";
 import type { IMessage } from "../context/ChatContext";
 
 // Enhanced chat types
@@ -8,6 +8,21 @@ export interface ChatMessage {
   timestamp?: Date;
   references?: ChatReference[];
 }
+
+type SSEPayload =
+  | {
+      type: "text" | "done" | "error" | "references";
+      text?: string;
+      references?: ChatReference[];
+      error?: string;
+    }
+  | {
+      text?: string;
+      done?: true;
+      references?: ChatReference[];
+      error?: string;
+    }
+  | string;
 
 export interface ChatReference {
   id: string;
@@ -57,7 +72,7 @@ export const ChatService = {
       onDone: () => void;
       onError: (error: string) => void;
     },
-    signal?: AbortSignal
+    signal?: AbortSignal,
   ): Promise<void> {
     try {
       const response = await fetch(`${API_CONFIG.baseURL}/ai/converse`, {
@@ -65,11 +80,13 @@ export const ChatService = {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "text/event-stream",
+          Accept: "text/event-stream",
         },
         body: JSON.stringify(request),
         signal,
       });
+
+      console.log(response);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -82,10 +99,11 @@ export const ChatService = {
       await this.processStream(response.body, callbacks);
     } catch (error) {
       if (signal?.aborted) {
-        console.log("Chat stream was aborted");
+        console.log("Chat stream was aborted: ", error);
         return;
       }
 
+      console.log("Chat stream had an Error: ", error);
       const apiError = handleApiError(error, "Failed to send message");
       callbacks.onError(apiError.message);
     }
@@ -129,7 +147,7 @@ export const ChatService = {
   async getChatHistory(
     captureId: string,
     limit?: number,
-    offset?: number
+    offset?: number,
   ): Promise<ChatMessage[]> {
     try {
       const params = new URLSearchParams();
@@ -142,9 +160,9 @@ export const ChatService = {
           method: "GET",
           credentials: "include",
           headers: {
-            "Accept": "application/json",
+            Accept: "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -166,10 +184,13 @@ export const ChatService = {
    */
   async clearChatHistory(captureId: string): Promise<void> {
     try {
-      const response = await fetch(`${API_CONFIG.baseURL}/ai/chat/${captureId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${API_CONFIG.baseURL}/ai/chat/${captureId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -190,7 +211,7 @@ export const ChatService = {
       onReferences?: (references: ChatReference[]) => void;
       onDone: () => void;
       onError: (error: string) => void;
-    }
+    },
   ): Promise<void> {
     const reader = stream.getReader();
     const decoder = new TextDecoder("utf-8");
@@ -199,11 +220,11 @@ export const ChatService = {
     try {
       while (true) {
         const { value, done } = await reader.read();
-        
+
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
-        
+
         // Process complete events
         const events = buffer.split("\n\n");
         buffer = events.pop() || ""; // Keep incomplete event in buffer
@@ -232,33 +253,84 @@ export const ChatService = {
       onReferences?: (references: ChatReference[]) => void;
       onDone: () => void;
       onError: (error: string) => void;
-    }
+    },
   ): Promise<void> {
-    if (!event.startsWith("data:")) return;
+    // Only handle events that contain at least one data: line
+    if (!event.includes("data:")) return;
 
     try {
-      const jsonStr = event.replace("data:", "").trim();
-      const data = JSON.parse(jsonStr);
+      // Split the event into individual lines and process each data: line separately.
+      // This makes the parser tolerant to SSE events that contain multiple `data:` lines
+      // (e.g. when the server emits consecutive data entries in a single event).
+      const lines = event
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0);
 
-      switch (data.type) {
-        case "text":
-          if (data.text) {
-            callbacks.onMessageChunk(data.text);
+      for (const line of lines) {
+        if (!line.startsWith("data:")) {
+          // ignore non-data lines (e.g. event:, id:, retry:)
+          continue;
+        }
+
+        const jsonStr = line.replace(/^data:/, "").trim();
+
+        // Try to parse JSON. If parsing fails, treat the payload as a raw text chunk.
+        let parsed: SSEPayload;
+        try {
+          parsed = JSON.parse(jsonStr);
+        } catch {
+          // Legacy/edge case: server sent plain text (not JSON)
+          callbacks.onMessageChunk(jsonStr);
+          continue;
+        }
+
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          if ("type" in parsed) {
+            // <-- type guard
+            switch (parsed.type) {
+              case "text":
+                if (parsed.text) callbacks.onMessageChunk(parsed.text);
+                break;
+              case "references":
+                if (parsed.references && callbacks.onReferences) {
+                  callbacks.onReferences(parsed.references);
+                }
+                break;
+              case "done":
+                callbacks.onDone();
+                break;
+              case "error":
+                callbacks.onError(parsed.error || "Unknown error occurred");
+                break;
+              default:
+                console.warn("Unknown event type:", parsed.type);
+            }
+            continue;
           }
-          break;
-        case "references":
-          if (data.references && callbacks.onReferences) {
-            callbacks.onReferences(data.references);
+
+          // Legacy format support:
+          if (typeof parsed.text === "string") {
+            callbacks.onMessageChunk(parsed.text);
           }
-          break;
-        case "done":
-          callbacks.onDone();
-          break;
-        case "error":
-          callbacks.onError(data.error || "Unknown error occurred");
-          break;
-        default:
-          console.warn("Unknown event type:", data.type);
+
+          if (parsed.references && callbacks.onReferences) {
+            callbacks.onReferences(parsed.references);
+          }
+
+          if (parsed.done === true) {
+            callbacks.onDone();
+          }
+
+          if (parsed.error) {
+            callbacks.onError(parsed.error);
+          }
+
+          continue;
+        }
+
+        // Fallback: unknown payload shape
+        console.warn("Unhandled SSE event payload:", parsed);
       }
     } catch (error) {
       console.error("Failed to parse SSE event:", error);
@@ -274,11 +346,11 @@ export const sendMessageStream = async (
   onMessageChunk: (chunk: string) => void,
   onDone: () => void,
   onError: (err: string) => void,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<void> => {
   return ChatService.sendMessageStream(
     { messages, captureId },
     { onMessageChunk, onDone, onError },
-    signal
+    signal,
   );
 };
