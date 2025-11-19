@@ -30,7 +30,7 @@ const EmptyNoteView = () => {
 
       try {
         setLoading(true);
-        const results = await CaptureService.search(term);
+        const results = await CaptureService.search({ query: term });
         cache.current.set(term, results);
         setCaptures(results);
       } catch (error) {
@@ -45,6 +45,7 @@ const EmptyNoteView = () => {
 
   useEffect(() => {
     debouncedSearch(searchTerm);
+    console.log("Searching:.....................");
   }, [searchTerm, debouncedSearch]);
 
   useEffect(() => {
