@@ -45,7 +45,6 @@ const EmptyNoteView = () => {
 
   useEffect(() => {
     debouncedSearch(searchTerm);
-    console.log("Searching:.....................");
   }, [searchTerm, debouncedSearch]);
 
   useEffect(() => {
@@ -116,7 +115,7 @@ const EmptyNoteView = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="relative flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded-[12px] border border-gray-200 hover:border-gray-300 dark:border-[#2a2a2a] dark:hover:border-[#3a3a3a] transition-colors duration-200">
+          <div className="relative shadow-2xl shadow-gray-300 dark:shadow-[#1a1a1a] flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded-[12px] border border-gray-200 hover:border-gray-300 dark:border-[#2a2a2a] dark:hover:border-[#3a3a3a] transition-colors duration-200">
             <FiSearch className="absolute left-4 text-[#86868b]" />
             <input
               type="text"

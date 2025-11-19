@@ -3,67 +3,83 @@ import { persist } from "zustand/middleware";
 import type { UIStore } from "./types";
 
 export const useUIStore = create<UIStore>()(
-    persist(
-        (set) => ({
-            collapsed: false,
-            middlePanelCollapsed: false,
-            mainContentCollapsed: false,
-            openGlobalSearch: false,
-            isFolderListOpen: false,
-            openActionBar: false,
-            openAiChat: false,
-            expandAiChat: false,
-            theme: "dark",
+  persist(
+    (set) => ({
+      collapsed: false,
+      middlePanelCollapsed: false,
+      mainContentCollapsed: false,
+      openGlobalSearch: false,
+      isFolderListOpen: false,
+      openActionBar: false,
+      openAiChat: false,
+      expandAiChat: false,
+      theme: "dark",
 
-            // UI Actions
-            // Actions
-            setCollapsed: (collapsed) => set({ collapsed }),
-            setMiddlePanelCollapsed: (middlePanelCollapsed) => set({ middlePanelCollapsed }),
-            setMainContentCollapsed: (mainContentCollapsed) => set({ mainContentCollapsed }),
-            setOpenGlobalSearch: (openGlobalSearch) => set({ openGlobalSearch }),
-            setIsFolderListOpen: (isFolderListOpen) => set({ isFolderListOpen }),
-            setOpenActionBar: (openActionBar) => set({ openActionBar }),
-            setOpenAiChat: (openAiChat) => set({ openAiChat }),
-            setExpandAiChat: (expandAiChat) => set({ expandAiChat }),
-            setTheme: (theme) => {
-                set({ theme });
-                // Apply theme to DOM
-                if (typeof document !== "undefined") {
-                    document.documentElement.classList.remove("light", "dark");
-                    document.documentElement.classList.add(theme);
-                }
-            },
-
-            // Convenience methods
-            toggleSidebar: () => set((state) => ({ collapsed: !state.collapsed })),
-            toggleMiddlePanel: () => set((state) => ({ middlePanelCollapsed: !state.middlePanelCollapsed })),
-            toggleMainContent: () => set((state) => ({ mainContentCollapsed: !state.mainContentCollapsed })),
-            toggleGlobalSearch: () => set((state) => ({ openGlobalSearch: !state.openGlobalSearch })),
-            toggleAiChat: () => set((state) => ({ openAiChat: !state.openAiChat })),
-            toggleTheme: () => set((state) => {
-                const newTheme = state.theme === "dark" ? "light" : "dark";
-                // Apply theme to DOM
-                if (typeof document !== "undefined") {
-                    document.documentElement.classList.remove("light", "dark");
-                    document.documentElement.classList.add(newTheme);
-                }
-                return { theme: newTheme };
-            }),
-            closeAllModals: () => set({ openGlobalSearch: false, isFolderListOpen: false, openActionBar: false, openAiChat: false, expandAiChat: false }),
-        }),
-        {
-            name: "ui-store",  // local storage key
-            partialize: (state) => ({
-                theme: state.theme,
-                collapsed: state.collapsed,
-            }),
-            onRehydrateStorage: () => (state) => {
-                // Apply theme to DOM when store is rehydrated
-                if (state && typeof document !== "undefined") {
-                    document.documentElement.classList.remove("light", "dark");
-                    document.documentElement.classList.add(state.theme);
-                }
-            }
+      // UI Actions
+      // Actions
+      setCollapsed: (collapsed) => set({ collapsed }),
+      setMiddlePanelCollapsed: (middlePanelCollapsed) =>
+        set({ middlePanelCollapsed }),
+      setMainContentCollapsed: (mainContentCollapsed) =>
+        set({ mainContentCollapsed }),
+      setOpenGlobalSearch: (openGlobalSearch) => set({ openGlobalSearch }),
+      setIsFolderListOpen: (isFolderListOpen) => set({ isFolderListOpen }),
+      setOpenActionBar: (openActionBar) => set({ openActionBar }),
+      setOpenAiChat: (openAiChat) => set({ openAiChat }),
+      setExpandAiChat: (expandAiChat) => set({ expandAiChat }),
+      setTheme: (theme) => {
+        set({ theme });
+        // Apply theme to DOM
+        if (typeof document !== "undefined") {
+          document.documentElement.classList.remove("light", "dark");
+          document.documentElement.classList.add(theme);
         }
-    )
+      },
+
+      // Convenience methods
+      toggleSidebar: () => set((state) => ({ collapsed: !state.collapsed })),
+      toggleMiddlePanel: () =>
+        set((state) => ({ middlePanelCollapsed: !state.middlePanelCollapsed })),
+      toggleMainContent: () =>
+        set((state) => ({ mainContentCollapsed: !state.mainContentCollapsed })),
+      toggleGlobalSearch: () =>
+        set((state) => ({ openGlobalSearch: !state.openGlobalSearch })),
+      toggleAiChat: () => set((state) => ({ openAiChat: !state.openAiChat })),
+      // Toggle expand/collapse state for the AI chat panel
+      toggleExpandAiChat: () =>
+        set((state) => ({ expandAiChat: !state.expandAiChat })),
+      toggleTheme: () =>
+        set((state) => {
+          const newTheme = state.theme === "dark" ? "light" : "dark";
+          // Apply theme to DOM
+          if (typeof document !== "undefined") {
+            document.documentElement.classList.remove("light", "dark");
+            document.documentElement.classList.add(newTheme);
+          }
+          return { theme: newTheme };
+        }),
+      closeAllModals: () =>
+        set({
+          openGlobalSearch: false,
+          isFolderListOpen: false,
+          openActionBar: false,
+          openAiChat: false,
+          expandAiChat: false,
+        }),
+    }),
+    {
+      name: "ui-store", // local storage key
+      partialize: (state) => ({
+        theme: state.theme,
+        collapsed: state.collapsed,
+      }),
+      onRehydrateStorage: () => (state) => {
+        // Apply theme to DOM when store is rehydrated
+        if (state && typeof document !== "undefined") {
+          document.documentElement.classList.remove("light", "dark");
+          document.documentElement.classList.add(state.theme);
+        }
+      },
+    },
+  ),
 );

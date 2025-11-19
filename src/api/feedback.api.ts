@@ -132,7 +132,7 @@ export const FeedbackService = {
     return apiCall(
       () => api.delete<ApiResponse<null>>(`/feedback/${id}`),
       "Failed to delete feedback"
-    );
+    ).then(() => {});
   },
 
   /**
@@ -244,7 +244,7 @@ export const submitFeedback = async (feedbackData: {
   feedback: string;
   name?: string;
   profession?: string;
-}): Promise<void> => {
+}): Promise<Feedback> => {
   return FeedbackService.submit(feedbackData);
 };
 

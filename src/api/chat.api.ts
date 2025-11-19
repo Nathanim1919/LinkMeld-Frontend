@@ -1,5 +1,5 @@
 import { API_CONFIG, handleApiError } from ".";
-import type { IMessage } from "../context/ChatContext";
+import type { IMessage } from "../stores/chat-store";
 
 // Enhanced chat types
 export interface ChatMessage {

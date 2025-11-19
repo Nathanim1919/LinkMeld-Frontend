@@ -49,7 +49,9 @@ export const AIChatContainer = () => {
               </motion.div>
               <motion.button
                 onClick={() => {
-                  setExpandAiChat?.(!expandAiChat);
+                  // Use functional updater to avoid stale reads
+                  setExpandAiChat?.((prev) => !prev);
+                  // Don't log the local variable here (it will be the previous render's value)
                 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
@@ -62,6 +64,7 @@ export const AIChatContainer = () => {
                   <Maximize size={16} />
                 )}
               </motion.button>
+
               <motion.button
                 onClick={() => {
                   setExpandAiChat?.(false);

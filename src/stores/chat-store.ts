@@ -32,7 +32,7 @@ type ChatStore = ChatState & ChatActions;
 
 export const useChatStore = create<ChatStore>()(
   persist(
-    (set, get) => ({
+    (set, _) => ({
       // State
       messages: [],
       userMessage: "",

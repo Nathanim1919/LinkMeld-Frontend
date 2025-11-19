@@ -28,6 +28,11 @@ const navItems = [
     path: "/in/bookmarks",
   },
   {
+    icon: <Brain />,
+    label: "Brain",
+    path: "/in/brain",
+  },
+  {
     icon: <IoSearch />,
     label: "Search",
     path: "/in",
@@ -59,7 +64,7 @@ const Sidebar: React.FC<{
 
   return (
     <motion.div
-      className={`h-screen relative shadow-2xl z-900 bg-white dark:bg-[#1A1A1C] border-r border-gray-100 dark:border-gray-800/40
+      className={`h-screen relative z-900 bg-white dark:bg-[#1A1A1C] border-r border-gray-100 dark:border-gray-800/40
     text-gray-600 dark:text-gray-300 flex flex-col justify-start md:justify-between gap-10 md:gap-0 pb-6
     transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
     /* Mobile behavior (controlled by hideSidebar) */
@@ -81,9 +86,9 @@ const Sidebar: React.FC<{
           onClick={() => {
             setCollapsed(false);
           }}
-          className={`p-2 ${collapsed ? "hover:cursor-e-resize" : ""} group ${
+          className={`p-4 ${collapsed ? "hover:cursor-e-resize" : ""} group ${
             collapsed ? "hover:bg-white/5" : ""
-          } rounded-lg backdrop-blur-sm`}
+          } backdrop-blur-sm`}
         >
           <Brain
             className={`${
