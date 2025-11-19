@@ -3,7 +3,7 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 // API Configuration
 const API_CONFIG = {
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api/v1",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://deepen-api.onrender.com/",
   timeout: parseInt(import.meta.env.VITE_API_TIMEOUT || "10000"),
   retryAttempts: 3,
   retryDelay: 1000,
