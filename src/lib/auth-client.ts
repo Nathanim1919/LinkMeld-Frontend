@@ -1,6 +1,11 @@
 import { createAuthClient } from "better-auth/client";
+import { buildAuthBase } from "./url";
+
+const authBase = buildAuthBase(
+  import.meta.env.VITE_API_BASE_URL as string,
+  import.meta.env.VITE_AUTH_BASE_URL as string,
+);
 
 export const authClient = createAuthClient({
-  // baseURL: "https://api.deepen.live/api/auth",
-  baseURL: "https://deepen-api.onrender.com/api/auth", // Uncomment for local development
+  baseURL: authBase,
 });
