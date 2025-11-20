@@ -14,6 +14,12 @@ export const LoginPage = () => {
     password: "",
   });
 
+  // Compute callback URL: prefer explicit env var, then client base, then runtime origin
+  const CALLBACK_URL =
+    (import.meta.env.VITE_AUTH_CALLBACK_URL as string) ||
+    ((import.meta.env.VITE_CLIENT_BASE_URL as string) ||
+      window.location.origin) + "/in";
+
   // Disable all interactive elements when loading
   const disableAll = loading;
 
@@ -27,13 +33,13 @@ export const LoginPage = () => {
         {
           ...formData,
           // callbackURL: "https://deepen.live/in",
-          callbackURL: "http://localhost:5173/in",
+          callbackURL: CALLBACK_URL,
         },
         {
           onRequest: () => {
             toast.loading("Signing in...");
           },
-         
+
           onSuccess: () => {
             toast.dismiss();
             toast.success("Successfully logged in");
@@ -44,7 +50,7 @@ export const LoginPage = () => {
             toast.error(ctx.error.message || "Invalid credentials");
             setLoading(false);
           },
-        }
+        },
       );
     } catch (error) {
       toast.error("Error occurred while signing in");

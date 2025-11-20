@@ -1,6 +1,14 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { User, Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft } from "lucide-react";
+import {
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ArrowLeft,
+} from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { useState } from "react";
@@ -8,7 +16,6 @@ import { authClient } from "../lib/auth-client";
 import { toast } from "sonner";
 
 export const RegisterPage = () => {
-  
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -18,28 +25,40 @@ export const RegisterPage = () => {
     password: "",
   });
 
+  // same CALLBACK_URL logic
+  const CALLBACK_URL =
+    (import.meta.env.VITE_AUTH_CALLBACK_URL as string) ||
+    ((import.meta.env.VITE_CLIENT_BASE_URL as string) ||
+      window.location.origin) + "/in";
+
   const handleRegistration = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const result = await authClient.signUp.email({
-        ...formData,
-        // callbackURL: "https://deepen.live/in",
-        callbackURL: "http://localhost:5173/in",
-        
-      });
-      setFormData({ name: "", email: "", password: "" });
-      if (result.error) {
-        toast.error(result.error.message);
-        return;
-      }
-
-      toast.success("Registration successful! Redirecting...");
+      await authClient.signUp.email(
+        {
+          ...formData,
+          callbackURL: CALLBACK_URL,
+        },
+        {
+          onRequest: () => {
+            toast.loading("Signing in...");
+          },
+          onSuccess: () => {
+            toast.dismiss();
+            toast.success("Successfully logged in");
+            setLoading(false); // Keep loading until navigation completes
+          },
+          onError: (ctx) => {
+            toast.dismiss();
+            toast.error(ctx.error.message || "Invalid credentials");
+            setLoading(false);
+          },
+        },
+      );
     } catch (error) {
-      toast.error("Registration failed. Please try again.");
-      setFormData({ name: "", email: "", password: "" });
-      // Optionally log the error for debugging
-      console.error("Registration failed", error);
+      toast.error("Error occurred while signing in");
+      console.error("Login failed", error);
     } finally {
       setLoading(false);
     }
@@ -250,7 +269,9 @@ export const RegisterPage = () => {
                   />
                 ) : (
                   <>
-                    <span className="font-medium text-sm tracking-wide">Create Account</span>
+                    <span className="font-medium text-sm tracking-wide">
+                      Create Account
+                    </span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -259,7 +280,7 @@ export const RegisterPage = () => {
           </form>
 
           {/* Social login buttons - side by side */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
@@ -306,7 +327,9 @@ export const RegisterPage = () => {
             className="flex items-center my-6"
           >
             <div className="flex-1 border-t border-[#2c2c2e]/50"></div>
-            <span className="px-3 text-[#636366]/70 text-xs font-medium">ALREADY REGISTERED?</span>
+            <span className="px-3 text-[#636366]/70 text-xs font-medium">
+              ALREADY REGISTERED?
+            </span>
             <div className="flex-1 border-t border-[#2c2c2e]/50"></div>
           </motion.div>
 
