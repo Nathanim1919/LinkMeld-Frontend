@@ -27,11 +27,20 @@ import { FolderNotes } from "./components/FolderNotes";
 import { SourceNotes } from "./components/SourceNotes";
 import { Manifesto } from "./pages/manifesto";
 import Waitlist from "./pages/Waitlist";
+import ConversationList from "./components/panels/conversationList";
+import { BrainChatContainer } from "./components/brainChat/BrainChatContainer";
+import { EmptyChatView } from "./components/brainChat/EmptyChatView";
 
 const FolderPanel = () => <FoldersPanel />;
 
 
 const FolderNoteDetail = () => {
+  return <CaptureDetail />;
+};
+
+const ConversationListPanel = () => <ConversationList />;
+
+const ConversationDetail = () => {
   return <CaptureDetail />;
 };
 
@@ -172,6 +181,30 @@ const sourcesPanel = createRoute({
   component: SourcesPanel,
 });
 
+const conversationListPanel = createRoute({
+  getParentRoute: () => contentRoute,
+  path: "brain",
+  component: ConversationListPanel, // This can be a layout if you want to nest more routes
+});
+
+const brainChatContainer = createRoute({
+  getParentRoute: () => conversationListPanel,
+  path: "$conversationId",
+  component: BrainChatContainer,
+});
+
+const emptyChatView = createRoute({
+  getParentRoute: () => conversationListPanel,
+  path: "/",
+  component: EmptyChatView,
+});
+
+const conversationDetail = createRoute({
+  getParentRoute: () => conversationListPanel,
+  path: "captures/$captureId",
+  component: ConversationDetail,
+});
+
 const sourceNotes = createRoute({
   getParentRoute: () => sourceLayoutRoute,
   path: "$sourceId",
@@ -234,6 +267,7 @@ export const routeTree = rootRoute.addChildren([
         sourceNotes.addChildren([sourceNoteDetail]),
       ]),
       BookmarkLayout.addChildren([bookmarksPanel, bookmarkDetail]),
+      conversationListPanel.addChildren([conversationDetail, brainChatContainer, emptyChatView]),
     ]),
     profileRoute,
   ]),

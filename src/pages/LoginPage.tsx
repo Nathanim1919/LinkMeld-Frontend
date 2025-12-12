@@ -16,10 +16,10 @@ export const LoginPage = () => {
 
   // Compute callback URL: prefer explicit env var, then client base, then runtime origin
   const CALLBACK_URL =
-    (import.meta.env.VITE_AUTH_CALLBACK_URL as string) ||
-    ((import.meta.env.VITE_CLIENT_BASE_URL as string) ||
-      window.location.origin) + "/in";
+    (import.meta.env.VITE_AUTH_CALLBACK_URL as string) + "/in" ||
+    (import.meta.env.VITE_CLIENT_BASE_URL as string) + "/in";
 
+  console.log("CALL BACK URL IS: ", CALLBACK_URL);
   // Disable all interactive elements when loading
   const disableAll = loading;
 
