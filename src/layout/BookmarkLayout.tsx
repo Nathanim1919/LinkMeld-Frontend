@@ -1,7 +1,7 @@
 import { useStore } from "../context/StoreContext";
-import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
 import NotesList from "../components/NotesList";
 import type { UIStore } from "../stores/types";
+import { PanelRightOpen } from "lucide-react";
 
 export const BookMarkLayout: React.FC = () => {
   const { middlePanelCollapsed, setMiddlePanelCollapsed } = useStore()
@@ -17,7 +17,10 @@ export const BookMarkLayout: React.FC = () => {
         className="w-8 z-1000 h-8 rounded-full cursor-pointer hover:bg-transparent text-2xl grid place-items-center dark:text-gray-200 text-[#333] absolute top-1 hover:opacity-45 right-0"
         onClick={() => setMiddlePanelCollapsed(!middlePanelCollapsed)}
       >
-        <MdOutlineKeyboardDoubleArrowLeft />
+        <PanelRightOpen
+        size={18}
+        className="text-gray-400 dark:text-gray-600 hover:opacity-85"
+        />
       </div>
       <NotesList filter="bookmarks" />
     </div>

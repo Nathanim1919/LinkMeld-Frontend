@@ -5,10 +5,10 @@ import { useStore } from "../../context/StoreContext";
 export const EmptyChatView = () => {
     const {middlePanelCollapsed} = useStore().ui as UIStore;
     return (
-        <div className="h-full w-full">
+        <div className="h-full w-full bg-[#faf7f7] dark:bg-[#141416]">
             <div className="flex flex-col relative h-full w-full items-center justify-center">
                 <div className="flex flex-col items-center mb-4">
-                    <Brain className="w-80 h-80 absolute top-[10%] left-1/2 -translate-x-1/2 text-black dark:text-white opacity-5" />
+                    <Brain className="w-80 h-80 absolute top-[10%] left-1/2 -translate-x-1/2 text-black dark:text-white opacity-2" />
                     <h1 className="text-2xl font-bold text-center text-black dark:text-white">Deepen.</h1>
                 </div>
                 <div className={`p-1 ${middlePanelCollapsed ? "w-[60%]" : "w-[70%]"} grid place-items-center rounded-3xl relative
