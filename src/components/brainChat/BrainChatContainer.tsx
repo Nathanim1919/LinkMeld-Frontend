@@ -1,4 +1,4 @@
-import { Brain, Ellipsis, Send, Share, Trash, User } from "lucide-react";
+import { Ellipsis, Send, Share, Trash } from "lucide-react";
 import { useState } from "react";
 
 export const BrainChatContainer = () => {
