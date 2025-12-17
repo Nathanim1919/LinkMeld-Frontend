@@ -2,8 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 
-const shimmer =
-  "bg-gradient-to-r from-[#bab6b6] dark:from-[#211f1f] via-gray-300 dark:via-gray-700 to-gray-400 dark:to-gray-800 bg-[length:400%_100%] animate-pulse";
+const shimmer ="bg-gradient-to-r from-[#bab6b6] dark:from-[#211f1f] via-gray-300 dark:via-gray-700 to-gray-400 dark:to-gray-800 bg-[length:400%_100%] animate-pulse";
 
 export const NoteSkeleton: React.FC = () => {
   return (
