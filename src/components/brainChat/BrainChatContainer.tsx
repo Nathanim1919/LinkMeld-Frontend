@@ -43,7 +43,7 @@ export const BrainChatContainer = () => {
             id: 9,
             mode: 'user',
             content: 'Can you give me examples of relative theories of relativity?',
-        },{
+        }, {
             id: 3,
             mode: 'user',
             content: 'What is the capital of France?',

@@ -7,6 +7,7 @@ import { authClient } from "../lib/auth-client";
 import { CaptureService } from "../api/capture.api";
 import debounce from "lodash.debounce";
 import { SearchResultCard } from "./cards/searchResultCard";
+import { Brain } from "lucide-react";
 
 const EmptyNoteView = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -162,6 +163,9 @@ const EmptyNoteView = () => {
           </span>
         )}
       </motion.div>
+      {/* <Brain className="w-100 h-100 transform  absolute top-[40%] left-1/2 -translate-x-1/2 text-black dark:text-white opacity-2" /> */}
+      <Brain className="w-full h-full transform  absolute top-[40%] -right-[30%] -translate-x-1/2 text-black dark:text-white opacity-2" />
+
     </div>
   );
 };

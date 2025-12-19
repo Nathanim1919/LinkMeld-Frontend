@@ -1,6 +1,7 @@
 import { Bookmark, Brain, FolderPlus, Plus, Send } from "lucide-react";
 import type { UIStore } from "../../stores/types";
 import { useStore } from "../../context/StoreContext";
+import { Link } from "@tanstack/react-router";
 
 export const EmptyChatView = () => {
     const {middlePanelCollapsed} = useStore().ui as UIStore;
@@ -41,7 +42,7 @@ export const EmptyChatView = () => {
                                 </div>
                             </div>
                             <div className="flex items-center p-1 group justify-center w-12 h-12 rounded-full overflow-hidden border-1 border-gray-300 dark:border-gray-800">
-                                <button className="bg-gradient-to-r hover:transform hover:rotate-30 transition-all duration-300 from-red-500 to-purple-500 text-white w-full h-full rounded-full  cursor-pointer grid place-items-center p-1"><Send /></button>
+                                <Link to="/in/brain/new" className="bg-gradient-to-r hover:transform hover:rotate-30 transition-all duration-300 from-red-500 to-purple-500 text-white w-full h-full rounded-full  cursor-pointer grid place-items-center p-1"><Send /></Link>
                             </div>
                         </div>
                     </div>
