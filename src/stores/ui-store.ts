@@ -2,10 +2,15 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { UIStore } from "./types";
 
+
+
+
 export const useUIStore = create<UIStore>()(
   persist(
     (set) => ({
       collapsed: false,
+      contextSelectorOpen: false,
+      contextSelectorMode: null,
       middlePanelCollapsed: false,
       mainContentCollapsed: false,
       openGlobalSearch: false,
@@ -18,6 +23,17 @@ export const useUIStore = create<UIStore>()(
       // UI Actions
       // Actions
       setCollapsed: (collapsed) => set({ collapsed }),
+      openContextSelector: (mode) =>
+        set({
+          contextSelectorOpen: true,
+          contextSelectorMode: mode
+        }),
+    
+      closeContextSelector: () =>
+        set({
+          contextSelectorOpen: false,
+          contextSelectorMode: null
+        }),
       setMiddlePanelCollapsed: (middlePanelCollapsed) =>
         set({ middlePanelCollapsed }),
       setMainContentCollapsed: (mainContentCollapsed) =>

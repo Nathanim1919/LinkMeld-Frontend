@@ -4,7 +4,7 @@ import { useStore } from "../../context/StoreContext";
 import { Link } from "@tanstack/react-router";
 
 export const EmptyChatView = () => {
-    const {middlePanelCollapsed} = useStore().ui as UIStore;
+    const { middlePanelCollapsed, openContextSelector } = useStore().ui as UIStore;
     return (
         <div className="h-full w-full bg-[#faf7f7] dark:bg-[#141416]">
             <div className="flex flex-col relative h-full w-full items-center justify-center">
@@ -17,7 +17,7 @@ export const EmptyChatView = () => {
                 after:content-[''] after:absolute after:bottom-0 after:right-0 after:animate-gradient-shift after:w-[40%] after:h-[50%] after:bg-gradient-to-r after:from-red-500 after:to-violet-500 after:rounded-3xl after:blur-3xl
                 `}>
 
-                <div className="border-1 relative z-100 grid gap-2 bg-[#faf7f7] dark:bg-[#141416] border-gray-300 dark:border-gray-800 rounded-3xl p-2 focus:border-blue-500 w-full">
+                    <div className="border-1 relative z-100 grid gap-2 bg-[#faf7f7] dark:bg-[#141416] border-gray-300 dark:border-gray-800 rounded-3xl p-2 focus:border-blue-500 w-full">
 
                         <div className="border-0 p-2 outline-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent">
                             <textarea
@@ -28,15 +28,21 @@ export const EmptyChatView = () => {
                         <div className="grid grid-cols-[1fr_auto]">
                             <div className="flex items-center gap-2 w-full">
                                 <div className="text-lg   dark:bg-[#1e1d1d] bg-[#e7e3e3] p-2 rounded-full cursor-pointer hover:opacity-100 grid place-items-center  font-medium text-black dark:text-white"><Plus /></div>
-                                <div className="flex cursor-pointer hover:opacity-100 text-sm font-medium text-black dark:text-white items-center gap-1 opacity-50 dark:bg-[#1e1d1d] bg-[#e7e3e3] p-2 rounded-full">
+                                <div
+                                onClick={() => openContextSelector("captures")}
+                                 className="flex cursor-pointer hover:opacity-100 text-sm font-medium text-black dark:text-white items-center gap-1 opacity-50 dark:bg-[#1e1d1d] bg-[#e7e3e3] p-2 rounded-full">
                                     <Brain />
                                 </div>
 
-                                <div className="flex items-center gap-1 opacity-50 cursor-pointer hover:opacity-100 text-sm font-medium text-black dark:text-white dark:bg-[#1e1d1d] bg-[#e7e3e3] px-4 py-2 rounded-full">
+                                <div
+                                onClick={() => openContextSelector("collections")}
+                                 className="flex items-center gap-1 opacity-50 cursor-pointer hover:opacity-100 text-sm font-medium text-black dark:text-white dark:bg-[#1e1d1d] bg-[#e7e3e3] px-4 py-2 rounded-full">
                                     <FolderPlus size={16} />
                                     Collections
                                 </div>
-                                <div className="flex items-center gap-1 opacity-50 cursor-pointer hover:opacity-100 text-sm font-medium text-black dark:text-white dark:bg-[#1e1d1d] bg-[#e7e3e3] px-4 py-2 rounded-full">
+                                <div
+                                onClick={() => openContextSelector("bookmarks")}
+                                 className="flex items-center gap-1 opacity-50 cursor-pointer hover:opacity-100 text-sm font-medium text-black dark:text-white dark:bg-[#1e1d1d] bg-[#e7e3e3] px-4 py-2 rounded-full">
                                     <Bookmark size={16} />
                                     Bookmarks
                                 </div>

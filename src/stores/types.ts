@@ -11,12 +11,20 @@ export interface BaseApiActions {
   clearError: () => void;
 }
 
+export type ContextSelectorMode = 
+  | "collections"
+  | "bookmarks"
+  | "captures"
+  | null;
+
 // UI Store - no loading/error needed (instant state changes)
 export interface UIState {
   // Sidebar states
   collapsed: boolean;
   middlePanelCollapsed: boolean;
   mainContentCollapsed: boolean;
+  contextSelectorOpen: boolean;
+  contextSelectorMode: ContextSelectorMode;
 
   // Modal states
   openGlobalSearch: boolean;
@@ -24,6 +32,7 @@ export interface UIState {
   openActionBar: boolean;
   openAiChat: boolean;
   expandAiChat: boolean;
+
 
   // Theme
   theme: "light" | "dark" | "system";
@@ -35,6 +44,8 @@ export interface UIActions {
   setCollapsed: (collapsed: boolean) => void;
   setMiddlePanelCollapsed: (collapsed: boolean) => void;
   setMainContentCollapsed: (collapsed: boolean) => void;
+  openContextSelector: (mode: ContextSelectorMode) => void
+  closeContextSelector: () => void
 
   // Modal actions
   setOpenGlobalSearch: (open: boolean) => void;

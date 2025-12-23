@@ -8,6 +8,7 @@ import { authClient } from "../lib/auth-client";
 import type { Session, User } from "better-auth/types";
 import { motion } from "framer-motion";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import { ContextSelectorOverlay } from "../components/brainChat/ContextSelectorOverlay";
 
 export const MainShell = () => {
   const [session, setSession] = useState<{
@@ -94,6 +95,7 @@ export const MainShell = () => {
         />
         <main className="overflow-hidden h-full">
           <Outlet />
+          <ContextSelectorOverlay />
         </main>
       </div>
     </div>
