@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { nanoid } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
 
 
 /*
@@ -73,13 +74,11 @@ const EMPTY_DRAFT: ContextDraft = {
 const buildContextSnapshot = (draft: ContextDraft): ContextSnapshot => {
   if (draft.brainEnabled) {
     return {
-      brain: {
-        enabled: true,
+        brain: {enabled: true},
         collections: {ids: []},
-        bookmarksEnabled:{enabled: false},
+        bookmarks:{enabled: false},
         captures: {ids: []}
       }
-    }
   }
 
   return {
@@ -104,19 +103,24 @@ type BrainStore = {
   draft: ContextDraft;
 
   // Actions
-  toggleBrain() => void;
-  toggleBookmark() => void;
-  toggleCollection(id: string) => void;
-  toggleCapture(id: string) => void;
-  resetDraft() => void;
+  toggleBrain: () => void;
+  toggleBookmark: () => void;
+  toggleCollection: (id: string) => void;
+  toggleCapture: (id: string) => void;
+  resetDraft: () => void;
 
-  startConversation(initialMessage: string) => Promise<void>;
-  sendMessage(content: string) => Promise<void>;
-  selectConversation(id: string) => void;
+  startConversation: (initialMessage: string) => Promise<void>;
+  sendMessage: (content: string) => Promise<void>;
+  selectConversation: (id: string) => void;
+
+  // Derived selectors
+  isBrainActive: () => boolean;
+  hasExplicitContext: () => boolean;
+  canSend: () => boolean;
 };
 
 
-export const useBrainStore = create<BrainStore>((set, get)) =>({
+export const useBrainStore = create<BrainStore>((set, get) => ({
   /*
     Initial State
   */
@@ -135,7 +139,7 @@ export const useBrainStore = create<BrainStore>((set, get)) =>({
         ...state.draft,
         brainEnabled: !state.draft.brainEnabled
       }
-    }),
+    })),
 
   toggleBookmark: () =>
     set(state => ({
@@ -144,12 +148,12 @@ export const useBrainStore = create<BrainStore>((set, get)) =>({
         bookmarksEnabled: !state.draft.bookmarksEnabled,
         brainEnabled: false // 🔒 explicit context disables brain
       }
-    }),
+    })),
 
   toggleCollection: (id: string) =>
-    set(state => ({
-      const next = new Set(state.draft.collections)
-        next.has(id) ? next.delete(id) : next.add(id)
+    set(state => {
+      const next = new Set(state.draft.collections);
+      next.has(id) ? next.delete(id) : next.add(id);
 
       return {
         draft: {
@@ -157,64 +161,63 @@ export const useBrainStore = create<BrainStore>((set, get)) =>({
           collections: next,
           brainEnabled: false // 🔒 explicit context disables brain
         }
-      }
-    })),
+      };
+    }),
 
-    toggleCapture: (id) =>
-        set(state => {
-          const next = new Set(state.draft.captures)
-          next.has(id) ? next.delete(id) : next.add(id)
+  toggleCapture: (id: string) =>
+    set(state => {
+      const next = new Set(state.draft.captures);
+      next.has(id) ? next.delete(id) : next.add(id);
 
-          return {
-            draft: {
-              ...state.draft,
-              captures: next,
-              brainEnabled: false
-            }
-          }
+      return {
+        draft: {
+          ...state.draft,
+          captures: next,
+          brainEnabled: false
+        }
+      };
     }),
 
   resetDraft: () => set({ draft: EMPTY_DRAFT }),
-
 
 
   /*
      Conversation Lifecycle
   */
 
-  startConversation: (firstMessage) =>
-  set(state => {
-    if (!firstMessage.trim()) return state;
+  startConversation: async (firstMessage: string) => {
+    set(state => {
+      if (!firstMessage.trim()) return state;
 
-    const context = buildContextSnapshot(state.draft);
-    const id = uuidv4();
+      const context = buildContextSnapshot(state.draft);
+      const id = uuidv4();
 
-    const conversation: Conversation = {
-      id,
-      title: firstMessage.slice(0, 60),
-      createdAt: Date.now(),
-      context,
-      messages: [
-        {
-          id: nanoid(),
-          role: 'user',
-          content: firstMessage,
-          createdAt: Date.now(),
-          status: 'sent'
-         }
-      ]
-    }
+      const conversation: Conversation = {
+        id,
+        title: firstMessage.slice(0, 60),
+        createdAt: Date.now(),
+        context,
+        messages: [
+          {
+            id: nanoid(),
+            role: 'user',
+            content: firstMessage,
+            createdAt: Date.now(),
+            status: 'sent'
+           }
+        ]
+      };
 
-    return {
-      conversations: {
-        ...state.conversations,
-        [id]: conversation
-      },
-      activeConversationId: id,
-      draft: EMPTY_DRAFT
-    }
-  })
-
+      return {
+        conversations: {
+          ...state.conversations,
+          [id]: conversation
+        },
+        activeConversationId: id,
+        draft: EMPTY_DRAFT
+      };
+    });
+  },
 
   sendMessage: async (content: string) => set(state => {
         const id = state.activeConversationId
@@ -243,29 +246,24 @@ export const useBrainStore = create<BrainStore>((set, get)) =>({
       }),
 
   selectConversation: (id: string) =>
-    set(state => ({
+    set((_state) => ({
       activeConversationId: id
-    }),
+    })),
 
-    // Derived selectors
-    get isBrainActive() {
-      return get().draft.brainEnabled
-    },
+  // Derived selectors
+    isBrainActive: () => get().draft.brainEnabled,
 
-    get hasExplicitContext() {
-      const draft = get().draft
+    hasExplicitContext: () => {
+      const draft = get().draft;
       return (
         draft.bookmarksEnabled ||
         draft.collections.size > 0 ||
         draft.captures.size > 0
-      )
+      );
     },
 
-    get canSend() {
+    canSend: () => {
       // Block only if Brain OFF and no explicit context
-      return get().draft.brainEnabled || get().hasExplicitContext
+      return get().draft.brainEnabled || get().hasExplicitContext();
     }
-});
-
-
-export const useBrainStore = create({});
+}));
