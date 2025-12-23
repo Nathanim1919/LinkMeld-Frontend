@@ -16,6 +16,7 @@ export type Message = {
 
 export type BrainSelector = {
   isBrainActive: boolean; // true if brain is active
+  isBookmarkActive: boolean; // true if bookmark is active
   hasExplicitContext: boolean; // true if context is explicitly set (any collection/bookmark/capures)
   canSend: boolean; // message can be sent
 }
@@ -115,6 +116,7 @@ type BrainStore = {
 
   // Derived selectors
   isBrainActive: () => boolean;
+  isBookmarkActive: () => boolean;
   hasExplicitContext: () => boolean;
   canSend: () => boolean;
 };
@@ -137,7 +139,8 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
     set(state => ({
       draft: {
         ...state.draft,
-        brainEnabled: !state.draft.brainEnabled
+        brainEnabled: !state.draft.brainEnabled,
+        bookmarksEnabled: false // 🔒 brain disables bookmarks
       }
     })),
 
@@ -252,6 +255,7 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
 
   // Derived selectors
     isBrainActive: () => get().draft.brainEnabled,
+    isBookmarkActive: () => get().draft.bookmarksEnabled,
 
     hasExplicitContext: () => {
       const draft = get().draft;
