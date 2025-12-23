@@ -9,8 +9,16 @@ export const useUIStore = create<UIStore>()(
   persist(
     (set) => ({
       collapsed: false,
+
+      /* Context selector */
       contextSelectorOpen: false,
       contextSelectorMode: null,
+
+       /* Hover coach */
+      hoverCoachVisible: false,
+      hoverCoachMode: null,
+      hoverCoachAnchor: null,
+
       middlePanelCollapsed: false,
       mainContentCollapsed: false,
       openGlobalSearch: false,
@@ -51,6 +59,12 @@ export const useUIStore = create<UIStore>()(
           document.documentElement.classList.add(theme);
         }
       },
+
+      /* Hover coach actions */
+      showHoverCoach: (mode, anchor) =>
+        set({ hoverCoachVisible: true, hoverCoachMode: mode, hoverCoachAnchor: anchor.getBoundingClientRect() }),
+      hideHoverCoach: () =>
+        set({ hoverCoachVisible: false, hoverCoachMode: null, hoverCoachAnchor: null }),
 
       // Convenience methods
       toggleSidebar: () => set((state) => ({ collapsed: !state.collapsed })),

@@ -9,6 +9,7 @@ import type { Session, User } from "better-auth/types";
 import { motion } from "framer-motion";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { ContextSelectorOverlay } from "../components/brainChat/context-selector/ContextSelectorOverlay";
+import { HoverCoach } from "../components/hover-coach/HoverCoach";
 
 export const MainShell = () => {
   const [session, setSession] = useState<{
@@ -75,7 +76,7 @@ export const MainShell = () => {
   return (
     <div className="h-screen w-screen overflow-hidden">
       <ContextSelectorOverlay />
-
+      <HoverCoach />
       <div className="w-8 h-8 m-1 rounded-full grid md:hidden place-items-center fixed z-1000 bottom-0 bg-[#000000]">
         {hideSidebar ? (
           <ChevronsRight

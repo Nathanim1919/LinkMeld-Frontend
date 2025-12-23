@@ -17,6 +17,14 @@ export type ContextSelectorMode =
   | "captures"
   | null;
 
+
+export type HoverCoachMode = 
+  | "brain"
+  | "collections"
+  | "bookmarks"
+  | "captures"
+  | null;
+
 // UI Store - no loading/error needed (instant state changes)
 export interface UIState {
   // Sidebar states
@@ -25,6 +33,9 @@ export interface UIState {
   mainContentCollapsed: boolean;
   contextSelectorOpen: boolean;
   contextSelectorMode: ContextSelectorMode;
+  hoverCoachVisible: boolean;
+  hoverCoachMode: HoverCoachMode;
+  hoverCoachAnchor: DOMRect | null;
 
   // Modal states
   openGlobalSearch: boolean;
@@ -46,6 +57,8 @@ export interface UIActions {
   setMainContentCollapsed: (collapsed: boolean) => void;
   openContextSelector: (mode: ContextSelectorMode) => void
   closeContextSelector: () => void
+  showHoverCoach: (mode: HoverCoachMode, anchor: HTMLElement) => void
+  hideHoverCoach: () => void
 
   // Modal actions
   setOpenGlobalSearch: (open: boolean) => void;
