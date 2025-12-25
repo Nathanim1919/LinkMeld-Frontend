@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { nanoid } from 'nanoid';
 import { v4 as uuidv4 } from 'uuid';
+import { API_CONFIG } from "../api";
+import { getAiModelList } from "../api/chat.api";
 
 
 /*
@@ -96,10 +98,59 @@ const buildContextSnapshot = (draft: ContextDraft): ContextSnapshot => {
    Store
 */
 
+export type OpenRouterModel = {
+  id: string;
+  canonicalSlug: string;
+  huggingFaceId?: string;
+  name: string;
+  created: number;
+  description: string;
+  pricing: {
+    prompt: number;
+    completion: number;
+    request?: number;
+    image?: number;
+    webSearch?: number;
+    internalReasoning?: number;
+    inputCacheRead?: number;
+    inputCacheWrite?: number;
+    audio?: number;
+  };
+  contextLength: number;
+  architecture: {
+    tokenizer: string;
+    instructType?: string | null;
+  };
+  modality: string;
+  inputModalities: string[];
+  outputModalities: string[];
+  topProvider: {
+    contextLength: number;
+    maxCompletionTokens?: number | null;
+  };
+  isModerated: boolean;
+  perRequestLimits: any | null;
+  supportedParameters: string[];
+  defaultParameters: {
+    temperature?: number | null;
+    topP?: number | null;
+    frequencyPenalty?: number | null;
+  };
+};
+
 
 type BrainStore = {
   conversations: Record<string, Conversation>;
   activeConversationId: string | null;
+
+  // Model selector
+  modelList: OpenRouterModel[];
+  setModelList: (models: OpenRouterModel[]) => void;
+  selectedModel: OpenRouterModel | null;
+  setSelectedModel: (model: OpenRouterModel) => void;
+  clearSelectedModel: () => void;
+  getModelList: () => void;
+
 
   draft: ContextDraft;
 
@@ -130,6 +181,12 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
   conversations: {},
   activeConversationId: null,
   draft: EMPTY_DRAFT,
+
+  modelList: [],
+  selectedModel: null,
+  setModelList: (models: OpenRouterModel[]) => set({ modelList: models }),
+  setSelectedModel: (model: OpenRouterModel) => set({ selectedModel: model }),
+  clearSelectedModel: () => set({ selectedModel: null }),
 
 
   /*
@@ -220,6 +277,11 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
         draft: EMPTY_DRAFT
       };
     });
+  },
+
+  getModelList: async () => {
+    const models = await getAiModelList();
+    set({ modelList: models });
   },
 
   sendMessage: async (content: string) => set(state => {

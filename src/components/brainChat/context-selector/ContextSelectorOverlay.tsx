@@ -3,6 +3,7 @@ import { X } from "lucide-react"
 import { useUIStore } from "../../../stores/ui-store"
 import { CollectionsPicker } from "./CollectionsPicker"
 import { CapturesPicker } from "./CapturesPicker"
+import { ModelsPicker } from "./ModelsPicker"
 
 export const ContextSelectorOverlay = () => {
   const {
@@ -38,7 +39,7 @@ export const ContextSelectorOverlay = () => {
         {/* Content */}
         <div className="max-h-[60vh] overflow-y-auto bg-gray-100 dark:bg-[#141416]">
           {contextSelectorMode === "collections" && <CollectionsPicker />}
-          {/* {contextSelectorMode === "bookmarks" && <BookmarksPicker />} */}
+          {contextSelectorMode === "models" && <ModelsPicker />}
           {contextSelectorMode === "captures" && <CapturesPicker />}
         </div>
       </div>

@@ -15,6 +15,7 @@ export type ContextSelectorMode =
   | "collections"
   | "bookmarks"
   | "captures"
+  | "models"
   | null;
 
 

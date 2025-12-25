@@ -1,4 +1,5 @@
 import { API_CONFIG, handleApiError } from ".";
+import type { OpenRouterModel } from "../stores/brain-store";
 import type { IMessage } from "../stores/chat-store";
 
 // Enhanced chat types
@@ -54,6 +55,23 @@ export interface ChatResponse {
     completionTokens: number;
     totalTokens: number;
   };
+}
+
+
+export const getAiModelList = async (): Promise<OpenRouterModel[]> => {
+  try {
+    const response = await fetch(`${API_CONFIG.baseURL}ai/models`, {
+      method: "GET",
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    return (await response.json()).data.data;
+  } catch (error) {
+    const apiError = handleApiError(error, "Failed to get model list");
+    throw new Error(apiError.message);
+  }
 }
 
 // Enhanced streaming chat service
@@ -338,6 +356,8 @@ export const ChatService = {
     }
   },
 };
+
+
 
 // Legacy function for backward compatibility
 export const sendMessageStream = async (

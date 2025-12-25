@@ -42,7 +42,7 @@ const ConversationList: React.FC = () => {
 
     return (
         <div className="h-full flex flex-col overflow-hidden relative bg-[#faf7f7] dark:bg-[#141416]">
-            <div className="flex justify-end items-center px-2 py-4 border-b border-gray-100 dark:border-zinc-800/50">
+            <div className="flex justify-end items-center px-2 py-2">
                 <div className="z-1000 opacity-50 flex items-center justify-center gap-4 rounded-full cursor-pointer hover:bg-transparent text-2xl  dark:text-gray-200 text-[#333]  top-1  right-0">
                     <Link to="/in/brain"
                         className="hover:opacity-45"
@@ -56,7 +56,7 @@ const ConversationList: React.FC = () => {
                     />
                 </div>
             </div>
-            <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
+            <div className="flex-1 overflow-y-auto px-2 space-y-0.5">
                 {sampleData.map((item) => (
                     <Link to={`/in/brain/${item.id}`}
                         key={item.id}
