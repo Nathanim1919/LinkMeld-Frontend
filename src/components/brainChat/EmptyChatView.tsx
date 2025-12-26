@@ -12,27 +12,25 @@ export const EmptyChatView = () => {
 
 
     return (
-        <div className="h-full w-full bg-[#faf7f7] dark:bg-[#141416]">
+        <div className="h-full w-full bg-[#eceaea] dark:bg-[#111112]">
             <div className="flex flex-col relative h-full w-full items-center justify-center">
                 <div className="flex flex-col items-center mb-4">
-                    <Brain className="w-80 h-80 absolute top-[10%] left-1/2 -translate-x-1/2 text-black dark:text-white opacity-2" />
+                    {/* <Brain className="w-80 h-80 absolute top-[10%] left-1/2 -translate-x-1/2 text-black dark:text-white opacity-2" /> */}
                     <h1 className="text-2xl font-bold text-center text-black dark:text-white">Deepen.</h1>
                 </div>
                 <div className={`p-1 ${middlePanelCollapsed ? "w-[60%]" : "w-[70%]"} grid place-items-center rounded-3xl relative
-                before:content-[''] before:absolute before:top-0 before:left-0  before:w-[40%] before:h-[50%] before:bg-gradient-to-r before:from-red-500 before:to-purple-500 before:rounded-3xl before:blur-3xl
-                after:content-[''] after:absolute after:bottom-0 after:right-0 after:animate-gradient-shift after:w-[40%] after:h-[50%] after:bg-gradient-to-r after:from-red-500 after:to-violet-500 after:rounded-3xl after:blur-3xl
                 `}>
 
-                    <div className="border-1 relative z-100 grid gap-2 bg-[#faf7f7] dark:bg-[#141416] border-gray-300 dark:border-gray-800 rounded-3xl p-2 focus:border-blue-500 w-full">
+                    <div className="border-1 relative z-100 grid gap-0 bg-[#faf7f7] dark:bg-[#141414] border-gray-300 dark:border-[#1b1b1c] shadow-2xl rounded-3xl overflow-hidden focus:border-blue-500 w-full">
                         <ContextSummaryBar />
 
-                        <div className="border-0 p-2 outline-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent">
+                        <div className="border-0 bg-gray-200 dark:bg-[#1e1d1d] rounded-t-3xl p-4 outline-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent">
                             <textarea
                                 rows={6}
                                 className="w-full h-full resize-none focus:outline-none text-black dark:text-white"
                                 placeholder="Start a new conversation..." />
                         </div>
-                        <div className="grid grid-cols-[1fr_auto]">
+                        <div className="grid grid-cols-[1fr_auto] px-2">
                             <div className="flex items-center gap-2 w-full">
                                 <div
                                     onMouseEnter={(e) =>
