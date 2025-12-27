@@ -3,35 +3,11 @@ import { useStore } from "../../context/StoreContext";
 import type { UIStore } from "../../stores/types";
 import { Link } from "@tanstack/react-router";
 import { ConversationListSkeleton } from "../skeleton/ConversationListSkeleton";
+import { useBrainStore } from "../../stores/brain-store";
+import { useEffect } from "react";
 
 const ConversationList: React.FC = () => {
-    const sampleData = [
-        { id: 1, title: "Planning our weekend trip" },
-        { id: 2, title: "Ideas for the new project" },
-        { id: 3, title: "Can you review this code?" },
-        { id: 4, title: "Birthday gift suggestions" },
-        { id: 5, title: "Lunch tomorrow?" },
-        { id: 6, title: "Meeting follow-up" },
-        { id: 7, title: "Funny memes to share" },
-        { id: 8, title: "Movie night plans" },
-        { id: 9, title: "Daily standup notes" },
-        { id: 10, title: "Weekend workout routine" },
-        { id: 11, title: "Travel itinerary ideas" },
-        { id: 12, title: "Homework help needed" },
-        { id: 13, title: "Coffee catch-up" },
-        { id: 14, title: "Project deadline approaching" },
-        { id: 15, title: "Favorite music playlists" },
-        { id: 16, title: "Book recommendations" },
-        { id: 17, title: "Dinner recipes to try" },
-        { id: 18, title: "Tech news updates" },
-        { id: 19, title: "Weekend getaway photos" },
-        { id: 20, title: "Funny work stories" },
-        { id: 21, title: "Team brainstorming session" },
-        { id: 22, title: "Random thoughts" },
-        { id: 23, title: "Shopping list for the week" },
-        { id: 24, title: "Gardening tips" },
-        { id: 25, title: "Concert tickets available" },
-    ];
+    const { conversationList, conversations, fetchConversations, selectConversation, fetchConversation } = useBrainStore();
 
     let loading = true;
 
@@ -40,6 +16,11 @@ const ConversationList: React.FC = () => {
 
     if (!loading) return <ConversationListSkeleton />;
 
+    useEffect(() => {
+        fetchConversations();
+    }, []);
+
+    console.log(conversations);
     return (
         <div className="h-full flex flex-col overflow-hidden relative bg-[#faf7f7] dark:bg-[#141416]">
             <div className="flex justify-end items-center px-2 py-2">
@@ -57,15 +38,28 @@ const ConversationList: React.FC = () => {
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto px-2 space-y-0.5">
-                {sampleData.map((item) => (
-                    <Link to={`/in/brain/${item.id}`}
-                        key={item.id}
+                {Object.values(conversationList || {}).map((item) => (
+                    <Link
+                    onClick={async () => {
+                        // Fetch full conversation if not already loaded
+                        if (!conversations[item._id || item.id]) {
+                            await fetchConversation(item._id || item.id);
+                        }
+                        selectConversation(item._id || item.id);
+                    }}
+                    to={`/in/brain/${item._id || item.id}`}
+                        key={item._id || item.id}
                         className="group flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-gray-100/80 dark:hover:bg-zinc-800/80 transition-all duration-200 cursor-pointer"
                     >
                         <div className="flex-1 min-w-0 pr-3">
                             <h3 className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white truncate">
-                                {item.title}
+                                {item.title || item.lastMessage?.content?.slice(0, 50) + "..." || "New Conversation"}
                             </h3>
+                            {item.lastMessage && (
+                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">
+                                    {item.lastMessage.content}
+                                </p>
+                            )}
                         </div>
                         <button className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-all text-gray-400 dark:text-gray-500">
                             <Ellipsis className="w-4 h-4" />

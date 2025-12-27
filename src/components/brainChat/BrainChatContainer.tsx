@@ -1,103 +1,48 @@
 import { Ellipsis, Send, Share, Trash } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "@tanstack/react-router";
+import { useBrainStore } from "../../stores/brain-store";
 
 export const BrainChatContainer = () => {
     const [showOptions, setShowOptions] = useState(false);
-    const chatSmaple = [
-        {
-            id: 1,
-            mode: 'user',
-            content: 'Hello, how are you?',
-        }, {
-            id: 2,
-            mode: 'deepen',
-            content: 'I am a deep learning model, I can help you with your questions.',
-        }, {
-            id: 3,
-            mode: 'user',
-            content: 'What is the capital of France?',
-        }, {
-            id: 4,
-            mode: 'deepen',
-            content: 'The capital of France is Paris.',
-        },
-        {
-            id: 5,
-            mode: 'user',
-            content: 'Explain relative theories of relativity.',
-        }, {
-            id: 6,
-            mode: 'deepen',
-            content: 'Relative theories of relativity are a set of theories that describe the relationship between space and time. They are based on the idea that the speed of light is constant in all inertial frames of reference.',
-        },
-        {
-            id: 7,
-            mode: 'user',
-            content: 'Can you give me examples of relative theories of relativity?',
-        }, {
-            id: 8,
-            mode: 'deepen',
-            content: 'The most famous example of relative theories of relativity is the theory of special relativity. It was proposed by Albert Einstein in 1905. It is based on the idea that the speed of light is constant in all inertial frames of reference.',
-        },
-        {
-            id: 9,
-            mode: 'user',
-            content: 'Can you give me examples of relative theories of relativity?',
-        }, {
-            id: 3,
-            mode: 'user',
-            content: 'What is the capital of France?',
-        }, {
-            id: 4,
-            mode: 'deepen',
-            content: 'The capital of France is Paris.',
-        },
-        {
-            id: 5,
-            mode: 'user',
-            content: 'Explain relative theories of relativity.',
-        }, {
-            id: 6,
-            mode: 'deepen',
-            content: 'Relative theories of relativity are a set of theories that describe the relationship between space and time. They are based on the idea that the speed of light is constant in all inertial frames of reference.',
-        },
-        {
-            id: 7,
-            mode: 'user',
-            content: 'Can you give me examples of relative theories of relativity?',
-        }, {
-            id: 8,
-            mode: 'deepen',
-            content: 'The most famous example of relative theories of relativity is the theory of special relativity. It was proposed by Albert Einstein in 1905. It is based on the idea that the speed of light is constant in all inertial frames of reference.',
-        },
-        {
-            id: 3,
-            mode: 'user',
-            content: 'What is the capital of France?',
-        }, {
-            id: 4,
-            mode: 'deepen',
-            content: 'The capital of France is Paris.',
-        },
-        {
-            id: 5,
-            mode: 'user',
-            content: 'Explain relative theories of relativity.',
-        }, {
-            id: 6,
-            mode: 'deepen',
-            content: 'Relative theories of relativity are a set of theories that describe the relationship between space and time. They are based on the idea that the speed of light is constant in all inertial frames of reference.',
-        },
-        {
-            id: 7,
-            mode: 'user',
-            content: 'Can you give me examples of relative theories of relativity?',
-        }, {
-            id: 8,
-            mode: 'deepen',
-            content: 'The most famous example of relative theories of relativity is the theory of special relativity. It was proposed by Albert Einstein in 1905. It is based on the idea that the speed of light is constant in all inertial frames of reference.',
-        },
-    ]
+    const [isLoading, setIsLoading] = useState(false);
+    const { conversationId } = useParams({ strict: false });
+    const { conversations, fetchConversation } = useBrainStore();
+    const conversation = conversations[conversationId || ''];
+
+    // Handle direct URL navigation - fetch conversation if not in store
+    useEffect(() => {
+        if (conversationId && !conversation && !isLoading && !conversationId.startsWith('temp-')) {
+            setIsLoading(true);
+            fetchConversation(conversationId).finally(() => {
+                setIsLoading(false);
+            });
+        }
+    }, [conversationId, conversation, fetchConversation, isLoading]);
+
+    // Show loading state while fetching
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                    <div className="text-gray-500 dark:text-gray-400 mb-2">Loading conversation...</div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+                </div>
+            </div>
+        );
+    }
+
+    // Show not found after loading attempt
+    if (!conversation && conversationId) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                    <div className="text-red-500 dark:text-red-400 mb-2">Conversation not found</div>
+                    <div className="text-sm text-gray-400">ID: {conversationId}</div>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className=" w-full relative bg-[#f6f3f3] dark:bg-[#101010] flex flex-col h-[calc(100vh-0px)]">
             <div className="flex text-black dark:text-white items-center justify-between px-4 py-2 border-b border-[#e2e0e0] dark:border-[#1b1b1c]">
@@ -122,9 +67,9 @@ export const BrainChatContainer = () => {
                 )}
             </div>
             <div className="flex flex-col  flex-1 p-4 w-[70%] mx-auto space-y-6 overflow-y-auto max-h-[calc(100vh-100px)]">
-                {chatSmaple.map((item) => (
-                    <div key={item.id} className={`flex ${item.mode === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`text-sm font-medium text-black dark:text-white ${item.mode === 'deepen' ? '' : 'bg-gray-200 dark:bg-[#1a1a1a] text-black dark:text-white'} rounded-2xl p-4`}>{item.content}</div>
+                {conversation?.messages.map((item) => (
+                    <div key={item.id} className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`text-sm font-medium text-black dark:text-white ${item.role === 'assistant' ? '' : 'bg-gray-200 dark:bg-[#1a1a1a] text-black dark:text-white'} rounded-2xl p-4`}>{item.content}</div>
                     </div>
                 ))}
             </div>

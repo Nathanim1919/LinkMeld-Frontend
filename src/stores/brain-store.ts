@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { nanoid } from 'nanoid';
 import { v4 as uuidv4 } from 'uuid';
-import { API_CONFIG } from "../api";
 import { getAiModelList } from "../api/chat.api";
+import { startConversation, getConversations, getConversation } from "../api/brain.api";
 
 
 /*
@@ -51,10 +51,22 @@ export type ContextSnapshot = {
 
 export type Conversation = {
   id: string;
+  _id?: string; // MongoDB ID (optional for local conversations)
   title: string;
   createdAt: number;
   context: ContextSnapshot;
   messages: Message[];
+  lastActivity?: number;
+  isActive?: boolean;
+};
+
+// Metadata version for conversation lists (no messages)
+export type ConversationMetadata = Omit<Conversation, 'messages' | 'context'> & {
+  lastMessage?: {
+    content: string;
+    timestamp: number;
+    role: 'user' | 'assistant';
+  };
 };
 
 
@@ -140,7 +152,8 @@ export type OpenRouterModel = {
 
 
 type BrainStore = {
-  conversations: Record<string, Conversation>;
+  conversations: Record<string, Conversation>; // Full conversations (with messages)
+  conversationList: Record<string, ConversationMetadata>; // Metadata for listing
   activeConversationId: string | null;
 
   // Model selector
@@ -161,7 +174,9 @@ type BrainStore = {
   toggleCapture: (id: string) => void;
   resetDraft: () => void;
 
-  startConversation: (initialMessage: string) => Promise<void>;
+  startConversation: (initialMessage: string, tempId?: string) => Promise<void>;
+  fetchConversations: () => Promise<void>;
+  fetchConversation: (id: string) => Promise<void>; // Fetch full conversation with messages
   sendMessage: (content: string) => Promise<void>;
   selectConversation: (id: string) => void;
 
@@ -178,7 +193,8 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
     Initial State
   */
 
-  conversations: {},
+  conversations: {}, // Full conversations (with messages)
+  conversationList: {}, // Metadata for listing
   activeConversationId: null,
   draft: EMPTY_DRAFT,
 
@@ -251,38 +267,69 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
      Conversation Lifecycle
   */
 
-  startConversation: async (firstMessage: string) => {
-    set(state => {
-      if (!firstMessage.trim()) return state;
+  startConversation: async (firstMessage: string, tempId?: string):Promise<void> =>  {
+    if (!firstMessage.trim()) return;
 
-      const context = buildContextSnapshot(state.draft);
-      const id = uuidv4();
+    const context = buildContextSnapshot(get().draft);
+    const conversationId = tempId || uuidv4(); // Use provided tempId or generate one
 
-      const conversation: Conversation = {
-        id,
-        title: firstMessage.slice(0, 60),
-        createdAt: Date.now(),
-        context,
-        messages: [
-          {
-            id: nanoid(),
-            role: 'user',
-            content: firstMessage,
-            createdAt: Date.now(),
-            status: 'sent'
-           }
-        ]
-      };
+    const conversation: Conversation = {
+      id: conversationId,
+      title: firstMessage.slice(0, 60),
+      createdAt: Date.now(),
+      context,
+      messages: [
+        {
+          id: nanoid(),
+          role: 'user',
+          content: firstMessage,
+          createdAt: Date.now(),
+          status: 'sent'
+        }
+      ]
+    };
 
-      return {
-        conversations: {
-          ...state.conversations,
-          [id]: conversation
-        },
-        activeConversationId: id,
-        draft: EMPTY_DRAFT
-      };
-    });
+    // Optimistic update with ID (temp or generated)
+    set(state => ({
+      conversations: {
+        ...state.conversations,
+        [conversationId]: conversation
+      },
+      activeConversationId: conversationId,
+      draft: EMPTY_DRAFT
+    }));
+
+    try {
+      const response = await startConversation(conversation);
+
+      // Update with server response (which should have the correct ID)
+      if (response?.data) {
+        // Map server response (_id) to our expected format (id)
+        const serverConversation = {
+          ...response.data,
+          id: response.data._id || response.data.id
+        };
+
+        set(state => {
+          const { [conversationId]: _, ...conversationsWithoutTemp } = state.conversations;
+          return {
+            conversations: {
+              ...conversationsWithoutTemp,
+              [serverConversation.id]: serverConversation
+            },
+            activeConversationId: serverConversation.id
+          };
+        });
+
+        // Update URL to reflect the real conversation ID
+        if (typeof window !== 'undefined') {
+          window.history.replaceState(null, '', `/in/brain/${serverConversation.id}`);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to start conversation:', error);
+      // Could add error handling here - maybe remove the optimistic update
+    }
   },
 
   getModelList: async () => {
@@ -315,6 +362,52 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
           }
         }
       }),
+
+  fetchConversations: async (): Promise<void> => {
+    const response = await getConversations();
+    console.log("conversations response", response);
+
+    // Convert array to metadata objects keyed by _id
+    const conversationListById = response.data.reduce((acc: Record<string, ConversationMetadata>, conv: any) => {
+      acc[conv._id] = {
+        id: conv._id,
+        _id: conv._id,
+        title: conv.title || '',
+        createdAt: conv.createdAt || Date.now(),
+        lastActivity: conv.lastActivity,
+        isActive: conv.isActive,
+        lastMessage: conv.messages?.length > 0 ? {
+          content: conv.messages[conv.messages.length - 1].content,
+          timestamp: conv.messages[conv.messages.length - 1].timestamp,
+          role: conv.messages[conv.messages.length - 1].role
+        } : undefined
+      };
+      return acc;
+    }, {});
+
+    set({ conversationList: conversationListById });
+  },
+
+  fetchConversation: async (id: string): Promise<void> => {
+    try {
+      const response = await getConversation(id);
+
+      // Map server response to our format
+      const serverConversation = {
+        ...response.data,
+        id: response.data._id || response.data.id
+      };
+
+      set(state => ({
+        conversations: {
+          ...state.conversations,
+          [serverConversation.id]: serverConversation
+        }
+      }));
+    } catch (error) {
+      console.error('Failed to fetch conversation:', error);
+    }
+  },
 
   selectConversation: (id: string) =>
     set((_state) => ({
