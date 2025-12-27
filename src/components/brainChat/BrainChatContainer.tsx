@@ -2,6 +2,7 @@ import { Ellipsis, Send, Share, Trash } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useParams } from "@tanstack/react-router";
 import { useBrainStore } from "../../stores/brain-store";
+import { ChatSkeleton } from "../skeleton/ChatSkeleton";
 
 export const BrainChatContainer = () => {
     const [showOptions, setShowOptions] = useState(false);
@@ -21,19 +22,10 @@ export const BrainChatContainer = () => {
     }, [conversationId, conversation, fetchConversation, isLoading]);
 
     // Show loading state while fetching
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-full">
-                <div className="text-center">
-                    <div className="text-gray-500 dark:text-gray-400 mb-2">Loading conversation...</div>
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-                </div>
-            </div>
-        );
-    }
+
 
     // Show not found after loading attempt
-    if (!conversation && conversationId) {
+    if (!conversation && conversationId && !isLoading) {
         return (
             <div className="flex items-center justify-center h-full">
                 <div className="text-center">
@@ -67,11 +59,17 @@ export const BrainChatContainer = () => {
                 )}
             </div>
             <div className="flex flex-col  flex-1 p-4 w-[70%] mx-auto space-y-6 overflow-y-auto max-h-[calc(100vh-100px)]">
-                {conversation?.messages.map((item) => (
-                    <div key={item.id} className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`text-sm font-medium text-black dark:text-white ${item.role === 'assistant' ? '' : 'bg-gray-200 dark:bg-[#1a1a1a] text-black dark:text-white'} rounded-2xl p-4`}>{item.content}</div>
-                    </div>
-                ))}
+                {isLoading ? (
+                    <ChatSkeleton />
+                ) : (
+
+
+                    conversation?.messages.map((item) => (
+                        <div key={item.id} className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                            <div className={`text-sm font-medium text-black dark:text-white ${item.role === 'assistant' ? '' : 'bg-gray-200 dark:bg-[#1a1a1a] text-black dark:text-white'} rounded-2xl p-4`}>{item.content}</div>
+                        </div>
+                    ))
+                )}
             </div>
             <div className="flex shadow-2xl overflow-hidden pl-4 p-3  items-center  w-[70%] bg-[#f6f3f3] dark:bg-[#101010]  mx-auto justify-center rounded-full border mb-4 border-[#e2e0e0] dark:border-[#1b1b1c]">
                 <textarea
