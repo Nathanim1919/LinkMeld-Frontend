@@ -23,7 +23,8 @@ export const ContextSummaryBar = () => {
   if (activeContexts.length === 0) return null;
 
   return (
-    <div className="flex gap-2 min-h-10 overflow-x-auto  p-2 opacity-60 rounded-md bg-transparent">
+    <div className="flex flex-col gap-2 border-b border-gray-300 dark:border-[#1b1b1c]">
+    <div className="flex gap-2 min-h-10 overflow-x-auto p-2 opacity-60 rounded-md bg-transparent">
       <AnimatePresence
       >
         <div className="flex items-center gap-3">
@@ -74,13 +75,14 @@ export const ContextSummaryBar = () => {
 
               <div className="text-sm font-medium text-black dark:text-white relative -left-0">
 
-                {activeContexts.length}+ Captures
+                {activeCaptures.length}+ Captures
 
               </div>
             </div>
           }
         </div>
       </AnimatePresence>
+      </div>
     </div>
   );
 };

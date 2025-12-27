@@ -12,7 +12,7 @@ export const EmptyChatView = () => {
 
 
     return (
-        <div className="h-full w-full bg-[#eceaea] dark:bg-[#111112]">
+        <div className="h-full w-full bg-[#f4f0f0] dark:bg-[#111112]">
             <div className="flex flex-col relative h-full w-full items-center justify-center">
                 <div className="flex flex-col items-center mb-4">
                     {/* <Brain className="w-80 h-80 absolute top-[10%] left-1/2 -translate-x-1/2 text-black dark:text-white opacity-2" /> */}
@@ -21,10 +21,10 @@ export const EmptyChatView = () => {
                 <div className={`p-1 ${middlePanelCollapsed ? "w-[60%]" : "w-[70%]"} grid place-items-center rounded-3xl relative
                 `}>
 
-                    <div className="border-1 relative z-100 grid gap-0 bg-[#faf7f7] dark:bg-[#141414] border-gray-300 dark:border-[#1b1b1c] shadow-2xl rounded-3xl overflow-hidden focus:border-blue-500 w-full">
+                    <div className="border-1 bg-[#f6f3f3] dark:bg-[#141414] relative z-100 grid gap-0 border-gray-300 dark:border-[#1b1b1c] rounded-3xl overflow-hidden focus:border-blue-500 w-full">
                         <ContextSummaryBar />
 
-                        <div className="border-0 bg-gray-200 dark:bg-[#1e1d1d] rounded-t-3xl p-4 outline-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent">
+                        <div className="border-0  rounded-t-3xl p-4 outline-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent">
                             <textarea
                                 rows={6}
                                 className="w-full h-full resize-none focus:outline-none text-black dark:text-white"
@@ -76,7 +76,7 @@ export const EmptyChatView = () => {
                                 <div
                                     onClick={() => openContextSelector("models")}
                                     className={`flex items-center gap-2  cursor-pointer hover:opacity-100 text-sm font-medium px-2 py-2 rounded-full
-                                     ${isBookmarkActive() ? "text-blue-500 dark:bg-[#9575ff]/10 bg-[#e7e3e3]" : "dark:bg-[#1e1d1d] bg-[#e7e3e3] text-black dark:text-white opacity-50"}`}>
+                                    dark:bg-[#1e1d1d] bg-[#e7e3e3] text-black dark:text-white opacity-50`}>
                                     <Bot size={16} />
                                     <span className="text-sm">
                                         {selectedModel?.name?.length && selectedModel?.name?.length > 10 ? selectedModel?.name?.slice(0, 20) + "..." : selectedModel?.name}

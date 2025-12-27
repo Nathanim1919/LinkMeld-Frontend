@@ -197,7 +197,9 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
       draft: {
         ...state.draft,
         brainEnabled: !state.draft.brainEnabled,
-        bookmarksEnabled: false // 🔒 brain disables bookmarks
+        bookmarksEnabled: false, // 🔒 brain disables bookmarks
+        captures: new Set(), // 🔒 brain disables captures
+        collections: new Set() // 🔒 brain disables collections
       }
     })),
 
@@ -206,7 +208,9 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
       draft: {
         ...state.draft,
         bookmarksEnabled: !state.draft.bookmarksEnabled,
-        brainEnabled: false // 🔒 explicit context disables brain
+        brainEnabled: false, // 🔒 explicit context disables brain
+        captures: new Set(), // 🔒 brain disables captures
+        collections: new Set() // 🔒 brain disables collections
       }
     })),
 
@@ -219,7 +223,8 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
         draft: {
           ...state.draft,
           collections: next,
-          brainEnabled: false // 🔒 explicit context disables brain
+          brainEnabled: false, // 🔒 explicit context disables brain
+          bookmarksEnabled: false, // 🔒 explicit context disables bookmarks
         }
       };
     }),
@@ -233,7 +238,8 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
         draft: {
           ...state.draft,
           captures: next,
-          brainEnabled: false
+          brainEnabled: false,
+          bookmarksEnabled: false,
         }
       };
     }),
