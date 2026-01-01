@@ -176,7 +176,7 @@ type BrainStore = {
 
   startConversation: (initialMessage: string, tempId?: string) => Promise<void>;
   fetchConversations: () => Promise<void>;
-  fetchConversation: (id: string) => Promise<void>; // Fetch full conversation with messages
+  fetchConversation: (id: string) => Promise<void | null>; // Fetch full conversation with messages
   sendMessage: (content: string) => Promise<void>;
   selectConversation: (id: string) => void;
 
@@ -569,15 +569,19 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
     set({ conversationList: conversationListById });
   },
 
-  fetchConversation: async (id: string): Promise<void> => {
+  fetchConversation: async (id: string): Promise<void | null> => {
     try {
       const response = await getConversation(id);
 
       // Map server response to our format
       const serverConversation = {
         ...response.data,
-        id: response.data._id || response.data.id
+        id: response?.data?._id || response?.data?.id
       };
+
+      if (!serverConversation){
+        return null;
+      }
 
       set(state => ({
         conversations: {

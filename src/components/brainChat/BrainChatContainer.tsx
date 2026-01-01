@@ -1,9 +1,10 @@
 import { Ellipsis, Send, Share, Trash } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { useBrainStore } from "../../stores/brain-store";
 import { ChatSkeleton } from "../skeleton/ChatSkeleton";
 import { MessageBubble } from "../Chat/MessageBubble";
+import { toast } from "sonner";
 
 
 export const BrainChatContainer = () => {
@@ -16,6 +17,8 @@ export const BrainChatContainer = () => {
     const { conversations, fetchConversation, sendMessage, selectConversation } = useBrainStore();
     const [message, setMessage] = useState('');
     const conversation = conversations[conversationId || ''];
+
+    const navigate = useNavigate();
 
     // Auto-scroll to bottom when messages change
     const scrollToBottom = () => {
@@ -47,8 +50,13 @@ export const BrainChatContainer = () => {
     useEffect(() => {
         if (conversationId && !conversation && !isLoading && !conversationId.startsWith('temp-')) {
             setIsLoading(true);
-            fetchConversation(conversationId).then(() => {
-                selectConversation(conversationId); // Set as active conversation
+            fetchConversation(conversationId).then((conversation) => {
+                if (!conversation) {
+                    toast.error('Opps! Conversation doesnt seem to exist!');
+                    navigate({ to: '/in/brain' });
+                    return;
+                }
+                selectConversation(conversationId);
             }).finally(() => {
                 setIsLoading(false);
             });
