@@ -44,7 +44,7 @@ api.interceptors.request.use(
     if (import.meta.env.DEV) {
       console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`, {
         data: config.data,
-        params: config.params,
+        params: config.params,3000
       });
     }
 

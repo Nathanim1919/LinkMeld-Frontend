@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { nanoid } from 'nanoid';
 import { v4 as uuidv4 } from 'uuid';
 import { getAiModelList } from "../api/chat.api";
-import { startConversation, getConversations, getConversation } from "../api/brain.api";
+import { getConversations, getConversation, startConversationStream } from "../api/brain.api";
 
 
 /*
@@ -267,12 +267,77 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
      Conversation Lifecycle
   */
 
-  startConversation: async (firstMessage: string, tempId?: string):Promise<void> =>  {
+  // startConversation: async (firstMessage: string, tempId?: string):Promise<void> =>  {
+  //   if (!firstMessage.trim()) return;
+
+  //   const context = buildContextSnapshot(get().draft);
+  //   const conversationId = tempId || uuidv4(); // Use provided tempId or generate one
+
+  //   const conversation: Conversation = {
+  //     id: conversationId,
+  //     title: firstMessage.slice(0, 60),
+  //     createdAt: Date.now(),
+  //     context,
+  //     messages: [
+  //       {
+  //         id: nanoid(),
+  //         role: 'user',
+  //         content: firstMessage,
+  //         createdAt: Date.now(),
+  //         status: 'sent'
+  //       }
+  //     ]
+  //   };
+
+  //   // Optimistic update with ID (temp or generated)
+  //   set(state => ({
+  //     conversations: {
+  //       ...state.conversations,
+  //       [conversationId]: conversation
+  //     },
+  //     activeConversationId: conversationId,
+  //     draft: EMPTY_DRAFT
+  //   }));
+
+  //   try {
+  //     const response = await startConversation(conversation);
+
+  //     // Update with server response (which should have the correct ID)
+  //     if (response?.data) {
+  //       // Map server response (_id) to our expected format (id)
+  //       const serverConversation = {
+  //         ...response.data,
+  //         id: response.data._id || response.data.id
+  //       };
+
+  //       set(state => {
+  //         const { [conversationId]: _, ...conversationsWithoutTemp } = state.conversations;
+  //         return {
+  //           conversations: {
+  //             ...conversationsWithoutTemp,
+  //             [serverConversation.id]: serverConversation
+  //           },
+  //           activeConversationId: serverConversation.id
+  //         };
+  //       });
+
+  //       // Update URL to reflect the real conversation ID
+  //       if (typeof window !== 'undefined') {
+  //         window.history.replaceState(null, '', `/in/brain/${serverConversation.id}`);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to start conversation:', error);
+  //     // Could add error handling here - maybe remove the optimistic update
+  //   }
+  // },
+
+  startConversation: async (firstMessage: string, tempId?: string): Promise<void> => {
     if (!firstMessage.trim()) return;
-
+  
     const context = buildContextSnapshot(get().draft);
-    const conversationId = tempId || uuidv4(); // Use provided tempId or generate one
-
+    const conversationId = tempId || uuidv4();
+  
     const conversation: Conversation = {
       id: conversationId,
       title: firstMessage.slice(0, 60),
@@ -281,57 +346,87 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
       messages: [
         {
           id: nanoid(),
-          role: 'user',
+          role: "user",
           content: firstMessage,
           createdAt: Date.now(),
-          status: 'sent'
-        }
-      ]
+          status: "sent",
+        },
+      ],
     };
-
-    // Optimistic update with ID (temp or generated)
-    set(state => ({
+  
+    // Optimistic update
+    set((state) => ({
       conversations: {
         ...state.conversations,
-        [conversationId]: conversation
+        [conversationId]: conversation,
       },
       activeConversationId: conversationId,
-      draft: EMPTY_DRAFT
+      draft: EMPTY_DRAFT,
     }));
-
+  
     try {
-      const response = await startConversation(conversation);
+      const serverConversation = await startConversationStream(
+        conversation,
+        (delta) => {
+          // Real-time updates for streaming tokens (if backend streams)
+          set((state) => {
+            const convo = state.conversations[conversationId];
+            if (!convo) return state;
 
-      // Update with server response (which should have the correct ID)
-      if (response?.data) {
-        // Map server response (_id) to our expected format (id)
-        const serverConversation = {
-          ...response.data,
-          id: response.data._id || response.data.id
-        };
+            let assistantMessage = convo.messages.find(
+              (m) => m.role === "assistant"
+            );
 
-        set(state => {
-          const { [conversationId]: _, ...conversationsWithoutTemp } = state.conversations;
-          return {
-            conversations: {
-              ...conversationsWithoutTemp,
-              [serverConversation.id]: serverConversation
-            },
-            activeConversationId: serverConversation.id
-          };
-        });
+            if (!assistantMessage) {
+              assistantMessage = {
+                id: nanoid(),
+                role: "assistant",
+                content: "",
+                createdAt: Date.now(),
+                status: "sent",
+              };
+              convo.messages.push(assistantMessage);
+            }
 
-        // Update URL to reflect the real conversation ID
-        if (typeof window !== 'undefined') {
-          window.history.replaceState(null, '', `/in/brain/${serverConversation.id}`);
+            assistantMessage.content += delta;
+
+            return {
+              conversations: {
+                ...state.conversations,
+                [conversationId]: convo,
+              },
+            };
+          });
+        },
+        (usage) => {
+          console.log('usage', usage);
         }
+      );
+
+      // Replace optimistic conversation with server response
+      set((state) => {
+        // Remove the temporary conversation
+        const { [conversationId]: _, ...conversationsWithoutTemp } = state.conversations;
+
+        return {
+          conversations: {
+            ...conversationsWithoutTemp,
+            [serverConversation.id]: serverConversation,
+          },
+          activeConversationId: serverConversation.id,
+        };
+      });
+
+      // Update URL to reflect server conversation ID
+      if (typeof window !== "undefined") {
+        window.history.replaceState(null, "", `/in/brain/${serverConversation.id}`);
       }
     } catch (error) {
-      console.error('Failed to start conversation:', error);
-      // Could add error handling here - maybe remove the optimistic update
+      console.error("Failed to start conversation:", error);
+      // Optionally remove optimistic conversation or mark as failed
     }
   },
-
+  
   getModelList: async () => {
     const models = await getAiModelList();
     set({ modelList: models });

@@ -59,7 +59,7 @@ const ConversationList: React.FC = () => {
                         }}
                         to={`/in/brain/${itemId}`}
                             key={itemId}
-                            className={`group flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 cursor-pointer relative ${
+                            className={`group flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer relative ${
                                 isActive
                                     ? 'bg-blue-50 dark:bg-blue-950/30 border-l-2 border-blue-500 text-blue-900 dark:text-blue-100 font-medium shadow-sm'
                                     : 'hover:bg-gray-100/80 dark:hover:bg-zinc-800/80 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
@@ -73,15 +73,6 @@ const ConversationList: React.FC = () => {
                                 }`}>
                                     {item.title || item.lastMessage?.content?.slice(0, 50) + "..." || "New Conversation"}
                                 </h3>
-                                {item.lastMessage && (
-                                    <p className={`text-xs truncate mt-1 ${
-                                        isActive
-                                            ? 'text-blue-700 dark:text-blue-200'
-                                            : 'text-gray-500 dark:text-gray-400'
-                                    }`}>
-                                        {item.lastMessage.content}
-                                    </p>
-                                )}
                             </div>
                             <button className={`p-1 rounded transition-all ${
                                 isActive

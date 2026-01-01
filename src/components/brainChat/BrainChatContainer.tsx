@@ -3,13 +3,20 @@ import { useState, useEffect } from "react";
 import { useParams } from "@tanstack/react-router";
 import { useBrainStore } from "../../stores/brain-store";
 import { ChatSkeleton } from "../skeleton/ChatSkeleton";
+import { MessageBubble } from "../Chat/MessageBubble";
 
 export const BrainChatContainer = () => {
     const [showOptions, setShowOptions] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { conversationId } = useParams({ strict: false });
-    const { conversations, fetchConversation } = useBrainStore();
+    const { conversations, fetchConversation, sendMessage } = useBrainStore();
+    const [message, setMessage] = useState('');
     const conversation = conversations[conversationId || ''];
+
+    const handleSendMessage = () => {
+        console.log('send message');
+        sendMessage(message);
+    }
 
     // Handle direct URL navigation - fetch conversation if not in store
     useEffect(() => {
@@ -66,18 +73,23 @@ export const BrainChatContainer = () => {
 
                     conversation?.messages.map((item) => (
                         <div key={item.id} className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`text-sm font-medium text-black dark:text-white ${item.role === 'assistant' ? '' : 'bg-gray-200 dark:bg-[#1a1a1a] text-black dark:text-white'} rounded-2xl p-4`}>{item.content}</div>
+                            {/* <div className={`text-sm font-medium text-black dark:text-white ${item.role === 'assistant' ? '' : 'bg-gray-200 dark:bg-[#1a1a1a] text-black dark:text-white'} rounded-2xl p-4`}>{item.content}</div> */}
+                            <MessageBubble role={item.role as 'user' | 'assistant'} content={item.content} />
                         </div>
                     ))
                 )}
             </div>
             <div className="flex shadow-2xl overflow-hidden pl-4 p-3  items-center  w-[70%] bg-[#f6f3f3] dark:bg-[#101010]  mx-auto justify-center rounded-full border mb-4 border-[#e2e0e0] dark:border-[#1b1b1c]">
                 <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="w-full h-full resize-none focus:outline-none text-black dark:text-white"
                     placeholder="Ask anything..."
                     rows={1}
                 />
-                <button className=" w-8 h-8 grid place-items-center text-black dark:text-white rounded-full cursor-pointer hover:opacity-50">
+                <button
+                onClick={handleSendMessage}
+                 className=" w-8 h-8 grid place-items-center text-black dark:text-white rounded-full cursor-pointer hover:opacity-50">
                     <Send size={22} />
                 </button>
             </div>

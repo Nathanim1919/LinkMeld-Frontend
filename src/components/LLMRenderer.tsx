@@ -13,6 +13,7 @@ type LLMRendererProps = {
 };
 
 
+// use react-mem
 export const LLMRenderer: React.FC<LLMRendererProps> = ({
   markdown,
   className = '',
