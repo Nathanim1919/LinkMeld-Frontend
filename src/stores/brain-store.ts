@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { nanoid } from 'nanoid';
 import { v4 as uuidv4 } from 'uuid';
 import { getAiModelList } from "../api/chat.api";
-import { getConversations, getConversation, startConversationStream } from "../api/brain.api";
+import { getConversations, getConversation, startConversationStream, sendMessage as sendMessageApi } from "../api/brain.api";
 
 
 /*
@@ -432,31 +432,117 @@ export const useBrainStore = create<BrainStore>((set, get) => ({
     set({ modelList: models });
   },
 
-  sendMessage: async (content: string) => set(state => {
-        const id = state.activeConversationId
-        if (!id || !content.trim()) return state
+   sendMessage: async (content: string): Promise<void> => {
+    const id = get().activeConversationId;
+    if (!id || !content.trim()) return;
 
-        const convo = state.conversations[id]
+    const convo = get().conversations[id];
+    if (!convo) return;
+
+    // Add user message optimistically BEFORE sending request
+    const userMessageId = nanoid();
+    set((state) => ({
+      conversations: {
+        ...state.conversations,
+        [id]: {
+          ...convo,
+          messages: [
+            ...convo.messages,
+            {
+              id: userMessageId,
+              role: 'user',
+              content,
+              createdAt: Date.now(),
+              status: 'sent'
+            }
+          ]
+        }
+      }
+    }));
+
+    try {
+      await sendMessageApi(convo, content,
+        (delta: string) => {
+          // Real-time updates for streaming tokens
+          set((state) => {
+            const currentConvo = state.conversations[id];
+            if (!currentConvo) return state;
+
+            let assistantMessage = currentConvo.messages.find(
+              (m) => m.role === "assistant" && m.status === 'sending'
+            );
+
+            if (!assistantMessage) {
+              // Create new assistant message for streaming
+              const newMessages = [
+                ...currentConvo.messages,
+                {
+                  id: nanoid(),
+                  role: "assistant" as const,
+                  content: delta,
+                  createdAt: Date.now(),
+                  status: "sending" as const,
+                }
+              ];
+              return {
+                conversations: {
+                  ...state.conversations,
+                  [id]: {
+                    ...currentConvo,
+                    messages: newMessages,
+                  },
+                },
+              };
+            }
+
+            // Append delta to existing assistant message
+            const updatedMessages = currentConvo.messages.map((msg) =>
+              msg.id === assistantMessage!.id
+                ? { ...msg, content: msg.content + delta }
+                : msg
+            );
+
+            return {
+              conversations: {
+                ...state.conversations,
+                [id]: {
+                  ...currentConvo,
+                  messages: updatedMessages,
+                },
+              },
+            };
+          });
+        },
+        (usage: any) => {
+          console.log('usage', usage);
+        }
+      );
+
+      // After stream completes, mark assistant message as sent
+      set((state) => {
+        const currentConvo = state.conversations[id];
+        if (!currentConvo) return state;
+
+        const updatedMessages = currentConvo.messages.map((msg) =>
+          msg.role === "assistant" && msg.status === 'sending'
+            ? { ...msg, status: "sent" as const }
+            : msg
+        );
 
         return {
           conversations: {
             ...state.conversations,
             [id]: {
-              ...convo,
-              messages: [
-                ...convo.messages,
-                {
-                  id: nanoid(),
-                  role: 'user',
-                  content,
-                  createdAt: Date.now(),
-                  status: 'sent'
-                }
-              ]
-            }
-          }
-        }
-      }),
+              ...currentConvo,
+              messages: updatedMessages,
+            },
+          },
+        };
+      });
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+  },
 
   fetchConversations: async (): Promise<void> => {
     const response = await getConversations();

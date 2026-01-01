@@ -1,32 +1,59 @@
 import { Ellipsis, Send, Share, Trash } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "@tanstack/react-router";
 import { useBrainStore } from "../../stores/brain-store";
 import { ChatSkeleton } from "../skeleton/ChatSkeleton";
 import { MessageBubble } from "../Chat/MessageBubble";
 
+
 export const BrainChatContainer = () => {
     const [showOptions, setShowOptions] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSending, setIsSending] = useState(false);
     const { conversationId } = useParams({ strict: false });
-    const { conversations, fetchConversation, sendMessage } = useBrainStore();
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
+    const { conversations, fetchConversation, sendMessage, selectConversation } = useBrainStore();
     const [message, setMessage] = useState('');
     const conversation = conversations[conversationId || ''];
 
-    const handleSendMessage = () => {
-        console.log('send message');
-        sendMessage(message);
+    // Auto-scroll to bottom when messages change
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [conversation?.messages]);
+
+    const handleSendMessage = async () => {
+        if (!message.trim() || isSending) return;
+
+        setIsSending(true);
+        console.log('BrainChatContainer: handleSendMessage called with:', message.trim());
+        console.log('BrainChatContainer: active conversation ID:', useBrainStore.getState().activeConversationId);
+        try {
+            await sendMessage(message.trim());
+            console.log('BrainChatContainer: sendMessage completed');
+            setMessage(''); // Clear input after sending
+        } catch (error) {
+            console.error('BrainChatContainer: sendMessage failed:', error);
+        } finally {
+            setIsSending(false);
+        }
     }
 
     // Handle direct URL navigation - fetch conversation if not in store
     useEffect(() => {
         if (conversationId && !conversation && !isLoading && !conversationId.startsWith('temp-')) {
             setIsLoading(true);
-            fetchConversation(conversationId).finally(() => {
+            fetchConversation(conversationId).then(() => {
+                selectConversation(conversationId); // Set as active conversation
+            }).finally(() => {
                 setIsLoading(false);
             });
         }
-    }, [conversationId, conversation, fetchConversation, isLoading]);
+    }, [conversationId, conversation, fetchConversation, selectConversation, isLoading]);
 
     // Show loading state while fetching
 
@@ -65,31 +92,42 @@ export const BrainChatContainer = () => {
                     </div>
                 )}
             </div>
-            <div className="flex flex-col  flex-1 p-4 w-[70%] mx-auto space-y-6 overflow-y-auto max-h-[calc(100vh-100px)]">
+            <div 
+                ref={messagesContainerRef}
+                className="flex flex-col flex-1 p-4 w-[70%] mx-auto space-y-6 overflow-y-auto max-h-[calc(100vh-100px)]"
+            >
                 {isLoading ? (
                     <ChatSkeleton />
                 ) : (
-
-
-                    conversation?.messages.map((item) => (
-                        <div key={item.id} className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            {/* <div className={`text-sm font-medium text-black dark:text-white ${item.role === 'assistant' ? '' : 'bg-gray-200 dark:bg-[#1a1a1a] text-black dark:text-white'} rounded-2xl p-4`}>{item.content}</div> */}
-                            <MessageBubble role={item.role as 'user' | 'assistant'} content={item.content} />
-                        </div>
-                    ))
+                    <>
+                        {conversation?.messages.map((item) => (
+                            <div key={item.id} className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                <MessageBubble role={item.role as 'user' | 'assistant'} content={item.content} />
+                            </div>
+                        ))}
+                        {/* Scroll anchor */}
+                        <div ref={messagesEndRef} />
+                    </>
                 )}
             </div>
-            <div className="flex shadow-2xl overflow-hidden pl-4 p-3  items-center  w-[70%] bg-[#f6f3f3] dark:bg-[#101010]  mx-auto justify-center rounded-full border mb-4 border-[#e2e0e0] dark:border-[#1b1b1c]">
+            <div className="flex shadow-2xl overflow-hidden pl-4 p-3 items-center w-[70%] bg-[#f6f3f3] dark:bg-[#101010] mx-auto justify-center rounded-full border mb-4 border-[#e2e0e0] dark:border-[#1b1b1c]">
                 <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSendMessage();
+                        }
+                    }}
                     className="w-full h-full resize-none focus:outline-none text-black dark:text-white"
                     placeholder="Ask anything..."
                     rows={1}
                 />
                 <button
                 onClick={handleSendMessage}
-                 className=" w-8 h-8 grid place-items-center text-black dark:text-white rounded-full cursor-pointer hover:opacity-50">
+                disabled={!message.trim() || isSending}
+                 className=" w-8 h-8 grid place-items-center text-black dark:text-white rounded-full cursor-pointer hover:opacity-50 disabled:opacity-30 disabled:cursor-not-allowed">
                     <Send size={22} />
                 </button>
             </div>

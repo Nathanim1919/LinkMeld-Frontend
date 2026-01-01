@@ -25,7 +25,7 @@ export const MessageBubble = ({ role, content }: MessageBubbleProps) => {
         {/* Avatar Section */}
         <div className="flex-shrink-0 flex flex-col items-center">
           {!isUser && <div
-            className={`w-8 h-8 rounded-full grid place-items-center border shadow-sm 
+            className={`w-8 h-8 rounded-full grid place-items-center border
              
                "bg-white dark:bg-[#1e1e1e] border-violet-100 dark:border-violet-900/30"
             `}
@@ -49,7 +49,7 @@ export const MessageBubble = ({ role, content }: MessageBubbleProps) => {
 
           {/* Bubble / Text Area */}
           <div
-            className={`relative px-5 py-1 text-[15px] leading-relaxed shadow-sm ${isUser
+            className={`relative px-5 py-1  leading-relaxed shadow-sm ${isUser
                 ? "bg-[#f4f4f4] dark:bg-[#161616] text-gray-800 dark:text-gray-100 rounded-[20px] rounded-tr-sm border border-transparent dark:border-white/5"
                 : "bg-transparent text-gray-800 dark:text-gray-200 w-full pl-0 pt-0" // Assistant looks like a document
               }`}

@@ -167,7 +167,7 @@ export const LLMRenderer: React.FC<LLMRendererProps> = ({
           
           // Paragraph with optimized readability
           p: ({ children }) => (
-            <p className="mb-5 leading-relaxed text-gray-700 dark:text-gray-300 text-[15px]">
+            <p className=" leading-relaxed text-gray-700 dark:text-gray-300 text-[16px]">
               {children}
             </p>
           ),
