@@ -19,7 +19,7 @@ export const MessageBubble = ({ role, content }: MessageBubbleProps) => {
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div
-        className={`flex max-w-[90%] md:max-w-[100%] gap-4 ${isUser ? "flex-row-reverse" : "flex-row"
+        className={`flex  gap-4 ${isUser ? "flex-row-reverse w-[100%] md:max-w-[60%]" : "flex-row w-[100%] md:max-w-[100%]"
           }`}
       >
         {/* Avatar Section */}

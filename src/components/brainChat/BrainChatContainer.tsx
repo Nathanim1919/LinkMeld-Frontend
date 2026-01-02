@@ -102,7 +102,7 @@ export const BrainChatContainer = () => {
             </div>
             <div 
                 ref={messagesContainerRef}
-                className="flex flex-col flex-1 p-4 w-[70%] mx-auto space-y-6 overflow-y-auto max-h-[calc(100vh-100px)]"
+                className="flex flex-col flex-1 p-4 w-full md:w-[60%] mx-auto space-y-6 overflow-y-auto max-h-[calc(100vh-100px)]"
             >
                 {isLoading ? (
                     <ChatSkeleton />
@@ -118,7 +118,7 @@ export const BrainChatContainer = () => {
                     </>
                 )}
             </div>
-            <div className="flex shadow-2xl overflow-hidden pl-4 p-3 items-center w-[70%] bg-[#f6f3f3] dark:bg-[#101010] mx-auto justify-center rounded-full border mb-4 border-[#e2e0e0] dark:border-[#1b1b1c]">
+            <div className="flex shadow-2xl overflow-hidden pl-4 p-3 items-center w-[90%] md:w-[70%] bg-[#f6f3f3] dark:bg-[#101010] mx-auto justify-center rounded-full border mb-4 border-[#e2e0e0] dark:border-[#1b1b1c]">
                 <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

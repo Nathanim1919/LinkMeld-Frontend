@@ -7,7 +7,7 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
-  ArrowLeft,
+  Brain,
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -106,12 +106,18 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#f5f5f7] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen grid grid-cols-1 md:grid-cols-[.75fr_1.25fr]">
       {/* Premium dark textured background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.03)_0%,_transparent_70%)] opacity-20" />
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(40,151,255,0.03)_0%,_transparent_50%)]" />
+   
 
       {/* Back button with refined animation */}
+      <div className="h-full w-full relative overflow-hidden
+        before:absolute before:w-[30%] before:h-[30%]  before:content-[''] before:bg-[#837663] before:blur-3xl
+        after:absolute after:w-[30%] after:h-[30%]  after:content-[''] after:bg-[#474847] after:bottom-0 after:right-0 after:blur-3xl
+      ">
+
+      <div className="h-full w-full bg-[#6b6d6a1f] grid grid-rows-3 p-4 relative z-100 backdrop-blur-3xl justify-center items-center">
+
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -120,21 +126,47 @@ export const RegisterPage = () => {
       >
         <Link
           to="/"
-          className="text-[#2997ff] hover:text-[#64b5ff] transition-colors flex items-center gap-1.5 group"
+          className="text-[#ffffff] hover:text-[#64b5ff] transition-colors flex items-center gap-1.5 group"
         >
-          <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
           <span className="text-sm font-medium">Back</span>
         </Link>
       </motion.div>
+      <div className="flex items-center gap-2 text-4xl justify-center opacity-5">
+        
+        <h1 className="text-8xl">Deepen</h1>
+      </div>
+      <div className="text-center w-full grid place-items-center">
+        <h1 className="text-4xl font-bold text-left leading-tight">
+          Capture.<br /> Organize.<br /> Understand <br /> Instantly.
+        </h1>
+        
+      </div>
+      <div className="text-center">
+        <div className="relative flex items-center justify-center">
+         <div className="flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-gray-500 relative border-2 border-black"></div>
+          <div className="w-10 h-10 rounded-full bg-gray-500 relative border-2 border-black -left-5"></div>
+          <div className="w-10 h-10 rounded-full bg-gray-500 relative border-2 border-black -left-10"></div>
+          <div className="w-10 h-10 rounded-full bg-gray-500 relative border-2 border-black -left-15"></div>
+          <div className="w-10 h-10 rounded-full bg-gray-500 relative border-2 border-black -left-20"></div>
+         </div>
+        <h2 className="text-2xl font-bold text-center relative -left-18">Join 1200+ users</h2>
+        </div>
+        <p className="text-sm text-gray-500">Be among the first to experience contextual intelligence that truly comprehends.</p>
+      </div>
+      </div>
+      </div>
 
       {/* Elevated registration card with glass morphism effect */}
+      <div className="h-full w-full grid place-items-center">
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, type: "spring" }}
         className="w-full max-w-md"
       >
-        <div className="bg-[#161618]/80 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-[#2c2c2e]/50 overflow-hidden">
+        <div className="rounded-2xl p-8  overflow-hidden">
           {/* Sophisticated header with subtle gradient */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -350,6 +382,7 @@ export const RegisterPage = () => {
           </motion.div>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

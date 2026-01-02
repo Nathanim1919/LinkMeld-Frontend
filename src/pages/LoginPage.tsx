@@ -129,7 +129,7 @@ export const LoginPage = () => {
         transition={{ delay: 0.1, type: "spring" }}
         className="w-full max-w-md"
       >
-        <div className="bg-[#161618]/80 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-[#2c2c2e]/50 overflow-hidden relative">
+        <div className="rounded-2xl p-8 shadow-2xl overflow-hidden relative">
           {/* Loading overlay */}
           {disableAll && (
             <div className="absolute inset-0 bg-black/30 z-10 flex items-center justify-center">
